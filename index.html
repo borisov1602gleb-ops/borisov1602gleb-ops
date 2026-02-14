@@ -2687,8 +2687,7 @@
        -------------------------------------------------------------------------- */
 
     const LOCALIZED_STRINGS = {
-      ru: {
-        ...I18N.ru,
+      ru: Object.assign({}, I18N.ru, {
         new: 'Новый',
         draft: 'Черновик',
         final: 'Итоговый',
@@ -2715,7 +2714,7 @@
         copy: 'Копировать',
         exportPdf: 'Экспорт в PDF',
         exportPrint: 'Печать'
-      }
+      })
     };
 
     /* --------------------------------------------------------------------------
@@ -3297,8 +3296,10 @@ No external libs except Google Fonts. Vanilla ES6+.
      * Opens signature modal. If a signature block in the editor was focused/clicked,
      * currentSignFieldKey can be set to that field's key so "Apply" fills the right block.
      */
-    document.getElementById('btnSign')?.addEventListener('click', () => {
-      const firstSignField = DATABASE.templates.find(t => t.id === appState.getCurrentTemplateId())?.fields.find(f => f.type === 'signature');
+    var btnSign = document.getElementById('btnSign');
+    if (btnSign) btnSign.addEventListener('click', () => {
+      var tpl = DATABASE.templates.find(function(t) { return t.id === appState.getCurrentTemplateId(); });
+      const firstSignField = tpl && tpl.fields ? tpl.fields.find(function(f) { return f.type === 'signature'; }) : null;
       currentSignFieldKey = firstSignField ? firstSignField.key : null;
       document.getElementById('signatureModal').classList.add('visible');
       clearSignaturePad();
@@ -3308,7 +3309,8 @@ No external libs except Google Fonts. Vanilla ES6+.
      * Delegate: when user clicks a signature placeholder in the editor, open modal
      * and set currentSignFieldKey so that applying signature fills that field.
      */
-    document.getElementById('editorScroll')?.addEventListener('click', (e) => {
+    var editorScroll = document.getElementById('editorScroll');
+    if (editorScroll) editorScroll.addEventListener('click', (e) => {
       const block = e.target.closest('[data-sign-field]');
       if (block) {
         const key = block.getAttribute('data-sign-field');
@@ -3320,13 +3322,16 @@ No external libs except Google Fonts. Vanilla ES6+.
       }
     });
 
-    document.getElementById('btnCloseSign')?.addEventListener('click', () => {
+    var btnCloseSign = document.getElementById('btnCloseSign');
+    if (btnCloseSign) btnCloseSign.addEventListener('click', () => {
       document.getElementById('signatureModal').classList.remove('visible');
     });
 
-    document.getElementById('btnClearSign')?.addEventListener('click', clearSignaturePad);
+    var btnClearSign = document.getElementById('btnClearSign');
+    if (btnClearSign) btnClearSign.addEventListener('click', clearSignaturePad);
 
-    document.getElementById('btnApplySign')?.addEventListener('click', () => {
+    var btnApplySign = document.getElementById('btnApplySign');
+    if (btnApplySign) btnApplySign.addEventListener('click', () => {
       const dataUrl = getSignatureDataUrl();
       if (dataUrl && currentSignFieldKey) {
         appState.setField(currentSignFieldKey, dataUrl);
@@ -3341,11 +3346,13 @@ No external libs except Google Fonts. Vanilla ES6+.
        EXPORT / PRINT
        -------------------------------------------------------------------------- */
 
-    document.getElementById('btnExport')?.addEventListener('click', () => {
+    var btnExport = document.getElementById('btnExport');
+    if (btnExport) btnExport.addEventListener('click', () => {
       window.print();
     });
 
-    document.getElementById('btnSave')?.addEventListener('click', () => {
+    var btnSave = document.getElementById('btnSave');
+    if (btnSave) btnSave.addEventListener('click', () => {
       const errors = validateCurrentDocument();
       if (errors.length > 0) {
         applyValidationErrors(errors);
@@ -3501,7 +3508,8 @@ No external libs except Google Fonts. Vanilla ES6+.
       });
     }
 
-    document.getElementById('signatureModal')?.addEventListener('transitionend', function (e) {
+    var signatureModal = document.getElementById('signatureModal');
+    if (signatureModal) signatureModal.addEventListener('transitionend', function (e) {
       if (e.target === this && this.classList.contains('visible')) {
         const firstBtn = this.querySelector('button');
         if (firstBtn) firstBtn.focus();
@@ -3515,11 +3523,11 @@ No external libs except Google Fonts. Vanilla ES6+.
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 'p') {
         e.preventDefault();
-        document.getElementById('btnExport')?.click();
+        var ex = document.getElementById('btnExport'); if (ex) ex.click();
       }
       if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
-        document.getElementById('btnSave')?.click();
+        var sv = document.getElementById('btnSave'); if (sv) sv.click();
       }
       if (e.key === 'Escape') {
         const modal = document.getElementById('signatureModal');
@@ -3534,13 +3542,23 @@ No external libs except Google Fonts. Vanilla ES6+.
        -------------------------------------------------------------------------- */
 
     function init() {
-      renderSidebar();
-      initSignaturePad();
-      const firstTemplate = DATABASE.templates[0];
-      if (firstTemplate) selectDocument(firstTemplate.id);
-      appState.subscribe(() => renderPreview());
-      updateA4Scale();
-      window.addEventListener('resize', updateA4Scale);
+      try {
+        if (typeof DATABASE === 'undefined' || !DATABASE.categories || !DATABASE.templates) {
+          console.error('MMB: DATABASE not loaded');
+          return;
+        }
+        renderSidebar();
+        initSignaturePad();
+        var firstTemplate = DATABASE.templates[0];
+        if (firstTemplate) selectDocument(firstTemplate.id);
+        appState.subscribe(function() { renderPreview(); });
+        updateA4Scale();
+        window.addEventListener('resize', updateA4Scale);
+      } catch (err) {
+        console.error('MMB init error:', err);
+        var preview = document.getElementById('a4Preview');
+        if (preview) preview.innerHTML = '<p style="color:#ea4335; padding:2em;">Ошибка загрузки. Откройте консоль (F12) для подробностей.</p>';
+      }
     }
 
     if (document.readyState === 'loading') {
