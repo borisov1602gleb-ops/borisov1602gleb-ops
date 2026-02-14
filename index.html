@@ -3,195 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProDoc - Конструктор документов</title>
+    <title>ProDoc Workspace - Профессиональный генератор документов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
     <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ */
         :root {
-            --primary: #4f46e5;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
+            --bg-color: #f3f4f6;
+            --sidebar-bg: #111827;
+            --sidebar-text: #9ca3af;
+            --sidebar-hover: #ffffff;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --doc-bg: #ffffff;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        body.dark {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #f1f5f9;
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --sidebar-bg: #020617;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --doc-bg: #f8fafc; /* Документ остается белым даже в темной теме для реализма */
         }
+
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
             margin: 0;
-            transition: 0.3s;
-        }
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
         }
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+
+        /* БОКОВОЕ МЕНЮ (SIDEBAR) */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            transition: 0.3s;
+            z-index: 10;
         }
-        @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
-        
-        .panel {
-            background: var(--card);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-        .preview-area {
-            background: white;
-            color: black;
-            padding: 50px;
-            min-height: 600px;
-            border: 1px solid #e2e8f0;
-            line-height: 1.6;
-            position: sticky;
-            top: 2rem;
-        }
-        label { display: block; margin-top: 1rem; font-weight: 600; font-size: 0.9rem; }
-        input, textarea, select {
-            width: 100%;
-            padding: 0.75rem;
-            margin-top: 0.4rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: var(--bg);
-            color: var(--text);
-            box-sizing: border-box;
-        }
-        .btn-group { display: flex; gap: 10px; margin-top: 2rem; }
-        button {
-            flex: 1;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 6px;
+        .logo { font-size: 1.5rem; font-weight: 800; color: white; padding: 0 20px 20px; border-bottom: 1px solid #374151; margin-bottom: 20px; letter-spacing: 1px; }
+        .logo span { color: var(--accent); }
+        .menu-item {
+            padding: 12px 20px;
             cursor: pointer;
-            font-weight: bold;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
         }
-        .btn-print { background: var(--primary); color: white; }
-        .btn-theme { background: #64748b; color: white; border-radius: 50%; width: 40px; flex: none; }
+        .menu-item:hover, .menu-item.active { background-color: #1f2937; color: var(--sidebar-hover); border-left: 4px solid var(--accent); }
+        .theme-toggle { margin-top: auto; padding: 20px; text-align: center; cursor: pointer; color: white; font-weight: 600; background: rgba(255,255,255,0.05); }
+
+        /* ОСНОВНАЯ РАБОЧАЯ ЗОНА */
+        .workspace { flex: 1; display: flex; gap: 20px; padding: 20px; overflow-y: auto; }
+
+        /* ПАНЕЛЬ ИНСТРУМЕНТОВ (РЕДАКТОР) */
+        .tools-panel {
+            flex: 0 0 400px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow-y: auto;
+            height: calc(100% - 50px);
+        }
+        .tools-panel::-webkit-scrollbar { width: 6px; }
+        .tools-panel::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        h2 { margin-top: 0; font-size: 1.2rem; color: var(--text-main); border-bottom: 2px solid var(--border); padding-bottom: 10px;}
         
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
+        input, textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--bg-color); color: var(--text-main); font-family: inherit; font-size: 0.95rem; box-sizing: border-box; transition: 0.2s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+
+        /* БЛОК ПОДПИСИ (CANVAS) */
+        .signature-box { border: 2px dashed var(--border); border-radius: 8px; background: var(--bg-color); margin-bottom: 15px; text-align: center; overflow: hidden; }
+        canvas { width: 100%; height: 120px; cursor: crosshair; touch-action: none; display: block; }
+        .clear-sig { background: #ef4444; color: white; border: none; padding: 5px 10px; font-size: 0.8rem; cursor: pointer; width: 100%; }
+
+        button.action-btn {
+            width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 8px;
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+        }
+        button.action-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        /* ПРЕДПРОСМОТР ДОКУМЕНТА (A4) */
+        .preview-panel {
+            flex: 1; display: flex; justify-content: center; overflow-y: auto; padding-bottom: 40px;
+        }
+        .document-a4 {
+            width: 210mm; min-height: 297mm; background: var(--doc-bg); color: #000;
+            padding: 20mm; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            font-family: 'Merriweather', serif; /* Серифный шрифт для официальности */
+            font-size: 14px; line-height: 1.6; position: relative;
+        }
+        
+        .doc-title { text-align: center; font-size: 18px; font-weight: bold; margin: 30px 0; text-transform: uppercase; }
+        .doc-right { text-align: right; margin-bottom: 40px; }
+        .doc-justify { text-align: justify; }
+        .sig-image { max-height: 80px; position: absolute; margin-top: -30px; }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 1000px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 10px; }
+            .logo { display: none; }
+            .menu-item { padding: 10px; white-space: nowrap; }
+            .workspace { flex-direction: column; overflow: visible; }
+            .tools-panel { flex: none; height: auto; width: 100%; box-sizing: border-box; }
+            .document-a4 { width: 100%; padding: 10mm; min-height: auto; box-sizing: border-box; }
+        }
+
+        /* ПРАВИЛА ДЛЯ ПЕЧАТИ */
         @media print {
-            header, .editor-panel, .btn-group { display: none !important; }
-            .main-layout { display: block; padding: 0; }
-            .preview-area { border: none; box-shadow: none; padding: 0; }
+            body { background: white; }
+            .sidebar, .tools-panel { display: none !important; }
+            .workspace { padding: 0; display: block; }
+            .preview-panel { display: block; padding: 0; }
+            .document-a4 { box-shadow: none; width: 100%; margin: 0; padding: 0; }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div style="font-size: 1.5rem; font-weight: 800;">📄 ProDoc v1.0</div>
-    <button class="btn-theme" onclick="document.body.classList.toggle('dark')">🌓</button>
-</header>
+    <div class="sidebar">
+        <div class="logo">Pro<span>Doc</span></div>
+        <div class="menu-item active" onclick="switchTemplate('contract')">📄 Договор услуг</div>
+        <div class="menu-item" onclick="switchTemplate('nda')">🔒 NDA (Неразглашение)</div>
+        <div class="menu-item" onclick="switchTemplate('rent')">🏠 Договор аренды</div>
+        <div class="menu-item" onclick="switchTemplate('receipt')">💰 Расписка</div>
+        <div class="theme-toggle" onclick="toggleTheme()">🌓 Сменить тему</div>
+    </div>
 
-<div class="main-layout">
-    <div class="panel editor-panel">
-        <h2 style="margin-top:0">Настройки документа</h2>
-        
-        <label>Тип документа</label>
-        <select id="docType" onchange="update()">
-            <option value="statement">Заявление на отпуск</option>
-            <option value="contract">Простой договор (услуги)</option>
-            <option value="receipt">Расписка о получении средств</option>
-        </select>
+    <div class="workspace">
+        <div class="tools-panel">
+            <h2>Заполнение данных</h2>
+            <div id="dynamic-fields">
+                </div>
+            
+            <h2>Ваша подпись</h2>
+            <div class="signature-box">
+                <canvas id="sigCanvas"></canvas>
+                <button class="clear-sig" onclick="clearSignature()">Очистить подпись</button>
+            </div>
 
-        <label>ФИО Заявителя / Исполнителя</label>
-        <input type="text" id="fio1" placeholder="Иванов Иван Иванович" oninput="update()">
+            <button class="action-btn" onclick="window.print()">🖨️ Печать / Сохранить PDF</button>
+            <button class="action-btn" style="background: #10b981; margin-top: 10px;" onclick="clearAll()">🗑️ Начать заново</button>
+        </div>
 
-        <label>ФИО Получателя / Заказчика</label>
-        <input type="text" id="fio2" placeholder="Петров Петр Петрович" oninput="update()">
-
-        <label>Сумма или Срок</label>
-        <input type="text" id="details" placeholder="Напр: 50 000 руб или 14 дней" oninput="update()">
-
-        <label>Дополнительное описание</label>
-        <textarea id="extra" rows="5" placeholder="Дополнительные условия или причины..." oninput="update()"></textarea>
-
-        <div class="btn-group">
-            <button class="btn-print" onclick="window.print()">Скачать / Печать PDF</button>
-            <button style="background: #ef4444; color: white;" onclick="resetForm()">Очистить</button>
+        <div class="preview-panel">
+            <div class="document-a4" id="document-preview">
+                </div>
         </div>
     </div>
 
-    <div class="panel preview-area" id="docContent">
-        </div>
-</div>
-
-<script>
-    const templates = {
-        statement: (data) => `
-<div style="text-align: right; margin-bottom: 50px;">
-    Кому: ${data.fio2 || '________________'}<br>
-    От: ${data.fio1 || '________________'}
-</div>
-<h2 style="text-align: center;">ЗАЯВЛЕНИЕ</h2>
-<p style="margin-top: 30px;">
-    Прошу предоставить мне очередной оплачиваемый отпуск сроком на <b>${data.details || '___'}</b>.
-</p>
-<p>${data.extra || ''}</p>
-<div style="margin-top: 100px; display: flex; justify-content: space-between;">
-    <span>Дата: ${new Date().toLocaleDateString()}</span>
-    <span>Подпись: ________________</span>
-</div>`,
-
-        contract: (data) => `
-<h2 style="text-align: center;">ДОГОВОР ОКАЗАНИЯ УСЛУГ</h2>
-<p style="text-align: right;">г. Москва, ${new Date().toLocaleDateString()}</p>
-<p>
-    <b>${data.fio2 || 'Заказчик'}</b>, именуемый в дальнейшем "Заказчик", с одной стороны, и 
-    <b>${data.fio1 || 'Исполнитель'}</b>, именуемый в дальнейшем "Исполнитель", заключили данный договор:
-</p>
-<p>1. Исполнитель обязуется выполнить следующие работы: ${data.extra || '________________'}.</p>
-<p>2. Стоимость услуг составляет: <b>${data.details || '0'} руб.</b></p>
-<div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-    <div>Заказчик: ___________</div>
-    <div>Исполнитель: ___________</div>
-</div>`,
-
-        receipt: (data) => `
-<h2 style="text-align: center;">РАСПИСКА</h2>
-<p>Я, ${data.fio1 || '________________'}, паспорт серии ____ № ______, 
-получил от ${data.fio2 || '________________'} денежные средства в размере:</p>
-<h3 style="text-align: center;">${data.details || '0'} рублей.</h3>
-<p>Основание: ${data.extra || 'возврат долга / оплата по договору'}.</p>
-<p style="margin-top: 50px;">Претензий по сумме не имею.</p>
-<p>Дата: ${new Date().toLocaleDateString()}</p>
-<p>Подпись: ________________</p>`
-    };
-
-    function update() {
-        const data = {
-            fio1: document.getElementById('fio1').value,
-            fio2: document.getElementById('fio2').value,
-            details: document.getElementById('details').value,
-            extra: document.getElementById('extra').value
+    <script>
+        // --- 1. БАЗА ШАБЛОНОВ ---
+        // Здесь мы описываем, какие поля нужны каждому документу и как он выглядит
+        const templates = {
+            contract: {
+                fields: [
+                    { id: 'city', label: 'Город подписания', default: 'Москва' },
+                    { id: 'date', label: 'Дата', type: 'date' },
+                    { id: 'customer', label: 'ФИО Заказчика', default: 'Иванов Иван Иванович' },
+                    { id: 'executor', label: 'ФИО Исполнителя', default: 'Петров Петр Петрович' },
+                    { id: 'service', label: 'Описание услуги', type: 'textarea', default: 'разработка веб-сайта' },
+                    { id: 'price', label: 'Сумма (руб)', default: '100 000' }
+                ],
+                render: (data, sig) => `
+                    <div class="doc-title">ДОГОВОР ОКАЗАНИЯ УСЛУГ</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <span>г. ${data.city || '_______'}</span>
+                        <span>${data.date || '«___» _______ 202_ г.'}</span>
+                    </div>
+                    <p class="doc-justify">
+                        Гражданин <b>${data.customer || '____________________'}</b>, именуемый в дальнейшем «Заказчик», с одной стороны, и 
+                        гражданин <b>${data.executor || '____________________'}</b>, именуемый в дальнейшем «Исполнитель», с другой стороны, 
+                        совместно именуемые «Стороны», заключили настоящий Договор о нижеследующем:
+                    </p>
+                    <p class="doc-justify">1. Исполнитель обязуется по заданию Заказчика оказать следующие услуги: <b>${data.service || '____________________'}</b>, а Заказчик обязуется оплатить эти услуги.</p>
+                    <p class="doc-justify">2. Стоимость оказываемых услуг составляет <b>${data.price || '_____'}</b> рублей. Оплата производится не позднее 3 (трех) дней с момента подписания акта приемки-передачи.</p>
+                    <p class="doc-justify">3. Настоящий договор составлен в двух экземплярах, имеющих одинаковую юридическую силу.</p>
+                    
+                    <div style="margin-top: 60px; display: flex; justify-content: space-between;">
+                        <div>
+                            <b>Заказчик:</b><br><br>
+                            ________________ /${data.customer || 'ФИО'}/
+                        </div>
+                        <div>
+                            <b>Исполнитель:</b><br><br>
+                            ${sig ? `<img src="${sig}" class="sig-image">` : '________________'} /${data.executor || 'ФИО'}/
+                        </div>
+                    </div>
+                `
+            },
+            receipt: {
+                fields: [
+                    { id: 'borrower', label: 'Я (ФИО кто берет)', default: '' },
+                    { id: 'passport', label: 'Серия и номер паспорта', default: '' },
+                    { id: 'amount', label: 'Сумма цифрами и прописью', default: '' },
+                    { id: 'lender', label: 'Получил(а) от (ФИО)', default: '' },
+                    { id: 'date_return', label: 'Обязуюсь вернуть до (Дата)', type: 'date' }
+                ],
+                render: (data, sig) => `
+                    <div class="doc-title">РАСПИСКА В ПОЛУЧЕНИИ ДЕНЕЖНЫХ СРЕДСТВ</div>
+                    <p class="doc-justify" style="margin-top: 40px; line-height: 2;">
+                        Я, <b>${data.borrower || '_________________________________'}</b>, паспорт: <b>${data.passport || '_________________'}</b>, 
+                        получил(а) от <b>${data.lender || '_________________________________'}</b> 
+                        денежные средства в размере <b>${data.amount || '_________________________________'}</b>.
+                    </p>
+                    <p class="doc-justify" style="margin-top: 20px;">
+                        Указанную сумму обязуюсь вернуть в полном объеме в срок до <b>${data.date_return || '«___» _______ 202_ г.'}</b>.
+                    </p>
+                    <div style="margin-top: 80px;">
+                        <b>Подпись заемщика:</b> ${sig ? `<img src="${sig}" class="sig-image" style="margin-left: 20px;">` : '________________'} 
+                    </div>
+                `
+            }
         };
-        const type = document.getElementById('docType').value;
-        document.getElementById('docContent').innerHTML = templates[type](data);
-    }
 
-    function resetForm() {
-        if(confirm('Очистить все поля?')) {
-            document.querySelectorAll('input, textarea').forEach(el => el.value = '');
-            update();
+        // Дублируем простые шаблоны для примера
+        templates.nda = templates.contract; 
+        templates.rent = templates.contract;
+
+        // --- 2. ЛОГИКА ПРИЛОЖЕНИЯ ---
+        let currentTemplate = 'contract';
+        let formData = JSON.parse(localStorage.getItem('prodoc_data')) || {};
+        let signatureData = localStorage.getItem('prodoc_sig') || null;
+
+        const fieldsContainer = document.getElementById('dynamic-fields');
+        const previewContainer = document.getElementById('document-preview');
+
+        // Смена шаблона
+        function switchTemplate(templateId) {
+            currentTemplate = templateId;
+            
+            // Подсветка меню
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            renderForm();
+            updatePreview();
         }
-    }
 
-    // Инициализация
-    update();
-</script>
+        // Отрисовка полей ввода
+        function renderForm() {
+            fieldsContainer.innerHTML = '';
+            const fields = templates[currentTemplate].fields;
 
+            fields.forEach(field => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'form-group';
+                
+                const label = document.createElement('label');
+                label.innerText = field.label;
+                wrapper.appendChild(label);
+
+                let input;
+                if (field.type === 'textarea') {
+                    input = document.createElement('textarea');
+                    input.rows = 3;
+                } else {
+                    input = document.createElement('input');
+                    input.type = field.type || 'text';
+                }
+
+                input.id = field.id;
+                // Восстанавливаем данные из памяти или ставим дефолт
+                input.value = formData[field.id] || field.default || '';
+                
+                // Сохраняем и обновляем при каждом вводе
+                input.addEventListener('input', (e) => {
+                    formData[field.id] = e.target.value;
+                    localStorage.setItem('prodoc_data', JSON.stringify(formData));
+                    updatePreview();
+                });
+
+                wrapper.appendChild(input);
+                fieldsContainer.appendChild(wrapper);
+            });
+        }
+
+        // Обновление листа А4
+        function updatePreview() {
+            previewContainer.innerHTML = templates[currentTemplate].render(formData, signatureData);
+        }
+
+        // Очистка всего
+        function clearAll() {
+            if(confirm('Точно удалить все введенные данные?')) {
+                formData = {};
+                signatureData = null;
+                localStorage.removeItem('prodoc_data');
+                clearSignature();
+                renderForm();
+                updatePreview();
+            }
+        }
+
+        // Темная тема
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // --- 3. ЛОГИКА РИСОВАНИЯ ПОДПИСИ (CANVAS) ---
+        const canvas = document.getElementById('sigCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        // Настройка размера холста
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000080'; // Цвет синей ручки
+            if(signatureData) {
+                let img = new Image();
+                img.onload = () => ctx.drawImage(img, 0, 0);
+                img.src = signatureData;
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        // Функции рисования
+        function startPosition(e) { isDrawing = true; draw(e); }
+        function endPosition() { 
+            isDrawing = false; 
+            ctx.beginPath(); 
+            // Сохраняем подпись после отпускания мыши
+            signatureData = canvas.toDataURL();
+            localStorage.setItem('prodoc_sig', signatureData);
+            updatePreview();
+        }
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault(); // Запрет скролла на телефоне при рисовании
+            
+            // Получаем координаты для мыши или пальца
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            ctx.lineTo(clientX - rect.left, clientY - rect.top);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(clientX - rect.left, clientY - rect.top);
+        }
+
+        // События мыши
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseleave', () => { if(isDrawing) endPosition(); });
+
+        // События тачскрина (для телефонов)
+        canvas.addEventListener('touchstart', startPosition, {passive: false});
+        canvas.addEventListener('touchend', endPosition);
+        canvas.addEventListener('touchmove', draw, {passive: false});
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            signatureData = null;
+            localStorage.removeItem('prodoc_sig');
+            updatePreview();
+        }
+
+        // Запуск при старте
+        setTimeout(() => {
+            renderForm();
+            updatePreview();
+            resizeCanvas();
+        }, 100);
+
+    </script>
 </body>
 </html>
