@@ -3,727 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ПАКЕТ УСЛУГ ММБ | Workspace</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>ПАКЕТ УСЛУГ ММБ | 2026 Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= ДИЗАЙН СИСТЕМА 2026 ================= */
         :root {
-            /* Базовые цвета (Пространственный минимализм) */
-            --surface-primary: #ffffff;
-            --surface-secondary: #f9fafb;
-            --surface-glass: rgba(255, 255, 255, 0.85);
-            
-            --text-primary: #111827;
-            --text-secondary: #6b7280;
-            --text-tertiary: #9ca3af;
-            
-            --border-light: #e5e7eb;
-            --border-focus: #111827;
-            
+            --sidebar-bg: #ffffff;
+            --workspace-bg: #f8fafc;
             --accent: #111827;
-            --accent-hover: #374151;
-            
-            /* Скругления и тени */
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 24px;
-            
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.03);
-            --shadow-float: 0 10px 40px rgba(0, 0, 0, 0.08);
-            
-            /* Размеры */
-            --sidebar-width: 320px;
+            --border: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--surface-secondary);
-            color: var(--text-primary);
+            background: var(--sidebar-bg);
+            color: var(--text-main);
             display: flex;
             height: 100vh;
             overflow: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Стилизация скроллбара */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
-
-        /* ================= БОКОВАЯ ПАНЕЛЬ (SIDEBAR) ================= */
+        /* --- SIDEBAR --- */
         .sidebar {
-            width: var(--sidebar-width);
-            background: var(--surface-glass);
-            backdrop-filter: blur(12px);
-            border-right: 1px solid var(--border-light);
+            width: 300px;
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            z-index: 10;
+            flex-shrink: 0;
+            background: #fff;
+            z-index: 100;
         }
 
-        .brand-header {
+        .brand {
             padding: 32px 24px;
-            border-bottom: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border);
         }
-        
-        .brand-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-        
-        .brand-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
-        }
+        .brand h1 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+        .brand p { font-size: 20px; font-weight: 700; margin-top: 4px; }
 
-        .folders-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px 16px;
-        }
+        .nav-container { flex: 1; overflow-y: auto; padding: 20px 12px; }
 
-        /* Аккордеон папок */
-        .folder {
-            margin-bottom: 8px;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-        }
-        
+        .folder { margin-bottom: 10px; }
         .folder-header {
-            padding: 12px 16px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            border-radius: var(--radius-md);
-            transition: background 0.2s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
-            color: var(--text-primary);
+            border-radius: 8px;
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 14px;
         }
+        .folder-header:hover { background: var(--workspace-bg); }
         
-        .folder-header:hover { background: var(--surface-secondary); }
-        .folder-icon { display: flex; align-items: center; gap: 10px; }
-        .chevron { transition: transform 0.3s ease; color: var(--text-tertiary); font-size: 0.8rem; }
-        
-        .folder.open .chevron { transform: rotate(90deg); }
-        .folder.open .folder-content {
-            max-height: 500px;
-            opacity: 1;
-            padding-top: 8px;
-            padding-bottom: 8px;
-        }
-
         .folder-content {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            display: none;
+            padding-left: 12px;
+            margin-top: 4px;
         }
+        .folder.open .folder-content { display: block; }
+        .folder.open .chevron { transform: rotate(90deg); }
 
         .doc-item {
-            padding: 10px 16px 10px 42px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            padding: 8px 12px;
+            font-size: 13px;
+            color: var(--text-muted);
             cursor: pointer;
-            border-radius: var(--radius-sm);
-            transition: all 0.2s ease;
-            position: relative;
+            border-radius: 6px;
+            margin-bottom: 2px;
+            transition: 0.2s;
         }
+        .doc-item:hover { background: var(--workspace-bg); color: var(--text-main); }
+        .doc-item.active { background: var(--accent); color: #fff; font-weight: 500; }
 
-        .doc-item::before {
-            content: ''; position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
-            width: 4px; height: 4px; border-radius: 50%; background: var(--border-light);
-            transition: background 0.2s;
-        }
-
-        .doc-item:hover { color: var(--text-primary); background: rgba(0,0,0,0.02); }
-        .doc-item:hover::before { background: var(--text-tertiary); }
-        
-        .doc-item.active {
-            color: var(--text-primary);
-            background: var(--surface-primary);
-            font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .doc-item.active::before { background: var(--accent); }
-
-        /* ================= РАБОЧАЯ ОБЛАСТЬ (WORKSPACE) ================= */
+        /* --- WORKSPACE --- */
         .workspace {
             flex: 1;
-            display: grid;
-            grid-template-columns: 400px 1fr;
-            background: var(--surface-secondary);
+            display: flex;
+            background: var(--workspace-bg);
+            position: relative; /* Важно для позиционирования экрана приветствия */
         }
 
-        /* Панель редактора (Формы) */
-        .editor-panel {
-            background: var(--surface-primary);
-            border-right: 1px solid var(--border-light);
+        /* Левая часть воркспейса (Поля ввода) */
+        .editor {
+            width: 400px;
+            background: #fff;
+            border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            position: relative;
-        }
-
-        .editor-header {
-            padding: 32px 32px 24px;
-            border-bottom: 1px solid var(--border-light);
-            background: var(--surface-primary);
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-        
-        .editor-header h2 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
-        .editor-header p { font-size: 0.85rem; color: var(--text-secondary); margin-top: 6px; }
-
-        .editor-form {
-            padding: 32px;
+            padding: 40px;
             overflow-y: auto;
-            flex: 1;
+            z-index: 10;
         }
+
+        .editor h2 { font-size: 22px; margin-bottom: 30px; }
 
         .input-group { margin-bottom: 24px; }
-        .input-group label {
-            display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
-            color: var(--text-secondary); margin-bottom: 8px; font-weight: 600;
+        .input-group label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .input-group input, .input-group textarea {
+            width: 100%; border: none; border-bottom: 1px solid var(--border);
+            padding: 10px 0; font-family: inherit; font-size: 15px; outline: none; transition: 0.3s;
         }
+        .input-group input:focus { border-bottom-color: var(--accent); }
 
-        /* Минималистичные инпуты 2026 */
-        .modern-input {
-            width: 100%; padding: 12px 0; font-size: 1rem; color: var(--text-primary);
-            background: transparent; border: none; border-bottom: 1px solid var(--border-light);
-            font-family: inherit; transition: border-color 0.3s ease;
-        }
-        .modern-input:focus { outline: none; border-bottom-color: var(--border-focus); }
-        .modern-input::placeholder { color: var(--text-tertiary); font-weight: 300; }
-        
-        textarea.modern-input { resize: vertical; min-height: 40px; }
-
-        /* Блок подписи */
-        .signature-wrapper {
-            margin-top: 32px; padding: 20px; border: 1px dashed var(--border-light);
-            border-radius: var(--radius-md); background: var(--surface-secondary);
-            text-align: center;
-        }
-        .signature-wrapper p { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-        canvas { width: 100%; height: 120px; background: var(--surface-primary); border-radius: var(--radius-sm); cursor: crosshair; touch-action: none; border: 1px solid var(--border-light); }
-        .clear-btn { margin-top: 10px; background: none; border: none; color: var(--text-tertiary); font-size: 0.8rem; cursor: pointer; text-decoration: underline; transition: color 0.2s; }
-        .clear-btn:hover { color: #ef4444; }
-
-        /* ================= ЗОНА ДОКУМЕНТА (A4) ================= */
-        .preview-panel {
-            padding: 40px;
+        /* Правая часть воркспейса (Лист А4) */
+        .preview {
+            flex: 1;
+            padding: 60px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            background: #f3f4f6; /* Чуть темнее фон для контраста с листом */
+            background: #f1f5f9;
         }
 
-        .a4-sheet {
+        .a4 {
             width: 210mm;
             min-height: 297mm;
-            background: var(--surface-primary);
+            background: #fff;
             padding: 25mm 20mm;
-            box-shadow: var(--shadow-float);
-            border-radius: 2px;
-            font-family: 'Lora', serif; /* Официальный серифный шрифт */
-            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            font-family: 'Lora', serif;
             line-height: 1.6;
-            color: #000000;
-            position: relative;
+            color: #1a1a1a;
         }
 
-        /* Типографика внутри документа */
-        .doc-title { text-align: center; font-size: 18px; font-weight: 600; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
-        .doc-subtitle { text-align: center; font-size: 14px; margin-bottom: 30px; }
-        .doc-right { text-align: right; margin-bottom: 20px; }
-        .doc-justify { text-align: justify; margin-bottom: 15px; }
-        .doc-bold { font-weight: 600; }
-        .doc-placeholder { color: #999; border-bottom: 1px solid #999; display: inline-block; min-width: 100px; text-align: center; }
-        
-        .signatures-block {
-            margin-top: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+        /* ЭКРАН ПРИВЕТСТВИЯ — теперь он перекрывает только Workspace */
+        .welcome {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 50;
+            text-align: center;
+            padding: 40px;
         }
-        .sig-box { border-top: 1px solid #000; padding-top: 10px; position: relative; min-height: 80px; }
-        .sig-label { font-size: 12px; font-weight: 600; margin-bottom: 30px; }
-        .rendered-sig { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); max-height: 60px; z-index: 1; }
+        .welcome h1 { font-size: 32px; margin-bottom: 16px; }
+        .welcome p { color: var(--text-muted); max-width: 400px; }
 
-        /* ================= ПЛАВАЮЩАЯ КНОПКА ПЕЧАТИ ================= */
-        .fab-print {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background: var(--accent);
-            color: var(--surface-primary);
-            border: none;
-            padding: 16px 32px;
-            border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(17, 24, 39, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 100;
+        /* Кнопка печати */
+        .btn-print {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--accent); color: #fff; border: none;
+            padding: 16px 32px; border-radius: 50px; font-weight: 600;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            z-index: 100; transition: 0.3s;
         }
-        .fab-print:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(17, 24, 39, 0.3); background: var(--accent-hover); }
+        .btn-print:hover { transform: translateY(-2px); }
 
-        /* Экран приветствия */
-        .welcome-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--surface-primary); display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 50; text-align: center; padding: 40px;
+        .signature-area {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px dashed var(--border);
+            border-radius: 12px;
         }
-        .welcome-screen h1 { font-size: 2rem; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.03em; }
-        .welcome-screen p { color: var(--text-secondary); max-width: 400px; line-height: 1.6; }
-
-        /* ================= АДАПТИВНОСТЬ & ПЕЧАТЬ ================= */
-        @media (max-width: 1200px) {
-            .workspace { grid-template-columns: 320px 1fr; }
-            .a4-sheet { transform: scale(0.85); transform-origin: top center; margin-bottom: -15%; }
-        }
-        
-        @media (max-width: 900px) {
-            body { flex-direction: column; overflow: auto; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-light); }
-            .workspace { display: flex; flex-direction: column; }
-            .editor-panel { border-right: none; border-bottom: 1px solid var(--border-light); }
-            .a4-sheet { transform: scale(1); width: 100%; padding: 15mm; min-height: auto; box-shadow: none; }
-            .fab-print { bottom: 20px; right: 20px; padding: 12px 24px; }
-        }
+        canvas { width: 100%; height: 100px; background: #fafafa; border-radius: 4px; cursor: crosshair; }
 
         @media print {
-            body * { visibility: hidden; }
-            .preview-panel, .a4-sheet, .a4-sheet * { visibility: visible; }
-            .preview-panel { position: absolute; left: 0; top: 0; padding: 0; background: transparent; }
-            .a4-sheet { box-shadow: none; width: 100%; margin: 0; padding: 0; border: none; }
-            @page { margin: 15mm; }
+            .sidebar, .editor, .btn-print, .welcome { display: none !important; }
+            body { background: #fff; }
+            .workspace, .preview { padding: 0; margin: 0; display: block; }
+            .a4 { box-shadow: none; width: 100%; margin: 0; }
         }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="brand-header">
-            <div class="brand-title">Система генерации</div>
-            <div class="brand-logo">Пакет ММБ</div>
+        <div class="brand">
+            <h1>Система документов</h1>
+            <p>Пакет услуг ММБ</p>
         </div>
-        
-        <div class="folders-container" id="sidebar-folders">
+        <div class="nav-container" id="menu">
             </div>
     </aside>
 
     <main class="workspace">
-        
-        <div class="welcome-screen" id="welcome-screen">
-            <h1>Добро пожаловать в ММБ Workspace</h1>
-            <p>Выберите нужный шаблон документа в меню слева. Дизайн формы и структура документа подстроятся автоматически.</p>
+        <div class="welcome" id="welcome">
+            <h1>Добро пожаловать</h1>
+            <p>Выберите документ из папки слева, чтобы начать работу.</p>
         </div>
 
-        <section class="editor-panel">
-            <div class="editor-header">
-                <h2 id="form-title">Настройки документа</h2>
-                <p id="form-desc">Заполните поля ниже</p>
-            </div>
+        <section class="editor">
+            <h2 id="doc-title">Настройка</h2>
+            <div id="fields"></div>
             
-            <div class="editor-form" id="form-fields">
-                </div>
-
-            <div class="signature-wrapper" style="display: none;" id="sig-wrapper">
-                <p>Ваша подпись</p>
-                <canvas id="signature-pad"></canvas>
-                <button class="clear-btn" onclick="clearSignature()">Очистить холст</button>
+            <div class="signature-area">
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 10px;">ПОДПИСЬ МЫШЬЮ</label>
+                <canvas id="pad"></canvas>
+                <button onclick="clearPad()" style="background:none; border:none; color:red; font-size:10px; cursor:pointer; margin-top:5px;">Очистить</button>
             </div>
         </section>
 
-        <section class="preview-panel">
-            <div class="a4-sheet" id="document-preview">
+        <section class="preview">
+            <div class="a4" id="a4-content">
                 </div>
         </section>
-
     </main>
 
-    <button class="fab-print" id="print-btn" onclick="window.print()" style="display: none;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-        Распечатать PDF
-    </button>
+    <button class="btn-print" id="print-btn" style="display:none" onclick="window.print()">Распечатать PDF</button>
 
     <script>
-        // База данных структуры папок и документов
-        const database = [
+        const data = [
             {
-                folder: "Корпоративные",
-                icon: "💼",
-                documents: [
-                    {
-                        id: "service_contract",
-                        title: "Договор оказания услуг",
-                        desc: "Стандартный договор между юридическим и физическим лицом.",
-                        fields: [
-                            { id: "city", label: "Город подписания", placeholder: "г. Москва" },
-                            { id: "date", label: "Дата подписания", placeholder: "«___» _______ 2026 г." },
-                            { id: "company", label: "Название компании (Заказчик)", placeholder: "ООО «ММБ Групп»" },
-                            { id: "director", label: "В лице генерального директора", placeholder: "Иванова И.И." },
-                            { id: "executor", label: "ФИО Исполнителя", placeholder: "Петров Петр Петрович" },
-                            { id: "service_desc", label: "Предмет договора (описание услуг)", placeholder: "разработка программного обеспечения", type: "textarea" },
-                            { id: "price", label: "Стоимость услуг (цифрами и прописью)", placeholder: "150 000 (сто пятьдесят тысяч) рублей" }
-                        ],
-                        render: (d, sig) => `
-                            <div class="doc-title">ДОГОВОР ОКАЗАНИЯ УСЛУГ № ___</div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
-                                <span>${d.city || '<span class="doc-placeholder">г. Москва</span>'}</span>
-                                <span>${d.date || '<span class="doc-placeholder">«___» _______ 202_ г.</span>'}</span>
+                folder: "Бизнес услуги",
+                docs: [
+                    { id: 'c1', name: 'Договор ММБ', fields: ['Город', 'Дата', 'ФИО Заказчика', 'Сумма'], template: (d, s) => `
+                        <div style="text-align:center; font-weight:700; margin-bottom:40px;">ДОГОВОР ОКАЗАНИЯ УСЛУГ</div>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:30px;">
+                            <span>г. ${d['Город'] || '_______'}</span>
+                            <span>${d['Дата'] || '«___» _______ 2026 г.'}</span>
+                        </div>
+                        <p>Заказчик <b>${d['ФИО Заказчика'] || '________________'}</b> поручает Исполнителю выполнение работ согласно Пакету ММБ.</p>
+                        <p>Стоимость услуг составляет ${d['Сумма'] || '0'} руб.</p>
+                        <div style="margin-top:100px; display:flex; justify-content:flex-end;">
+                            <div style="text-align:center; border-top:1px solid #000; min-width:200px;">
+                                ${s ? `<img src="${s}" style="height:60px; display:block; margin: -50px auto 0;">` : ''}
+                                <small>Подпись Заказчика</small>
                             </div>
-                            
-                            <p class="doc-justify">
-                                <span class="doc-bold">${d.company || '<span class="doc-placeholder">ООО "Компания"</span>'}</span>, именуемое в дальнейшем «Заказчик», в лице генерального директора <span class="doc-bold">${d.director || '<span class="doc-placeholder">ФИО Директора</span>'}</span>, действующего на основании Устава, с одной стороны, и
-                            </p>
-                            <p class="doc-justify">
-                                Гражданин РФ <span class="doc-bold">${d.executor || '<span class="doc-placeholder">ФИО Исполнителя</span>'}</span>, именуемый в дальнейшем «Исполнитель», с другой стороны, совместно именуемые «Стороны», заключили настоящий Договор о нижеследующем:
-                            </p>
-                            
-                            <p class="doc-justify" style="margin-top:20px; font-weight:600;">1. ПРЕДМЕТ ДОГОВОРА</p>
-                            <p class="doc-justify">
-                                1.1. По настоящему Договору Исполнитель обязуется по заданию Заказчика оказать следующие услуги: <span class="doc-bold">${d.service_desc || '<span class="doc-placeholder">описание услуг</span>'}</span>, а Заказчик обязуется оплатить эти услуги.
-                            </p>
-                            
-                            <p class="doc-justify" style="margin-top:20px; font-weight:600;">2. СТОИМОСТЬ И ПОРЯДОК РАСЧЕТОВ</p>
-                            <p class="doc-justify">
-                                2.1. Общая стоимость услуг по настоящему Договору составляет <span class="doc-bold">${d.price || '<span class="doc-placeholder">Сумма</span>'}</span>. НДС не облагается в связи с применением Исполнителем НПД.
-                            </p>
-                            <p class="doc-justify">
-                                2.2. Оплата производится Заказчиком путем перечисления денежных средств на банковский счет Исполнителя в течение 5 (пяти) рабочих дней с момента подписания Акта сдачи-приемки оказанных услуг.
-                            </p>
-
-                            <p class="doc-justify" style="margin-top:20px; font-weight:600;">3. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</p>
-                            <p class="doc-justify">
-                                3.1. Настоящий Договор вступает в силу с момента его подписания и действует до полного исполнения Сторонами своих обязательств.<br>
-                                3.2. Договор составлен в двух экземплярах, имеющих равную юридическую силу.
-                            </p>
-
-                            <div class="signatures-block">
-                                <div>
-                                    <div class="sig-label">ЗАКАЗЧИК:</div>
-                                    <div class="sig-box">
-                                        ___________ / ${d.director ? d.director.split(' ')[0] : 'ФИО'} /<br><br>
-                                        М.П.
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="sig-label">ИСПОЛНИТЕЛЬ:</div>
-                                    <div class="sig-box">
-                                        ${sig ? `<img src="${sig}" class="rendered-sig">` : '___________'} / ${d.executor || 'ФИО'} /
-                                    </div>
-                                </div>
-                            </div>
-                        `
-                    },
-                    {
-                        id: "nda",
-                        title: "Соглашение о неразглашении (NDA)",
-                        desc: "Договор о защите конфиденциальной информации.",
-                        fields: [
-                            { id: "party1", label: "Раскрывающая сторона", placeholder: "ООО «ММБ Групп»" },
-                            { id: "party2", label: "Получающая сторона (ФИО)", placeholder: "Иванов Иван Иванович" },
-                            { id: "fine", label: "Сумма штрафа за разглашение", placeholder: "1 000 000 руб." }
-                        ],
-                        render: (d, sig) => `
-                            <div class="doc-title">СОГЛАШЕНИЕ О КОНФИДЕНЦИАЛЬНОСТИ (NDA)</div>
-                            <p class="doc-justify" style="margin-top: 40px;">
-                                <span class="doc-bold">${d.party1 || '___________________'}</span>, именуемое в дальнейшем «Раскрывающая сторона», и 
-                                <span class="doc-bold">${d.party2 || '___________________'}</span>, именуемый(ая) в дальнейшем «Получающая сторона», заключили настоящее соглашение.
-                            </p>
-                            <p class="doc-justify">
-                                1. Получающая сторона обязуется сохранять в тайне всю конфиденциальную информацию, переданную ей Раскрывающей стороной в процессе сотрудничества.<br><br>
-                                2. За каждый факт нарушения режима конфиденциальности Получающая сторона обязуется выплатить штраф в размере <span class="doc-bold">${d.fine || '___________'}</span>, а также возместить все причиненные убытки.
-                            </p>
-                            <div class="signatures-block" style="margin-top: 100px;">
-                                <div><div class="sig-label">РАСКРЫВАЮЩАЯ СТОРОНА:</div><div class="sig-box">___________</div></div>
-                                <div><div class="sig-label">ПОЛУЧАЮЩАЯ СТОРОНА:</div><div class="sig-box">${sig ? `<img src="${sig}" class="rendered-sig">` : '___________'}</div></div>
-                            </div>
-                        `
-                    }
+                        </div>
+                    `}
                 ]
             },
             {
-                folder: "Физические лица",
-                icon: "👤",
-                documents: [
-                    {
-                        id: "receipt",
-                        title: "Расписка о получении средств",
-                        desc: "Документ, подтверждающий факт передачи денег.",
-                        fields: [
-                            { id: "borrower", label: "Я (ФИО кто берет деньги)", placeholder: "Иванов Иван Иванович" },
-                            { id: "passport1", label: "Паспортные данные берущего", placeholder: "Серия 1234 № 567890, выдан..." },
-                            { id: "lender", label: "Получил от (ФИО кто дает)", placeholder: "Петрова Петра Петровича" },
-                            { id: "amount", label: "Сумма цифрами и прописью", placeholder: "50 000 (пятьдесят тысяч) рублей" },
-                            { id: "reason", label: "Основание (за что)", placeholder: "в качестве займа / в счет оплаты авто" },
-                            { id: "date_return", label: "Обязуюсь вернуть до (Дата)", placeholder: "31 декабря 2026 г." }
-                        ],
-                        render: (d, sig) => `
-                            <div class="doc-title">РАСПИСКА В ПОЛУЧЕНИИ ДЕНЕЖНЫХ СРЕДСТВ</div>
-                            <div class="doc-right">г. Москва, ${new Date().toLocaleDateString('ru-RU')}</div>
-                            <p class="doc-justify" style="line-height: 2; margin-top: 40px;">
-                                Я, гражданин РФ <span class="doc-bold">${d.borrower || '<span class="doc-placeholder">ФИО заемщика</span>'}</span>, 
-                                паспорт <span class="doc-bold">${d.passport1 || '<span class="doc-placeholder">данные паспорта</span>'}</span>, 
-                                настоящим подтверждаю, что получил(а) от <span class="doc-bold">${d.lender || '<span class="doc-placeholder">ФИО кредитора</span>'}</span> 
-                                денежные средства в размере <span class="doc-bold">${d.amount || '<span class="doc-placeholder">Сумма</span>'}</span>.
-                            </p>
-                            <p class="doc-justify" style="line-height: 2;">
-                                Денежные средства получены <span class="doc-bold">${d.reason || '<span class="doc-placeholder">основание</span>'}</span>.
-                            </p>
-                            <p class="doc-justify" style="line-height: 2;">
-                                Указанную сумму обязуюсь вернуть в полном объеме в срок до <span class="doc-bold">${d.date_return || '<span class="doc-placeholder">Дата возврата</span>'}</span>. 
-                                Расписка написана мной собственноручно, находясь в здравом уме и твердой памяти.
-                            </p>
-                            <div style="margin-top: 80px; text-align: right; position: relative; min-height: 80px;">
-                                Подпись лица, получившего деньги: <br><br>
-                                ${sig ? `<img src="${sig}" class="rendered-sig" style="right: 50px; left: auto; transform: none; bottom: -20px;">` : '______________________'} 
-                                / ${d.borrower ? d.borrower.split(' ')[0] : 'Фамилия'} /
-                            </div>
-                        `
-                    }
-                ]
-            },
-            {
-                folder: "Недвижимость",
-                icon: "🏢",
-                documents: [
-                    {
-                        id: "rent",
-                        title: "Договор аренды квартиры",
-                        desc: "Простой договор найма жилого помещения.",
-                        fields: [
-                            { id: "landlord", label: "ФИО Арендодателя", placeholder: "Иванов И.И." },
-                            { id: "tenant", label: "ФИО Арендатора", placeholder: "Петров П.П." },
-                            { id: "address", label: "Адрес квартиры", placeholder: "г. Москва, ул. Пушкина, д.1, кв.1" },
-                            { id: "rent_price", label: "Арендная плата в месяц", placeholder: "40 000 руб." }
-                        ],
-                        render: (d, sig) => `
-                            <div class="doc-title">ДОГОВОР НАЙМА ЖИЛОГО ПОМЕЩЕНИЯ</div>
-                            <p class="doc-justify" style="margin-top: 30px;">
-                                <span class="doc-bold">${d.landlord || '_______________'}</span> (Наймодатель) и <span class="doc-bold">${d.tenant || '_______________'}</span> (Наниматель) заключили договор о сдаче в аренду жилого помещения, расположенного по адресу: <span class="doc-bold">${d.address || '_______________'}</span>.
-                            </p>
-                            <p class="doc-justify">
-                                Ежемесячная плата составляет: <span class="doc-bold">${d.rent_price || '_______'}</span>. Коммунальные услуги оплачиваются отдельно по счетчикам.
-                            </p>
-                            <div class="signatures-block" style="margin-top: 80px;">
-                                <div><div class="sig-label">НАЙМОДАТЕЛЬ:</div><div class="sig-box">___________</div></div>
-                                <div><div class="sig-label">НАНИМАТЕЛЬ:</div><div class="sig-box">${sig ? `<img src="${sig}" class="rendered-sig">` : '___________'}</div></div>
-                            </div>
-                        `
-                    }
+                folder: "Личные документы",
+                docs: [
+                    { id: 'r1', name: 'Расписка', fields: ['От кого', 'Кому', 'Сумма слов'], template: (d, s) => `
+                        <div style="text-align:center; font-weight:700; margin-bottom:40px;">РАСПИСКА</div>
+                        <p>Я, ${d['От кого'] || '_______'}, подтверждаю получение денежных средств от ${d['Кому'] || '_______'}.</p>
+                        <p>Сумма: ${d['Сумма слов'] || '_______'}.</p>
+                        <div style="margin-top:100px;">Подпись: ${s ? `<img src="${s}" style="height:50px;">` : '___________'}</div>
+                    `}
                 ]
             }
         ];
 
-        // Глобальное состояние
-        let activeDocId = null;
-        let activeDocConfig = null;
-        let formData = {};
-        let signatureData = null;
+        let currentDoc = null;
+        let inputs = {};
+        let sigImg = null;
 
-        // Элементы DOM
-        const sidebarFolders = document.getElementById('sidebar-folders');
-        const formFieldsContainer = document.getElementById('form-fields');
-        const documentPreview = document.getElementById('document-preview');
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const printBtn = document.getElementById('print-btn');
-        const sigWrapper = document.getElementById('sig-wrapper');
+        // Инициализация меню
+        const menu = document.getElementById('menu');
+        data.forEach(cat => {
+            const f = document.createElement('div');
+            f.className = 'folder';
+            f.innerHTML = `
+                <div class="folder-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span>📁 ${cat.folder}</span>
+                    <span class="chevron" style="font-size:10px;">▶</span>
+                </div>
+                <div class="folder-content">
+                    ${cat.docs.map(doc => `<div class="doc-item" onclick="loadDoc('${doc.id}')">${doc.name}</div>`).join('')}
+                </div>
+            `;
+            menu.appendChild(f);
+        });
 
-        // 1. Инициализация бокового меню
-        function initSidebar() {
-            let html = '';
-            database.forEach((cat, index) => {
-                const isOpen = index === 0 ? 'open' : ''; // Первая папка открыта по умолчанию
-                html += `
-                    <div class="folder ${isOpen}" onclick="toggleFolder(this)">
-                        <div class="folder-header">
-                            <div class="folder-icon">${cat.icon} <span>${cat.folder}</span></div>
-                            <span class="chevron">▶</span>
-                        </div>
-                        <div class="folder-content" onclick="event.stopPropagation()">
-                            ${cat.documents.map(doc => `
-                                <div class="doc-item" id="nav-${doc.id}" onclick="loadDocument('${doc.id}')">
-                                    ${doc.title}
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-            sidebarFolders.innerHTML = html;
-        }
-
-        // Логика аккордеона
-        function toggleFolder(element) {
-            element.classList.toggle('open');
-        }
-
-        // 2. Загрузка выбранного документа
-        function loadDocument(docId) {
-            // Убираем экран приветствия
-            welcomeScreen.style.display = 'none';
-            printBtn.style.display = 'flex';
-            sigWrapper.style.display = 'block';
-
-            // Ищем документ в базе
-            let docConfig = null;
-            database.forEach(cat => {
-                const found = cat.documents.find(d => d.id === docId);
-                if(found) docConfig = found;
-            });
-            if(!docConfig) return;
-
-            activeDocId = docId;
-            activeDocConfig = docConfig;
+        function loadDoc(id) {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('print-btn').style.display = 'block';
             
-            // Загружаем данные из памяти (если есть)
-            formData = JSON.parse(localStorage.getItem(`prodoc_${docId}`)) || {};
-            signatureData = localStorage.getItem('prodoc_sig') || null;
-
-            // Подсветка активного пункта в меню
-            document.querySelectorAll('.doc-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`nav-${docId}`).classList.add('active');
-
-            // Обновляем заголовки редактора
-            document.getElementById('form-title').innerText = docConfig.title;
-            document.getElementById('form-desc').innerText = docConfig.desc;
-
-            // Генерируем инпуты
-            let formHtml = '';
-            docConfig.fields.forEach(field => {
-                const value = formData[field.id] || '';
-                if(field.type === 'textarea') {
-                    formHtml += `
-                        <div class="input-group">
-                            <label>${field.label}</label>
-                            <textarea class="modern-input" id="input-${field.id}" placeholder="${field.placeholder}" oninput="updateData('${field.id}', this.value)">${value}</textarea>
-                        </div>
-                    `;
-                } else {
-                    formHtml += `
-                        <div class="input-group">
-                            <label>${field.label}</label>
-                            <input type="text" class="modern-input" id="input-${field.id}" placeholder="${field.placeholder}" value="${value}" oninput="updateData('${field.id}', this.value)">
-                        </div>
-                    `;
-                }
+            // Ищем конфиг документа
+            data.forEach(cat => {
+                const found = cat.docs.find(d => d.id === id);
+                if(found) currentDoc = found;
             });
-            formFieldsContainer.innerHTML = formHtml;
 
-            // Сбрасываем размер канваса при открытии
-            setTimeout(resizeCanvas, 10);
-            renderDocument();
+            document.getElementById('doc-title').innerText = currentDoc.name;
+            const fDiv = document.getElementById('fields');
+            fDiv.innerHTML = '';
+            inputs = {};
+            
+            currentDoc.fields.forEach(f => {
+                const group = document.createElement('div');
+                group.className = 'input-group';
+                group.innerHTML = `<label>${f}</label><input type="text" oninput="update('${f}', this.value)">`;
+                fDiv.appendChild(group);
+            });
+            
+            render();
         }
 
-        // 3. Обновление данных и предпросмотра
-        function updateData(key, value) {
-            formData[key] = value;
-            localStorage.setItem(`prodoc_${activeDocId}`, JSON.stringify(formData));
-            renderDocument();
+        function update(key, val) {
+            inputs[key] = val;
+            render();
         }
 
-        function renderDocument() {
-            if(activeDocConfig) {
-                documentPreview.innerHTML = activeDocConfig.render(formData, signatureData);
-            }
+        function render() {
+            if(!currentDoc) return;
+            document.getElementById('a4-content').innerHTML = currentDoc.template(inputs, sigImg);
         }
 
-        // 4. Логика Подписи (Canvas)
-        const canvas = document.getElementById('signature-pad');
+        // Подпись
+        const canvas = document.getElementById('pad');
         const ctx = canvas.getContext('2d');
-        let isDrawing = false;
+        let drawing = false;
 
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.offsetWidth - 40; // padding компенсация
-            canvas.height = 120;
-            ctx.lineWidth = 2.5;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.strokeStyle = '#0f172a'; // Глубокий сине-черный цвет чернил
-            
-            // Восстанавливаем подпись если есть
-            if(signatureData) {
-                let img = new Image();
-                img.onload = () => ctx.drawImage(img, 0, 0);
-                img.src = signatureData;
-            }
-        }
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 100;
 
-        // Рисование мышь/тач
-        function getCoords(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
-                y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
-            };
-        }
-
-        function startDrawing(e) {
-            isDrawing = true;
-            const coords = getCoords(e);
-            ctx.beginPath();
-            ctx.moveTo(coords.x, coords.y);
-            e.preventDefault();
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const coords = getCoords(e);
-            ctx.lineTo(coords.x, coords.y);
+        canvas.onmousedown = () => drawing = true;
+        canvas.onmouseup = () => { drawing = false; ctx.beginPath(); sigImg = canvas.toDataURL(); render(); };
+        canvas.onmousemove = (e) => {
+            if(!drawing) return;
+            ctx.lineWidth = 2;
+            ctx.lineTo(e.offsetX, e.offsetY);
             ctx.stroke();
-            e.preventDefault();
-        }
+        };
 
-        function stopDrawing() {
-            if (isDrawing) {
-                isDrawing = false;
-                signatureData = canvas.toDataURL('image/png');
-                localStorage.setItem('prodoc_sig', signatureData);
-                renderDocument();
-            }
-        }
-
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
-
-        canvas.addEventListener('touchstart', startDrawing, {passive: false});
-        canvas.addEventListener('touchmove', draw, {passive: false});
-        canvas.addEventListener('touchend', stopDrawing);
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            signatureData = null;
-            localStorage.removeItem('prodoc_sig');
-            renderDocument();
-        }
-
-        // Запуск
-        window.addEventListener('resize', resizeCanvas);
-        initSidebar();
+        function clearPad() { ctx.clearRect(0,0,canvas.width,canvas.height); sigImg = null; render(); }
     </script>
 </body>
 </html>
