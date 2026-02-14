@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Мой первый сайт</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя визитка</title>
+    <style>
+        /* Это магия CSS — здесь мы настраиваем красоту */
+        body {
+            background: #121212; /* Темный фон */
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #00d2ff;
+        }
+        h1 { color: #00d2ff; margin-bottom: 5px; }
+        p { font-size: 18px; color: #bbb; }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: #00d2ff;
+            color: black;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .button:hover { background: #fff; transform: scale(1.05); }
+    </style>
 </head>
 <body>
-    <h1>Ура! Я в сети!</h1>
-    <p>Это мой самый первый сайт, созданный с нуля.</p>
+
+    <div class="card">
+        <h1>Глеб на связи! 🚀</h1>
+        <p>Это мой первый сайт с крутым дизайном.</p>
+        <a href="#" class="button" onclick="alert('Работает как часы!')">Проверить кнопку</a>
+    </div>
+
 </body>
 </html>
