@@ -3,50 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя визитка</title>
+    <title>ProDoc - Конструктор документов</title>
     <style>
-        /* Это магия CSS — здесь мы настраиваем красоту */
+        :root {
+            --primary: #4f46e5;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+        body.dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+        }
         body {
-            background: #121212; /* Темный фон */
-            color: white;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-        }
-        .card {
-            background: #1e1e1e;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid #00d2ff;
-        }
-        h1 { color: #00d2ff; margin-bottom: 5px; }
-        p { font-size: 18px; color: #bbb; }
-        .button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 25px;
-            background: #00d2ff;
-            color: black;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
             transition: 0.3s;
         }
-        .button:hover { background: #fff; transform: scale(1.05); }
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
+        
+        .panel {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .preview-area {
+            background: white;
+            color: black;
+            padding: 50px;
+            min-height: 600px;
+            border: 1px solid #e2e8f0;
+            line-height: 1.6;
+            position: sticky;
+            top: 2rem;
+        }
+        label { display: block; margin-top: 1rem; font-weight: 600; font-size: 0.9rem; }
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 0.4rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: var(--bg);
+            color: var(--text);
+            box-sizing: border-box;
+        }
+        .btn-group { display: flex; gap: 10px; margin-top: 2rem; }
+        button {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-print { background: var(--primary); color: white; }
+        .btn-theme { background: #64748b; color: white; border-radius: 50%; width: 40px; flex: none; }
+        
+        @media print {
+            header, .editor-panel, .btn-group { display: none !important; }
+            .main-layout { display: block; padding: 0; }
+            .preview-area { border: none; box-shadow: none; padding: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Глеб на связи! 🚀</h1>
-        <p>Это мой первый сайт с крутым дизайном.</p>
-        <a href="#" class="button" onclick="alert('Работает как часы!')">Проверить кнопку</a>
+<header>
+    <div style="font-size: 1.5rem; font-weight: 800;">📄 ProDoc v1.0</div>
+    <button class="btn-theme" onclick="document.body.classList.toggle('dark')">🌓</button>
+</header>
+
+<div class="main-layout">
+    <div class="panel editor-panel">
+        <h2 style="margin-top:0">Настройки документа</h2>
+        
+        <label>Тип документа</label>
+        <select id="docType" onchange="update()">
+            <option value="statement">Заявление на отпуск</option>
+            <option value="contract">Простой договор (услуги)</option>
+            <option value="receipt">Расписка о получении средств</option>
+        </select>
+
+        <label>ФИО Заявителя / Исполнителя</label>
+        <input type="text" id="fio1" placeholder="Иванов Иван Иванович" oninput="update()">
+
+        <label>ФИО Получателя / Заказчика</label>
+        <input type="text" id="fio2" placeholder="Петров Петр Петрович" oninput="update()">
+
+        <label>Сумма или Срок</label>
+        <input type="text" id="details" placeholder="Напр: 50 000 руб или 14 дней" oninput="update()">
+
+        <label>Дополнительное описание</label>
+        <textarea id="extra" rows="5" placeholder="Дополнительные условия или причины..." oninput="update()"></textarea>
+
+        <div class="btn-group">
+            <button class="btn-print" onclick="window.print()">Скачать / Печать PDF</button>
+            <button style="background: #ef4444; color: white;" onclick="resetForm()">Очистить</button>
+        </div>
     </div>
+
+    <div class="panel preview-area" id="docContent">
+        </div>
+</div>
+
+<script>
+    const templates = {
+        statement: (data) => `
+<div style="text-align: right; margin-bottom: 50px;">
+    Кому: ${data.fio2 || '________________'}<br>
+    От: ${data.fio1 || '________________'}
+</div>
+<h2 style="text-align: center;">ЗАЯВЛЕНИЕ</h2>
+<p style="margin-top: 30px;">
+    Прошу предоставить мне очередной оплачиваемый отпуск сроком на <b>${data.details || '___'}</b>.
+</p>
+<p>${data.extra || ''}</p>
+<div style="margin-top: 100px; display: flex; justify-content: space-between;">
+    <span>Дата: ${new Date().toLocaleDateString()}</span>
+    <span>Подпись: ________________</span>
+</div>`,
+
+        contract: (data) => `
+<h2 style="text-align: center;">ДОГОВОР ОКАЗАНИЯ УСЛУГ</h2>
+<p style="text-align: right;">г. Москва, ${new Date().toLocaleDateString()}</p>
+<p>
+    <b>${data.fio2 || 'Заказчик'}</b>, именуемый в дальнейшем "Заказчик", с одной стороны, и 
+    <b>${data.fio1 || 'Исполнитель'}</b>, именуемый в дальнейшем "Исполнитель", заключили данный договор:
+</p>
+<p>1. Исполнитель обязуется выполнить следующие работы: ${data.extra || '________________'}.</p>
+<p>2. Стоимость услуг составляет: <b>${data.details || '0'} руб.</b></p>
+<div style="margin-top: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <div>Заказчик: ___________</div>
+    <div>Исполнитель: ___________</div>
+</div>`,
+
+        receipt: (data) => `
+<h2 style="text-align: center;">РАСПИСКА</h2>
+<p>Я, ${data.fio1 || '________________'}, паспорт серии ____ № ______, 
+получил от ${data.fio2 || '________________'} денежные средства в размере:</p>
+<h3 style="text-align: center;">${data.details || '0'} рублей.</h3>
+<p>Основание: ${data.extra || 'возврат долга / оплата по договору'}.</p>
+<p style="margin-top: 50px;">Претензий по сумме не имею.</p>
+<p>Дата: ${new Date().toLocaleDateString()}</p>
+<p>Подпись: ________________</p>`
+    };
+
+    function update() {
+        const data = {
+            fio1: document.getElementById('fio1').value,
+            fio2: document.getElementById('fio2').value,
+            details: document.getElementById('details').value,
+            extra: document.getElementById('extra').value
+        };
+        const type = document.getElementById('docType').value;
+        document.getElementById('docContent').innerHTML = templates[type](data);
+    }
+
+    function resetForm() {
+        if(confirm('Очистить все поля?')) {
+            document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            update();
+        }
+    }
+
+    // Инициализация
+    update();
+</script>
 
 </body>
 </html>
