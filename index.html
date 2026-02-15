@@ -1,765 +1,147 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Футбольный Турнир 2024</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Fonts for UI and main content -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --c-white: #fff;
-      --c-light: #F8FAFC;
-      --c-black: #111827;
-      --c-glass: rgba(255,255,255,0.52);
-      --c-shadow: 0 10px 40px rgba(0,0,0,0.05);
-      --c-accent: #4979FF;
-      --border: 1.5px solid #e5e7eb;
-      --transition: .22s cubic-bezier(.43,.2,.37,1.22);
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Inter, Arial, sans-serif;
-      background: var(--c-light);
-      color: var(--c-black);
-      min-height: 100vh;
-      height: 100%;
-    }
-    body {
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    #root {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* Header */
-    .t-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--c-white);
-      padding: 0 38px 0 24px;
-      height: 70px;
-      box-shadow: var(--c-shadow);
-      font-family: Inter, sans-serif;
-      z-index: 2;
-      position: relative;
-    }
-    .t-header__logo {
-      font-family: 'Lora', serif;
-      font-size: 1.67rem;
-      font-weight: 700;
-      letter-spacing: .042em;
-      color: var(--c-accent);
-      text-shadow: 0 2px 24px rgba(50,120,220,.035);
-    }
-    .t-header__nav {
-      display: flex;
-      gap: 20px;
-    }
-    .t-header__nav-btn {
-      border: none;
-      background: transparent;
-      font-family: inherit;
-      font-size: 1.08rem;
-      color: var(--c-black);
-      padding: 8px 12px;
-      border-radius: 5.5px;
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition);
-      font-weight: 500;
-      position: relative;
-    }
-    .t-header__nav-btn.active,
-    .t-header__nav-btn:hover {
-      background: var(--c-accent);
-      color: #fff;
-    }
-    /* Container/panels */
-    .t-main {
-      display: flex;
-      flex: 1 1 auto;
-      background: linear-gradient(115deg, var(--c-white) 80%, var(--c-light) 100%);
-      min-height: 0;
-      min-width: 0;
-      position: relative;
-      padding: 0;
-      overflow: hidden;
-    }
-    /* TAB PANELS */
-    .tab-panel {
-      flex: 1 1 auto;
-      display: none;
-      padding: 38px 22px 40px 22px;
-      min-width: 0;
-      min-height: 0;
-      background: transparent;
-      position: relative;
-      animation: fadeInTab 0.26s;
-    }
-    @keyframes fadeInTab {
-      from { opacity: .6; transform: translateY(12px);}
-      to { opacity: 1; transform: none;}
-    }
-    .tab-panel.visible { display: block; }
-    /* MAIN TAB: Tournament */
-    .main-container {
-      display: flex;
-      flex-direction: row;
-      gap: 40px;
-      justify-content: stretch;
-      min-width: 0;
-    }
-    /* Info Column */
-    .main-info {
-      flex: 1 1 260px;
-      min-width: 246px;
-      max-width: 320px;
-      background: var(--c-glass);
-      backdrop-filter: blur(24px);
-      border-radius: 22px;
-      box-shadow: var(--c-shadow);
-      padding: 32px 34px 32px 28px;
-      margin-bottom: 18px;
-      margin-right: 0;
-    }
-    .main-info h2 {
-      margin-top: 0; font-family: Lora, serif; font-size:1.25rem;
-    }
-    .main-info ul {
-      padding-left: 18px;
-      margin:0;
-      margin-bottom: 10px;
-    }
-    /* Group Column */
-    .main-groups {
-      flex: 2 1 520px;
-      min-width: 350px;
-      max-width: 660px;
-    }
-    .groups-header {
-      display:flex; gap:48px; align-items: flex-end; margin-bottom: 12px;
-    }
-    .group-block {
-      background: var(--c-white);
-      box-shadow: var(--c-shadow);
-      border-radius: 17px;
-      margin-bottom: 22px;
-      padding: 18px 14px 20px 20px;
-      min-width: 260px;
-      overflow-x: auto;
-    }
-    .group-block h3 {
-      margin-top: 0;font-family: Lora, serif;font-size:1.16rem;color: var(--c-accent);
-      font-weight: 700;margin-bottom:8px;
-    }
-    .team-list {
-      list-style: none; padding: 0; margin: 0;
-    }
-    .team-list li {
-      display: flex; align-items: center;
-      border-bottom: 1.5px solid #ededed;
-      font-size: 1.09rem; font-family: Lora, serif;
-      padding: 3px 0 3px 0;
-      font-weight: 500;
-      min-height: 34px;
-    }
-    .team-logo {
-      width:26px;height:26px;object-fit:contain; border-radius:6px; background:#f2f2f2;
-      margin-right:9px; border:1px solid #f0f0f4;
-      box-shadow: 0 2px 11px rgba(20,40,80,.06);
-    }
-    /* Playoff bracket grid */
-    .playoff-block {
-      background: var(--c-white);
-      border-radius: 18px;
-      padding: 22px 16px 18px 24px;
-      box-shadow: var(--c-shadow);
-      min-width: 328px;
-    }
-    .playoff-title {
-      font-family: Lora, serif; font-size: 1.23rem;
-      font-weight: bold; color: #374151; margin-top: 0;
-      margin-bottom: 8px;
-    }
-    .bracket {
-      display: flex; gap:34px; align-items: flex-start;flex-wrap:wrap;
-    }
-    .bracket-col {
-      display: flex; flex-direction: column; gap: 30px;
-    }
-    .bracket-game {
-      min-width: 105px;
-      min-height: 60px;
-      background:var(--c-light);
-      border-radius:12px;
-      border:1.5px solid #e1e6ea;
-      box-shadow: 0 2px 16px rgba(160,180,200,.03);
-      padding:6px 14px 8px 10px;
-      display: flex; flex-direction:column; justify-content: center;align-items: flex-start;
-    }
-    .bracket-game .game-stage {
-      font-size: .82rem; color: #697194; margin-bottom:2px; font-family: Inter, sans-serif;
-    }
-    .bracket-game .game-teams {
-      font-family: Lora, serif; font-size:1.08rem; color: #161c26;
-    }
-    .bracket-game .game-score {
-      font-size:.98rem;font-family:Inter,sans-serif;color:#4979FF;
-      margin-left:10px;
-    }
-
-    /* MERCH TAB */
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
-      gap: 26px;
-      margin-top: 24px;
-    }
-    .bento-card {
-      background: var(--c-glass);
-      border-radius: 18px;
-      box-shadow: var(--c-shadow);
-      padding: 24px 18px 20px 18px;
-      display: flex; flex-direction: column; align-items: center;
-      transition: box-shadow .27s cubic-bezier(.43,.2,.37,1.22), transform .18s;
-      position: relative;
-      border: var(--border);
-      backdrop-filter: blur(8px);
-    }
-    .bento-card:hover {
-      box-shadow: 0 18px 48px rgba(24,64,235,0.13);
-      transform: translateY(-4px) scale(1.018);
-      z-index: 2;
-    }
-    .bento-img {
-      width:110px;height:110px;object-fit:contain; border-radius:16px; background:#f0f0f3;
-      margin-bottom:16px;
-      box-shadow:0 3px 12px rgba(80,120,220,.06);
-    }
-    .bento-title {
-      font-family: Lora, serif;
-      font-size: 1.13rem;
-      margin-bottom: 7px;
-      font-weight: 700;
-      color: #111827;
-      text-align: center;
-    }
-    .bento-desc {
-      font-size:.97rem;color:#45496B;text-align:center;margin-bottom:16px;
-    }
-    .bento-cta {
-      background: var(--c-accent);
-      color: #fff;
-      border: none;
-      border-radius:7px;
-      padding:7px 15px;
-      font-size:1rem;
-      font-family: Inter, sans-serif;
-      cursor:pointer;
-      font-weight: 600;
-      box-shadow:0 3px 14px rgba(40,120,240,0.065);
-      transition: background var(--transition), box-shadow var(--transition);
-    }
-    .bento-cta:hover {
-      background: #2a56db;
-      box-shadow:0 7px 30px rgba(42,86,219,0.13);
-    }
-
-    /* PRIZES & PARTNERS TAB */
-    .prize-section {
-      margin-bottom: 48px;
-      padding: 12px 0 0 0;
-    }
-    .prize-title {
-      font-family: Lora, serif; font-size:1.22rem;color: var(--c-accent);font-weight:700;
-      margin-bottom:8px;
-    }
-    .prize-list {
-      display: flex; gap:36px; flex-wrap:wrap; margin-top:12px;
-    }
-    .prize-card {
-      background: #fff;
-      border-radius: 13px;
-      box-shadow: var(--c-shadow);
-      min-width:200px;
-      max-width:260px;
-      padding:17px 22px 18px 18px;
-      font-family: Inter, sans-serif;
-      border: var(--border);
-      margin-bottom: 8px;
-    }
-    .prize-card h4 {
-      margin: 0 0 6px 0; font-size: 1rem; color: #4979FF;
-    }
-    .prize-card .prize-amount {
-      font-size:27px;color:#111827;font-family:Lora,serif;font-weight:700;
-      margin-bottom: 2px; margin-top:8px;
-    }
-    .prize-card ul {
-      margin:0 0 6px 12px; font-size:.95em;
-    }
-    /* Partners grid */
-    .partners-section {
-      padding: 14px 0 0 0;
-    }
-    .partners-title {
-      font-family: Lora, serif; font-size:1.18rem;color: var(--c-accent);font-weight:600;
-      margin-bottom:15px;margin-top:0;
-    }
-    .partners-logos {
-      display: flex;flex-wrap:wrap;gap:30px 48px;
-      align-items:center;
-      margin-bottom: 11vw;
-      margin-top: 10px;
-    }
-    .partner-logo-box {
-      background: var(--c-white);
-      border-radius: 12px;
-      box-shadow:var(--c-shadow);
-      display: flex; align-items: center; justify-content: center;
-      padding:18px 22px;
-      min-width:128px;
-      min-height:66px;
-      border: var(--border);
-      margin-bottom: 18px;
-    }
-    .partner-logo {
-      max-width:96px; max-height:38px; object-fit:contain;
-    }
-    /* scroll bars, etc */
-    * {
-      scrollbar-color: #d8d8ff #fff;
-      scrollbar-width: thin;
-      }
-    ::-webkit-scrollbar {width:7px;background:#f8fafc;}
-    ::-webkit-scrollbar-thumb {background:#c5c8d6;border-radius:7px;}
-    @media (max-width:1100px) {
-      .main-container {flex-direction:column; gap:0;}
-      .main-info {max-width:unset;margin-bottom:13px;}
-      .main-groups,
-      .playoff-block {max-width:100vw;}
-    }
-    @media (max-width:750px) {
-      .t-header { padding:0 10px;}
-      .main-info,
-      .playoff-block {padding:18px 9px;}
-      .tab-panel {padding:20px 4vw;}
-      .bento-grid {gap:12px;}
-      .partners-logos{gap:18px 24px;}
-    }
-    /* Print: show only main bracket for final game */
-    @media print {
-      body, html { background: #fff !important; }
-      .t-header, .t-header *, #main-tab, #merch-tab, #partners-tab, .main-info, .main-groups, .bento-grid, .partners-section, .prize-section {
-        display: none !important;
-        height: 0 !important;
-        overflow: hidden;
-      }
-      .print-bracket-final { display: block !important; }
-    }
-    .print-bracket-final { display: none;}
-    /* Animations etc */
-    .bounce-in {
-      animation: bounceIn .63s cubic-bezier(.41,.91,.41,.91);
-    }
-    @keyframes bounceIn {
-      0% {transform:scale(.6) translateY(70px);opacity:0;}
-      75% {transform:scale(1.07) translateY(-4px);}
-      100% {transform:scale(1) translateY(0);opacity:1;}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELITE TROPHY 2026 | Official Tournament</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #f3f3f3; }
+        .text-outline { -webkit-text-stroke: 1px rgba(255,255,255,0.3); color: transparent; }
+        .bento-card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
+        .bento-card:hover { border-color: #FF3B00; background: #111111; }
+        .grain { pointer-events: none; position: fixed; inset: 0; z-index: 999; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        
+    </style>
 </head>
-<body>
-<div id="root">
-  <!-- HEADER -->
-  <header class="t-header">
-    <div class="t-header__logo">Футбольный Турнир 2024</div>
-    <nav class="t-header__nav">
-      <button class="t-header__nav-btn active" data-tab="main-tab">Главная</button>
-      <button class="t-header__nav-btn" data-tab="merch-tab">Мерч</button>
-      <button class="t-header__nav-btn" data-tab="partners-tab">Призы и партнёры</button>
-    </nav>
-  </header>
-  <!-- MAIN TABS -->
-  <main class="t-main">
-    <!-- Главная: турнирная таблица, группы, плей-офф -->
-    <section class="tab-panel visible" id="main-tab">
-      <div class="main-container">
-        <aside class="main-info">
-          <h2>О турнире</h2>
-          <p>Добро пожаловать на ежегодный Летний футбольный турнир 2024! Сражаются 8 команд в двух группах, далее — плей-офф.<br/><b>Место:</b> Спорткомплекс «Лидер», Москва.<br/><b>Даты:</b> 15–17 июня 2024.<br/><b>Формат:</b> 2 группы по 4, финал — кубок!</p>
-          <ul>
-            <li>⚽ 2 тайма по 20 минут</li>
-            <li>⏰ Начало игр: 09:30</li>
-            <li>🟢 Открытая регистрация команд</li>
-            <li>🎥 Прямая трансляция/судейство</li>
-          </ul>
-          <p style="margin-top:2.5em;font-size:.96rem;color:#6572a3;">Контакты для заявок:<br/><b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru" style="color:var(--c-accent);text-decoration:underline;">support@foot-tournament.ru</a></p>
-        </aside>
-        <!-- middle: groups -->
-        <section class="main-groups">
-          <div class="groups-header">
-            <div><h2 style="margin:0;font-family:Lora,serif;font-weight:700;font-size:1.18rem;">Группы</h2></div>
-            <div><h2 style="margin:0;font-family:Lora,serif;font-size:1.03rem;color:#939AD8;">Этап: групповой</h2></div>
-          </div>
-          <!-- two groups -->
-          <div style="display:flex;gap:22px;flex-wrap:wrap;">
-            <!-- Group A -->
-            <div class="group-block">
-              <h3>ГРУППА A</h3>
-              <ol class="team-list" id="group-a-list">
-                <!-- Автоматически заполнится ниже скриптом -->
-              </ol>
-            </div>
-            <!-- Group B -->
-            <div class="group-block">
-              <h3>ГРУППА B</h3>
-              <ol class="team-list" id="group-b-list"></ol>
-            </div>
-          </div>
-          <!-- Playoff bracket -->
-          <div class="playoff-block">
-            <div class="playoff-title">Плей-офф Сетка</div>
-            <div class="bracket" id="playoff-bracket"></div>
-          </div>
-        </section>
-      </div>
-    </section>
-    <!-- MERCH TAB -->
-    <section class="tab-panel" id="merch-tab">
-      <div style="font-family:Lora,serif;font-size:1.27rem;font-weight:700;color:#425194;margin-bottom:22px;">Мерч и клубная атрибутика</div>
-      <div class="bento-grid" id="merch-grid"></div>
-      <div style="margin-top:32px;font-size:.94rem;color:#6375a2;">
-        Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:var(--c-accent);">merch@foot-tournament.ru</a>
-      </div>
-    </section>
-    <!-- PRIZES & PARTNERS TAB -->
-    <section class="tab-panel" id="partners-tab">
-      <div class="prize-section">
-        <div class="prize-title">Призовой фонд</div>
-        <div class="prize-list" id="prize-list"></div>
-      </div>
-      <div class="partners-section">
-        <div class="partners-title">Наши партнёры</div>
-        <div class="partners-logos" id="partners-logos"></div>
-      </div>
-    </section>
-    <!-- For printing (Final bracket only) -->
-    <section class="print-bracket-final" id="print-bracket-final"></section>
-  </main>
-</div>
-<!-- JS: All data and logic -->
-<script>
-'use strict';
-// ---------------------  ДАННЫЕ --------------------------
-const GROUPS = [
-  {
-    title: "Группа A",
-    teams: [
-      {name: "Беркута", img: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Eagles-fc.png"},
-      {name: "Легенда", img: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Crystal_Palace_FC_logo_%282013%29.svg"},
-      {name: "Север", img: "https://upload.wikimedia.org/wikipedia/commons/1/18/FK_North_Badge.png"},
-      {name: "Молния", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Shinoda_lightning_logo.png"}
-    ]
-  },
-  {
-    title: "Группа B",
-    teams: [
-      {name: "Дельта", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Delta_logo_example.svg"},
-      {name: "Торнадо", img:"https://upload.wikimedia.org/wikipedia/commons/a/ad/Tornado_Sport_Club_Badge.png"},
-      {name: "Ветераны", img:"https://upload.wikimedia.org/wikipedia/commons/9/99/Veterans-Logo-real.png"},
-      {name: "Атлант", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Atalanta_BC_logo.svg"}
-    ]
-  }
-];
+<body x-data="{ sound: false }">
 
-// Групповой этап: имитация результатов как объекты (Может быть расширено)
-const GROUP_RESULTS = {
-  "Группа A": [
-    {team: "Беркута", played: 3, wins: 2, draws: 1, loses: 0, goals: "7-3", pts: 7},
-    {team: "Легенда", played: 3, wins: 2, draws: 0, loses: 1, goals: "5-4", pts: 6},
-    {team: "Север", played: 3, wins: 1, draws: 1, loses: 1, goals: "3-4", pts: 4},
-    {team: "Молния", played: 3, wins: 0, draws: 0, loses: 3, goals: "2-6", pts: 0}
-  ],
-  "Группа B": [
-    {team: "Дельта", played: 3, wins: 2, draws: 1, loses: 0, goals: "6-2", pts: 7},
-    {team: "Торнадо", played: 3, wins: 1, draws: 2, loses: 0, goals: "5-3", pts: 5},
-    {team: "Атлант", played: 3, wins: 1, draws: 0, loses: 2, goals: "3-5", pts: 3},
-    {team: "Ветераны", played: 3, wins: 0, draws: 1, loses: 2, goals: "2-6", pts: 1}
-  ]
-};
+    <div class="grain"></div>
 
-// Плей-офф (полуфиналы, финал, матч за 3 место)
-const PLAYOFF = [
-  // 1/2 финала
-  {
-    round: "Полуфиналы",
-    games: [
-      {stage: "1/2 финала", teams: ["Беркута", "Торнадо"], score: "2:1"},
-      {stage: "1/2 финала", teams: ["Дельта", "Легенда"], score: "1:3"}
-    ]
-  },
-  // Матч за 3-е место
-  {
-    round: "За 3 место",
-    games: [
-      {stage: "3-е место", teams: ["Дельта", "Торнадо"], score: "2:1"}
-    ]
-  },
-  // Финал
-  {
-    round: "Финал",
-    games: [
-      {stage: "Финал", teams: ["Беркута", "Легенда"], score: "1:2"}
-    ]
-  }
-];
-
-// МЕРЧ
-const MERCH_LIST = [
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3847/3847278.png",
-    title: "Футбольная форма турнира (набор)",
-    desc: "Доступна в двух расцветках, номера и фамилия на спине. Лимитированная коллекция!",
-    price: "3500₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3208/3208707.png",
-    title: "Шарф фаната",
-    desc: "Тёплый сувенир и клубная поддержка. С надписью 'Лето 2024'.",
-    price: "900₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3225/3225092.png",
-    title: "Бутылка для воды",
-    desc: "Стильная и экологичная бутылка объемом 700 мл с символикой турнира.",
-    price: "650₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3208/3208715.png",
-    title: "Бейсболка",
-    desc: "Базовая защита от солнца — с логотипом турнира.",
-    price: "800₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/2941/2941559.png",
-    title: "Кружка",
-    desc: "Брендированная кружка для настоящих болельщиков.",
-    price: "450₽",
-    url: "#"
-  },
-];
-// ПРИЗЫ
-const PRIZES = [
-  {
-    place: "I место",
-    amount: "30 000₽",
-    items: ["Кубок⚽", "Медали", "Сертификат на инвентарь", "Фирменные толстовки"]
-  },
-  {
-    place: "II место",
-    amount: "15 000₽",
-    items: ["Медали", "Памятный приз", "Фирменные футболки"]
-  },
-  {
-    place: "III место",
-    amount: "7 500₽",
-    items: ["Медали", "Памятная кружка"]
-  },
-  {
-    place: "Лучший бомбардир",
-    amount: "Подарок",
-    items: ["Памятный мяч", "Гравировка"]
-  }
-];
-// ПАРТНЁРЫ
-const PARTNERS = [
-  {
-    name: "SportLife",
-    img: "https://seeklogo.com/images/A/adidas-logo-FD7F5DEF12-seeklogo.com.png",
-    url: "https://adidas.com/"
-  },
-  {
-    name: "SoccerShop",
-    img: "https://seeklogo.com/images/N/nike-logo-7F31D4B897-seeklogo.com.png",
-    url: "https://nike.com/"
-  },
-  {
-    name: "ЛигаСпорт",
-    img: "https://seeklogo.com/images/P/pepsi-logo-8749D7BEAE-seeklogo.com.png",
-    url: "https://pepsi.com/"
-  },
-  {
-    name: "МегаФитнес",
-    img:"https://seeklogo.com/images/G/gazprom-logo-2E7B52FA08-seeklogo.com.png",
-    url: "https://gazprom.ru"
-  },
-  {
-    name: "СпонсорФонд",
-    img:"https://seeklogo.com/images/U/uefa-champions-league-logo-29E9E7980B-seeklogo.com.png",
-    url:"#"
-  }
-];
-// ----------- ФУНКЦИИ РЕНДЕРИНГА --------------------------
-
-// GROUPS - Render table
-function renderGroups() {
-  // Sort by group results
-  GROUPS.forEach((group, index) => {
-    const id = index===0?'group-a-list':'group-b-list';
-    const el = document.getElementById(id);
-    el.innerHTML = '';
-    const scoreData = GROUP_RESULTS[group.title];
-    // header row
-    el.insertAdjacentHTML('beforeend',
-      `<li style="color:#6377ad;background:#f2f7fc;font-size:.95em;border:none;padding-bottom:0;">
-        <span style="flex:1 1 60px;min-width:72px;">Команда</span>
-        <span style="width:43px;text-align:center;">И</span>
-        <span style="width:43px;text-align:center;">В</span>
-        <span style="width:43px;text-align:center;">Н</span>
-        <span style="width:43px;text-align:center;">П</span>
-        <span style="width:64px;text-align:center;">Голы</span>
-        <span style="width:44px;text-align:center;">Очки</span></li>`);
-    scoreData.forEach(teamRes => {
-      const team = group.teams.find(t => t.name === teamRes.team);
-      el.insertAdjacentHTML('beforeend',
-        `<li>
-          <img class="team-logo" src="${team?.img||''}" alt="" loading="lazy"/>
-          <span style="flex:1 1 70px;min-width:68px;">${teamRes.team}</span>
-          <span style="width:43px;text-align:center;">${teamRes.played}</span>
-          <span style="width:43px;text-align:center;">${teamRes.wins}</span>
-          <span style="width:43px;text-align:center;">${teamRes.draws}</span>
-          <span style="width:43px;text-align:center;">${teamRes.loses}</span>
-          <span style="width:64px;text-align:center;">${teamRes.goals}</span>
-          <span style="width:44px;text-align:center;font-weight:700;color:#5171f7;">${teamRes.pts}</span>
-        </li>`);
-    });
-  });
-}
-
-// PLAYOFF BRACKET
-function renderBracket() {
-  const bracket = document.getElementById("playoff-bracket");
-  bracket.innerHTML = '';
-  // Render bracket columns (semi, 3rd, final)
-  // 1 col: полуфиналы; 2 col: бронза; 3 col: финал
-  const cols = [[],[],[]];
-  for (const round of PLAYOFF) {
-    if (round.round.startsWith('Полуфин')) cols[0] = round.games;
-    else if (round.round == 'За 3 место') cols[1] = round.games;
-    else if (round.round === 'Финал') cols[2] = round.games;
-  }
-  ["Полуфиналы", "Матч за бронзу", "Финал"].forEach((header,i)=>{
-    bracket.insertAdjacentHTML('beforeend',`
-      <div class="bracket-col">
-        <div class="bracket-stage" style="font-family:Inter,sans-serif;color:#9daadc;font-size:.98em;font-weight:600;margin-bottom:8px;text-align:left;">
-          ${header}
+    <button @click="sound = !sound" class="fixed bottom-8 right-8 z-50 flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-full hover:bg-white/10 transition-all">
+        <div class="flex items-end gap-0.5 h-3">
+            <template x-for="i in 4">
+                <div :class="sound ? 'animate-bounce' : ''" class="w-0.5 bg-[#FF3B00]" :style="'height:' + (Math.random() * 100 + 20) + '%'"></div>
+            </template>
         </div>
-        ${cols[i].map(game =>
-          `<div class="bracket-game bounce-in">
-            <div class="game-stage">${game.stage||""}</div>
-            <div class="game-teams">${game.teams[0]} <span class="game-score">${game.score||""}</span> ${game.teams[1]}</div>
-          </div>`
-        ).join('')}
-      </div>`);
-  });
-  // ----- Print Only: финал -----
-  const printFinal = document.getElementById('print-bracket-final');
-  printFinal.innerHTML = `<div style="font-family:Lora,serif;font-size:2.1rem;text-align:center;margin-top:2em;color:#4979FF;">ФИНАЛ</div>
-    <div style="margin:2.3em auto 1.2em auto;max-width:440px;background:#f6f8fe;border-radius:22px;padding:45px 0 22px 0;box-shadow:0 18px 55px rgba(100,120,220,0.07);letter-spacing:0.02em;">
-      <div style="font-family:Lora,serif;font-size:1.5rem;font-weight:600;letter-spacing:.008em;">
-        ${cols[2][0].teams[0]} <span style="font-size:2rem;color:#333;">${cols[2][0].score}</span> ${cols[2][0].teams[1]}
-      </div>
-      <div style="margin-top:.5em;">
-        <img src="${GROUPS[0].teams[0].img}" style="height:34px;width:34px;border-radius:50%;margin:0 26px 0 0;" alt="">
-        <img src="${GROUPS[0].teams[1].img}" style="height:34px;width:34px;border-radius:50%;margin:0 0 0 26px;" alt="">
-      </div>
-      <div style="margin-top:.9em;color:#7a92c7;font-family:Inter,sans-serif;font-size:1.11rem;">17 июня 2024, 17:00, поле A</div>
-    </div>
-  `;
-}
+        <span class="text-[10px] font-bold tracking-widest uppercase" x-text="sound ? 'Sound On' : 'Sound Off'"></span>
+    </button>
 
-// MERCH
-function renderMerch() {
-  const grid = document.getElementById("merch-grid");
-  grid.innerHTML = '';
-  for (const merch of MERCH_LIST) {
-    grid.insertAdjacentHTML('beforeend', `
-      <div class="bento-card">
-        <img src="${merch.img}" alt="" class="bento-img" loading="lazy"/>
-        <div class="bento-title">${merch.title}</div>
-        <div class="bento-desc">${merch.desc}</div>
-        <button class="bento-cta" disabled>Купить за ${merch.price}</button>
-      </div>
-    `);
-  }
-}
+    <section class="relative h-[90vh] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/80 to-[#050505] z-10"></div>
+            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover scale-105" alt="Stadium">
+        </div>
 
-// PRIZES
-function renderPrizes() {
-  const pl = document.getElementById("prize-list");
-  pl.innerHTML = '';
-  for (const p of PRIZES) {
-    pl.insertAdjacentHTML('beforeend',`
-      <div class="prize-card">
-        <h4>${p.place}</h4>
-        <div class="prize-amount">${p.amount}</div>
-        <ul>${p.items.map(x=>`<li>${x}</li>`).join('')}</ul>
-      </div>
-    `);
-  }
-}
-// PARTNERS
-function renderPartners() {
-  const box = document.getElementById("partners-logos");
-  box.innerHTML = '';
-  for (const p of PARTNERS) {
-    box.insertAdjacentHTML('beforeend', `
-      <a href="${p.url}" target="_blank" title="${p.name}" class="partner-logo-box">
-        <img src="${p.img}" alt="${p.name}" class="partner-logo" loading="lazy"/>
-      </a>
-    `);
-  }
-}
+        <div class="relative z-20 text-center space-y-6 px-4">
+            <span class="inline-block px-4 py-1 border border-[#FF3B00] text-[#FF3B00] text-[10px] font-black uppercase tracking-[0.4em] rounded-full">World Finals 2026</span>
+            <h1 class="text-[12vw] md:text-[10vw] font-black uppercase leading-[0.8] tracking-tighter">
+                FOOTBALL<br><span class="text-outline">CUP PRO</span>
+            </h1>
+        </div>
+    </section>
 
-// ------------------- Навигация и табы ------------------
-const tabBtns = Array.from(document.querySelectorAll('.t-header__nav-btn'));
-const panels = {
-  'main-tab': document.getElementById('main-tab'),
-  'merch-tab': document.getElementById('merch-tab'),
-  'partners-tab': document.getElementById('partners-tab')
-};
-// Tab switch
-tabBtns.forEach(btn => btn.addEventListener('click', e=>{
-  if(btn.classList.contains('active')) return;
-  tabBtns.forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  Object.values(panels).forEach(p=>p.classList.remove('visible'));
-  panels[btn.dataset.tab]?.classList.add('visible');
-  window.scrollTo({top:0, behavior:'smooth'});
-}));
+    <main class="max-w-7xl mx-auto px-6 -mt-20 relative z-30 pb-32">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            
+            <div class="md:col-span-8 bento-card rounded-[2rem] p-10 min-h-[400px]">
+                <div class="flex justify-between items-center mb-12">
+                    <h3 class="text-2xl font-black uppercase tracking-tight">Play-off Bracket</h3>
+                    <span class="text-[10px] text-white/40 font-mono italic underline cursor-pointer">View full bracket</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-8 relative">
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white/5 rounded-xl border-l-2 border-[#FF3B00]">
+                            <div class="flex justify-between text-xs opacity-40 mb-2"><span>1/4 Final</span><span>Full time</span></div>
+                            <div class="flex justify-between font-bold"><span>GERMANY</span><span>2</span></div>
+                            <div class="flex justify-between font-bold opacity-30"><span>BRAZIL</span><span>1</span></div>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-xl border-l-2 border-white/10 opacity-50">
+                            <div class="flex justify-between text-xs opacity-40 mb-2"><span>1/4 Final</span><span>Tomorrow</span></div>
+                            <div class="flex justify-between font-bold"><span>FRANCE</span><span>-</span></div>
+                            <div class="flex justify-between font-bold"><span>SPAIN</span><span>-</span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <div class="p-6 bg-white text-black rounded-2xl shadow-[0_0_40px_rgba(255,59,0,0.2)]">
+                            <span class="text-[8px] font-black uppercase bg-[#FF3B00] text-white px-2 py-0.5 rounded-full mb-2 inline-block">Semifinal</span>
+                            <div class="flex justify-between items-center font-black text-xl italic">
+                                <span>GER</span>
+                                <span class="text-[#FF3B00] text-sm">VS</span>
+                                <span>TBD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-// --------------------- INIT (запуск) ---------------------
-renderGroups();
-renderBracket();
-renderMerch();
-renderPrizes();
-renderPartners();
+            <div class="md:col-span-4 bento-card rounded-[2rem] p-8">
+                <h3 class="text-lg font-bold mb-8 opacity-60 uppercase tracking-widest">Group Stage</h3>
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                        <span class="font-bold uppercase tracking-tighter">1. Germany</span>
+                        <span class="font-black text-[#FF3B00]">9 pts</span>
+                    </div>
+                    <div class="flex items-center justify-between border-b border-white/5 pb-4 opacity-60">
+                        <span class="font-bold uppercase tracking-tighter">2. Spain</span>
+                        <span class="font-black">6 pts</span>
+                    </div>
+                    <div class="flex items-center justify-between border-b border-white/5 pb-4 opacity-40">
+                        <span class="font-bold uppercase tracking-tighter">3. Scotland</span>
+                        <span class="font-black">3 pts</span>
+                    </div>
+                </div>
+            </div>
 
-</script>
-<!-- FOOTER, optional -->
-<footer style="font-family:Inter,Arial,sans-serif;text-align:center;color:#b0b8d2;background:rgba(248,250,252,.72);padding:18px 0 9px 0;font-size:.99rem;letter-spacing:.01em;border-top:1.5px solid #ECEEF4;margin-top:auto;box-shadow:0 2px 7px rgba(10,16,23,.02);">
-  © 2024 Summer Football Tournament — Все права защищены
-</footer>
+            <div class="md:col-span-12 bento-card rounded-[3rem] p-12 overflow-hidden relative">
+                <div class="relative z-10">
+                    <h2 class="text-4xl font-black uppercase mb-16 tracking-tighter">Prize Pool & Rewards</h2>
+                    <div class="flex flex-col md:flex-row items-end gap-4 h-[350px]">
+                        <div class="flex-1 bg-white/5 rounded-t-3xl p-8 flex flex-col items-center justify-end h-[70%] border-t border-white/10 group hover:bg-white/10">
+                            <span class="text-6xl font-black text-white/[0.05] absolute mb-20 group-hover:text-[#FF3B00]/10 transition-colors">02</span>
+                            <div class="text-center">
+                                <p class="text-2xl font-black">$500,000</p>
+                                <p class="text-[10px] uppercase tracking-[0.2em] opacity-40">Silver Medal</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-white/10 rounded-t-3xl p-8 flex flex-col items-center justify-end h-[100%] border-t-4 border-[#FF3B00] relative">
+                            <span class="text-9xl font-black text-white/[0.05] absolute mb-28">01</span>
+                            <div class="text-center pb-8">
+                                <p class="text-5xl font-black mb-2">$1,500,000</p>
+                                <p class="text-xs uppercase tracking-[0.4em] text-[#FF3B00] font-bold">Main Trophy</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-white/5 rounded-t-3xl p-8 flex flex-col items-center justify-end h-[50%] border-t border-white/10 group hover:bg-white/10">
+                            <span class="text-4xl font-black text-white/[0.05] absolute mb-16 group-hover:text-[#FF3B00]/10 transition-colors">03</span>
+                            <div class="text-center">
+                                <p class="text-xl font-black">$250,000</p>
+                                <p class="text-[10px] uppercase tracking-[0.2em] opacity-40">Bronze Medal</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-20 text-center opacity-20 text-[10px] uppercase tracking-[0.5em]">
+        Elite Trophy • 2026 • Designed for Champions
+    </footer>
+
+    <audio id="stadiumAmbience" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('stadiumAmbience');
+        document.querySelector('button').addEventListener('click', () => {
+            if (audio.paused) audio.play();
+            else audio.pause();
+        });
+    </script>
 </body>
 </html>
