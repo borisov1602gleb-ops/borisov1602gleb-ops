@@ -1,422 +1,728 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Раменский Кубок Любителей — Road to Ramenskoe</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>
-    body {
-      background: radial-gradient(circle at center, #001a3d, #000814);
-      font-family: 'Montserrat', sans-serif;
-      color: white;
-      overflow-x: hidden;
-    }
-    .text-gold {
-      color: #d4af37;
-    }
-    .bg-gold-glow {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-    }
-    .glow-text {
-      text-shadow: 0 0 10px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.5);
-    }
-    .stadium-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-      opacity: 0.25;
-    }
-    .film-grain {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9;
-      opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    }
-    .parallax {
-      transform: translateY(0);
-    }
-    .parallax-container {
-      perspective: 1000px;
-    }
-    .countdown-digit {
-      font-size: clamp(3rem, 10vw, 8rem);
-      font-weight: 900;
-      background: linear-gradient(to bottom, #fff, #d4af37);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
-      display: inline-block;
-      min-width: 0.8em;
-      text-align: center;
-    }
-    .trophy-icon {
-      font-size: 4rem;
-      color: #d4af37;
-    }
-    .text-stroke {
-      -webkit-text-stroke: 4px #d4af37;
-      color: transparent;
-    }
-    .drop-zone {
-      border: 2px dashed rgba(212, 175, 55, 0.5);
-      border-radius: 12px;
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    .drop-zone:hover, .drop-zone.dragover {
-      background: rgba(212, 175, 55, 0.1);
-      border-color: #d4af37;
-    }
-    .audio-visualizer {
-      height: 60px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-around;
-      gap: 4px;
-    }
-    .bar {
-      width: 6px;
-      background: #d4af37;
-      border-radius: 2px;
-      transition: height 0.1s ease;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Раменский Любительский Кубок | Ramenskoe Amateur Cup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .glass-morphism {
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gold-glow {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
+                         0 0 40px rgba(212, 175, 55, 0.6),
+                         0 0 60px rgba(212, 175, 55, 0.4);
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(ellipse at center, #001a3d 0%, #000814 100%);
+        }
+        
+        .bento-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .bento-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .countdown-digit {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #d4af37;
+            animation: confetti-fall 3s linear;
+            z-index: 9999;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .audio-visualizer {
+            display: flex;
+            align-items: flex-end;
+            height: 30px;
+            gap: 2px;
+        }
+        
+        .audio-bar {
+            width: 3px;
+            background: #d4af37;
+            animation: audio-wave 1s ease-in-out infinite;
+        }
+        
+        @keyframes audio-wave {
+            0%, 100% { height: 5px; }
+            50% { height: 25px; }
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        
+        .step-indicator.active {
+            background: #d4af37;
+            color: #000814;
+        }
+        
+        .drag-zone {
+            border: 2px dashed rgba(212, 175, 55, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .drag-zone.dragover {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%);
+            color: #000814;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .bracket-line {
+            stroke: #d4af37;
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .podium-block {
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+        
+        .podium-block:hover {
+            transform: rotateY(5deg) rotateX(-5deg);
+        }
+    </style>
 </head>
-<body class="relative">
-
-<!-- ФИЛЬМ-ГРЕЙН НАЛОЖЕНИЕ -->
-<div class="film-grain"></div>
-
-<!-- ФОНОВОЕ ВИДЕО СТАДИОНА (ПАРАЛЛАКС) -->
-<video autoplay muted loop class="stadium-video parallax">
-  <source src="https://assets.mixkit.co/videos/preview/mixkit-empty-soccer-stadium-4402-large.mp4" type="video/mp4" />
-</video>
-
-<!-- ГЛОБАЛЬНОЕ СОСТОЯНИЕ (Alpine.js) -->
-<div x-data="{
-  modalOpen: false,
-  currentStep: 1,
-  audioPlaying: false,
-  crowdNoise: null,
-  audioContext: null,
-  analyser: null,
-  frequencyData: new Uint8Array(16),
-  initAudio() {
-    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    this.analyser = this.audioContext.createAnalyser();
-    this.analyser.fftSize = 32;
-    const bufferLength = this.analyser.frequencyBinCount;
-    this.frequencyData = new Uint8Array(bufferLength);
-
-    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-stadium-crowd-applause-and-people-celebrating-230.wav');
-    audio.loop = true;
-    const source = this.audioContext.createMediaElementSource(audio);
-    source.connect(this.analyser);
-    this.analyser.connect(this.audioContext.destination);
-
-    this.crowdNoise = audio;
-  },
-  toggleAudio() {
-    if (!this.audioContext) this.initAudio();
-    if (this.audioPlaying) {
-      this.crowdNoise.pause();
-    } else {
-      this.crowdNoise.play();
-    }
-    this.audioPlaying = !this.audioPlaying;
-    this.animateBars();
-  },
-  animateBars() {
-    if (!this.audioPlaying) return;
-    this.analyser.getByteFrequencyData(this.frequencyData);
-    $refs.bars.forEach((bar, i) => {
-      bar.style.height = `${this.frequencyData[i] * 0.3}px`;
-    });
-    requestAnimationFrame(() => this.animateBars());
-  },
-  nextStep() { this.currentStep = Math.min(this.currentStep + 1, 4) },
-  prevStep() { this.currentStep = Math.max(this.currentStep - 1, 1) },
-  resetForm() { this.currentStep = 1; document.getElementById('registrationForm').reset(); }
-}" x-init="initAudio">
-
-  <!-- HERO СЕКЦИЯ -->
-  <section class="min-h-screen flex items-center justify-center relative px-6 text-center">
-    <div class="z-10">
-      <h1 class="text-gold glow-text font-black text-center mb-4" style="font-size: clamp(3rem, 10vw, 8rem);">
-        РАМЕНСКИЙ КУБОК ЛЮБИТЕЛЕЙ
-      </h1>
-      <p class="text-xl md:text-2xl text-gray-300 mb-10">Road to Ramenskoe</p>
-
-      <!-- АУДИО ЭНЖИН С ВИЗУАЛИЗАТОРОМ -->
-      <div class="flex flex-col items-center space-y-4 mb-12">
-        <button @click="toggleAudio"
-                class="px-6 py-3 bg-gold-glow backdrop-blur-md rounded-full font-medium flex items-center space-x-2 hover:scale-105 transition-transform">
-          <span x-show="!audioPlaying">🔊 Включить атмосферу</span>
-          <span x-show="audioPlaying">🎧 Выключить атмосферу</span>
-        </button>
-        <div x-show="audioPlaying" class="audio-visualizer w-48" x-ref="bars">
-          <div class="bar" style="height: 10px;"></div>
-          <div class="bar" style="height: 20px;"></div>
-          <div class="bar" style="height: 5px;"></div>
-          <div class="bar" style="height: 30px;"></div>
-          <div class="bar" style="height: 15px;"></div>
-          <div class="bar" style="height: 25px;"></div>
-          <div class="bar" style="height: 8px;"></div>
-          <div class="bar" style="height: 22px;"></div>
-          <div class="bar" style="height: 12px;"></div>
-          <div class="bar" style="height: 28px;"></div>
-          <div class="bar" style="height: 6px;"></div>
-          <div class="bar" style="height: 18px;"></div>
-          <div class="bar" style="height: 14px;"></div>
-          <div class="bar" style="height: 26px;"></div>
-          <div class="bar" style="height: 10px;"></div>
-          <div class="bar" style="height: 20px;"></div>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen hero-gradient flex items-center justify-center">
+        <!-- Background Video/Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=1920&h=1080&fit=crop" 
+                 alt="Stadium" 
+                 class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 hero-gradient"></div>
         </div>
-      </div>
-
-      <!-- КНОПКА РЕГИСТРАЦИИ -->
-      <button @click="modalOpen = true"
-              class="px-10 py-4 bg-gradient-to-r from-yellow-500 to-yellow-700 text-black font-bold text-lg rounded-full shadow-2xl hover:scale-105 transition-all duration-300 transform">
-        ЗАРЕГИСТРИРОВАТЬ КОМАНДУ
-      </button>
-    </div>
-  </section>
-
-  <!-- БЛОК СЧЁТЧИКА -->
-  <section class="py-20 px-6">
-    <div class="max-w-6xl mx-auto text-center">
-      <h2 class="text-4xl md:text-5xl font-black mb-12 text-gold">Осталось до старта</h2>
-      <div id="countdown" class="flex justify-center space-x-8 md:space-x-12">
-        <div class="text-center">
-          <div id="days" class="countdown-digit">00</div>
-          <div class="text-sm uppercase opacity-70">Дней</div>
-        </div>
-        <div class="text-center">
-          <div id="hours" class="countdown-digit">00</div>
-          <div class="text-sm uppercase opacity-70">Часов</div>
-        </div>
-        <div class="text-center">
-          <div id="minutes" class="countdown-digit">00</div>
-          <div class="text-sm uppercase opacity-70">Минут</div>
-        </div>
-        <div class="text-center">
-          <div id="seconds" class="countdown-digit">00</div>
-          <div class="text-sm uppercase opacity-70">Секунд</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- МОДАЛЬНОЕ ОКНО РЕГИСТРАЦИИ -->
-  <div x-show="modalOpen"
-       class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
-       x-transition:enter="transition ease-out duration-300"
-       x-transition:enter-start="opacity-0 scale-90"
-       x-transition:enter-end="opacity-100 scale-100"
-       x-transition:leave="transition ease-in duration-200"
-       x-transition:leave-start="opacity-100 scale-100"
-       x-transition:leave-end="opacity-0 scale-90">
-
-    <div class="bg-black bg-opacity-80 backdrop-blur-xl rounded-2xl p-8 max-w-3xl w-full border border-gray-700 shadow-2xl">
-
-      <!-- ЗАГОЛОВОК МОДАЛЬНОГО ОКНА -->
-      <h3 class="text-3xl font-black text-center mb-8 text-gold" x-text="currentStep === 1 ? 'Шаг 1: Информация о команде' : 
-                                                                    currentStep === 2 ? 'Шаг 2: Документы' :
-                                                                    currentStep === 3 ? 'Шаг 3: Оплата' : 'Регистрация завершена!'">
-      </h3>
-
-      <!-- ФОРМА РЕГИСТРАЦИИ -->
-      <form id="registrationForm" @submit.prevent="nextStep" class="space-y-8">
-
-        <!-- ШАГ 1: ИНФОРМАЦИЯ -->
-        <div x-show="currentStep === 1" x-transition>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-medium mb-2">Название команды</label>
-              <input type="text" required placeholder="Например: Раменские Львы" 
-                     class="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition">
+        
+        <!-- Audio Controls -->
+        <div class="absolute top-8 right-8 z-20 glass-morphism rounded-lg p-4">
+            <div class="flex items-center gap-3">
+                <button id="audioToggle" class="text-yellow-400 hover:text-yellow-300 transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <div class="audio-visualizer" id="audioVisualizer">
+                    <div class="audio-bar" style="animation-delay: 0s;"></div>
+                    <div class="audio-bar" style="animation-delay: 0.1s;"></div>
+                    <div class="audio-bar" style="animation-delay: 0.2s;"></div>
+                    <div class="audio-bar" style="animation-delay: 0.3s;"></div>
+                    <div class="audio-bar" style="animation-delay: 0.4s;"></div>
+                </div>
             </div>
-            <div>
-              <label class="block text-sm font-medium mb-2">Имя капитана</label>
-              <input type="text" required placeholder="Иван Петров" 
-                     class="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition">
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium mb-2">Телефон (+7)</label>
-              <input type="tel" required placeholder="+7 (999) 123-45-67" 
-                     class="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent outline-none transition">
-            </div>
-          </div>
         </div>
-
-        <!-- ШАГ 2: ДОКУМЕНТЫ -->
-        <div x-show="currentStep === 2" x-transition>
-          <div class="drop-zone" x-on:dragover.prevent="$el.classList.add('dragover')"
-                                x-on:dragleave.prevent="$el.classList.remove('dragover')"
-                                x-on:drop.prevent="console.log('Файл загружен'); $el.classList.remove('dragover')">
-            <p>Перетащите или выберите файл состава команды</p>
-            <p class="text-xs opacity-60 mt-2">Поддерживаемые форматы: PDF, DOC, XLSX</p>
-            <input type="file" accept=".pdf,.doc,.docx,.xlsx" class="hidden">
-            <button type="button" @click="$el.previousElementSibling.click()"
-                    class="mt-4 px-6 py-2 bg-gold-glow rounded-lg text-sm font-medium hover:bg-opacity-80 transition">
-              Выбрать файл
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 gold-glow" style="color: #d4af37;">
+                РАМЕНСКИЙ
+            </h1>
+            <h2 class="text-4xl md:text-6xl font-black mb-8 gold-glow" style="color: #d4af37;">
+                ЛЮБИТЕЛЬСКИЙ КУБОК
+            </h2>
+            <p class="text-xl md:text-2xl mb-12 text-gray-300 font-light">
+                Турнир по футболу среди любительских команд
+            </p>
+            
+            <!-- Golden Countdown -->
+            <div class="glass-morphism rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-6 text-yellow-400">ДО НАЧАЛА ТУРНИРА ОСТАЛОСЬ:</h3>
+                <div id="countdown" class="grid grid-cols-4 gap-4 md:gap-8">
+                    <div class="text-center">
+                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="days">00</div>
+                        <div class="text-sm md:text-base text-gray-400 mt-2">Дней</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="hours">00</div>
+                        <div class="text-sm md:text-base text-gray-400 mt-2">Часов</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="minutes">00</div>
+                        <div class="text-sm md:text-base text-gray-400 mt-2">Минут</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="seconds">00</div>
+                        <div class="text-sm md:text-base text-gray-400 mt-2">Секунд</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Registration Button -->
+            <button id="openRegistration" class="btn-primary px-12 py-4 rounded-full text-lg font-bold">
+                ЗАРЕГИСТРИРОВАТЬ КОМАНДУ
             </button>
-          </div>
         </div>
-
-        <!-- ШАГ 3: ОПЛАТА -->
-        <div x-show="currentStep === 3" x-transition>
-          <div class="bg-gray-900 p-6 rounded-xl border border-gray-700">
-            <h4 class="font-bold text-lg mb-4">Платёжная карта</h4>
-            <div class="grid grid-cols-4 gap-2 mb-4">
-              <div class="text-2xl font-mono">0000</div>
-              <div class="text-2xl font-mono">0000</div>
-              <div class="text-2xl font-mono">0000</div>
-              <div class="text-2xl font-mono">0000</div>
+    </section>
+    
+    <!-- Tournament Intelligence Dashboard -->
+    <section class="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 gold-glow" style="color: #d4af37;">
+                ТУРНИРНАЯ ПАНЕЛЬ
+            </h2>
+            
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Draw Module -->
+                <div class="bento-item glass-morphism rounded-xl p-6 lg:col-span-2">
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">ЖЕРЕБЬЕВКА</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-2">КОРЗИНА 1</div>
+                            <div class="space-y-2">
+                                <div class="glass-morphism rounded p-2">Команда А</div>
+                                <div class="glass-morphism rounded p-2">Команда Б</div>
+                                <div class="glass-morphism rounded p-2">Команда В</div>
+                                <div class="glass-morphism rounded p-2">Команда Г</div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-2">КОРЗИНА 2</div>
+                            <div class="space-y-2">
+                                <div class="glass-morphism rounded p-2">Команда Д</div>
+                                <div class="glass-morphism rounded p-2">Команда Е</div>
+                                <div class="glass-morphism rounded p-2">Команда Ж</div>
+                                <div class="glass-morphism rounded p-2">Команда З</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interactive Bracket -->
+                <div class="bento-item glass-morphism rounded-xl p-6 lg:col-span-2">
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">ТУРНИРНАЯ СЕТКА</h3>
+                    <svg viewBox="0 0 400 300" class="w-full h-48">
+                        <!-- Quarter Finals -->
+                        <rect x="20" y="20" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                        <rect x="20" y="70" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                        <rect x="20" y="120" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                        <rect x="20" y="170" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                        
+                        <!-- Semi Finals -->
+                        <rect x="140" y="45" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
+                        <rect x="140" y="145" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
+                        
+                        <!-- Final -->
+                        <rect x="260" y="95" width="60" height="30" fill="#d4af37" opacity="0.8" rx="4"/>
+                        
+                        <!-- Connectors -->
+                        <path class="bracket-line" d="M 80 35 L 140 60"/>
+                        <path class="bracket-line" d="M 80 85 L 140 60"/>
+                        <path class="bracket-line" d="M 80 135 L 140 160"/>
+                        <path class="bracket-line" d="M 80 185 L 140 160"/>
+                        <path class="bracket-line" d="M 200 60 L 260 110"/>
+                        <path class="bracket-line" d="M 200 160 L 260 110"/>
+                    </svg>
+                </div>
+                
+                <!-- Prize Podium -->
+                <div class="bento-item glass-morphism rounded-xl p-6 lg:col-span-4">
+                    <h3 class="text-xl font-bold mb-6 text-yellow-400">ПРИЗОВЫЕ МЕСТА</h3>
+                    <div class="flex justify-center items-end gap-4 md:gap-8">
+                        <!-- Silver -->
+                        <div class="podium-block text-center">
+                            <div class="text-6xl font-black mb-2" style="color: #C0C0C0;">02</div>
+                            <div class="w-20 h-32 md:w-24 md:h-40 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg flex items-center justify-center">
+                                <span class="text-2xl font-bold text-gray-800">2</span>
+                            </div>
+                            <div class="mt-2 text-sm">СЕРЕБРО</div>
+                        </div>
+                        
+                        <!-- Gold -->
+                        <div class="podium-block text-center">
+                            <div class="text-6xl font-black mb-2 gold-glow" style="color: #d4af37;">01</div>
+                            <div class="w-20 h-40 md:w-24 md:h-48 bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-lg flex items-center justify-center">
+                                <span class="text-3xl font-bold text-yellow-900">1</span>
+                            </div>
+                            <div class="mt-2 text-sm">ЗОЛОТО</div>
+                        </div>
+                        
+                        <!-- Bronze -->
+                        <div class="podium-block text-center">
+                            <div class="text-6xl font-black mb-2" style="color: #CD7F32;">03</div>
+                            <div class="w-20 h-24 md:w-24 md:h-32 bg-gradient-to-t from-orange-700 to-orange-500 rounded-t-lg flex items-center justify-center">
+                                <span class="text-2xl font-bold text-orange-100">3</span>
+                            </div>
+                            <div class="mt-2 text-sm">БРОНЗА</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex justify-between text-sm opacity-70">
-              <span>Срок: 12/28</span>
-              <span>CVV: ***</span>
+        </div>
+    </section>
+    
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="glass-morphism rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <!-- Modal Header -->
+                <div class="p-6 border-b border-gray-700">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-yellow-400">РЕГИСТРАЦИЯ КОМАНДЫ</h2>
+                        <button onclick="closeModal()" class="text-gray-400 hover:text-white">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Step Indicators -->
+                    <div class="flex gap-2 mt-4">
+                        <div class="step-indicator active w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                        <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center font-bold">2</div>
+                        <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center font-bold">3</div>
+                        <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center font-bold">4</div>
+                    </div>
+                </div>
+                
+                <!-- Modal Content -->
+                <div class="p-6">
+                    <!-- Step 1: Team Data -->
+                    <div id="step1" class="step-content">
+                        <h3 class="text-xl font-bold mb-6">Данные команды</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Название команды</label>
+                                <input type="text" id="teamName" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="Введите название команды">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Имя капитана</label>
+                                <input type="text" id="captainName" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="Введите имя капитана">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Телефон капитана</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="+7 (___) ___-__-__">
+                            </div>
+                        </div>
+                        <button onclick="nextStep()" class="btn-primary w-full py-3 rounded-lg mt-6 font-bold">
+                            ДАЛЕЕ
+                        </button>
+                    </div>
+                    
+                    <!-- Step 2: File Upload -->
+                    <div id="step2" class="step-content hidden">
+                        <h3 class="text-xl font-bold mb-6">Загрузка состава</h3>
+                        <div id="dropZone" class="drag-zone rounded-lg p-8 text-center cursor-pointer">
+                            <svg class="w-12 h-12 mx-auto mb-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            <p class="text-lg mb-2">Перетащите файл сюда или нажмите для выбора</p>
+                            <p class="text-sm text-gray-400">Поддерживаемые форматы: PDF, DOC, DOCX</p>
+                            <p id="fileSelected" class="text-green-400 mt-4 hidden">Файл выбран: <span id="fileName"></span></p>
+                        </div>
+                        <input type="file" id="fileInput" class="hidden" accept=".pdf,.doc,.docx">
+                        <div class="flex gap-4 mt-6">
+                            <button onclick="prevStep()" class="flex-1 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 font-bold transition">
+                                НАЗАД
+                            </button>
+                            <button onclick="nextStep()" class="btn-primary flex-1 py-3 rounded-lg font-bold">
+                                ДАЛЕЕ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Payment -->
+                    <div id="step3" class="step-content hidden">
+                        <h3 class="text-xl font-bold mb-6">Оплата взноса</h3>
+                        <div class="glass-morphism rounded-lg p-6 mb-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-lg">Взнос за участие:</span>
+                                <span class="text-2xl font-bold text-yellow-400">5,000 ₽</span>
+                            </div>
+                            <div class="text-sm text-gray-400 mb-4">Тестовая карта для оплаты: 0000 0000 0000 0000</div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Номер карты</label>
+                                <input type="text" id="cardNumber" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="0000 0000 0000 0000" maxlength="19">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Срок действия</label>
+                                    <input type="text" id="cardExpiry" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">CVV</label>
+                                    <input type="text" id="cardCVV" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="***" maxlength="3">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Получатель</label>
+                                <input type="text" value="RCL Committee" readonly class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700">
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 mt-6">
+                            <button onclick="prevStep()" class="flex-1 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 font-bold transition">
+                                НАЗАД
+                            </button>
+                            <button onclick="nextStep()" class="btn-primary flex-1 py-3 rounded-lg font-bold">
+                                ОПЛАТИТЬ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Success -->
+                    <div id="step4" class="step-content hidden">
+                        <div class="text-center">
+                            <div class="text-6xl mb-6">🎉</div>
+                            <h3 class="text-2xl font-bold mb-4 text-yellow-400">РЕГИСТРАЦИЯ УСПЕШНА!</h3>
+                            <p class="text-gray-300 mb-8">Ваша команда успешно зарегистрирована на турнир</p>
+                            
+                            <div class="glass-morphism rounded-lg p-6 text-left mb-6">
+                                <h4 class="text-lg font-bold mb-4 text-yellow-400">Правила турнира:</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">1.</span>
+                                        <div>
+                                            <strong>Дисциплина:</strong> Соблюдение правил игры и спортивного поведения
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">2.</span>
+                                        <div>
+                                            <strong>Снаряжение:</strong> Обязательное наличие футбольной формы и бутс
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">3.</span>
+                                        <div>
+                                            <strong>Состав:</strong> Максимум 16 игроков в заявке команды
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <span class="text-yellow-400">4.</span>
+                                        <div>
+                                            <strong>Уважение:</strong> Уважительное отношение к соперникам и судьям
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button onclick="closeModal()" class="btn-primary px-8 py-3 rounded-lg font-bold">
+                                ЗАКРЫТЬ
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="mt-4 text-sm">Получатель: Оргкомитет РКЛ</p>
-            <p class="text-sm">Сумма: 5 000 ₽</p>
-          </div>
-          <button type="button"
-                  @click="nextStep"
-                  class="w-full mt-6 px-6 py-4 bg-gradient-to-r from-green-500 to-green-700 text-white font-bold rounded-lg hover:scale-105 transition transform">
-            Подтвердить оплату
-          </button>
         </div>
-
-        <!-- ШАГ 4: УСПЕХ -->
-        <div x-show="currentStep === 4" x-transition>
-          <div class="text-center space-y-6">
-            <div class="trophy-icon">🏆</div>
-            <h4 class="text-2xl font-bold">Регистрация успешна!</h4>
-            <p class="text-gray-300">Ваша команда принята в турнир «Раменский Кубок Любителей».</p>
-
-            <div class="bg-gray-900 p-6 rounded-xl space-y-4">
-              <h5 class="font-bold text-gold">4 ЗОЛОТЫХ ПРАВИЛА:</h5>
-              <ul class="text-left space-y-2 text-sm">
-                <li><strong>1. Дисциплина:</strong> Неявка = дисквалификация.</li>
-                <li><strong>2. Экипировка:</strong> Обязательны щитки и комплект формы.</li>
-                <li><strong>3. Состав:</strong> Максимум 15 игроков в заявке.</li>
-                <li><strong>4. Уважение:</strong> Нулевая терпимость к судьям.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- НАВИГАЦИЯ ПО ШАГАМ -->
-        <div class="flex justify-between mt-10">
-          <button type="button" @click="prevStep" x-show="currentStep > 1"
-                  class="px-6 py-2 bg-gray-700 rounded-lg hover:bg-gray-600 transition">Назад</button>
-          <button type="button" @click="resetForm" x-show="currentStep === 4"
-                  class="px-6 py-2 bg-gold-glow text-black font-medium rounded-lg hover:scale-105 transition">Закрыть</button>
-          <button type="submit" x-show="currentStep < 4"
-                  class="px-6 py-2 bg-gold-glow text-black font-medium rounded-lg hover:scale-105 transition">Далее</button>
-        </div>
-
-      </form>
     </div>
-  </div>
-
-  <!-- ХАБ ТУРНИРА -->
-  <section class="py-20 px-6">
-    <div class="max-w-7xl mx-auto">
-
-      <!-- ЖЕРЕБЬЁВКА -->
-      <h2 class="text-4xl font-black text-center mb-12 text-gold">Жеребьёвка</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-        <div class="bg-gold-glow backdrop-blur-md p-6 rounded-2xl text-center">
-          <h3 class="text-2xl font-bold mb-4">Корзина 1</h3>
-          <ul class="space-y-2">
-            <li>Раменские Львы</li>
-            <li>Балашиха United</li>
-            <li>Московские Орлы</li>
-            <li>Подольск FC</li>
-          </ul>
-        </div>
-        <div class="bg-gold-glow backdrop-blur-md p-6 rounded-2xl text-center">
-          <h3 class="text-2xl font-bold mb-4">Корзина 2</h3>
-          <ul class="space-y-2">
-            <li>Люберецкие Волки</li>
-            <li>Коломна Stars</li>
-            <li>Щелково Dynamo</li>
-            <li>Жуковский City</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- BENTO GRID: СТАТИСТИКА -->
-      <h2 class="text-4xl font-black text-center mb-12 text-gold">Статистика</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-        <div class="bg-gold-glow backdrop-blur-md p-6 rounded-2xl col-span-1 md:col-span-2 lg:col-span-1">
-          <h3 class="font-bold text-lg mb-2">Лучший бомбардир</h3>
-          <p class="text-2xl">А. Смирнов — 12 голов</p>
-        </div>
-        <div class="bg-gold-glow backdrop-blur-md p-6 rounded-2xl col-span-1 md:col-span-2 lg:col-span-1">
-          <h3 class="font-bold text-lg mb-2">Группа A</h3>
-          <p>1. Львы<br>2. Волки<br>3. Орлы</p>
-        </div>
-        <div class="bg-gold-glow backdrop-blur-md p-6 rounded-2xl col-span-1 md:col-span-2 lg:col-span-1">
-          <h3 class="font-bold text-lg mb-2">Группа B</h3>
-          <p>1. United<br>2. Dynamo<br>3. Stars</p>
-        </div>
-        <div class="bg-gold-glow backdrop-blur-md p-6 rounded-2xl col-span-1 md:col-span-2 lg:col-span-1 flex items-center justify-center">
-          <div class="text-center">
-            <div class="text-6xl text-stroke font-black mb-2">01</div>
-            <p class="text-sm">Победитель</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ПОДВАЛ -->
-  <footer class="py-12 px-6 text-center text-gray-500 text-sm">
-    © 2025 Раменский Кубок Любителей. Все права защищены.<br>
-    Официальное мероприятие Департамента физкультуры и спорта Московской области.
-  </footer>
-
-</div>
-
-<script>
-  // Точный обратный отсчёт до 23 июня 2026, 14:26
-  function updateCountdown() {
-    const target = new Date("June 23, 2026 14:26:00").getTime();
-    const now = new Date().getTime();
-    const diff = target - now;
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById("days").textContent = String(days).padStart(2, '0');
-    document.getElementById("hours").textContent = String(hours).padStart(2, '0');
-    document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
-    document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
-  }
-
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-</script>
-
+    
+    <script>
+        // State Management
+        const state = {
+            currentStep: 1,
+            audioPlaying: false,
+            registrationData: {
+                teamName: '',
+                captainName: '',
+                phone: '',
+                file: null,
+                payment: {
+                    cardNumber: '',
+                    expiry: '',
+                    cvv: ''
+                }
+            }
+        };
+        
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date('2026-06-23T14:26:00');
+            const now = new Date();
+            const difference = targetDate - now;
+            
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            }
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Audio Controls
+        document.getElementById('audioToggle').addEventListener('click', function() {
+            state.audioPlaying = !state.audioPlaying;
+            const visualizer = document.getElementById('audioVisualizer');
+            
+            if (state.audioPlaying) {
+                visualizer.style.display = 'flex';
+                // Audio would play here
+            } else {
+                visualizer.style.display = 'none';
+                // Audio would pause here
+            }
+        });
+        
+        // Modal Controls
+        document.getElementById('openRegistration').addEventListener('click', function() {
+            document.getElementById('registrationModal').classList.remove('hidden');
+        });
+        
+        function closeModal() {
+            document.getElementById('registrationModal').classList.add('hidden');
+            resetRegistration();
+        }
+        
+        function resetRegistration() {
+            state.currentStep = 1;
+            state.registrationData = {
+                teamName: '',
+                captainName: '',
+                phone: '',
+                file: null,
+                payment: {
+                    cardNumber: '',
+                    expiry: '',
+                    cvv: ''
+                }
+            };
+            updateStepDisplay();
+        }
+        
+        // Step Navigation
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (state.currentStep < 4) {
+                    state.currentStep++;
+                    updateStepDisplay();
+                    
+                    if (state.currentStep === 4) {
+                        createConfetti();
+                    }
+                }
+            }
+        }
+        
+        function prevStep() {
+            if (state.currentStep > 1) {
+                state.currentStep--;
+                updateStepDisplay();
+            }
+        }
+        
+        function updateStepDisplay() {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.classList.add('hidden');
+            });
+            
+            // Show current step
+            document.getElementById(`step${state.currentStep}`).classList.remove('hidden');
+            
+            // Update indicators
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                if (index < state.currentStep) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('bg-gray-700');
+                } else {
+                    indicator.classList.remove('active');
+                    indicator.classList.add('bg-gray-700');
+                }
+            });
+        }
+        
+        function validateCurrentStep() {
+            switch(state.currentStep) {
+                case 1:
+                    const teamName = document.getElementById('teamName').value;
+                    const captainName = document.getElementById('captainName').value;
+                    const phone = document.getElementById('phone').value;
+                    
+                    if (!teamName || !captainName || !phone) {
+                        alert('Заполните все поля');
+                        return false;
+                    }
+                    
+                    state.registrationData.teamName = teamName;
+                    state.registrationData.captainName = captainName;
+                    state.registrationData.phone = phone;
+                    return true;
+                    
+                case 2:
+                    if (!state.registrationData.file) {
+                        alert('Загрузите файл состава');
+                        return false;
+                    }
+                    return true;
+                    
+                case 3:
+                    const cardNumber = document.getElementById('cardNumber').value;
+                    const expiry = document.getElementById('cardExpiry').value;
+                    const cvv = document.getElementById('cardCVV').value;
+                    
+                    if (!cardNumber || !expiry || !cvv) {
+                        alert('Заполните все поля карты');
+                        return false;
+                    }
+                    
+                    state.registrationData.payment = { cardNumber, expiry, cvv };
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+        
+        // File Upload
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+        
+        function handleFileSelect(file) {
+            state.registrationData.file = file;
+            document.getElementById('fileSelected').classList.remove('hidden');
+            document.getElementById('fileName').textContent = file.name;
+        }
+        
+        // Card Input Formatting
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+        
+        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+        
+        document.getElementById('cardCVV').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+        
+        // Phone Input Formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0 && value[0] === '7') {
+                value = value.slice(1);
+            }
+            
+            let formatted = '+7';
+            if (value.length > 0) {
+                formatted += ' (' + value.slice(0, 3);
+            }
+            if (value.length > 3) {
+                formatted += ') ' + value.slice(3, 6);
+            }
+            if (value.length > 6) {
+                formatted += '-' + value.slice(6, 8);
+            }
+            if (value.length > 8) {
+                formatted += '-' + value.slice(8, 10);
+            }
+            
+            e.target.value = formatted;
+        });
+        
+        // Confetti Effect
+        function createConfetti() {
+            const colors = ['#d4af37', '#FF3B00', '#001a3d', '#ffffff'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+        
+        // Initialize
+        updateStepDisplay();
+    </script>
 </body>
 </html>
