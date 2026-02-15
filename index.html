@@ -234,7 +234,7 @@
             right: 2rem;
             left: auto;
             transform: none;
-            z-index: 50;
+            z-index: 100;
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -448,6 +448,13 @@
             background: rgba(212, 175, 55, 0.1);
         }
         
+        /* Mobile cursor disable */
+        @media (pointer: coarse) {
+            .cursor-glow, .cursor-ring {
+                display: none;
+            }
+        }
+        
         /* Hero Parallax */
         .hero-parallax {
             position: absolute;
@@ -545,6 +552,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: auto;
+        }
+        
+        .preloader-overlay.hidden {
+            pointer-events: none;
         }
         
         .preloader-split {
@@ -684,13 +696,28 @@
             background: rgba(0, 26, 61, 0.95);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(212, 175, 55, 0.3);
-            z-index: 200;
+            z-index: 999;
             transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
         }
         
         .team-drawer.open {
             right: 0;
+        }
+        
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
         
         .radar-chart {
@@ -2135,6 +2162,174 @@
                         ease: "power2.inOut"
                     });
                 }
+            });
+        });
+        
+        // Initialize app when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fix any missing elements
+            const missingElements = [];
+            
+            if (!document.getElementById('cursorGlow')) missingElements.push('cursorGlow');
+            if (!document.getElementById('cursorRing')) missingElements.push('cursorRing');
+            if (!document.getElementById('preloader')) missingElements.push('preloader');
+            if (!document.getElementById('teamDrawer')) missingElements.push('teamDrawer');
+            if (!document.getElementById('drawerOverlay')) missingElements.push('drawerOverlay');
+            
+            if (missingElements.length > 0) {
+                console.warn('Missing elements:', missingElements);
+            }
+            
+            // Initialize countdown safely
+            function updateCountdown() {
+                const targetDate = new Date('2026-06-23T14:26:00');
+                const now = new Date();
+                const difference = targetDate - now;
+                
+                if (difference > 0) {
+                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+                    
+                    const daysEl = document.getElementById('days');
+                    const hoursEl = document.getElementById('hours');
+                    const minutesEl = document.getElementById('minutes');
+                    const secondsEl = document.getElementById('seconds');
+                    
+                    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+                    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+                    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+                    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+                }
+            }
+            
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            
+            // Initialize preloader safely
+            const preloader = document.getElementById('preloader');
+            const preloaderTop = document.getElementById('preloaderTop');
+            const preloaderBottom = document.getElementById('preloaderBottom');
+            
+            if (preloader && preloaderTop && preloaderBottom) {
+                setTimeout(() => {
+                    preloaderTop.classList.add('slide-out-top');
+                    preloaderBottom.classList.add('slide-out-bottom');
+                }, 500);
+                
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 2500);
+            }
+            
+            // Initialize cursor safely (disable on mobile)
+            if (!window.matchMedia('(pointer: coarse)').matches) {
+                const cursor = document.getElementById('cursorGlow');
+                const cursorRing = document.getElementById('cursorRing');
+                
+                if (cursor && cursorRing) {
+                    let mouseX = 0, mouseY = 0;
+                    let cursorX = 0, cursorY = 0;
+                    
+                    document.addEventListener('mousemove', (e) => {
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                    });
+                    
+                    function animateCursor() {
+                        const speed = 0.15;
+                        cursorX += (mouseX - cursorX) * speed;
+                        cursorY += (mouseY - cursorY) * speed;
+                        
+                        cursor.style.left = cursorX - 10 + 'px';
+                        cursor.style.top = cursorY - 10 + 'px';
+                        
+                        cursorRing.style.left = cursorX + 'px';
+                        cursorRing.style.top = cursorY + 'px';
+                        
+                        requestAnimationFrame(animateCursor);
+                    }
+                    animateCursor();
+                    
+                    // Hover effects
+                    const interactiveElements = document.querySelectorAll('a, button, .bento-item, .tilt-card');
+                    interactiveElements.forEach(elem => {
+                        elem.addEventListener('mouseenter', () => {
+                            cursorRing.classList.add('hover');
+                        });
+                        elem.addEventListener('mouseleave', () => {
+                            cursorRing.classList.remove('hover');
+                        });
+                    });
+                }
+            }
+            
+            // Initialize voting safely
+            const votingData = {
+                ramenskoe: 0,
+                meteor: 0,
+                victory: 0,
+                totalVotes: 0
+            };
+            
+            window.vote = function(team) {
+                if (!votingData.hasOwnProperty(team)) return;
+                
+                votingData[team]++;
+                votingData.totalVotes++;
+                
+                const teams = ['ramenskoe', 'meteor', 'victory'];
+                
+                teams.forEach(team => {
+                    const votes = votingData[team];
+                    const percentage = votingData.totalVotes > 0 ? (votes / votingData.totalVotes) * 100 : 0;
+                    
+                    const bar = document.getElementById(`${team}Votes`);
+                    const percent = document.getElementById(`${team}Percent`);
+                    
+                    if (bar && percent) {
+                        gsap.to(bar, {
+                            width: `${percentage}%`,
+                            duration: 1,
+                            ease: "cubic-bezier(0.4, 0, 0.2, 1)"
+                        });
+                        
+                        gsap.to(percent, {
+                            textContent: `${Math.round(percentage)}%`,
+                            duration: 1,
+                            ease: "cubic-bezier(0.4, 0, 0.2, 1)"
+                        });
+                    }
+                });
+            };
+            
+            // Initialize venue map safely
+            const pins = document.querySelectorAll('.venue-pin');
+            pins.forEach(pin => {
+                pin.addEventListener('mouseenter', (e) => {
+                    e.stopPropagation();
+                    const tooltip = pin.querySelector('.pin-tooltip');
+                    if (tooltip) {
+                        gsap.to(tooltip, {
+                            opacity: 1,
+                            bottom: '120%',
+                            duration: 0.3
+                        });
+                    }
+                });
+                
+                pin.addEventListener('mouseleave', (e) => {
+                    e.stopPropagation();
+                    const tooltip = pin.querySelector('.pin-tooltip');
+                    if (tooltip) {
+                        gsap.to(tooltip, {
+                            opacity: 0,
+                            duration: 0.3
+                        });
+                    }
+                });
             });
         });
     </script>
