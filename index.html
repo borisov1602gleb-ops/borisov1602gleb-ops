@@ -508,6 +508,92 @@
             transform: translateY(0);
         }
         
+        /* Collapsible Navigation */
+        .nav-container {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-container.collapsed {
+            top: 1rem;
+        }
+        
+        .nav-container.collapsed #mainNav {
+            padding: 0.5rem 1rem;
+            gap: 0;
+        }
+        
+        .nav-container.collapsed .nav-link {
+            opacity: 0;
+            width: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .nav-container.collapsed .weather-widget {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            margin: 0;
+        }
+        
+        .nav-toggle {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 26, 61, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+        
+        .nav-toggle:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+        }
+        
+        .nav-toggle svg {
+            transition: transform 0.3s ease;
+            color: #d4af37;
+        }
+        
+        .nav-container.collapsed .nav-toggle svg {
+            transform: rotate(180deg);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                top: 1rem;
+                left: 1rem;
+                right: 1rem;
+                transform: none;
+            }
+            
+            .nav-container.collapsed {
+                left: auto;
+                right: 1rem;
+                width: auto;
+            }
+            
+            .nav-container.collapsed #mainNav {
+                width: auto;
+                display: inline-flex;
+            }
+        }
+        
         /* Bento Grid */
         .bento-grid {
             display: grid;
@@ -804,20 +890,29 @@
     <div id="cursor-dot"></div>
     
     <!-- Navigation -->
-    <nav id="mainNav" class="glass-strong rounded-2xl p-2 flex flex-col md:flex-row gap-1 items-center">
-        <a href="#hero" class="nav-link magnetic">Главная</a>
-        <a href="#match" class="nav-link magnetic">Матч</a>
-        <a href="#bracket" class="nav-link magnetic">Сетка</a>
-        <a href="#road" class="nav-link magnetic">История</a>
-        <a href="#prize" class="nav-link magnetic">Призы</a>
-        <a href="#registration" class="nav-link magnetic text-gold">Регистрация</a>
+    <div class="nav-container" id="navContainer">
+        <nav id="mainNav" class="glass-strong rounded-2xl p-2 flex flex-col md:flex-row gap-1 items-center">
+            <a href="#hero" class="nav-link magnetic">Главная</a>
+            <a href="#match" class="nav-link magnetic">Матч</a>
+            <a href="#bracket" class="nav-link magnetic">Сетка</a>
+            <a href="#road" class="nav-link magnetic">История</a>
+            <a href="#prize" class="nav-link magnetic">Призы</a>
+            <a href="#registration" class="nav-link magnetic text-gold">Регистрация</a>
+            
+            <!-- Weather Widget -->
+            <div class="weather-widget glass rounded-xl px-3 py-2 ml-2 flex items-center gap-2 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <span class="text-white/80">Раменское: <span class="text-gold font-semibold">22°C</span></span>
+            </div>
+        </nav>
         
-        <!-- Weather Widget -->
-        <div class="weather-widget glass rounded-xl px-3 py-2 ml-2 flex items-center gap-2 text-xs">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            <span class="text-white/80">Раменское: <span class="text-gold font-semibold">22°C</span></span>
-        </div>
-    </nav>
+        <!-- Nav Toggle Button -->
+        <button class="nav-toggle" id="navToggle" onclick="toggleNav()" title="Свернуть/развернуть навигацию">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </button>
+    </div>
     
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -1187,7 +1282,7 @@
                     <div class="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     </div>
-                    <div class="stat-number text-4xl md:text-5xl font-black text-gold mb-2" data-target="24">0</div>
+                    <div class="stat-number text-4xl md:text-5xl font-black text-gold mb-2" data-target="16">0</div>
                     <div class="text-white/60 text-sm uppercase tracking-wider">Команд</div>
                 </div>
                 
@@ -1950,6 +2045,30 @@
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        
+        // Toggle Navigation
+        function toggleNav() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.toggle('collapsed');
+        }
+        
+        // Auto-collapse nav on scroll
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const navContainer = document.getElementById('navContainer');
+            const currentScrollY = window.scrollY;
+            
+            // Collapse when scrolling down past 300px
+            if (currentScrollY > 300 && currentScrollY > lastScrollY) {
+                navContainer.classList.add('collapsed');
+            }
+            // Expand when scrolling up
+            else if (currentScrollY < lastScrollY && currentScrollY < 300) {
+                navContainer.classList.remove('collapsed');
+            }
+            
+            lastScrollY = currentScrollY;
+        });
     </script>
 </body>
 </html>
