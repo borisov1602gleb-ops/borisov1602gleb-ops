@@ -6,494 +6,604 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Fonts for UI and main content -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      --c-bg: #101426;
+      --c-bg2: #23253d;
       --c-white: #fff;
-      --c-light: #F8FAFC;
-      --c-black: #131825;
-      --c-glass: rgba(255,255,255,0.30);
-      --c-glass-strong: rgba(255,255,255,0.45);
-      --c-shadow: 0 10px 50px rgba(34,51,101,0.12);
-      --c-shadow-strong: 0 14px 54px rgba(34,51,101,0.22);
-      --c-accent: #326bfc;
-      --c-accent-light: #7eb2ff;
-      --border: 2px solid rgba(70,110,170,0.13);
-      --transition: .22s cubic-bezier(.43,.2,.37,1.22);
-      --frost: blur(22px) saturate(1.45);
+      --c-black: #000;
+      --c-surface-glass: rgba(23,28,54,0.62);
+      --c-surface-glass-hover: rgba(38,45,95,0.84);
+      --c-surface-glass-deep: rgba(24,26,48,0.94);
+      --c-surface-card: rgba(25,28,42,0.85);
+
+      --c-accent: #62A9FF;
+      --c-accent2: #57d7ff;
+      --c-accent3: #4979FF;
+      --c-accent-bg: linear-gradient(92deg, #62a9ff 16%, #7467ff 88%);
+      
+      --c-gradient1: linear-gradient(120deg,#6a93f5 0%, #5edbff 60%, #fff3 100%);
+      --c-gradient2: linear-gradient(125deg, #212446 0%, #5069e7 85%);
+      --c-shadow: 0 8px 45px 2px rgba(90,150,250,0.11), 0 1.5px 18px 0 rgba(60,80,108,.14);
+      --c-shadow-strong: 0 20px 60px 0 rgba(44,100,250,0.11), 0 4px 30px 0 rgba(15,23,65,0.13);
+
+      --c-border-glass: 1.4px solid rgba(181,200,255,0.13);
+      --c-border: 2px solid #32437822;
+      --c-card-blur: blur(22px) saturate(1.5);
+      --transition: .24s cubic-bezier(.43,.2,.37,1.22);
+
+      /* Premium effect */
+      --premium-glow: 0 0 120px 0 #61f1ffa0, 0 0 64px 0 #4052ff60;
+      --glass-gradient: linear-gradient(110deg,rgba(44,68,166,.32) 0%,rgba(190,240,255,0.09) 100%);
+      --frost: blur(38px) saturate(1.44);
     }
+
     html, body {
       margin: 0;
       padding: 0;
-      font-family: Inter, Arial, sans-serif;
-      background: linear-gradient(125deg,#6a93d2 0%,#acd7fe 100%);
+      font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+      background: var(--c-gradient2);
+      color: var(--c-white);
       min-height: 100vh;
-      color: var(--c-black);
+      background-attachment: fixed;
     }
     body {
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
+    body::before {
+      content: '';
+      position: fixed; z-index: 0;
+      left: -180px; top: -230px;
+      width: 820px; height: 760px;
+      background: radial-gradient(circle at 30% 45%, #63f6ff80 0%, transparent 80%);
+      filter: blur(38px);
+      pointer-events: none;
+      opacity:.68;
+      animation: floatBlob 10s ease-in-out infinite alternate;
+    }
+    body::after {
+      content: '';
+      position: fixed; z-index: 0;
+      right: -220px; bottom: -195px;
+      width: 990px; height: 700px;
+      background: radial-gradient(circle at 70% 80%, #8ed9ffa2 0%, transparent 75%);
+      filter: blur(48px);
+      pointer-events: none;
+      opacity:.57;
+      animation: floatBlob2 13s ease-in-out infinite alternate;
+    }
+    @keyframes floatBlob { 100% {left: -140px; top:-180px;} }
+    @keyframes floatBlob2 { 100% {right: -280px; bottom:-230px;} }
     #root {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       position: relative;
-      z-index: 1;
-    }
-    /* translucent blobby background shape */
-    body::before {
-      content:'';
-      position: fixed;
-      z-index: 0;
-      top: -200px; left: -180px;
-      width: 710px; height: 750px;
-      background: radial-gradient(ellipse at 44% 50%,rgba(70,115,255,0.18),transparent 80%);
-      filter: blur(22px);
-      pointer-events:none;
-      opacity:.76;
-    }
-    body::after {
-      content: '';
-      position: fixed;
-      z-index: 0;
-      bottom: -240px; right: -200px;
-      width: 670px;height: 550px;
-      background: radial-gradient(ellipse at 65% 55%,rgba(255,255,255,0.41),transparent 80%);
-      filter: blur(30px);
-      pointer-events:none;
-      opacity:.65;
+      z-index: 2;
     }
 
-    /* Header */
+    /* HEADER */
     .t-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--c-glass-strong);
+      background: var(--c-surface-glass);
       box-shadow: var(--c-shadow-strong);
-      padding: 0 46px 0 34px;
-      height: 80px;
-      border-radius: 0 0 2.7em 2.7em;
-      font-family: Inter, sans-serif;
+      padding: 0 58px 0 38px;
+      height: 90px;
+      border-radius: 0 0 32px 32px;
+      font-family: 'Space Grotesk', 'Montserrat', sans-serif;
       z-index: 12;
       position: relative;
-      border-bottom: 2.8px solid rgba(70,110,170,0.07);
+      border-bottom: 2.8px solid rgba(120,170,255,0.10);
       backdrop-filter: var(--frost);
+      box-shadow: 0 3px 40px #4979ff15, 0 1px 16px #22317817;
+      overflow: visible;
     }
     .t-header__logo {
-      font-family: 'Lora', serif;
-      font-size: 2.09rem;
-      font-weight: 700;
-      letter-spacing: .062em;
-      color: var(--c-accent);
-      text-shadow: 0 2px 26px rgba(50,110,230,.19);
-      transition: color .18s;
-      filter: drop-shadow(0 1px 29px rgba(64,152,255,0.23));
-      padding-right: 1em;
+      font-family: 'Space Grotesk', 'Lora', serif;
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      color: #fff;
+      background: var(--c-accent-bg);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 3px 30px #63c9ff40,0 0px 70px #6adfff80;
+      filter: drop-shadow(0 1.2px 40px #71a5ff45);
+      transition: color .2s, text-shadow .23s;
+      user-select: none;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: .2em;
     }
     .t-header__nav {
       display: flex;
-      gap: 30px;
+      gap: 36px;
     }
     .t-header__nav-btn {
       border: none;
-      background: var(--c-glass);
+      background: var(--c-surface-glass);
       font-family: inherit;
-      font-size: 1.18rem;
-      color: #244080;
-      padding: 10px 20px;
-      border-radius: 9px;
+      font-size: 1.24rem;
+      color: #badcff;
+      padding: 13px 30px;
+      border-radius: 15px;
       cursor: pointer;
       transition: background var(--transition), color var(--transition), box-shadow var(--transition), border var(--transition);
-      font-weight: 540;
-      box-shadow: 0 2px 13px rgba(70,120,250,0.11);
-      border: 1.5px solid rgba(80,120,255,0.07);
-      position: relative;
-      letter-spacing: .02em;
+      font-weight: 600;
       outline: none;
+      letter-spacing: .04em;
+      border: 2.2px solid rgba(140,160,250,0.14);
+      text-shadow: 0 0 25px #4dfbff13;
+      backdrop-filter: blur(13px);
+      position: relative;
+      box-shadow: 0 2px 24px #689fff11;
+      /* Premium glowing effect */
     }
     .t-header__nav-btn.active,
     .t-header__nav-btn:hover {
-      background: linear-gradient(92deg,var(--c-accent-light) 20%,#457eff 100%);
+      background: linear-gradient(91deg,#2a45d7 40%,#47cde9 160%);
       color: #fff;
-      box-shadow: 0 7px 37px rgba(46,66,152,.15);
-      border: 1.6px solid rgba(50,130,255,0.17);
+      box-shadow: 0 6px 55px 6px #71dafc33, 0 4px 30px #2b5fee1b;
+      border: 2.2px solid #6defff44;
+      text-shadow: 0 2px 27px #9afbff32, 0 1px 20px #7e97ff24;
+      filter: drop-shadow(0 0 32px #37dbe98f);
     }
 
-    /* Container/panels */
+    /* Panels Container */
     .t-main {
       display: flex;
       flex: 1 1 auto;
-      background: none;
       min-height: 0;
       min-width: 0;
       position: relative;
       padding: 0;
       overflow: visible;
-      z-index: 1;
+      z-index: 2;
     }
 
     /* TAB PANELS */
     .tab-panel {
       flex: 1 1 auto;
       display: none;
-      padding: 42px 3vw 45px 3vw;
+      padding: 62px 4vw 56px 4vw;
       min-width: 0;
       min-height: 0;
       background: transparent;
       position: relative;
-      animation: fadeInTab 0.32s;
+      animation: fadeInTab 0.47s cubic-bezier(.42,.12,.45,.97);
+      z-index: 3;
     }
     @keyframes fadeInTab {
-      from { opacity: .48; transform: translateY(18px);}
+      from { opacity: .33; transform: translateY(27px);}
       to { opacity: 1; transform: none;}
     }
     .tab-panel.visible { display: block; }
 
-    /* MAIN TAB: Tournament */
+    /* MAIN CONTENT CONTAINER */
     .main-container {
       display: flex;
       flex-direction: row;
-      gap: 48px;
+      gap: 64px;
       justify-content: stretch;
       min-width: 0;
       z-index: 2;
+      position:relative;
     }
-    /* Info Column */
+
+    /* INFO COLUMN - GLASS CARD */
     .main-info {
-      flex: 1 1 260px;
-      min-width: 246px;
-      max-width: 340px;
-      background: var(--c-glass-strong);
+      flex: 1 1 280px;
+      min-width: 255px;
+      max-width: 350px;
+      background: var(--c-surface-glass-deep);
       backdrop-filter: var(--frost);
-      border-radius: 30px;
-      box-shadow: var(--c-shadow);
-      padding: 38px 37px 38px 28px;
-      margin-bottom: 22px;
-      margin-right: 0;
-      border: 2px solid rgba(44,90,200,.105);
-      z-index: 1;
+      border-radius: 36px;
+      box-shadow: var(--c-shadow-strong);
+      padding: 50px 47px 48px 30px;
+      border: 2.3px solid rgba(78,148,233,0.19);
+      z-index: 3;
+      overflow: visible;
       position: relative;
+      transition: box-shadow .24s;
+    }
+    .main-info:hover {
+      box-shadow:0 16px 74px #7be0ff25, 0 2px 24px #71d7ff33;
+      border-color: #7fe2ff45;
     }
     .main-info h2 {
       margin-top: 0;
-      font-family: Lora, serif;
-      font-size:1.38rem;
-      color: var(--c-accent);
-      letter-spacing: .016em;
-      text-shadow: 0 2px 12px rgba(65,130,255,0.08);
+      font-family: 'Space Grotesk','Lora', serif;
+      font-size:1.54rem;
+      line-height: 1.12;
+      color: #8fd8ff;
+      letter-spacing: .032em;
+      text-shadow: 0 3px 16px #74e1ff0a;
+      background: linear-gradient(90deg,#74dafe 0%,#759bff 58%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .main-info ul, .main-info p {
-      font-size:1.07em;
-      color: #30496c;
-      margin-bottom: 8px;
+      font-size:1.12em;
+      color: #badaea;
+      margin-bottom: 10px;
     }
     .main-info ul {
-      padding-left: 22px;
-      margin-top: 1em;
-      margin-bottom: 16px;
+      padding-left: 1.9em;
+      margin-bottom: 23px;
+      margin-top: 1.1em;
     }
     .main-info li {
-      opacity: 0.93;
-      font-size:1em;
-      margin-bottom: 0.15em;
+      opacity: .97;
+      font-size:1.009em;
+      margin-bottom: 0.25em;
+      filter: blur(.1px);
     }
     .main-info p {
       margin-top: 0;
       margin-bottom: 0;
-      line-height: 1.5;
+      line-height: 1.6;
+      opacity:.92;
     }
 
-    /* Group Column */
+    /* GROUPS PANEL (Tournament tables) */
     .main-groups {
-      flex: 2 1 540px;
-      min-width: 370px;
-      max-width: 780px;
+      flex: 2 1 620px;
+      min-width: 410px;
+      max-width: 960px;
       z-index: 2;
+      position:relative;
     }
     .groups-header {
-      display:flex; gap:38px; align-items: flex-end; margin-bottom: 18px;
+      display:flex; gap:42px; align-items: flex-end; margin-bottom: 20px;
+      margin-left:2px;
     }
     .groups-header h2 {
-      text-shadow:0 1.5px 15px rgba(120,130,220,0.07);
+      text-shadow:0 1.5px 18px #54ddff13;
+      font-family: 'Montserrat', 'Lora', serif;
+      letter-spacing: .014em;
     }
     .group-block {
-      background: var(--c-glass);
-      box-shadow: var(--c-shadow-strong);
-      backdrop-filter: blur(19px) saturate(1.25);
-      border-radius: 18px;
-      margin-bottom: 30px;
-      padding: 19px 14px 19px 26px;
-      min-width: 260px;
+      background: var(--c-surface-card);
+      box-shadow: 0 11px 54px 0 rgba(64,137,247,.17), 0 2px 14px #579bff1c;
+      backdrop-filter: blur(22px) saturate(1.18);
+      border-radius: 22px;
+      margin-bottom: 34px;
+      padding: 27px 13px 17px 36px;
+      min-width: 270px;
       overflow-x: auto;
-      border: 2px solid rgba(82,144,238,.13);
+      border: 2.2px solid rgba(82,144,238,.15);
       position: relative;
       z-index: 1;
-      transition: box-shadow .23s cubic-bezier(.51,.2,.35,1.12);
+      transition: box-shadow .23s cubic-bezier(.51,.2,.35,1.12), border .24s;
+      animation: floatUp .7s ease;
     }
-    .group-block:hover { box-shadow: 0 10px 54px rgba(120,170,255,0.065);}
+    .group-block:hover { 
+      box-shadow: 0 18px 54px #82eaff21, 0 2px 15px #acdfff24; 
+      border-color: #6be2ff46; 
+    }
     .group-block h3 {
       margin-top: 0;
-      font-family: Lora, serif;
-      font-size:1.18rem;
-      color: var(--c-accent);
-      font-weight: 700;
-      margin-bottom:8px;
-      filter: blur(.01px);
+      font-family: 'Space Grotesk', 'Montserrat', serif;
+      font-size:1.17rem;
+      color: var(--c-accent2);
+      font-weight: 800;
+      margin-bottom:9px;
+      letter-spacing:.08em;
+      text-shadow: 0 2px 16px #33f1ff20;
     }
     .team-list {
       list-style: none; padding: 0; margin: 0;
-      border-radius: 10px;
+      border-radius: 13px;
       overflow: hidden;
+      box-shadow: 0 2px 20px #66fafd07;
     }
     .team-list li {
       display: flex; align-items: center;
-      border-bottom: 1.7px solid rgba(108,133,200,.075);
-      font-size: 1.09rem; font-family: Lora, serif;
-      padding: 4px 0 3px 0;
+      border-bottom: 1.7px solid rgba(49,195,255,.075);
+      font-size: 1.11rem; font-family: 'Montserrat', Lora, serif;
+      padding: 7px 0 4px 0;
       font-weight: 500;
-      min-height: 34px;
-      background: rgba(255,255,255,0.16);
-      transition: background .19s;
+      min-height: 41px;
+      background: rgba(53,87,168,0.097);
+      transition: background .17s;
+      filter: blur(.1px);
+      backdrop-filter: blur(2px);
     }
     .team-list li:last-child { border-bottom: none;}
     .team-list li:hover {
-      background: rgba(102,152,255,0.08);
+      background: rgba(102,152,255,0.12);
     }
     .team-logo {
-      width:28px;height:28px;object-fit:contain; border-radius:8px; background:#eef2f8;
-      margin-right:9px; border:1.2px solid #e0e5ef;
-      box-shadow: 0 2px 15px rgba(40,100,255,.06);
+      width:32px;height:32px;object-fit:contain; border-radius:8px; background:#1c223a;
+      margin-right:14px; border:1.2px solid #447cbb36;
+      box-shadow: 0 3px 15px rgba(40,180,240,.12);
+      transition: box-shadow .21s;
+      filter: drop-shadow(0 0 13px #67e6fd15);
     }
-
-    /* Playoff bracket grid */
+    /* Bracket Section */
     .playoff-block {
-      background: var(--c-glass-strong);
-      border-radius: 21px;
-      padding: 26px 22px 20px 26px;
+      background: var(--c-surface-card);
+      border-radius: 25px;
+      padding: 38px 25px 27px 35px;
       box-shadow: var(--c-shadow-strong);
       min-width: 328px;
-      border: 2px solid rgba(82,144,238,.12);
-      margin-top: 12px;
-      margin-bottom: 8px;
-      backdrop-filter: var(--frost);
+      border: 2.3px solid rgba(93,154,238,.18);
+      margin-top: 16px;
+      margin-bottom: 13px;
+      backdrop-filter: blur(21px) saturate(1.307);
       position: relative;
       z-index: 1;
+      transition: box-shadow .22s, border .22s;
+    }
+    .playoff-block:hover{
+      box-shadow: 0 19px 60px #7be3ff19,0 2px 18px #61caff46;
+      border-color: #55defc38;
     }
     .playoff-title {
-      font-family: Lora, serif; font-size: 1.23rem;
-      font-weight: bold; color: #3358b6; margin-top: 0;
-      margin-bottom: 12px;
-      letter-spacing: .012em;
-      opacity: .87;
-      text-shadow:0 1.5px 12px rgba(110,140,210,0.08);
+      font-family: 'Space Grotesk', 'Montserrat', serif;
+      font-size: 1.35rem;
+      font-weight: bold;
+      color: #acf8ff;
+      margin-top: 0;
+      margin-bottom: 16px;
+      letter-spacing: .022em;
+      opacity: .98;
+      text-shadow:0 1.5px 18px #75e0ff18;
+      background: linear-gradient(92deg, #62a9ff 10%, #b5e6ff 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .bracket {
-      display: flex; gap:40px; align-items: flex-start;flex-wrap:wrap;
+      display: flex; gap:48px; align-items: flex-start; flex-wrap:wrap;
     }
     .bracket-col {
-      display: flex; flex-direction: column; gap: 32px;
+      display: flex; flex-direction: column; gap: 38px;
     }
     .bracket-game {
-      min-width: 108px;
-      min-height: 60px;
-      background:var(--c-glass);
-      border-radius:14px;
-      border:2px solid #e3ecef60;
-      box-shadow: 0 2px 22px rgba(160,180,240,0.09);
-      padding:9px 14px 13px 12px;
+      min-width: 122px;
+      min-height: 68px;
+      background:var(--c-surface-glass-hover);
+      border-radius:17px;
+      border:2.3px solid #4eb4f950;
+      box-shadow: 0 2px 22px #a0eefd11, 0 2px 7px #bfeaff10;
+      padding:13px 18px 15px 15px;
       display: flex; flex-direction:column; justify-content: center;align-items: flex-start;
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(12px) saturate(1.15);
+      backdrop-filter: blur(12px) saturate(1.18);
     }
     .bracket-game .game-stage {
-      font-size: .93rem; color: #6971b4; margin-bottom:2px; font-family: Inter, sans-serif;
-      opacity: 0.92;
+      font-size: .99rem; color: #8ad2ff; margin-bottom:1px; font-family: 'Inter',sans-serif; font-weight:600; opacity:.97;
     }
     .bracket-game .game-teams {
-      font-family: Lora, serif; font-size:1.14rem; color: #161c39;
+      font-family: 'Montserrat', 'Lora', serif; font-size:1.19rem; color: #f3f8ff;
+      letter-spacing:.01em;
+      filter: blur(.07px);
+      font-weight:700;
+      text-shadow: 0 2px 13px #52e7ff0d;
     }
     .bracket-game .game-score {
-      font-size:1.11rem;font-family:Inter,sans-serif;color:#4979FF;
-      margin-left:11px;
+      font-size:1.13rem;font-family:Inter,sans-serif;color:#6be7ff;
+      margin-left:14px;
       font-weight: bold;
-      text-shadow: 0 3px 9px #cbdafe50;
+      text-shadow: 0 3px 13px #94f6ff28;
+      letter-spacing:.04em;
     }
 
     /* MERCH TAB */
     .bento-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
-      gap: 28px;
-      margin-top: 27px;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 31px;
+      margin-top: 37px;
       z-index: 1;
       position: relative;
     }
     .bento-card {
-      background: var(--c-glass);
-      border-radius: 21px;
-      box-shadow: var(--c-shadow);
-      padding: 27px 19px 23px 19px;
+      background: var(--c-surface-glass);
+      border-radius: 25px;
+      box-shadow: var(--c-shadow-strong);
+      padding: 35px 19px 24px 19px;
       display: flex; flex-direction: column; align-items: center;
-      transition: box-shadow .27s cubic-bezier(.43,.2,.37,1.22), transform .18s;
+      transition: box-shadow .29s cubic-bezier(.43,.2,.37,1.22), transform .22s;
+      border: 2px solid rgba(47,192,220,.11);
+      backdrop-filter: blur(19px) saturate(1.21);
       position: relative;
-      border: 2px solid rgba(130,150,210,.11);
-      backdrop-filter: blur(10px) saturate(1.17);
+      overflow: visible;
     }
     .bento-card:hover {
-      box-shadow: 0 13px 38px rgba(70,120,220,0.16), 0 2px 15px #aacbff30;
-      transform: translateY(-6px) scale(1.021);
-      z-index: 2;
+      box-shadow: 0 17px 45px #5ae7ff18, 0 4px 17px #54c7db24;
+      transform: translateY(-10px) scale(1.032);
+      border-color: #6feeff36;
+      transition: box-shadow .14s, transform .21s, border-color .21s;
+      z-index: 3;
     }
     .bento-img {
-      width:114px;height:114px;object-fit:contain; border-radius:20px; background:#eef2fd;
-      margin-bottom:20px;
-      box-shadow:0 3px 17px rgba(120,170,255,.13);
+      width:121px;height:121px;object-fit:contain; border-radius:30px; background:#101426;
+      margin-bottom:28px;
+      box-shadow:0 3px 27px #41ffc513;
+      filter: blur(.3px);
+      transition: box-shadow .18s;
     }
     .bento-title {
-      font-family: Lora, serif;
-      font-size: 1.19rem;
-      margin-bottom: 9px;
+      font-family: 'Space Grotesk', 'Montserrat', serif;
+      font-size: 1.33rem;
+      margin-bottom: 10px;
       font-weight: 700;
-      color: #223665;
+      color: var(--c-accent3);
       text-align: center;
+      text-shadow: 0 3px 23px #44e9ff19;
+      letter-spacing:.011em;
     }
     .bento-desc {
-      font-size:.99rem;color:#4562a9;text-align:center;margin-bottom:17px;
+      font-size:1.03rem;color:#b6e3ff;text-align:center;margin-bottom:14px;
+      filter: blur(.07px);
     }
     .bento-cta {
-      background: linear-gradient(88deg,#4979FF 20%,#4051e9 90%);
+      background: var(--c-accent-bg);
       color: #fff;
       border: none;
-      border-radius:10px;
-      padding:8px 19px;
-      font-size:1.08rem;
+      border-radius:13px;
+      padding:10px 32px;
+      font-size:1.09rem;
       font-family: Inter, sans-serif;
       cursor:pointer;
-      font-weight: 600;
-      box-shadow:0 3px 18px rgba(40,120,240,0.085);
-      transition: background var(--transition), box-shadow var(--transition);
-      opacity: 0.9;
+      font-weight: 700;
+      box-shadow:0 6px 21px #3de9f727;
+      transition: background var(--transition), box-shadow var(--transition), border .14s;
+      opacity: 0.93;
+      border:2px solid transparent;
     }
     .bento-cta:hover {
-      background: #244efc;
-      box-shadow:0 10px 32px rgba(42,86,219,0.17);
+      background: linear-gradient(92deg,#62a9ff 20%,#41f2f8 85%);
+      box-shadow:0 15px 37px #05ecff26;
+      border:2px solid #73efff54;
+      opacity:1;
+      letter-spacing: .015em;
     }
 
     /* PRIZES & PARTNERS TAB */
     .prize-section {
       margin-bottom: 61px;
-      padding: 17px 0 0 0;
+      padding: 22px 0 0 0;
       z-index: 1;
       position: relative;
     }
     .prize-title {
-      font-family: Lora, serif; font-size:1.24rem;color: var(--c-accent);font-weight:700;
-      margin-bottom:13px;
-      letter-spacing: 0.012em;
-      text-shadow:0 1.5px 12px rgba(65,130,255,0.15);
+      font-family: 'Space Grotesk','Montserrat',serif; font-size:1.27rem; font-weight:700;
+      letter-spacing: 0.02em;
+      background: linear-gradient(87deg,#befecc 10%,#b6eefe 86%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom:21px;
+      text-shadow:0 1.5px 24px #2cffb511;
     }
     .prize-list {
       display: flex; gap:38px; flex-wrap:wrap; margin-top:13px;
     }
     .prize-card {
-      background: var(--c-glass);
-      border-radius: 18px;
+      background: var(--c-surface-card);
+      border-radius: 25px;
       box-shadow: var(--c-shadow-strong);
-      min-width:206px; max-width:272px;
-      padding:20px 25px 21px 21px;
+      min-width:220px; max-width:282px;
+      padding:29px 26px 24px 26px;
       font-family: Inter, sans-serif;
-      border: 2px solid rgba(82,144,238,0.12);
-      margin-bottom: 10px;
-      backdrop-filter: blur(10px);
+      border: 2.6px solid rgba(82,144,238,0.12);
+      margin-bottom: 14px;
+      backdrop-filter: blur(12px);
       z-index: 1;
       position: relative;
-      transition: box-shadow .21s;
+      transition: box-shadow .221s, border .18s;
     }
-    .prize-card:hover { box-shadow: 0 13px 38px rgba(70,120,220,0.13);}
+    .prize-card:hover { box-shadow: 0 24px 87px #7be0ff27;background:var(--c-surface-glass-hover); border-color:#8bf3ff41;}
     .prize-card h4 {
-      margin: 0 0 9px 0; font-size: 1.06rem; color: #4979FF;
+      margin: 0 0 14px 0; font-size: 1.11rem; color: #6ad7ff;
+      font-family: 'Space Grotesk','Montserrat',serif; font-weight:700;letter-spacing:.02em;
     }
     .prize-card .prize-amount {
-      font-size:29px;color:#111827;font-family:Lora,serif;font-weight:700;
-      margin-bottom: 3px; margin-top:10px;
-      text-shadow: 0 3px 13px #bcc6ee30;
+      font-size:29px;color:#fff;font-family:Lora,serif;font-weight:700;
+      margin-bottom: 6px; margin-top:13px;
+      text-shadow: 0 3px 15px #8ff2ff29;
+      letter-spacing:.033em;
     }
     .prize-card ul {
-      margin:0 0 8px 16px; font-size:.98em;
+      margin:0 0 10px 17px; font-size:1.04em; color:#afefff; filter: blur(.05px);
     }
 
-    /* Partners grid */
+    /* PARTNERS PANEL */
     .partners-section {
-      padding: 19px 0 0 0;
+      padding: 24px 0 0 0;
       z-index: 1;
       position: relative;
     }
     .partners-title {
-      font-family: Lora, serif; font-size:1.19rem;color: var(--c-accent);font-weight:600;
-      margin-bottom:19px;margin-top:0;
-      text-shadow:0 1.5px 12px rgba(65,130,255,0.06);
+      font-family: 'Space Grotesk', 'Montserrat', serif; font-size:1.22rem;font-weight:700;
+      margin-bottom:19px;margin-top:0; letter-spacing: .02em;
+      background: linear-gradient(96deg, #6be2ff 20%, #eafe6b 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow:0 1.5px 12px #81f3ff18;
     }
     .partners-logos {
-      display: flex;flex-wrap:wrap;gap:30px 54px;
+      display: flex;flex-wrap:wrap;gap:35px 55px;
       align-items:center;
-      margin-bottom: 6vw;
-      margin-top: 12px;
+      margin-bottom: 5vw;
+      margin-top: 16px;
     }
     .partner-logo-box {
-      background: var(--c-glass-strong);
+      background: var(--c-surface-glass-hover);
       border-radius: 18px;
-      box-shadow:var(--c-shadow);
+      box-shadow: 0 4px 27px #77e6ff15;
       display: flex; align-items: center; justify-content: center;
-      padding:22px 27px;
-      min-width:128px;
-      min-height:66px;
-      border: 2px solid rgba(60,130,250,0.08);
-      margin-bottom: 12px;
-      transition: box-shadow .19s;
-      backdrop-filter: blur(8px);
+      padding:29px 35px;
+      min-width:148px;
+      min-height:72px;
+      border: 2.3px solid rgba(60,160,250,0.15);
+      margin-bottom: 8px;
+      transition: box-shadow .19s, border .13s;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: visible;
     }
-    .partner-logo-box:hover { box-shadow: 0 10px 40px #b3d3ff22;}
+    .partner-logo-box:hover { box-shadow: 0 21px 63px #d1f3ff37,0 7px 32px #aaeafd43;border-color:#5df4ff51;}
     .partner-logo {
-      max-width:102px; max-height:39px; object-fit:contain;
-      filter: drop-shadow(0 2px 8px #acc4e944);
-      opacity:.88;
+      max-width:102px; max-height:44px; object-fit:contain;
+      filter: drop-shadow(0 3px 16px #61e5fc33);
+      opacity:.91;
       transition: opacity .23s;
+      background: transparent;
     }
     .partner-logo-box:hover .partner-logo { opacity: 1;}
-    /* scroll bars, etc */
+
+    /* scroll bars */
     * {
-      scrollbar-color: #d6e6ff #f6faff;
+      scrollbar-color: #5fefff #162243;
       scrollbar-width: thin;
     }
-    ::-webkit-scrollbar {width:8px;background:#f4f8fb;}
-    ::-webkit-scrollbar-thumb {background:#bdd9fb;border-radius:8px;}
+    ::-webkit-scrollbar {width:8px;background:#23273d;}
+    ::-webkit-scrollbar-thumb {background:#5afbea;border-radius:8px;}
+
+    /* Animations */
+    @keyframes floatUp {
+      0% {transform: translateY(20px) scale(.98);}
+      100% {transform: none;}
+    }
+    .bounce-in {
+      animation: bounceIn .73s cubic-bezier(.41,.91,.41,.91);
+    }
+    @keyframes bounceIn {
+      0% {transform:scale(.58) translateY(90px);opacity:0;}
+      68% {transform:scale(1.14) translateY(-7px);}
+      100% {transform:scale(1) translateY(0);opacity:1;}
+    }
+
     /* Responsive */
     @media (max-width:1200px) {
       .main-container {flex-direction:column; gap:0;}
-      .main-info {max-width:unset;margin-bottom:16px;}
+      .main-info {max-width:unset;margin-bottom:26px;}
       .main-groups, .playoff-block {max-width:100vw;}
-      .playoff-block {margin-bottom:24px;}
+      .playoff-block {margin-bottom:28px;}
+      .bento-grid {gap:19px;}
     }
-    @media (max-width:850px) {
-      .t-header { padding:0 8px;height:70px;}
-      .main-info,
-      .playoff-block {padding:18px 7px;}
-      .tab-panel {padding:21px 2vw;}
-      .groups-header {gap:19px;}
-      .bento-grid {gap:17px;}
-      .partners-logos{gap:17px 16px;}
+    @media (max-width:900px) {
+      .t-header { padding:0 10px; height:74px;}
+      .t-header__logo { font-size:1.23rem;}
+      .main-info {padding:15px 7vw;}
+      .tab-panel {padding:21px 1vw;}
     }
     @media (max-width:600px) {
-      .t-header {height:60px;}
-      .t-header__logo {font-size: 1.15rem;}
-      .tab-panel {padding:12px 1vw;}
-      .main-info {padding:16px 4vw;}
-      .playoff-block {padding:11px 3vw;}
+      .t-header {height:62px;}
+      .main-info {padding:13px 4vw;}
+      .playoff-block {padding:13px 1vw;}
+      .tab-panel {padding:7px;}
     }
+
     /* Print: show only main bracket for final game */
     @media print {
       body, html { background: #fff !important; }
@@ -505,15 +615,7 @@
       .print-bracket-final { display: block !important; }
     }
     .print-bracket-final { display: none;}
-    /* Animations etc */
-    .bounce-in {
-      animation: bounceIn .73s cubic-bezier(.41,.91,.41,.91);
-    }
-    @keyframes bounceIn {
-      0% {transform:scale(.58) translateY(90px);opacity:0;}
-      68% {transform:scale(1.14) translateY(-7px);}
-      100% {transform:scale(1) translateY(0);opacity:1;}
-    }
+
   </style>
 </head>
 <body>
@@ -534,23 +636,29 @@
       <div class="main-container">
         <aside class="main-info">
           <h2>О турнире</h2>
-          <p>Добро пожаловать на ежегодный Летний футбольный турнир 2024! 8 команд, 2 прозрачных группы — дальше борьба за кубок в плей-офф.<br/><b>Место:</b> Спорткомплекс «Лидер», Москва.<br/><b>Даты:</b> 15–17 июня 2024.<br/><b>Формат:</b> 2 группы по 4, финал — кубок!</p>
+          <p>Добро пожаловать на ежегодный Летний футбольный турнир 2024! Вас ждёт премиальный формат — 8 команд, 2 крутых группы, топовый кубок и только лучшие условия для игроков и болельщиков.<br/>
+          <b>Место:</b> Спорткомплекс «Лидер», Москва.<br/>
+          <b>Даты:</b> 15–17 июня 2024.<br/>
+          <b>Формат:</b> 2 группы по 4, плей-офф, финал — кубок!</p>
           <ul>
-            <li>⚽ 2 тайма по 20 минут</li>
-            <li>⏰ Начало игр: 09:30</li>
-            <li>🟢 Открытая регистрация команд</li>
-            <li>🎥 Прямая трансляция/судейство</li>
+            <li>⚽ 2 тайма по 20 минут — чистое премиальное время</li>
+            <li>⏰ Начало матчей: 09:30 электроминуты</li>
+            <li>🟢 Ультра-открытая регистрация (8 команд)</li>
+            <li>🎥 Прямая трансляция UHD и VAR судейство</li>
           </ul>
-          <p style="margin-top:2.7em;font-size:.99rem;color:#6572a3;">Контакты для заявок:<br/><b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru" style="color:var(--c-accent);text-decoration:underline;">support@foot-tournament.ru</a></p>
+          <p style="margin-top:2.8em;font-size:1.05rem;color:#aeeffe;">
+            Контакты для заявок:<br/>
+            <b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru" style="color:var(--c-accent);text-decoration:underline;">support@foot-tournament.ru</a>
+          </p>
         </aside>
         <!-- middle: groups -->
         <section class="main-groups">
           <div class="groups-header">
-            <div><h2 style="margin:0;font-family:Lora,serif;font-weight:700;font-size:1.19rem;color:#2d5efc;">Группы</h2></div>
-            <div><h2 style="margin:0;font-family:Lora,serif;font-size:1.03rem;color:#a0b7ea;">Этап: групповой</h2></div>
+            <div><h2 style="margin:0;font-family:'Space Grotesk',Montserrat,serif;font-weight:700;font-size:1.22rem;color:#71e3ff;">Группы</h2></div>
+            <div><h2 style="margin:0;font-family:'Space Grotesk',Montserrat,serif;font-size:1.08rem;color:#d5f7ff;">Этап: групповой</h2></div>
           </div>
           <!-- two groups -->
-          <div style="display:flex;gap:27px;flex-wrap:wrap;">
+          <div style="display:flex;gap:34px;flex-wrap:wrap;">
             <!-- Group A -->
             <div class="group-block">
               <h3>ГРУППА A</h3>
@@ -574,10 +682,10 @@
     </section>
     <!-- MERCH TAB -->
     <section class="tab-panel" id="merch-tab">
-      <div style="font-family:Lora,serif;font-size:1.33rem;font-weight:700;color:#265fb0;margin-bottom:28px;text-shadow:0 2px 24px #326bff15;">Мерч и клубная атрибутика</div>
+      <div style="font-family:'Space Grotesk','Montserrat',serif;font-size:1.41rem;font-weight:700;color:#63cfff;margin-bottom:30px;text-shadow:0 5px 24px #38e4ee23;letter-spacing:0.01em;">Премиум мерч и официальная атрибутика турнира</div>
       <div class="bento-grid" id="merch-grid"></div>
-      <div style="margin-top:32px;font-size:.94rem;color:#5e8ddd;">
-        Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:var(--c-accent);">merch@foot-tournament.ru</a>
+      <div style="margin-top:32px;font-size:1rem;color:#bff8f1;text-shadow:0 2px 22px #23f6fe11;">
+        Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:#49dfff;font-weight:700;text-decoration:underline;">merch@foot-tournament.ru</a>
       </div>
     </section>
     <!-- PRIZES & PARTNERS TAB -->
@@ -587,7 +695,7 @@
         <div class="prize-list" id="prize-list"></div>
       </div>
       <div class="partners-section">
-        <div class="partners-title">Наши партнёры</div>
+        <div class="partners-title">Наши премиальные партнёры</div>
         <div class="partners-logos" id="partners-logos"></div>
       </div>
     </section>
@@ -666,36 +774,36 @@ const PLAYOFF = [
 const MERCH_LIST = [
   {
     img: "https://cdn-icons-png.flaticon.com/512/3847/3847278.png",
-    title: "Футбольная форма турнира (набор)",
-    desc: "Доступна в двух расцветках, номера и фамилия на спине. Лимитированная коллекция!",
+    title: "Оригинальная форма 2024 (комплект)",
+    desc: "Премиальное качество! Любой размер. Именная вышивка. Лимитированная коллекция.",
     price: "3500₽",
     url: "#"
   },
   {
     img: "https://cdn-icons-png.flaticon.com/512/3208/3208707.png",
-    title: "Шарф фаната",
-    desc: "Тёплый сувенир и клубная поддержка. С надписью 'Лето 2024'.",
+    title: "Прозрачный шарф фаната",
+    desc: "Пушистый неоновый стиль — лучший сувенир тура! Надпись 'Лето 2024'.",
     price: "900₽",
     url: "#"
   },
   {
     img: "https://cdn-icons-png.flaticon.com/512/3225/3225092.png",
-    title: "Бутылка для воды",
-    desc: "Стильная и экологичная бутылка объемом 700 мл с символикой турнира.",
+    title: "Стеклянная бутылка для воды",
+    desc: "700ml, стильный футуризм. Символика турнира, премиальная крышка!",
     price: "650₽",
     url: "#"
   },
   {
     img: "https://cdn-icons-png.flaticon.com/512/3208/3208715.png",
-    title: "Бейсболка",
-    desc: "Базовая защита от солнца — с логотипом турнира.",
+    title: "Голографическая бейсболка",
+    desc: "С мощным логотипом турнира и градиентной окантовкой.",
     price: "800₽",
     url: "#"
   },
   {
     img: "https://cdn-icons-png.flaticon.com/512/2941/2941559.png",
-    title: "Кружка",
-    desc: "Брендированная кружка для настоящих болельщиков.",
+    title: "Neo-кружка с логотипом",
+    desc: "Эффект прозрачности, premium печать, возможна персонализация.",
     price: "450₽",
     url: "#"
   },
@@ -705,22 +813,22 @@ const PRIZES = [
   {
     place: "I место",
     amount: "30 000₽",
-    items: ["Кубок⚽", "Медали", "Сертификат на инвентарь", "Фирменные толстовки"]
+    items: ["Кубок-премиум ⚽", "Gold-медали", "Сертификат на инвентарь", "Эксклюзивные толстовки"]
   },
   {
     place: "II место",
     amount: "15 000₽",
-    items: ["Медали", "Памятный приз", "Фирменные футболки"]
+    items: ["Silver-медали", "Памятный приз", "Фирменные футболки"]
   },
   {
     place: "III место",
     amount: "7 500₽",
-    items: ["Медали", "Памятная кружка"]
+    items: ["Bronze-медали", "Премиальная кружка"]
   },
   {
     place: "Лучший бомбардир",
-    amount: "Подарок",
-    items: ["Памятный мяч", "Гравировка"]
+    amount: "Неон-подарок",
+    items: ["Оригинальный мяч", "Именная гравировка"]
   }
 ];
 // ПАРТНЁРЫ
@@ -751,7 +859,7 @@ const PARTNERS = [
     url:"#"
   }
 ];
-// ----------- ФУНКЦИИ РЕНДЕРИНГА --------------------------
+// ----------- РЕНДЕР --------------------------
 
 // GROUPS - Render table
 function renderGroups() {
@@ -761,10 +869,10 @@ function renderGroups() {
     const el = document.getElementById(id);
     el.innerHTML = '';
     const scoreData = GROUP_RESULTS[group.title];
-    // header row
+    // header row (premium style)
     el.insertAdjacentHTML('beforeend',
-      `<li style="color:#6377ad;background:rgba(185,203,242,0.26);font-size:.97em;border:none;padding-bottom:0;">
-        <span style="flex:1 1 60px;min-width:72px;">Команда</span>
+      `<li style="color:#42f3ff;background:rgba(64,89,128,.20);font-size:1.06em;border:none;font-weight:600;letter-spacing:.035em;">
+        <span style="flex:1 1 60px;">Команда</span>
         <span style="width:43px;text-align:center;">И</span>
         <span style="width:43px;text-align:center;">В</span>
         <span style="width:43px;text-align:center;">Н</span>
@@ -782,7 +890,7 @@ function renderGroups() {
           <span style="width:43px;text-align:center;">${teamRes.draws}</span>
           <span style="width:43px;text-align:center;">${teamRes.loses}</span>
           <span style="width:64px;text-align:center;">${teamRes.goals}</span>
-          <span style="width:44px;text-align:center;font-weight:700;color:#5171f7;">${teamRes.pts}</span>
+          <span style="width:44px;text-align:center;font-weight:700;color:#40ecff;">${teamRes.pts}</span>
         </li>`);
     });
   });
@@ -803,7 +911,7 @@ function renderBracket() {
   ["Полуфиналы", "Матч за бронзу", "Финал"].forEach((header,i)=>{
     bracket.insertAdjacentHTML('beforeend',`
       <div class="bracket-col">
-        <div class="bracket-stage" style="font-family:Inter,sans-serif;color:#9daadc;font-size:1.01em;font-weight:600;margin-bottom:8px;text-align:left;">
+        <div class="bracket-stage" style="font-family:Inter,sans-serif;color:#76daff;font-size:1.04em;font-weight:700;margin-bottom:11px;text-align:left;letter-spacing:.01em;opacity:.93;">
           ${header}
         </div>
         ${cols[i].map(game =>
@@ -816,17 +924,18 @@ function renderBracket() {
   });
   // ----- Print Only: финал -----
   const printFinal = document.getElementById('print-bracket-final');
-  printFinal.innerHTML = `<div style="font-family:Lora,serif;font-size:2.13rem;text-align:center;margin-top:2em;color:#4979FF;text-shadow: 0 5px 28px #d0eaff;">
+  printFinal.innerHTML = `<div style="font-family:'Space Grotesk',Montserrat,serif;font-size:2.23rem;text-align:center;margin-top:2em;color:#70f3ff;background: linear-gradient(91deg,#62a9ff 30%,#69f3db 70%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;text-shadow: 0 5px 35px #7ff7ff28;">
     ФИНАЛ</div>
-    <div style="margin:2.5em auto 1.3em auto;max-width:460px;background:rgba(230,240,255,.92);border-radius:29px;padding:49px 0 24px 0;box-shadow:0 22px 70px rgba(90,130,220,0.13);letter-spacing:0.03em;">
-      <div style="font-family:Lora,serif;font-size:1.7rem;font-weight:600;letter-spacing:.008em;text-shadow:0 2px 30px #b0d0ff55;">
-        ${cols[2][0].teams[0]} <span style="font-size:2.12rem;color:#353e63;">${cols[2][0].score}</span> ${cols[2][0].teams[1]}
+    <div style="margin:2.5em auto 1.3em auto;max-width:460px;background:rgba(44,97,170,.57);border-radius:33px;padding:59px 0 29px 0;box-shadow:0 27px 100px #6dcafc33;letter-spacing:0.05em;">
+      <div style="font-family:'Space Grotesk','Montserrat',serif;font-size:1.72rem;font-weight:700;letter-spacing:.014em;text-shadow:0 2px 30px #a9fcf9;">
+        ${cols[2][0].teams[0]} <span style="font-size:2.36rem;color:#eaffff;">${cols[2][0].score}</span> ${cols[2][0].teams[1]}
       </div>
-      <div style="margin-top:.6em;">
-        <img src="${GROUPS[0].teams[0].img}" style="height:37px;width:37px;border-radius:50%;margin:0 26px 0 0;" alt="">
-        <img src="${GROUPS[0].teams[1].img}" style="height:37px;width:37px;border-radius:50%;margin:0 0 0 26px;" alt="">
+      <div style="margin-top:.7em;">
+        <img src="${GROUPS[0].teams[0].img}" style="height:38px;width:38px;border-radius:50%;margin:0 28px 0 0;filter:drop-shadow(0 1px 20px #1edfe7);background:#d8fefe;" alt="">
+        <img src="${GROUPS[0].teams[1].img}" style="height:38px;width:38px;border-radius:50%;margin:0 0 0 28px;filter:drop-shadow(0 1px 17px #0affbb85);background:#e0fffc;" alt="">
       </div>
-      <div style="margin-top:.9em;color:#7aa2cd;font-family:Inter,sans-serif;font-size:1.15rem;">17 июня 2024, 17:00, поле A</div>
+      <div style="margin-top:.99em;color:#aeefff;font-family:Inter,sans-serif;font-size:1.24rem;">
+        17 июня 2024, 17:00, поле A</div>
     </div>
   `;
 }
@@ -899,9 +1008,8 @@ renderPrizes();
 renderPartners();
 
 </script>
-<!-- FOOTER, optional -->
-<footer style="font-family:Inter,Arial,sans-serif;text-align:center;color:#b0caff;background:rgba(219,230,255,.67);padding:20px 0 13px 0;font-size:1.01rem;letter-spacing:.01em;border-top:2.2px solid #BFE1FB33;margin-top:auto;box-shadow:0 2px 13px rgba(41,84,142,.03);backdrop-filter: blur(7px);border-radius: 0 0 22px 22px;">
-  © 2024 Summer Football Tournament — Все права защищены
+<footer style="font-family:'Space Grotesk','Inter',Arial,sans-serif;text-align:center;color:#b3fff6;background:rgba(44,195,255,.10);padding:23px 0 15px 0;font-size:1.13rem;letter-spacing:.01em;border-top: 2.8px solid #85effd38;margin-top:auto;box-shadow:0 2px 17px #29daf222;backdrop-filter: blur(10px);border-radius: 0 0 28px 28px;text-shadow:0 2px 18px #67eefd41;">
+  © 2024 Summer Football Tournament — Все премиальные права защищены
 </footer>
 </body>
 </html>
