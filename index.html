@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Раменский Любительский Кубок | Ramenskoe Amateur Cup</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -129,16 +132,319 @@
         .podium-block:hover {
             transform: rotateY(5deg) rotateX(-5deg);
         }
+        
+        .prize-pool {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 2rem;
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .prize-amount {
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: #d4af37;
+            font-weight: 900;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+            background: linear-gradient(90deg, #d4af37, #ffd700, #d4af37);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .sponsorship-modal {
+            backdrop-filter: blur(20px);
+            background: rgba(0, 26, 61, 0.95);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .sponsorship-benefits {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sponsorship-benefit {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .sponsorship-benefit:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .sponsorship-icon {
+            margin-right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            min-width: 2.5rem;
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .sponsorship-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            color: #000;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            gap: 0.5rem;
+        }
+        
+        .sponsorship-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* Premium Navigation */
+        .magnetic-nav {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 26, 61, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50px;
+        }
+        
+        .magnetic-btn {
+            position: relative;
+            padding: 0.75rem 1.5rem;
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .magnetic-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        
+        .magnetic-btn:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .magnetic-btn:hover {
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+        
+        /* Video Text Mask */
+        .text-mask {
+            position: relative;
+            font-size: clamp(4rem, 12vw, 12rem);
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(212, 175, 55, 0.3);
+            background: url('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4') center/cover;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes textGlow {
+            0%, 100% { -webkit-text-stroke: 2px rgba(212, 175, 55, 0.3); }
+            50% { -webkit-text-stroke: 2px rgba(212, 175, 55, 0.8); }
+        }
+        
+        /* Timeline Styles */
+        .timeline-container {
+            position: relative;
+            padding: 4rem 0;
+            overflow: hidden;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, transparent, #d4af37, transparent);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin: 4rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            padding-right: 50%;
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) {
+            padding-left: 50%;
+            text-align: left;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: #d4af37;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+        }
+        
+        /* Trophy Gallery */
+        .trophy-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+        
+        .trophy-3d {
+            width: 400px;
+            height: 600px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        
+        .trophy-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.4));
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+        
+        /* Swiss Layout */
+        .swiss-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .swiss-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        /* Premium Spacing */
+        .section-spacing {
+            padding: 8rem 0;
+        }
+        
+        .mega-spacing {
+            padding: 12rem 0;
+        }
+        
+        /* Cursor Effects */
+        .cursor-glow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+        }
     </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden">
+    <!-- Magnetic Navigation -->
+    <nav class="magnetic-nav">
+        <a href="#hero" class="magnetic-btn">ГЛАВНАЯ</a>
+        <a href="#timeline" class="magnetic-btn">ДОРОГА СЛАВЫ</a>
+        <a href="#trophy" class="magnetic-btn">КУБОК</a>
+        <a href="#registration" class="magnetic-btn">РЕГИСТРАЦИЯ</a>
+    </nav>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+    
     <!-- Hero Section -->
-    <section class="relative min-h-screen hero-gradient flex items-center justify-center">
-        <!-- Background Video/Image -->
+    <section id="hero" class="relative min-h-screen hero-gradient flex items-center justify-center">
+        <!-- Background Video -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=1920&h=1080&fit=crop" 
-                 alt="Stadium" 
-                 class="w-full h-full object-cover opacity-40">
+            <video autoplay muted loop class="w-full h-full object-cover opacity-30">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            </video>
             <div class="absolute inset-0 hero-gradient"></div>
         </div>
         
@@ -160,16 +466,14 @@
             </div>
         </div>
         
-        <!-- Hero Content -->
-        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
-            <h1 class="text-6xl md:text-8xl font-black mb-6 gold-glow" style="color: #d4af37;">
-                РАМЕНСКИЙ
-            </h1>
+        <!-- Hero Content with Video Text Mask -->
+        <div class="relative z-10 text-center px-4 max-w-7xl mx-auto">
+            <div class="text-mask mb-8">РАМЕНСКОЕ</div>
             <h2 class="text-4xl md:text-6xl font-black mb-8 gold-glow" style="color: #d4af37;">
                 ЛЮБИТЕЛЬСКИЙ КУБОК
             </h2>
-            <p class="text-xl md:text-2xl mb-12 text-gray-300 font-light">
-                Турнир по футболу среди любительских команд
+            <p class="text-xl md:text-2xl mb-12 text-gray-300 font-light max-w-3xl mx-auto">
+                Эпицентр футбольной страсти. Где рождаются легенды и пишется история.
             </p>
             
             <!-- Golden Countdown -->
@@ -202,102 +506,235 @@
         </div>
     </section>
     
+    <!-- Road of Glory Timeline -->
+    <section id="timeline" class="section-spacing bg-gradient-to-b from-gray-900 to-black">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 gold-glow" style="color: #d4af37;">
+                ДОРОГА СЛАВЫ
+            </h2>
+            
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-morphism rounded-xl p-8 max-w-md">
+                        <div class="text-3xl font-black mb-4 text-yellow-400">23 ИЮНЯ</div>
+                        <div class="text-xl font-bold mb-2">НАЧАЛО ТУРНИРА</div>
+                        <p class="text-gray-300">Открытие чемпионата и первые матчи группового этапа. 8 команд начинают свою битву за кубок.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-morphism rounded-xl p-8 max-w-md">
+                        <div class="text-3xl font-black mb-4 text-yellow-400">10 ИЮЛЯ</div>
+                        <div class="text-xl font-bold mb-2">ПЛЕЙ-ОФФ</div>
+                        <p class="text-gray-300">Четвертьфиналы и полуфиналы. Самые напряженные и драматичные матчи турнира.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="glass-morphism rounded-xl p-8 max-w-md">
+                        <div class="text-3xl font-black mb-4 text-yellow-400">20 ИЮЛЯ</div>
+                        <div class="text-xl font-bold mb-2">ГРАНД-ФИНАЛ</div>
+                        <p class="text-gray-300">Великая битва двух лучших команд. Коронация чемпиона и торжественная церемония награждения.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Trophy Gallery -->
+    <section id="trophy" class="trophy-container">
+        <div class="particles-container" id="particlesContainer"></div>
+        <div class="trophy-3d" id="trophy3d">
+            <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=600&fit=crop&crop=center" 
+                 alt="Trophy" 
+                 class="trophy-image">
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="text-center">
+                <h2 class="text-5xl md:text-7xl font-black mb-4 gold-glow" style="color: #d4af37;">КУБОК ЧЕМПИОНОВ</h2>
+                <p class="text-xl text-gray-300 max-w-2xl">Символ величия и спортивного духа. Мечта каждой команды.</p>
+            </div>
+        </div>
+    </section>
+    
     <!-- Tournament Intelligence Dashboard -->
-    <section class="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
-        <div class="max-w-7xl mx-auto">
+    <section id="registration" class="mega-spacing bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-4xl md:text-5xl font-black text-center mb-16 gold-glow" style="color: #d4af37;">
                 ТУРНИРНАЯ ПАНЕЛЬ
             </h2>
             
-            <!-- Bento Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Draw Module -->
-                <div class="bento-item glass-morphism rounded-xl p-6 lg:col-span-2">
-                    <h3 class="text-xl font-bold mb-4 text-yellow-400">ЖЕРЕБЬЕВКА</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold mb-2">КОРЗИНА 1</div>
-                            <div class="space-y-2">
-                                <div class="glass-morphism rounded p-2">Команда А</div>
-                                <div class="glass-morphism rounded p-2">Команда Б</div>
-                                <div class="glass-morphism rounded p-2">Команда В</div>
-                                <div class="glass-morphism rounded p-2">Команда Г</div>
+            <!-- Swiss Grid Layout -->
+            <div class="swiss-grid">
+                <!-- Left Column -->
+                <div class="swiss-column">
+                    <!-- Draw Module -->
+                    <div class="bento-item glass-morphism rounded-xl p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ЖЕРЕБЬЕВКА</h3>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="text-center">
+                                <div class="text-3xl font-black mb-4 text-yellow-400">КОРЗИНА 1</div>
+                                <div class="space-y-3">
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда А</div>
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Б</div>
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда В</div>
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Г</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold mb-2">КОРЗИНА 2</div>
-                            <div class="space-y-2">
-                                <div class="glass-morphism rounded p-2">Команда Д</div>
-                                <div class="glass-morphism rounded p-2">Команда Е</div>
-                                <div class="glass-morphism rounded p-2">Команда Ж</div>
-                                <div class="glass-morphism rounded p-2">Команда З</div>
+                            <div class="text-center">
+                                <div class="text-3xl font-black mb-4 text-yellow-400">КОРЗИНА 2</div>
+                                <div class="space-y-3">
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Д</div>
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Е</div>
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Ж</div>
+                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда З</div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Prize Pool Section -->
+                    <div class="bento-item glass-morphism rounded-xl p-8 text-center">
+                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ОБЩИЙ ПРИЗОВОЙ ФОНД</h3>
+                        <div class="prize-amount mb-8">1.000.000 ₽</div>
+                        <button onclick="openSponsorshipModal()" class="sponsorship-cta">
+                            СТАТЬ ПАРТНЕРОМ ТУРНИРА
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- Interactive Bracket -->
-                <div class="bento-item glass-morphism rounded-xl p-6 lg:col-span-2">
-                    <h3 class="text-xl font-bold mb-4 text-yellow-400">ТУРНИРНАЯ СЕТКА</h3>
-                    <svg viewBox="0 0 400 300" class="w-full h-48">
-                        <!-- Quarter Finals -->
-                        <rect x="20" y="20" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                        <rect x="20" y="70" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                        <rect x="20" y="120" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                        <rect x="20" y="170" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                        
-                        <!-- Semi Finals -->
-                        <rect x="140" y="45" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
-                        <rect x="140" y="145" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
-                        
-                        <!-- Final -->
-                        <rect x="260" y="95" width="60" height="30" fill="#d4af37" opacity="0.8" rx="4"/>
-                        
-                        <!-- Connectors -->
-                        <path class="bracket-line" d="M 80 35 L 140 60"/>
-                        <path class="bracket-line" d="M 80 85 L 140 60"/>
-                        <path class="bracket-line" d="M 80 135 L 140 160"/>
-                        <path class="bracket-line" d="M 80 185 L 140 160"/>
-                        <path class="bracket-line" d="M 200 60 L 260 110"/>
-                        <path class="bracket-line" d="M 200 160 L 260 110"/>
-                    </svg>
-                </div>
-                
-                <!-- Prize Podium -->
-                <div class="bento-item glass-morphism rounded-xl p-6 lg:col-span-4">
-                    <h3 class="text-xl font-bold mb-6 text-yellow-400">ПРИЗОВЫЕ МЕСТА</h3>
-                    <div class="flex justify-center items-end gap-4 md:gap-8">
-                        <!-- Silver -->
-                        <div class="podium-block text-center">
-                            <div class="text-6xl font-black mb-2" style="color: #C0C0C0;">02</div>
-                            <div class="w-20 h-32 md:w-24 md:h-40 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg flex items-center justify-center">
-                                <span class="text-2xl font-bold text-gray-800">2</span>
+                <!-- Right Column -->
+                <div class="swiss-column">
+                    <!-- Interactive Bracket -->
+                    <div class="bento-item glass-morphism rounded-xl p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ТУРНИРНАЯ СЕТКА</h3>
+                        <svg viewBox="0 0 400 300" class="w-full h-64">
+                            <!-- Quarter Finals -->
+                            <rect x="20" y="20" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                            <rect x="20" y="70" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                            <rect x="20" y="120" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                            <rect x="20" y="170" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
+                            
+                            <!-- Semi Finals -->
+                            <rect x="140" y="45" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
+                            <rect x="140" y="145" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
+                            
+                            <!-- Final -->
+                            <rect x="260" y="95" width="60" height="30" fill="#d4af37" opacity="0.8" rx="4"/>
+                            
+                            <!-- Connectors -->
+                            <path class="bracket-line" d="M 80 35 L 140 60"/>
+                            <path class="bracket-line" d="M 80 85 L 140 60"/>
+                            <path class="bracket-line" d="M 80 135 L 140 160"/>
+                            <path class="bracket-line" d="M 80 185 L 140 160"/>
+                            <path class="bracket-line" d="M 200 60 L 260 110"/>
+                            <path class="bracket-line" d="M 200 160 L 260 110"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Prize Podium -->
+                    <div class="bento-item glass-morphism rounded-xl p-8">
+                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ПРИЗОВЫЕ МЕСТА</h3>
+                        <div class="flex justify-center items-end gap-6">
+                            <!-- Silver -->
+                            <div class="podium-block text-center">
+                                <div class="text-5xl font-black mb-2" style="color: #C0C0C0;">02</div>
+                                <div class="w-16 h-24 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg flex items-center justify-center">
+                                    <span class="text-xl font-bold text-gray-800">2</span>
+                                </div>
+                                <div class="mt-2 text-sm font-semibold">СЕРЕБРО</div>
                             </div>
-                            <div class="mt-2 text-sm">СЕРЕБРО</div>
-                        </div>
-                        
-                        <!-- Gold -->
-                        <div class="podium-block text-center">
-                            <div class="text-6xl font-black mb-2 gold-glow" style="color: #d4af37;">01</div>
-                            <div class="w-20 h-40 md:w-24 md:h-48 bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-lg flex items-center justify-center">
-                                <span class="text-3xl font-bold text-yellow-900">1</span>
+                            
+                            <!-- Gold -->
+                            <div class="podium-block text-center">
+                                <div class="text-5xl font-black mb-2 gold-glow" style="color: #d4af37;">01</div>
+                                <div class="w-16 h-32 bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-lg flex items-center justify-center">
+                                    <span class="text-2xl font-bold text-yellow-900">1</span>
+                                </div>
+                                <div class="mt-2 text-sm font-semibold">ЗОЛОТО</div>
                             </div>
-                            <div class="mt-2 text-sm">ЗОЛОТО</div>
-                        </div>
-                        
-                        <!-- Bronze -->
-                        <div class="podium-block text-center">
-                            <div class="text-6xl font-black mb-2" style="color: #CD7F32;">03</div>
-                            <div class="w-20 h-24 md:w-24 md:h-32 bg-gradient-to-t from-orange-700 to-orange-500 rounded-t-lg flex items-center justify-center">
-                                <span class="text-2xl font-bold text-orange-100">3</span>
+                            
+                            <!-- Bronze -->
+                            <div class="podium-block text-center">
+                                <div class="text-5xl font-black mb-2" style="color: #CD7F32;">03</div>
+                                <div class="w-16 h-20 bg-gradient-to-t from-orange-700 to-orange-500 rounded-t-lg flex items-center justify-center">
+                                    <span class="text-xl font-bold text-orange-100">3</span>
+                                </div>
+                                <div class="mt-2 text-sm font-semibold">БРОНЗА</div>
                             </div>
-                            <div class="mt-2 text-sm">БРОНЗА</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
+    <!-- Sponsorship Modal -->
+    <div id="sponsorshipModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0" onclick="closeSponsorshipModal()"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="sponsorship-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-yellow-400">СТАНЬТЕ ПАРТНЕРОМ ТУРНИРА</h2>
+                    <button onclick="closeSponsorshipModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="mb-8">
+                    <p class="text-lg text-gray-300 mb-6">Партнерство с Раменским Любительским Кубком — это уникальная возможность для вашего бренда получить максимальную видимость среди целевой аудитории.</p>
+                    
+                    <h3 class="text-xl font-bold mb-4 text-yellow-400">Что вы получаете:</h3>
+                    <ul class="sponsorship-benefits">
+                        <li class="sponsorship-benefit">
+                            <div class="sponsorship-icon">📺</div>
+                            <div>
+                                <strong>Media Coverage:</strong> Логотип на всех трансляциях и в соцсетях турнира
+                            </div>
+                        </li>
+                        <li class="sponsorship-benefit">
+                            <div class="sponsorship-icon">🏟️</div>
+                            <div>
+                                <strong>Field Presence:</strong> Размещение баннеров на стадионе в Раменском
+                            </div>
+                        </li>
+                        <li class="sponsorship-benefit">
+                            <div class="sponsorship-icon">🏆</div>
+                            <div>
+                                <strong>Awarding:</strong> Участие в торжественной церемонии награждения победителей
+                            </div>
+                        </li>
+                        <li class="sponsorship-benefit">
+                            <div class="sponsorship-icon">👥</div>
+                            <div>
+                                <strong>Direct Access:</strong> Прямой контакт с аудиторией более 500+ игроков и болельщиков
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <a href="https://t.me/your_username" target="_blank" class="sponsorship-cta">
+                        Связаться в Telegram
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.56l-1.68 7.92c-.12.54-.54.67-.97.42l-2.67-1.98-1.29 1.23c-.14.14-.26.26-.52.26l.18-2.79 4.95-4.48c.22-.19-.05-.3-.34-.11l-6.12 3.86-2.64-.83c-.57-.18-.58-.57.12-.84l10.32-3.97c.47-.17.88.11.73.84z"/>
+                        </svg>
+                    </a>
+                    <p class="text-sm text-gray-400 mt-3">Наш менеджер ответит в течение 15 минут</p>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Registration Modal -->
     <div id="registrationModal" class="fixed inset-0 z-50 hidden">
@@ -518,6 +955,15 @@
             document.getElementById('registrationModal').classList.remove('hidden');
         });
         
+        // Sponsorship Modal Controls
+        function openSponsorshipModal() {
+            document.getElementById('sponsorshipModal').classList.remove('hidden');
+        }
+        
+        function closeSponsorshipModal() {
+            document.getElementById('sponsorshipModal').classList.add('hidden');
+        }
+        
         function closeModal() {
             document.getElementById('registrationModal').classList.add('hidden');
             resetRegistration();
@@ -723,6 +1169,143 @@
         
         // Initialize
         updateStepDisplay();
+        
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Custom Cursor
+        const cursor = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+        });
+        
+        // Magnetic Navigation
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                gsap.to(btn, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+        
+        // Timeline Animations
+        gsap.utils.toArray('.timeline-item').forEach((item, index) => {
+            gsap.to(item, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: index * 0.2,
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+        
+        // Trophy 3D Effect
+        const trophy = document.getElementById('trophy3d');
+        const trophyContainer = document.querySelector('.trophy-container');
+        
+        trophyContainer.addEventListener('mousemove', (e) => {
+            const rect = trophyContainer.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            
+            gsap.to(trophy, {
+                rotationY: x * 20,
+                rotationX: -y * 20,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        });
+        
+        trophyContainer.addEventListener('mouseleave', () => {
+            gsap.to(trophy, {
+                rotationY: 0,
+                rotationX: 0,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        });
+        
+        // Create Particles
+        const particlesContainer = document.getElementById('particlesContainer');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Hero Text Mask Animation
+        gsap.from('.text-mask', {
+            scale: 0.8,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power3.out"
+        });
+        
+        // Countdown Animation
+        gsap.from('.countdown-digit', {
+            scale: 0,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            delay: 0.5,
+            ease: "back.out(1.7)"
+        });
+        
+        // Bento Items Animation
+        gsap.utils.toArray('.bento-item').forEach((item, index) => {
+            gsap.from(item, {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: index * 0.1,
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+        
+        // Smooth Scroll for Navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    gsap.to(window, {
+                        duration: 1.5,
+                        scrollTo: target,
+                        ease: "power2.inOut"
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
