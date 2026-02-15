@@ -17,11 +17,10 @@
       --color-neon: #64ffda;
       --color-accent: #2dd4fa;
       --color-accent-strong: #2080d7;
-      --color-accent-gradient:linear-gradient(100deg, #64ffda 0%, #2080d7 130%);
-      --color-border: rgba(90, 255, 218, 0.24);
-      --color-border-neon: #64ffda;
       --color-danger: #ee2857;
       --color-success: #18cc54;
+      --color-border: rgba(90, 255, 218, 0.24);
+      --color-border-neon: #64ffda;
       --header-height: 90px;
       --radius-outer: 38px;
       --radius-card: 24px;
@@ -44,18 +43,19 @@
       position:relative;
       overflow-x:hidden;
     }
-    body::before {
-      content: '';
-      position: fixed; z-index: 0;
-      left: -160px; top: -230px;
-      width: 900px; height: 720px;
-      background: radial-gradient(circle at 43% 40%, #64ffda22 0%, transparent 77%);
-      filter: blur(35px);
+    /* Stadium BG */
+    .stadium-bg {
+      z-index: 0;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      opacity:.66;
-      animation: floatBlob 19s ease-in-out infinite alternate;
+      filter: blur(2px) brightness(0.63) grayscale(0.13);
+      object-fit: cover;
+      opacity: 0.93;
+      transition: filter .7s;
     }
-    @keyframes floatBlob { 100% {left: -90px; top:-160px;} }
     #root {
       min-height:100vh;
       display:flex;
@@ -64,7 +64,85 @@
       z-index:1;
       gap:0;
     }
-
+    /* RUNNING MARQUEE */
+    #sponsors-marquee-wrap {
+      position: sticky;
+      top: 0;
+      width: 100vw;
+      z-index: 30;
+      overflow: hidden;
+      padding: 0;
+      background: rgba(0,0,0,0.45);
+      border-bottom: 3px solid #64ffda3d;
+      box-shadow: 0 5px 21px 0 #5afae91a;
+    }
+    .marquee {
+      display: flex;
+      align-items: center;
+      gap: 2.2rem;
+      animation: scrollmarquee 26s linear infinite;
+      height: 46px;
+      user-select: none;
+      font-family: 'Barlow', 'Montserrat', sans-serif;
+      font-size: 1.09rem;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    @keyframes scrollmarquee {
+      0% { transform: translateX(0);}
+      100% {transform: translateX(-50%);}
+    }
+    .marquee .sponsor-marquee-item {
+      display: flex; align-items: center;
+      gap: .8rem;
+      margin-right: 2.5rem;
+    }
+    .marquee .sponsor-name {
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      font-size: 1.15rem;
+      letter-spacing: .06em;
+      text-shadow: 0 2px 10px #64ffda44;
+      background:linear-gradient(89deg,#68ffe7 60%,#2a8fff 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .marquee .sponsor-logo-marq {
+      width: 34px; height: 34px; object-fit: contain; border-radius:8px; background: #fff0; margin-right:6px; box-shadow:0 1px 6px #2afdff20;
+      filter:brightness(1.09) grayscale(0.13);
+    }
+    /* SOUND BUTTON */
+    .sound-toggle-btn {
+      position: absolute;
+      right: 28px;
+      top: 18px;
+      z-index: 72;
+      outline: none;
+      border: none;
+      background: rgba(24,31,44,0.75);
+      box-shadow:0 3px 13px #00ffe51c;
+      border-radius: 13px 7px 13px 7px;
+      padding: 11px 17px 11px 19px;
+      color: #64ffda;
+      font-size: 1.58rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1ch;
+      transition: background .15s,border .13s,transform .14s;
+      border: 2.4px solid #64ffda22;
+      font-family: 'Barlow','Inter',sans-serif;
+    }
+    .sound-toggle-btn:hover,
+    .sound-toggle-btn.active {
+      background: var(--color-accent);
+      color: #181d29;
+      border-color: #64ffda;
+      transform: scale(1.05);
+      box-shadow:0 9px 23px #2affd835;
+    }
+    .sound-toggle-btn:active{transform:scale(.98);}
     /* HEADER */
     .t-header {
       display: flex;
@@ -76,7 +154,7 @@
       height: var(--header-height);
       border-radius: 0 0 var(--radius-outer) var(--radius-outer);
       font-family: 'Barlow', 'Montserrat', 'Inter', sans-serif;
-      z-index: 12;
+      z-index: 11;
       position: relative;
       border-bottom: 3px solid var(--color-border);
       backdrop-filter: blur(24px) saturate(1.2);
@@ -88,7 +166,7 @@
       font-weight: 900;
       letter-spacing: .13em;
       color: #fff;
-      background: var(--color-accent-gradient);
+      background: linear-gradient(100deg, #64ffda 0%, #2080d7 130%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-transform: uppercase;
@@ -124,7 +202,7 @@
     }
     .t-header__nav-btn.active,
     .t-header__nav-btn:hover {
-      background: var(--color-accent-gradient);
+      background: linear-gradient(100deg, #64ffda 0%, #2080d7 130%);
       color: #090a11;
       box-shadow: var(--shadow-cta);
       border: 2px solid var(--color-neon);
@@ -132,17 +210,15 @@
       transform: scale(1.04);
       text-shadow:none;
     }
-
     .t-main {
       display: flex;
       flex: 1 1 auto;
       position: relative;
       padding: 0;
       overflow: visible;
-      background: linear-gradient(120deg,#060712 0%,#18213a 100%) !important;
+      background: transparent!important;
       z-index:2;
     }
-
     /* TAB PANELS */
     .tab-panel {
       flex: 1 1 auto;
@@ -160,8 +236,6 @@
       to { opacity: 1; transform: none;}
     }
     .tab-panel.visible { display: block; }
-
-    /* MAIN CONTENT */
     .main-container {
       display: grid;
       grid-template-columns: minmax(290px,360px) 1fr;
@@ -173,8 +247,6 @@
     @media (max-width:1200px) {
       .main-container { grid-template-columns: 1fr; gap:29px; }
     }
-
-    /* INFO COLUMN */
     .main-info {
       background: var(--color-panel);
       backdrop-filter: blur(32px) saturate(1.15);
@@ -202,7 +274,7 @@
       text-transform: uppercase;
       letter-spacing:.12em;
       color:var(--color-neon);
-      background:var(--color-accent-gradient);
+      background:linear-gradient(100deg,#64ffda 0%,#2080d7 130%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom:18px;
@@ -218,12 +290,9 @@
     .main-info li { opacity:1;font-size:1.03em;margin-bottom:.35em;}
     .main-info b { color: #fff; }
     .main-info a { color: var(--color-neon); text-decoration: underline; }
-
-    /* GROUPS & GAMES BLOCK */
     .main-groups {
       min-width:330px; max-width:1100px; margin-top:0;
     }
-
     .groups-header {
       display:flex; gap:63px; align-items: flex-end; margin-bottom:37px; margin-left:2px;
     }
@@ -246,7 +315,6 @@
       margin-bottom:.09em;
       letter-spacing:.05em;
     }
-    /* Tournament Table - premium, clean glass style */
     .group-block {
       background: var(--color-card);
       box-shadow: 0 13px 70px 0 rgba(58,255,202,.07);
@@ -284,7 +352,6 @@
       overflow: hidden;
       box-shadow: 0 1.5px 14px #00ffe20e;
     }
-    /* Clean, thin lines, neon highlight for leader */
     .team-list li {
       display:flex; align-items:center;
       border-bottom:1px solid #232a41;
@@ -308,7 +375,6 @@
       box-shadow:0 3px 17px #00ffd21e;
       filter:saturate(1.19) brightness(1.15);
     }
-    /* Bracket Section - neon, glass card */
     .playoff-block {
       border-radius: var(--radius-card);
       border:2.2px solid var(--color-border-neon);
@@ -419,12 +485,10 @@
       font-weight:900;
       text-shadow: 0 3px 20px #43ffe729;
       letter-spacing:.05em;
-      background:var(--color-accent-gradient);
+      background:linear-gradient(98deg,#64ffda 18%,#00fffa 88%);
       border-radius:11px;
       padding:0 6px;
     }
-
-    /* Custom status badges */
     .match-badge {
       display:inline-block;
       padding:3px 15px 3px 12px;
@@ -451,8 +515,6 @@
       0% { box-shadow: 0 0 8px #ef1c2d90,0 0 38px #ef1c2d00;}
       100% {box-shadow:0 0 18px #ef1c2db6,0 0 64px #fd945655;}
     }
-
-    /* MERCH TAB */
     .bento-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(290px,1fr));
@@ -512,7 +574,7 @@
       filter:blur(.01px);
     }
     .bento-cta {
-      background:var(--color-accent-gradient);
+      background:linear-gradient(100deg, #64ffda 0%, #2080d7 130%);
       color:#181f2b;
       border:none;
       border-radius:13px;
@@ -536,8 +598,6 @@
     .bento-cta[disabled]{
       filter:grayscale(0.39);opacity:.83;pointer-events:none;
     }
-
-    /* PRIZES & PARTNERS TAB */
     .prize-section {
       margin-bottom:63px;
       padding: 22px 0 0 0;
@@ -606,8 +666,6 @@
       color:#64ffd7;
       filter: blur(.01px);
     }
-
-    /* PARTNERS */
     .partners-section { padding:29px 0 0 0;z-index:1;position:relative;}
     .partners-title {
       font-family:'Barlow','Montserrat',serif; font-size:1.28rem;font-weight:900;
@@ -653,8 +711,6 @@
       transition: opacity .19s;
       background:transparent;
     }
-
-    /* Custom scrollbar */
     *{
       scrollbar-color:#2dfcdf #11172c;
       scrollbar-width:thin;
@@ -662,23 +718,18 @@
     ::-webkit-scrollbar {width:10px;background:#1a2036;}
     ::-webkit-scrollbar-thumb {background:#1aeff9;border-radius:10px;}
     ::-webkit-scrollbar-thumb:hover {background:#64ffda;}
-
-    /* Animation keyframes */
     @keyframes floatFade {
       0% {transform:translateY(27px) scale(.98);}
       100% {transform:none;}
     }
-
-    /* PRINT FINAL */
     @media print {
       body, html { background:#fff !important; }
-      .t-header, .t-header *, #main-tab, #merch-tab, #partners-tab, .main-info, .main-groups, .bento-grid, .partners-section, .prize-section {
+      .t-header, .t-header *, #main-tab, #merch-tab, #partners-tab, .main-info, .main-groups, .bento-grid, .partners-section, .prize-section,#sponsors-marquee-wrap {
         display:none !important;height:0 !important;overflow:hidden;
       }
       .print-bracket-final { display: block !important; }
     }
     .print-bracket-final { display: none;}
-
     @media (max-width:1200px){
       .main-container{ grid-template-columns: 1fr; gap:32px;}
       .main-info{margin-right:0;max-width:100vw;}
@@ -702,81 +753,140 @@
   </style>
 </head>
 <body>
-<div id="root">
-  <header class="t-header">
-    <div class="t-header__logo">Футбольный Турнир 2024</div>
-    <nav class="t-header__nav">
-      <button class="t-header__nav-btn active" data-tab="main-tab">Главная</button>
-      <button class="t-header__nav-btn" data-tab="merch-tab">Мерч</button>
-      <button class="t-header__nav-btn" data-tab="partners-tab">Призы и партнёры</button>
-    </nav>
-  </header>
-  <main class="t-main">
-    <!-- Главная: турнирная таблица, группы, плей-офф -->
-    <section class="tab-panel visible" id="main-tab">
-      <div class="main-container">
-        <aside class="main-info">
-          <h2>О турнире</h2>
-          <p>Ежегодный летний турнир нового поколения. 8 команд, премиальный формат, ультраакцент на киберспорт стилистике. <br><b>Место:</b> Спорткомплекс «Лидер», Москва.<br>
-            <b>Даты:</b> 15–17 июня 2024.<br>
-            <b>Формат:</b> 2 группы по 4, сверхдинамичный play-off, ФИНАЛ под светом прожекторов.
-          </p>
-          <ul>
-            <li>⚽ 2 ultra-халва 20 минут</li>
-            <li>⏰ Start матчей: 09:30</li>
-            <li>🟢 Neo-регистрация команд</li>
-            <li>🎥 LIVE трансляция &amp; VAR</li>
-          </ul>
-          <p style="margin-top:2.5em;font-size:1.01rem;color:#86ffe2;">Контакты для заявок:<br>
-            <b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru">support@foot-tournament.ru</a></p>
-        </aside>
-        <section class="main-groups">
-          <div class="groups-header">
-            <h2>Группы</h2>
-            <h2>Этап: групповой</h2>
-          </div>
-          <div style="display:flex;gap:36px;flex-wrap:wrap;">
-            <div class="group-block">
-              <h3>ГРУППА A</h3>
-              <ol class="team-list" id="group-a-list"></ol>
+  <img class="stadium-bg" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" alt="stadium-bg">
+  <div id="sponsors-marquee-wrap">
+    <div class="marquee" id="sponsors-marquee"></div>
+  </div>
+  <div id="root">
+    <button class="sound-toggle-btn" id="soundToggleBtn" aria-label="toggle-sound">
+      <span id="soundIcon" style="display:inline;"><svg height="24" style="vertical-align:-6px" width="24" fill="none" viewBox="0 0 24 24"><path d="M2 9v6h4l5 5V4L6 9H2z" fill="currentColor"/><path id="sndonwaves" d="M19 12c0-2.21-.895-4.01-2.47-5.16a1 1 0 1 1 1.12-1.66C20.023 7.2 22 9.34 22 12c0 2.66-1.978 4.8-4.35 6.82a1 1 0 1 1-1.12-1.66C18.105 16.01 19 14.21 19 12z" fill="currentColor"/></svg></span>
+      <span style="font-size:.98rem;font-weight:700">Звук</span>
+    </button>
+    <header class="t-header">
+      <div class="t-header__logo">Футбольный Турнир 2024</div>
+      <nav class="t-header__nav">
+        <button class="t-header__nav-btn active" data-tab="main-tab">Главная</button>
+        <button class="t-header__nav-btn" data-tab="merch-tab">Мерч</button>
+        <button class="t-header__nav-btn" data-tab="partners-tab">Призы и партнёры</button>
+      </nav>
+    </header>
+    <main class="t-main">
+      <section class="tab-panel visible" id="main-tab">
+        <div class="main-container">
+          <aside class="main-info">
+            <h2>О турнире</h2>
+            <p>Ежегодный летний турнир нового поколения. 8 команд, премиальный формат, ультраакцент на киберспорт стилистике. <br><b>Место:</b> Спорткомплекс «Лидер», Москва.<br>
+              <b>Даты:</b> 15–17 июня 2024.<br>
+              <b>Формат:</b> 2 группы по 4, сверхдинамичный play-off, ФИНАЛ под светом прожекторов.
+            </p>
+            <ul>
+              <li>⚽ 2 ultra-халва 20 минут</li>
+              <li>⏰ Start матчей: 09:30</li>
+              <li>🟢 Neo-регистрация команд</li>
+              <li>🎥 LIVE трансляция &amp; VAR</li>
+            </ul>
+            <p style="margin-top:2.5em;font-size:1.01rem;color:#86ffe2;">Контакты для заявок:<br>
+              <b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru">support@foot-tournament.ru</a></p>
+          </aside>
+          <section class="main-groups">
+            <div class="groups-header">
+              <h2>Группы</h2>
+              <h2>Этап: групповой</h2>
             </div>
-            <div class="group-block">
-              <h3>ГРУППА B</h3>
-              <ol class="team-list" id="group-b-list"></ol>
+            <div style="display:flex;gap:36px;flex-wrap:wrap;">
+              <div class="group-block">
+                <h3>ГРУППА A</h3>
+                <ol class="team-list" id="group-a-list"></ol>
+              </div>
+              <div class="group-block">
+                <h3>ГРУППА B</h3>
+                <ol class="team-list" id="group-b-list"></ol>
+              </div>
             </div>
-          </div>
-          <div class="playoff-block">
-            <div class="playoff-title">
-              Плей-офф Сетка <span class="match-badge badge-live">live</span>
-              <span class="soon-badge">soon</span>
+            <div class="playoff-block">
+              <div class="playoff-title">
+                Плей-офф Сетка <span class="match-badge badge-live">live</span>
+                <span class="soon-badge">soon</span>
+              </div>
+              <div class="bracket" id="playoff-bracket"></div>
             </div>
-            <div class="bracket" id="playoff-bracket"></div>
-          </div>
-        </section>
-      </div>
-    </section>
-    <section class="tab-panel" id="merch-tab">
-      <div style="font-family:'Barlow','Montserrat',serif;font-size:1.48rem;font-weight:900;color:#64ffda;text-transform:uppercase;margin-bottom:31px;text-shadow:0 3px 22px #62ffda53;">Мерч и премиум-атрибутика</div>
-      <div class="bento-grid" id="merch-grid"></div>
-      <div style="margin-top:32px;font-size:.97rem;color:#7cffec;text-shadow:0 3px 24px #29ffd617;">
-        Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:#64ffda;font-weight:700;text-decoration:underline;">merch@foot-tournament.ru</a>
-      </div>
-    </section>
-    <section class="tab-panel" id="partners-tab">
-      <div class="prize-section">
-        <div class="prize-title">Призовой фонд</div>
-        <div class="prize-list" id="prize-list"></div>
-      </div>
-      <div class="partners-section">
-        <div class="partners-title">Партнёры</div>
-        <div class="partners-logos" id="partners-logos"></div>
-      </div>
-    </section>
-    <section class="print-bracket-final" id="print-bracket-final"></section>
-  </main>
-</div>
+          </section>
+        </div>
+      </section>
+      <section class="tab-panel" id="merch-tab">
+        <div style="font-family:'Barlow','Montserrat',serif;font-size:1.48rem;font-weight:900;color:#64ffda;text-transform:uppercase;margin-bottom:31px;text-shadow:0 3px 22px #62ffda53;">Мерч и премиум-атрибутика</div>
+        <div class="bento-grid" id="merch-grid"></div>
+        <div style="margin-top:32px;font-size:.97rem;color:#7cffec;text-shadow:0 3px 24px #29ffd617;">
+          Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:#64ffda;font-weight:700;text-decoration:underline;">merch@foot-tournament.ru</a>
+        </div>
+      </section>
+      <section class="tab-panel" id="partners-tab">
+        <div class="prize-section">
+          <div class="prize-title">Призовой фонд</div>
+          <div class="prize-list" id="prize-list"></div>
+        </div>
+        <div class="partners-section">
+          <div class="partners-title">Партнёры</div>
+          <div class="partners-logos" id="partners-logos"></div>
+        </div>
+      </section>
+      <section class="print-bracket-final" id="print-bracket-final"></section>
+    </main>
+  </div>
+  <audio id="crowdAudio" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12e8674933.mp3" loop preload="auto"></audio>
+  <footer style="font-family:'Barlow','Montserrat','Inter',sans-serif;text-align:center;color:#64ffda;background:rgba(44,195,255,.08);padding:25px 0 13px 0;font-size:1.07rem;letter-spacing:.05em;border-top: 3px solid #64ffda27;margin-top:auto;box-shadow:0 3px 30px #2cf8ff11;backdrop-filter:blur(10px);border-radius:0 0 18px 18px;">
+    © 2024 Summer Football Tournament — All rights reserved — Powered by NeoSport UI
+  </footer>
 <script>
 'use strict';
+// Sponsors for marquee
+const SPONSORS = [
+  {
+    name: "SportLife",
+    img: "https://seeklogo.com/images/A/adidas-logo-FD7F5DEF12-seeklogo.com.png",
+    url: "https://adidas.com/"
+  },
+  {
+    name: "SoccerShop",
+    img: "https://seeklogo.com/images/N/nike-logo-7F31D4B897-seeklogo.com.png",
+    url: "https://nike.com/"
+  },
+  {
+    name: "ЛигаСпорт",
+    img: "https://seeklogo.com/images/P/pepsi-logo-8749D7BEAE-seeklogo.com.png",
+    url: "https://pepsi.com/"
+  },
+  {
+    name: "МегаФитнес",
+    img:"https://seeklogo.com/images/G/gazprom-logo-2E7B52FA08-seeklogo.com.png",
+    url: "https://gazprom.ru"
+  },
+  {
+    name: "СпонсорФонд",
+    img:"https://seeklogo.com/images/U/uefa-champions-league-logo-29E9E7980B-seeklogo.com.png",
+    url:"#"
+  }
+];
+// Render sponsors marquee (infinite loop)
+function renderSponsorsMarquee() {
+  const marquee = document.getElementById('sponsors-marquee');
+  if (!marquee) return;
+  let itemsHTML = '';
+  // Show sponsors twice for infinite feeling scroll
+  for (let i = 0; i < 2; ++i) {
+    for (const p of SPONSORS) {
+      itemsHTML += `
+      <a href="${p.url}" target="_blank" class="sponsor-marquee-item">
+        <img src="${p.img}" loading="lazy" class="sponsor-logo-marq" alt="${p.name}"/>
+        <span class="sponsor-name">${p.name}</span>
+      </a>
+      `;
+    }
+  }
+  marquee.innerHTML = itemsHTML;
+}
+renderSponsorsMarquee();
+
 const GROUPS = [
   {
     title: "Группа A",
@@ -822,115 +932,27 @@ const GROUP_RESULTS = {
 };
 
 const PLAYOFF = [
-  {
-    round: "Полуфиналы",
-    games: [
-      // Soon
-    ]
-  },
-  {
-    round: "За 3 место",
-    games: [
-      // Soon
-    ]
-  },
-  {
-    round: "Финал",
-    games: [
-      // Soon
-    ]
-  }
+  { round: "Полуфиналы", games: [] },
+  { round: "За 3 место", games: [] },
+  { round: "Финал", games: [] }
 ];
 
 const MERCH_LIST = [
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3847/3847278.png",
-    title: "Оригинальная форма 2024",
-    desc: "Лимитированная коллекция. Имя и номер. Мягкий, премиальный материал.",
-    price: "3500₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3208/3208707.png",
-    title: "Шарф фаната",
-    desc: "Флуоресцентные цвета. Бейдж турнира. Персонализация по желанию.",
-    price: "900₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3225/3225092.png",
-    title: "Неоновая бутылка",
-    desc: "Экологичная. Светится в ультрафиолете. 700ml.",
-    price: "650₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/3208/3208715.png",
-    title: "Хайп бейсболка",
-    desc: "Логотип из металлизированной нити. Сидит дерзко.",
-    price: "800₽",
-    url: "#"
-  },
-  {
-    img: "https://cdn-icons-png.flaticon.com/512/2941/2941559.png",
-    title: "Neo-кружка",
-    desc: "Полупрозрачный ободок. Гравировка под заказ.",
-    price: "450₽",
-    url: "#"
-  },
+  {img:"https://cdn-icons-png.flaticon.com/512/3847/3847278.png",title:"Оригинальная форма 2024",desc:"Лимитированная коллекция. Имя и номер. Мягкий, премиальный материал.",price:"3500₽",url:"#"},
+  {img:"https://cdn-icons-png.flaticon.com/512/3208/3208707.png",title:"Шарф фаната",desc:"Флуоресцентные цвета. Бейдж турнира. Персонализация по желанию.",price:"900₽",url:"#"},
+  {img:"https://cdn-icons-png.flaticon.com/512/3225/3225092.png",title:"Неоновая бутылка",desc:"Экологичная. Светится в ультрафиолете. 700ml.",price:"650₽",url:"#"},
+  {img:"https://cdn-icons-png.flaticon.com/512/3208/3208715.png",title:"Хайп бейсболка",desc:"Логотип из металлизированной нити. Сидит дерзко.",price:"800₽",url:"#"},
+  {img:"https://cdn-icons-png.flaticon.com/512/2941/2941559.png",title:"Neo-кружка",desc:"Полупрозрачный ободок. Гравировка под заказ.",price:"450₽",url:"#"},
 ];
 const PRIZES = [
-  {
-    place: "I место",
-    amount: "30 000₽",
-    items: ["Кубок ⚽", "Gold-медали", "Сертификат на инвентарь", "Эксклюзивные худи"]
-  },
-  {
-    place: "II место",
-    amount: "15 000₽",
-    items: ["Silver-медали", "Премиальный приз", "Hype футболки"]
-  },
-  {
-    place: "III место",
-    amount: "7 500₽",
-    items: ["Bronze-медали", "Памятная кружка"]
-  },
-  {
-    place: "Лучший бомбардир",
-    amount: "Неон-подарок",
-    items: ["Гравировка мяча", "Личный сертификат"]
-  }
+  {place:"I место",amount:"30 000₽",items:["Кубок ⚽","Gold-медали","Сертификат на инвентарь","Эксклюзивные худи"]},
+  {place:"II место",amount:"15 000₽",items:["Silver-медали","Премиальный приз","Hype футболки"]},
+  {place:"III место",amount:"7 500₽",items:["Bronze-медали","Памятная кружка"]},
+  {place:"Лучший бомбардир",amount:"Неон-подарок",items:["Гравировка мяча","Личный сертификат"]}
 ];
-const PARTNERS = [
-  {
-    name: "SportLife",
-    img: "https://seeklogo.com/images/A/adidas-logo-FD7F5DEF12-seeklogo.com.png",
-    url: "https://adidas.com/"
-  },
-  {
-    name: "SoccerShop",
-    img: "https://seeklogo.com/images/N/nike-logo-7F31D4B897-seeklogo.com.png",
-    url: "https://nike.com/"
-  },
-  {
-    name: "ЛигаСпорт",
-    img: "https://seeklogo.com/images/P/pepsi-logo-8749D7BEAE-seeklogo.com.png",
-    url: "https://pepsi.com/"
-  },
-  {
-    name: "МегаФитнес",
-    img:"https://seeklogo.com/images/G/gazprom-logo-2E7B52FA08-seeklogo.com.png",
-    url: "https://gazprom.ru"
-  },
-  {
-    name: "СпонсорФонд",
-    img:"https://seeklogo.com/images/U/uefa-champions-league-logo-29E9E7980B-seeklogo.com.png",
-    url:"#"
-  }
-];
+const PARTNERS = SPONSORS;
 
 // Render Functions
-
 function renderGroups() {
   GROUPS.forEach((group, index) => {
     const id = index===0?'group-a-list':'group-b-list';
@@ -963,12 +985,8 @@ function renderGroups() {
     });
   });
 }
-
-// PLAYOFF BRACKET
 function renderBracket() {
   const bracket = document.getElementById("playoff-bracket");
-  bracket.innerHTML = '';
-  // SKELETON/Placeholder for soon
   bracket.innerHTML = `
     <div style="width:100%;display:flex;justify-content:center;align-items:center;height:160px;opacity:.74;">
       <div style="font-family:'Barlow','Montserrat',sans-serif;font-size:2rem;font-weight:900;color:#f6f78c;background:linear-gradient(97deg,#f6f78c 10%,#64ffda 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.12em;filter:blur(.1px);text-transform:uppercase;">
@@ -988,7 +1006,6 @@ function renderBracket() {
     </div>
   `;
 }
-
 function renderMerch() {
   const grid = document.getElementById("merch-grid");
   grid.innerHTML = '';
@@ -1003,7 +1020,6 @@ function renderMerch() {
     `);
   }
 }
-
 function renderPrizes() {
   const pl = document.getElementById("prize-list");
   pl.innerHTML = '';
@@ -1028,7 +1044,6 @@ function renderPartners() {
     `);
   }
 }
-
 // ------------------- Навигация и табы ------------------
 const tabBtns = Array.from(document.querySelectorAll('.t-header__nav-btn'));
 const panels = {
@@ -1044,15 +1059,61 @@ tabBtns.forEach(btn => btn.addEventListener('click', e=>{
   panels[btn.dataset.tab]?.classList.add('visible');
   window.scrollTo({top:0, behavior:'smooth'});
 }));
-// INIT
+// --------------- SOUND (CROWD) LOGIC ----------------
+const crowdAudio = document.getElementById('crowdAudio');
+if (crowdAudio) {
+  crowdAudio.volume = 0.38;
+  let autoPlay = false;
+  // Try to autoplay on load on desktop (not on mobile)
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(()=>{
+      try {
+        if (window.innerWidth > 900) { crowdAudio.play(); autoPlay = true;}
+      } catch(e){}
+      updateSoundBtn();
+    }, 650);
+  });
+}
+const soundBtn = document.getElementById('soundToggleBtn');
+let soundOn = false;
+function updateSoundBtn(){
+  if (!soundBtn) return;
+  if (crowdAudio && !crowdAudio.paused && crowdAudio.currentTime>0) {
+    soundOn = true;
+    soundBtn.classList.add('active');
+    document.getElementById('soundIcon').innerHTML = `<svg height="24" style="vertical-align:-6px" width="24" fill="none" viewBox="0 0 24 24"><path d="M2 9v6h4l5 5V4L6 9H2z" fill="currentColor"/><path id="sndonwaves" d="M19 12c0-2.21-.895-4.01-2.47-5.16a1 1 0 1 1 1.12-1.66C20.023 7.2 22 9.34 22 12c0 2.66-1.978 4.8-4.35 6.82a1 1 0 1 1-1.12-1.66C18.105 16.01 19 14.21 19 12z" fill="currentColor"/></svg>`;
+  } else {
+    soundOn = false;
+    soundBtn.classList.remove('active');
+    document.getElementById('soundIcon').innerHTML = `<svg height="24" style="vertical-align:-6px" width="24" fill="none" viewBox="0 0 24 24"><path d="M2 9v6h4l5 5V4L6 9H2z" fill="currentColor"/><path d="M18 6L6 18" stroke="currentColor" stroke-width="2.2"/><path d="M18 18L6 6" stroke="currentColor" stroke-width="2.2"/></svg>`;
+  }
+}
+if (soundBtn) {
+  soundBtn.addEventListener('click',()=>{
+    if (crowdAudio.paused) {
+      crowdAudio.play();
+    } else {
+      crowdAudio.pause();
+    }
+    updateSoundBtn();
+  });
+}
+if (crowdAudio) {
+  crowdAudio.addEventListener('play',updateSoundBtn);
+  crowdAudio.addEventListener('pause',updateSoundBtn);
+  crowdAudio.addEventListener('ended',()=>{crowdAudio.currentTime=0;});
+}
+
+function immediatelyUpdateSoundBtn() { setTimeout(updateSoundBtn, 250);}
+immediatelyUpdateSoundBtn();
+// END SOUND
+
+// --------------------- INIT ---------------------
 renderGroups();
 renderBracket();
 renderMerch();
 renderPrizes();
 renderPartners();
 </script>
-<footer style="font-family:'Barlow','Montserrat','Inter',sans-serif;text-align:center;color:#64ffda;background:rgba(44,195,255,.08);padding:25px 0 13px 0;font-size:1.07rem;letter-spacing:.05em;border-top: 3px solid #64ffda27;margin-top:auto;box-shadow:0 3px 30px #2cf8ff11;backdrop-filter:blur(10px);border-radius:0 0 18px 18px;">
-  © 2024 Summer Football Tournament — All rights reserved — Powered by NeoSport UI
-</footer>
 </body>
 </html>
