@@ -855,6 +855,231 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
         }
+        
+        /* Corporate Elite Governance Section */
+        .governance-section {
+            background: linear-gradient(135deg, #000814 0%, #001a3d 50%, #000814 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .governance-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        
+        .governance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .governance-card {
+            background: rgba(0, 26, 61, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        
+        .governance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.5), transparent, rgba(212, 175, 55, 0.5));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .governance-card:hover::before {
+            opacity: 1;
+        }
+        
+        .governance-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+        }
+        
+        .governance-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .governance-card:hover .governance-icon {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .governance-content {
+            transition: all 0.3s ease;
+        }
+        
+        .governance-card:hover .governance-content {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        .governance-reveal {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0, 26, 61, 0.95), rgba(0, 26, 61, 0.8));
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .governance-card:hover .governance-reveal {
+            transform: translateY(0);
+        }
+        
+        .governance-lead {
+            color: #d4af37;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .governance-name {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .governance-contact {
+            background: rgba(212, 175, 55, 0.2);
+            color: #d4af37;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        
+        .governance-contact:hover {
+            background: #d4af37;
+            color: #000814;
+        }
+        
+        /* Vault Sidebar */
+        .vault-container {
+            background: rgba(0, 26, 61, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .vault-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: #d4af37;
+            font-weight: 700;
+        }
+        
+        .vault-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .vault-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateX(5px);
+        }
+        
+        .vault-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+        }
+        
+        .vault-info h4 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
+        .vault-info p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+        
+        .vault-download {
+            margin-left: auto;
+            color: #d4af37;
+            transition: transform 0.3s ease;
+        }
+        
+        .vault-item:hover .vault-download {
+            transform: translateY(3px);
+        }
+        
+        @media (max-width: 1024px) {
+            .governance-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .governance-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .governance-card {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -1458,6 +1683,161 @@
                             <div id="victory-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
                         </div>
                         <div id="victory-percent" class="text-sm text-white/60 mt-1">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Corporate Elite Governance Section -->
+    <section id="governance" class="governance-section py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">СТРУКТУРА УПРАВЛЕНИЯ ТУРНИРОМ</h2>
+            <p class="text-center text-white/60 mb-16 reveal">Профессиональная система управления и контроля</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Governance Cards Grid -->
+                <div class="governance-grid lg:col-span-3">
+                    <!-- Card 1: Org Committee -->
+                    <div class="governance-card reveal" data-governance="org">
+                        <div class="governance-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        </div>
+                        <div class="governance-content">
+                            <h3 class="text-xl font-bold text-white mb-2">Оргкомитет</h3>
+                            <p class="text-white/60 text-sm">Стратегическое планирование и исполнительное руководство</p>
+                        </div>
+                        <div class="governance-reveal">
+                            <p class="governance-lead">Глава Оргкомитета</p>
+                            <p class="governance-name">Александр Морозов</p>
+                            <button class="governance-contact" onclick="showContactModal('org')">Связаться</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2: Referee Department -->
+                    <div class="governance-card reveal" data-governance="referee">
+                        <div class="governance-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+                        </div>
+                        <div class="governance-content">
+                            <h3 class="text-xl font-bold text-white mb-2">Судейский Департамент</h3>
+                            <p class="text-white/60 text-sm">Контроль честности и справедливости игры</p>
+                        </div>
+                        <div class="governance-reveal">
+                            <p class="governance-lead">Главный судья</p>
+                            <p class="governance-name">Виктор Степанов</p>
+                            <button class="governance-contact" onclick="showContactModal('referee')">Связаться</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: KDK -->
+                    <div class="governance-card reveal" data-governance="kdk">
+                        <div class="governance-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                        </div>
+                        <div class="governance-content">
+                            <h3 class="text-xl font-bold text-white mb-2">КДК</h3>
+                            <p class="text-white/60 text-sm">Контрольно-Дисциплинарный Комитет и этика</p>
+                        </div>
+                        <div class="governance-reveal">
+                            <p class="governance-lead">Председатель КДК</p>
+                            <p class="governance-name">Наталья Волкова</p>
+                            <button class="governance-contact" onclick="showContactModal('kdk')">Связаться</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4: Media Center -->
+                    <div class="governance-card reveal" data-governance="media">
+                        <div class="governance-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        </div>
+                        <div class="governance-content">
+                            <h3 class="text-xl font-bold text-white mb-2">Медиа-центр</h3>
+                            <p class="text-white/60 text-sm">ПР, социальные сети и прямые трансляции</p>
+                        </div>
+                        <div class="governance-reveal">
+                            <p class="governance-lead">Руководитель медиа</p>
+                            <p class="governance-name">Дмитрий Козлов</p>
+                            <button class="governance-contact" onclick="showContactModal('media')">Связаться</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 5: Technical Commission -->
+                    <div class="governance-card reveal lg:col-span-2" data-governance="tech">
+                        <div class="governance-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        </div>
+                        <div class="governance-content">
+                            <h3 class="text-xl font-bold text-white mb-2">Техническая Комиссия</h3>
+                            <p class="text-white/60 text-sm">Логистика стадионов, безопасность и инфраструктура</p>
+                        </div>
+                        <div class="governance-reveal">
+                            <p class="governance-lead">Технический директор</p>
+                            <p class="governance-name">Сергей Павлов</p>
+                            <button class="governance-contact" onclick="showContactModal('tech')">Связаться</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vault Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="vault-container sticky top-24">
+                        <div class="vault-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            <span>ДОКУМЕНТЫ</span>
+                        </div>
+                        
+                        <div class="vault-item" onclick="downloadDoc('regulations')">
+                            <div class="vault-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <div class="vault-info">
+                                <h4>Регламент</h4>
+                                <p>PDF • 2.4 MB</p>
+                            </div>
+                            <div class="vault-download">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </div>
+                        </div>
+                        
+                        <div class="vault-item" onclick="downloadDoc('fairplay')">
+                            <div class="vault-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                            </div>
+                            <div class="vault-info">
+                                <h4>Кодекс Fair Play</h4>
+                                <p>PDF • 1.1 MB</p>
+                            </div>
+                            <div class="vault-download">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </div>
+                        </div>
+                        
+                        <div class="vault-item" onclick="downloadDoc('insurance')">
+                            <div class="vault-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </div>
+                            <div class="vault-info">
+                                <h4>Страхование</h4>
+                                <p>PDF • 890 KB</p>
+                            </div>
+                            <div class="vault-download">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </div>
+                        </div>
+                        
+                        <div class="vault-item" onclick="downloadDoc('antidoping')">
+                            <div class="vault-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                            </div>
+                            <div class="vault-info">
+                                <h4>Антидопинг</h4>
+                                <p>PDF • 1.5 MB</p>
+                            </div>
+                            <div class="vault-download">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2076,6 +2456,59 @@
             
             lastScrollY = currentScrollY;
         });
+        
+        // GSAP Stagger Animation for Governance Cards
+        const governanceCards = document.querySelectorAll('.governance-card');
+        const governanceObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 150);
+                    governanceObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        
+        governanceCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            governanceObserver.observe(card);
+        });
+        
+        // Governance Contact Modal
+        function showContactModal(dept) {
+            const contacts = {
+                org: { name: 'Александр Морозов', role: 'Глава Оргкомитета', email: 'org@ramenskoe-cup.ru', phone: '+7 (495) 123-45-67' },
+                referee: { name: 'Виктор Степанов', role: 'Главный судья', email: 'referee@ramenskoe-cup.ru', phone: '+7 (495) 234-56-78' },
+                kdk: { name: 'Наталья Волкова', role: 'Председатель КДК', email: 'kdk@ramenskoe-cup.ru', phone: '+7 (495) 345-67-89' },
+                media: { name: 'Дмитрий Козлов', role: 'Руководитель медиа', email: 'media@ramenskoe-cup.ru', phone: '+7 (495) 456-78-90' },
+                tech: { name: 'Сергей Павлов', role: 'Технический директор', email: 'tech@ramenskoe-cup.ru', phone: '+7 (495) 567-89-01' }
+            };
+            
+            const contact = contacts[dept];
+            if (contact) {
+                alert(`${contact.role}\n${contact.name}\n\nEmail: ${contact.email}\nТелефон: ${contact.phone}`);
+            }
+        }
+        
+        // Document Download
+        function downloadDoc(docType) {
+            const docs = {
+                regulations: 'Регламент турнира 2026.pdf',
+                fairplay: 'Кодекс Fair Play.pdf',
+                insurance: 'Страхование участников.pdf',
+                antidoping: 'Антидопинговые правила.pdf'
+            };
+            
+            const docName = docs[docType];
+            if (docName) {
+                alert(`Загрузка: ${docName}\n\n(В реальном проекте здесь будет скачивание PDF)`);
+            }
+        }
     </script>
 </body>
 </html>
