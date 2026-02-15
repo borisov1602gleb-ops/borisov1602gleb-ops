@@ -337,6 +337,29 @@
       text-transform:uppercase;
       letter-spacing:.045em;
       text-shadow:0 2px 27px #37eaef17;
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+    .soon-badge {
+      font-family:'Barlow','Montserrat',sans-serif;
+      font-weight:900;
+      font-size:1em;
+      border-radius: 12px;
+      padding:4px 17px;
+      color:#18192a;
+      background: linear-gradient(98deg, #f6f78c, #64ffda 86%);
+      box-shadow:0 2px 16px #e7ff0085;
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      margin-left:8px;
+      opacity:.96;
+      position:relative;
+      animation: soonPulse 1.4s infinite alternate;
+    }
+    @keyframes soonPulse {
+      from{box-shadow:0 0 7px #f6f78c80, 0 2px 33px #64ffda00;}
+      to{box-shadow:0 0 22px #f6f78ccc, 0 5px 55px #64ffda50;}
     }
     .bracket {
       display: flex;
@@ -723,7 +746,10 @@
             </div>
           </div>
           <div class="playoff-block">
-            <div class="playoff-title">Плей-офф Сетка <span class="match-badge badge-live">live</span></div>
+            <div class="playoff-title">
+              Плей-офф Сетка <span class="match-badge badge-live">live</span>
+              <span class="soon-badge">soon</span>
+            </div>
             <div class="bracket" id="playoff-bracket"></div>
           </div>
         </section>
@@ -758,7 +784,11 @@ const GROUPS = [
       {name: "Беркута", img: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Eagles-fc.png"},
       {name: "Легенда", img: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Crystal_Palace_FC_logo_%282013%29.svg"},
       {name: "Север", img: "https://upload.wikimedia.org/wikipedia/commons/1/18/FK_North_Badge.png"},
-      {name: "Молния", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Shinoda_lightning_logo.png"}
+      {name: "Молния", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Shinoda_lightning_logo.png"},
+      {name: "8 чудес света", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Seven_Wonders_of_the_World.svg/200px-Seven_Wonders_of_the_World.svg.png"},
+      {name: "Артемида", img: "https://upload.wikimedia.org/wikipedia/commons/2/2d/Diana-Artemis-symbol.svg"},
+      {name: "Сатурн", img: "https://upload.wikimedia.org/wikipedia/commons/9/9e/Saturn_%28planet%29.svg"},
+      {name: "ЦСКА", img: "https://upload.wikimedia.org/wikipedia/commons/6/61/CSKA_Moscow_logo.png"}
     ]
   },
   {
@@ -774,10 +804,14 @@ const GROUPS = [
 
 const GROUP_RESULTS = {
   "Группа A": [
-    {team: "Беркута", played: 3, wins: 2, draws: 1, loses: 0, goals: "7-3", pts: 7},
-    {team: "Легенда", played: 3, wins: 2, draws: 0, loses: 1, goals: "5-4", pts: 6},
-    {team: "Север", played: 3, wins: 1, draws: 1, loses: 1, goals: "3-4", pts: 4},
-    {team: "Молния", played: 3, wins: 0, draws: 0, loses: 3, goals: "2-6", pts: 0}
+    {team: "Беркута", played: 7, wins: 5, draws: 2, loses: 0, goals: "14-5", pts: 17},
+    {team: "Легенда", played: 7, wins: 5, draws: 1, loses: 1, goals: "13-6", pts: 16},
+    {team: "Север", played: 7, wins: 4, draws: 1, loses: 2, goals: "13-8", pts: 13},
+    {team: "Молния", played: 7, wins: 3, draws: 3, loses: 1, goals: "11-9", pts: 12},
+    {team: "8 чудес света", played: 7, wins: 3, draws: 0, loses: 4, goals: "8-14", pts: 9},
+    {team: "Артемида", played: 7, wins: 2, draws: 1, loses: 4, goals: "6-11", pts: 7},
+    {team: "Сатурн", played: 7, wins: 1, draws: 2, loses: 4, goals: "5-13", pts: 5},
+    {team: "ЦСКА", played: 7, wins: 0, draws: 0, loses: 7, goals: "4-18", pts: 0}
   ],
   "Группа B": [
     {team: "Дельта", played: 3, wins: 2, draws: 1, loses: 0, goals: "6-2", pts: 7},
@@ -791,20 +825,19 @@ const PLAYOFF = [
   {
     round: "Полуфиналы",
     games: [
-      {stage: "1/2 финала", teams: ["Беркута", "Торнадо"], score: "2:1"},
-      {stage: "1/2 финала", teams: ["Дельта", "Легенда"], score: "1:3"}
+      // Soon
     ]
   },
   {
     round: "За 3 место",
     games: [
-      {stage: "3-е место", teams: ["Дельта", "Торнадо"], score: "2:1"}
+      // Soon
     ]
   },
   {
     round: "Финал",
     games: [
-      {stage: "Финал", teams: ["Беркута", "Легенда"], score: "1:2"}
+      // Soon
     ]
   }
 ];
@@ -935,40 +968,22 @@ function renderGroups() {
 function renderBracket() {
   const bracket = document.getElementById("playoff-bracket");
   bracket.innerHTML = '';
-  const cols = [[],[],[]];
-  for (const round of PLAYOFF) {
-    if (round.round.startsWith('Полуфин')) cols[0] = round.games;
-    else if (round.round == 'За 3 место') cols[1] = round.games;
-    else if (round.round === 'Финал') cols[2] = round.games;
-  }
-  ["Полуфиналы", "Матч за бронзу", "Финал"].forEach((header, i) => {
-    bracket.insertAdjacentHTML('beforeend',`
-      <div class="bracket-col">
-        <div class="bracket-stage" style="font-family:'Barlow',Montserrat,sans-serif;color:#2dd4fa;font-size:1.13em;font-weight:900;letter-spacing:.04em;text-transform:uppercase;margin-bottom:13px;">
-          ${header}
-        </div>
-        ${cols[i].map(game =>
-          `<div class="bracket-game bounce-in">
-            <div class="game-stage">${game.stage||""}</div>
-            <div class="game-teams">${game.teams[0]} <span class="game-score">${game.score||""}</span> ${game.teams[1]}</div>
-          </div>`
-        ).join('')}
-      </div>`);
-  });
-  // Print Only: финал
+  // SKELETON/Placeholder for soon
+  bracket.innerHTML = `
+    <div style="width:100%;display:flex;justify-content:center;align-items:center;height:160px;opacity:.74;">
+      <div style="font-family:'Barlow','Montserrat',sans-serif;font-size:2rem;font-weight:900;color:#f6f78c;background:linear-gradient(97deg,#f6f78c 10%,#64ffda 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.12em;filter:blur(.1px);text-transform:uppercase;">
+        Плей-офф сетка скоро будет опубликована
+      </div>
+    </div>
+  `;
+  // For final printing, keep empty or show "Soon"
   const printFinal = document.getElementById('print-bracket-final');
   printFinal.innerHTML = `<div style="font-family:'Barlow',Montserrat,sans-serif;font-size:2.19rem;text-align:center;margin-top:2em;color:#64ffda;text-transform:uppercase;letter-spacing:.06em;background: linear-gradient(91deg,#44ffe3 25%,#2dd4fa 80%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;text-shadow: 0 4px 35px #2cdfff45;">
-    ФИНАЛ</div>
+    Финал
+    </div>
     <div style="margin:2.5em auto 1.2em auto;max-width:510px;background:rgba(44,97,170,.45);border-radius:39px;padding:60px 0 32px 0;box-shadow:0 27px 100px #4dddfc38;letter-spacing:0.05em;">
-      <div style="font-family:'Barlow',Montserrat,sans-serif;font-size:1.77rem;font-weight:900;letter-spacing:.04em;text-shadow:0 2px 32px #89ffe6;">
-        ${cols[2][0].teams[0]} <span style="font-size:2.13rem;color:#eaffff;">${cols[2][0].score}</span> ${cols[2][0].teams[1]}
-      </div>
-      <div style="margin-top:.9em;">
-        <img src="${GROUPS[0].teams[0].img}" style="height:41px;width:41px;border-radius:50%;margin:0 28px 0 0;filter:drop-shadow(0 1px 31px #1edfe7);background:#d8fefe;" alt="">
-        <img src="${GROUPS[0].teams[1].img}" style="height:41px;width:41px;border-radius:50%;margin:0 0 0 28px;filter:drop-shadow(0 1px 27px #0affce85);background:#e0fffc;" alt="">
-      </div>
-      <div style="margin-top:1.1em;color:#86ffe2;font-family:'Barlow','Montserrat',sans-serif;font-size:1.13rem;">
-        17 июня 2024, 17:00, поле A
+      <div style="font-family:'Barlow',Montserrat,sans-serif;font-size:1.42rem;font-weight:900;letter-spacing:.04em;text-shadow:0 2px 32px #89ffe6;">
+        Плей-офф скоро
       </div>
     </div>
   `;
