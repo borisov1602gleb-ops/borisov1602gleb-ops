@@ -933,23 +933,57 @@
         </div>
     </section>
     
-    <!-- Trophy Gallery -->
-    <section id="trophy" class="trophy-container">
-        <div class="particles-container" id="particlesContainer"></div>
-        <div class="trophy-3d" id="trophy3d">
-            <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=600&fit=crop&crop=center" 
-                 alt="Trophy" 
-                 class="trophy-image">
-        </div>
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div class="text-center">
-                <h2 class="text-5xl md:text-7xl font-black mb-4 gold-glow" style="color: #d4af37;">КУБОК ЧЕМПИОНОВ</h2>
-                <p class="text-xl text-gray-300 max-w-2xl">Символ величия и спортивного духа. Мечта каждой команды.</p>
+    <!-- Live Match Center -->
+    <section class="section-spacing bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bento-item glass-morphism rounded-xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-yellow-400">MATCH CENTER</h3>
+                    <div class="live-indicator">
+                        <div class="live-dot"></div>
+                        <span>LIVE</span>
+                    </div>
+                </div>
+                
+                <!-- Current Match -->
+                <div class="text-center mb-8">
+                    <h4 class="text-xl font-bold mb-4">FC Ramenskoe vs. Meteor</h4>
+                    <div class="text-5xl font-black mb-4">
+                        <span class="text-yellow-400">2</span> - <span>1</span>
+                    </div>
+                    <div class="text-gray-400">65' • Стадион "Раменское"</div>
+                </div>
+                
+                <!-- Match Timeline -->
+                <div class="match-timeline">
+                    <!-- Minutes -->
+                    <div class="timeline-minute" data-minute="0">0'</div>
+                    <div class="timeline-minute" data-minute="15">15'</div>
+                    <div class="timeline-minute" data-minute="24">24'</div>
+                    <div class="timeline-minute event-goal" data-minute="45" style="position: relative;">
+                        ⚽
+                        <div class="event-card">
+                            <strong>ГОЛ!</strong><br>
+                            Иванов • 45'<br>
+                            FC Ramenskoe 2-1
+                        </div>
+                    </div>
+                    <div class="timeline-minute" data-minute="60">60'</div>
+                    <div class="timeline-minute" data-minute="78">78'</div>
+                    <div class="timeline-minute event-foul" data-minute="90" style="position: relative;">
+                        🟨
+                        <div class="event-card">
+                            <strong>ФОЛ!</strong><br>
+                            Петров • 78'<br>
+                            Желтая карточка
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
     
-    <!-- Cinematic Preloader -->
+    <!-- Team Profiles with Radar Chart -->
     <div class="preloader-overlay" id="preloader">
         <div class="preloader-split">
             <div class="preloader-split-top" id="preloaderTop"></div>
@@ -1798,19 +1832,31 @@
         // Venue Map Interactions
         document.querySelectorAll('.venue-pin').forEach(pin => {
             pin.addEventListener('mouseenter', (e) => {
+                e.stopPropagation();
                 const tooltip = pin.querySelector('.pin-tooltip');
+                const rect = pin.getBoundingClientRect();
+                const containerRect = pin.parentElement.getBoundingClientRect();
+                
+                // Calculate position relative to container
+                const relativeX = rect.left - containerRect.left + rect.width / 2;
+                const relativeY = rect.top - containerRect.top + rect.height / 2;
+                
                 gsap.to(tooltip, {
                     opacity: 1,
                     bottom: '120%',
+                    left: '50%',
+                    x: `${relativeX}px`,
+                    y: `${relativeY}px`,
+                    transform: 'translateX(-50%)',
                     duration: 0.3
                 });
             });
             
             pin.addEventListener('mouseleave', (e) => {
+                e.stopPropagation();
                 const tooltip = pin.querySelector('.pin-tooltip');
                 gsap.to(tooltip, {
                     opacity: 0,
-                    bottom: '100%',
                     duration: 0.3
                 });
             });
