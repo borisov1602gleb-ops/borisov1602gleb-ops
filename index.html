@@ -1,435 +1,168 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Раменский Любительский Кубок | Ramenskoe Amateur Cup</title>
+    <title>Раменский Кубок | Ramenskoe Cup 2026</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cup-dark': '#000814',
+                        'cup-blue': '#001a3d',
+                        'cup-gold': '#d4af37',
+                        'cup-gold-light': '#ffd700',
+                    },
+                    fontFamily: {
+                        'montserrat': ['Montserrat', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
     <style>
         * {
             font-family: 'Montserrat', sans-serif;
-            scroll-behavior: smooth;
         }
         
-        .glass-morphism {
-            backdrop-filter: blur(15px);
-            background: rgba(255, 255, 255, 0.03);
+        body {
+            background-color: #000814;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        /* Glassmorphism Base */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .gold-glow {
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8),
-                         0 0 40px rgba(212, 175, 55, 0.6),
-                         0 0 60px rgba(212, 175, 55, 0.4);
-        }
-        
-        .hero-gradient {
-            background: radial-gradient(ellipse at center, #001a3d 0%, #000814 100%);
-        }
-        
-        .bento-item {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .bento-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .countdown-digit {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #d4af37;
-            animation: confetti-fall 3s linear;
-            z-index: 9999;
-        }
-        
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        .audio-visualizer {
-            display: flex;
-            align-items: flex-end;
-            height: 30px;
-            gap: 2px;
-        }
-        
-        .audio-bar {
-            width: 3px;
-            background: #d4af37;
-            animation: audio-wave 1s ease-in-out infinite;
-        }
-        
-        @keyframes audio-wave {
-            0%, 100% { height: 5px; }
-            50% { height: 25px; }
-        }
-        
-        .modal-backdrop {
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.8);
-        }
-        
-        .step-indicator {
-            transition: all 0.3s ease;
-        }
-        
-        .step-indicator.active {
-            background: #d4af37;
-            color: #000814;
-        }
-        
-        .drag-zone {
-            border: 2px dashed rgba(212, 175, 55, 0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .drag-zone.dragover {
-            border-color: #d4af37;
-            background: rgba(212, 175, 55, 0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #d4af37 0%, #f4e4bc 100%);
-            color: #000814;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
-        }
-        
-        .bracket-line {
-            stroke: #d4af37;
-            stroke-width: 2;
-            fill: none;
-        }
-        
-        .podium-block {
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease;
-        }
-        
-        .podium-block:hover {
-            transform: rotateY(5deg) rotateX(-5deg);
-        }
-        
-        .prize-pool {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 2rem;
-            border-radius: 1rem;
-            position: relative;
-            overflow: hidden;
-            color: #000;
-            font-weight: bold;
-        }
-        
-        .prize-amount {
-            font-size: clamp(3rem, 8vw, 6rem);
-            color: #d4af37;
-            font-weight: 900;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
-            background: linear-gradient(90deg, #d4af37, #ffd700, #d4af37);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .sponsorship-modal {
-            backdrop-filter: blur(20px);
-            background: rgba(0, 26, 61, 0.95);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #fff;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-        }
-        
-        .sponsorship-benefits {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .sponsorship-benefit {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .sponsorship-benefit:hover {
-            background: rgba(212, 175, 55, 0.1);
-            transform: translateX(5px);
-        }
-        
-        .sponsorship-icon {
-            margin-right: 1rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            min-width: 2.5rem;
-            background: linear-gradient(135deg, #d4af37, #ffd700);
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            font-weight: bold;
-        }
-        
-        .sponsorship-cta {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-            padding: 1rem 2rem;
-            border-radius: 2rem;
-            color: #000;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            gap: 0.5rem;
-        }
-        
-        .sponsorship-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
-        }
-        
-        /* Premium Navigation */
-        .magnetic-nav {
-            position: fixed;
-            top: 2rem;
-            right: 2rem;
-            left: auto;
-            transform: none;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            padding: 1rem 1.5rem;
+        .glass-strong {
             background: rgba(0, 26, 61, 0.8);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 20px;
         }
         
-        .magnetic-btn {
-            position: relative;
-            padding: 0.75rem 1.5rem;
-            color: #fff;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            cursor: pointer;
-        }
-        
-        .magnetic-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
-            transition: all 0.5s ease;
-            transform: translate(-50%, -50%);
-        }
-        
-        .magnetic-btn:hover::before {
-            width: 100px;
-            height: 100px;
-        }
-        
-        .magnetic-btn:hover {
+        /* Gold Effects */
+        .text-gold {
             color: #d4af37;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
         }
         
-        /* Video Text Mask */
-        .text-mask {
-            position: relative;
-            font-size: clamp(4rem, 12vw, 12rem);
-            font-weight: 900;
-            color: transparent;
-            -webkit-text-stroke: 2px rgba(212, 175, 55, 0.3);
-            background: url('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4') center/cover;
+        .text-gold-light {
+            color: #ffd700;
+        }
+        
+        .bg-gold {
+            background-color: #d4af37;
+        }
+        
+        .border-gold {
+            border-color: #d4af37;
+        }
+        
+        .gold-glow {
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+        
+        .gold-box-glow {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), 0 0 60px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
             -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: textGlow 3s ease-in-out infinite;
         }
         
-        @keyframes textGlow {
-            0%, 100% { -webkit-text-stroke: 2px rgba(212, 175, 55, 0.3); }
-            50% { -webkit-text-stroke: 2px rgba(212, 175, 55, 0.8); }
-        }
-        
-        /* Timeline Styles */
-        .timeline-container {
-            position: relative;
-            padding: 4rem 0;
-            overflow: hidden;
-        }
-        
-        .timeline-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(180deg, transparent, #d4af37, transparent);
-            transform: translateX(-50%);
-        }
-        
-        .timeline-item {
-            position: relative;
-            margin: 4rem 0;
-            opacity: 0;
-            transform: translateY(50px);
-        }
-        
-        .timeline-item:nth-child(odd) {
-            padding-right: 50%;
-            text-align: right;
-        }
-        
-        .timeline-item:nth-child(even) {
-            padding-left: 50%;
-            text-align: left;
-        }
-        
-        .timeline-dot {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 20px;
-            height: 20px;
-            background: #d4af37;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
-        }
-        
-        /* Trophy Gallery */
-        .trophy-container {
-            position: relative;
-            min-height: 100vh;
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000814;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            perspective: 1000px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
         
-        .trophy-3d {
-            width: 400px;
-            height: 600px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
-        }
-        
-        .trophy-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.4));
-        }
-        
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #d4af37;
-            border-radius: 50%;
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            animation: float 6s ease-in-out infinite;
         }
         
-        @keyframes float {
-            0%, 100% { 
-                transform: translateY(0) translateX(0);
-                opacity: 0;
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { 
-                transform: translateY(-100px) translateX(50px);
-                opacity: 0;
+        .pitch-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 2s ease forwards;
+        }
+        
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
             }
         }
         
-        /* Swiss Layout */
-        .swiss-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        .pitch-circle {
+            transform-origin: center;
+            animation: pulseCircle 2s ease-in-out infinite;
         }
         
-        .swiss-column {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+        @keyframes pulseCircle {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
         }
         
-        /* Premium Spacing */
-        .section-spacing {
-            padding: 8rem 0;
-        }
-        
-        .mega-spacing {
-            padding: 12rem 0;
-        }
-        
-        /* Cursor Effects */
-        .cursor-glow {
+        /* Navigation */
+        #mainNav {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.8) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease-out;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
         }
         
-        .cursor-ring {
+        .nav-link {
+            position: relative;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            border-radius: 9999px;
+        }
+        
+        .nav-link:hover {
+            color: #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Custom Cursor */
+        #cursor {
             position: fixed;
             width: 40px;
             height: 40px;
@@ -437,960 +170,1193 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 9998;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, border-color 0.3s;
+            mix-blend-mode: difference;
         }
         
-        .cursor-ring.hover {
+        #cursor.hover {
             width: 60px;
             height: 60px;
             border-color: #ffd700;
             background: rgba(212, 175, 55, 0.1);
         }
         
-        /* Mobile cursor disable */
+        #cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #d4af37;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        
         @media (pointer: coarse) {
-            .cursor-glow, .cursor-ring {
-                display: none;
+            #cursor, #cursor-dot {
+                display: none !important;
             }
         }
         
-        /* Hero Parallax */
-        .hero-parallax {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
+        /* Hero Text Mask */
+        .hero-mask-text {
+            font-size: clamp(4rem, 15vw, 12rem);
+            font-weight: 900;
+            line-height: 0.9;
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5));
         }
         
-        .hero-content {
-            position: relative;
-            z-index: 10;
-        }
-        
-        /* Glass Cards Tilt */
-        .tilt-card {
-            transform-style: preserve-3d;
-            transition: transform 0.3s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .tilt-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-            pointer-events: none;
-        }
-        
-        /* Live Ticker */
-        .ticker-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 26, 61, 0.9);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(212, 175, 55, 0.3);
-            z-index: 40;
-            overflow: hidden;
-        }
-        
-        .ticker-content {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 0;
-            animation: marquee 20s linear infinite;
-            white-space: nowrap;
-        }
-        
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        
-        .ticker-item {
-            color: #d4af37;
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding: 0 2rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .ticker-separator {
-            color: rgba(212, 175, 55, 0.5);
-            margin: 0 1rem;
-        }
-        
-        /* Enhanced Audio Visualizer */
-        .audio-visualizer-enhanced {
-            display: flex;
-            align-items: flex-end;
-            height: 24px;
-            gap: 3px;
-            margin-left: 1rem;
-        }
-        
-        .audio-bar-enhanced {
+        /* Audio Visualizer */
+        .audio-bar {
             width: 3px;
             background: linear-gradient(to top, #d4af37, #ffd700);
             border-radius: 2px;
-            transition: all 0.2s ease;
+            animation: audioWave 0.5s ease-in-out infinite alternate;
         }
         
-        /* Cinematic Preloader */
-        .preloader-overlay {
-            position: fixed;
-            inset: 0;
-            background: #000814;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: auto;
+        @keyframes audioWave {
+            from { height: 4px; }
+            to { height: 20px; }
         }
         
-        .preloader-overlay.hidden {
-            pointer-events: none;
+        .audio-bar:nth-child(2) { animation-delay: 0.1s; }
+        .audio-bar:nth-child(3) { animation-delay: 0.2s; }
+        .audio-bar:nth-child(4) { animation-delay: 0.3s; }
+        
+        /* Countdown */
+        .countdown-item {
+            position: relative;
         }
         
-        .preloader-split {
+        .countdown-item::after {
+            content: ':';
             position: absolute;
-            inset: 0;
-            display: flex;
-            overflow: hidden;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 2rem;
+            font-weight: 300;
         }
         
-        .preloader-split-top {
-            flex: 1;
-            background: #000814;
-            transform: translateY(0);
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        .countdown-item:last-child::after {
+            display: none;
         }
         
-        .preloader-split-bottom {
-            flex: 1;
-            background: #000814;
-            transform: translateY(0);
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .preloader-split.slide-out-top {
-            transform: translateY(-100%);
-        }
-        
-        .preloader-split.slide-out-bottom {
-            transform: translateY(100%);
-        }
-        
-        /* Match Center */
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 0.75rem;
-            background: rgba(239, 68, 68, 0.9);
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .live-dot {
+        /* Live Indicator */
+        .live-pulse {
             width: 8px;
             height: 8px;
             background: #ef4444;
             border-radius: 50%;
-            animation: pulse-red 2s infinite;
+            animation: livePulse 2s ease-in-out infinite;
         }
         
-        @keyframes pulse-red {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
         }
         
-        .match-timeline {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
+        /* Match Timeline */
+        .timeline-event {
             position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
         
-        .timeline-minute {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .timeline-event:hover {
+            transform: scale(1.2);
         }
         
-        .timeline-minute:hover {
-            background: rgba(212, 175, 55, 0.2);
-            transform: scale(1.1);
-        }
-        
-        .event-marker {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            transition: all 0.3s ease;
-        }
-        
-        .event-goal {
-            background: #d4af37;
-            color: #000814;
-        }
-        
-        .event-foul {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .event-card {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 0.75rem;
-            border-radius: 0.5rem;
+        .event-tooltip {
             position: absolute;
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            min-width: 150px;
+            background: rgba(0, 26, 61, 0.95);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            white-space: nowrap;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s ease;
+            transition: opacity 0.3s ease, bottom 0.3s ease;
             z-index: 10;
         }
         
-        .event-marker:hover .event-card {
+        .timeline-event:hover .event-tooltip {
             opacity: 1;
             bottom: 120%;
         }
         
-        /* Team Profiles Drawer */
-        .team-drawer {
+        /* Bracket */
+        .bracket-line {
+            stroke: #d4af37;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.6;
+        }
+        
+        .bracket-team {
+            fill: rgba(212, 175, 55, 0.2);
+            stroke: #d4af37;
+            stroke-width: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .bracket-team:hover {
+            fill: rgba(212, 175, 55, 0.4);
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+        }
+        
+        /* Radar Chart */
+        .radar-grid {
+            stroke: rgba(212, 175, 55, 0.2);
+            stroke-width: 1;
+            fill: none;
+        }
+        
+        .radar-polygon {
+            fill: rgba(212, 175, 55, 0.2);
+            stroke: #d4af37;
+            stroke-width: 2;
+            transition: all 0.5s ease;
+        }
+        
+        /* Side Drawer */
+        .side-drawer {
             position: fixed;
             top: 0;
             right: -400px;
             width: 400px;
             height: 100vh;
-            background: rgba(0, 26, 61, 0.95);
+            background: rgba(0, 26, 61, 0.98);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(212, 175, 55, 0.3);
-            z-index: 999;
+            z-index: 200;
             transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
         }
         
-        .team-drawer.open {
+        .side-drawer.open {
             right: 0;
         }
         
         .drawer-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 998;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 199;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
         
-        .drawer-overlay.active {
+        .drawer-overlay.open {
             opacity: 1;
             pointer-events: auto;
         }
         
-        .radar-chart {
-            width: 300px;
-            height: 300px;
-            margin: 2rem auto;
-        }
-        
-        .player-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.625rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin: 0.25rem;
-        }
-        
-        .badge-gk { background: #10b981; color: white; }
-        .badge-def { background: #3b82f6; color: white; }
-        .badge-mid { background: #8b5cf6; color: white; }
-        .badge-str { background: #ef4444; color: white; }
-        
-        /* Isometric Venue Map */
-        .isometric-container {
-            perspective: 1000px;
-            margin: 4rem 0;
-        }
-        
-        .isometric-grid {
-            width: 600px;
-            height: 400px;
-            transform: rotateX(60deg) rotateZ(-45deg);
-            margin: 0 auto;
+        /* Timeline (Road of Glory) */
+        .road-timeline {
             position: relative;
-            background: linear-gradient(135deg, #001a3d 0%, #000814 100%);
-            border: 2px solid rgba(212, 175, 55, 0.2);
         }
         
-        .venue-pin {
+        .road-timeline::before {
+            content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #d4af37;
-            border-radius: 50%;
-            border: 3px solid #000814;
-            transform: translateZ(20px);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-        }
-        
-        .venue-pin:hover {
-            transform: translateZ(30px) scale(1.2);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
-        }
-        
-        .pin-tooltip {
-            position: absolute;
-            bottom: 100%;
             left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #d4af37, transparent);
             transform: translateX(-50%);
-            background: rgba(0, 26, 61, 0.95);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            min-width: 200px;
+        }
+        
+        .timeline-node {
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .timeline-node.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Prize Pool Shimmer */
+        .prize-shimmer {
+            background: linear-gradient(
+                90deg,
+                #d4af37 0%,
+                #ffd700 25%,
+                #fff 50%,
+                #ffd700 75%,
+                #d4af37 100%
+            );
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 301;
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s ease;
-            z-index: 100;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
-        .venue-pin:hover .pin-tooltip {
+        .modal-content.open {
+            transform: translate(-50%, -50%) scale(1);
             opacity: 1;
-            bottom: 120%;
+            pointer-events: auto;
         }
         
-        /* Fan Prediction Engine */
-        .prediction-progress {
-            height: 8px;
-            background: rgba(212, 175, 55, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 0.5rem 0;
+        /* Step Indicator */
+        .step-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
         }
         
-        .prediction-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #d4af37, #ffd700);
-            border-radius: 4px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 0%;
+        .step-dot.active {
+            background: #d4af37;
+            border-color: #d4af37;
+            color: #000814;
+        }
+        
+        .step-dot.completed {
+            background: rgba(212, 175, 55, 0.3);
+            border-color: #d4af37;
+        }
+        
+        /* Step Content */
+        .step-panel {
+            display: none;
+        }
+        
+        .step-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Magnetic Effect */
+        .magnetic {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .bento-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .bento-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .road-timeline::before {
+                left: 20px;
+            }
+            
+            #mainNav {
+                top: auto;
+                bottom: 1rem;
+                right: 50%;
+                transform: translateX(50%);
+                flex-direction: row;
+            }
+            
+            .side-drawer {
+                width: 100%;
+                right: -100%;
+            }
         }
     </style>
 </head>
-<body class="bg-black text-white overflow-x-hidden">
-    <!-- Magnetic Navigation -->
-    <nav class="magnetic-nav">
-        <a href="#hero" class="magnetic-btn">ГЛАВНАЯ</a>
-        <a href="#timeline" class="magnetic-btn">ДОРОГА СЛАВЫ</a>
-        <a href="#trophy" class="magnetic-btn">КУБОК</a>
-        <a href="#registration" class="magnetic-btn">РЕГИСТРАЦИЯ</a>
-    </nav>
-    
-    <!-- Dynamic Cursor -->
-    <div class="cursor-glow" id="cursorGlow"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
-    
-    <!-- Hero Section -->
-    <section id="hero" class="relative min-h-screen hero-gradient flex items-center justify-center">
-        <!-- Background Video with Parallax -->
-        <div class="hero-parallax" id="heroParallax">
-            <video autoplay muted loop class="w-full h-full object-cover opacity-30">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-            </video>
-            <div class="absolute inset-0 hero-gradient"></div>
-        </div>
-        
-        <!-- Audio Controls -->
-        <div class="absolute top-8 right-8 z-20 glass-morphism rounded-lg p-4">
-            <div class="flex items-center gap-3">
-                <button id="audioToggle" class="text-yellow-400 hover:text-yellow-300 transition">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-                <div class="audio-visualizer-enhanced" id="audioVisualizer">
-                    <div class="audio-bar-enhanced" style="height: 8px; animation-delay: 0s;"></div>
-                    <div class="audio-bar-enhanced" style="height: 16px; animation-delay: 0.1s;"></div>
-                    <div class="audio-bar-enhanced" style="height: 12px; animation-delay: 0.2s;"></div>
-                    <div class="audio-bar-enhanced" style="height: 20px; animation-delay: 0.3s;"></div>
-                </div>
+<body class="antialiased">
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="relative">
+            <svg width="300" height="300" viewBox="0 0 300 300" class="mb-8">
+                <!-- Outer Field -->
+                <rect x="30" y="30" width="240" height="240" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0s;"/>
+                
+                <!-- Center Line -->
+                <line x1="150" y1="30" x2="150" y2="270" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.2s;"/>
+                
+                <!-- Center Circle -->
+                <circle cx="150" cy="150" r="40" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-circle"/>
+                
+                <!-- Penalty Areas -->
+                <rect x="30" y="80" width="60" height="140" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.4s;"/>
+                <rect x="210" y="80" width="60" height="140" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.6s;"/>
+                
+                <!-- Goal Areas -->
+                <rect x="30" y="110" width="30" height="80" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.8s;"/>
+                <rect x="240" y="110" width="30" height="80" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 1s;"/>
+                
+                <!-- Corner Arcs -->
+                <path d="M30 40 A10 10 0 0 1 40 30" fill="none" stroke="#d4af37" stroke-width="2"/>
+                <path d="M260 30 A10 10 0 0 1 270 40" fill="none" stroke="#d4af37" stroke-width="2"/>
+                <path d="M30 260 A10 10 0 0 0 40 270" fill="none" stroke="#d4af37" stroke-width="2"/>
+                <path d="M260 270 A10 10 0 0 0 270 260" fill="none" stroke="#d4af37" stroke-width="2"/>
+            </svg>
+            <div class="text-center">
+                <p class="text-gold text-lg font-semibold tracking-widest">РАМЕНСКИЙ КУБОК</p>
+                <p class="text-white/60 text-sm mt-2">Загрузка...</p>
             </div>
-        </div>
-        
-        <!-- Hero Content with Reveal Animation -->
-        <div class="hero-content relative z-10 text-center px-4 max-w-7xl mx-auto">
-            <div class="text-mask mb-8" id="heroText">РАМЕНСКОЕ</div>
-            <h2 class="text-4xl md:text-6xl font-black mb-8 gold-glow" style="color: #d4af37;">
-                ЛЮБИТЕЛЬСКИЙ КУБОК
-            </h2>
-            <p class="text-xl md:text-2xl mb-12 text-gray-300 font-light max-w-3xl mx-auto">
-                Эпицентр футбольной страсти. Где рождаются легенды и пишется история.
-            </p>
-            
-            <!-- Golden Countdown -->
-            <div class="glass-morphism rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
-                <h3 class="text-2xl font-bold mb-6 text-yellow-400">ДО НАЧАЛА ТУРНИРА ОСТАЛОСЬ:</h3>
-                <div id="countdown" class="grid grid-cols-4 gap-4 md:gap-8">
-                    <div class="text-center">
-                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="days">00</div>
-                        <div class="text-sm md:text-base text-gray-400 mt-2">Дней</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="hours">00</div>
-                        <div class="text-sm md:text-base text-gray-400 mt-2">Часов</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="minutes">00</div>
-                        <div class="text-sm md:text-base text-gray-400 mt-2">Минут</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="countdown-digit text-4xl md:text-6xl font-black gold-glow" id="seconds">00</div>
-                        <div class="text-sm md:text-base text-gray-400 mt-2">Секунд</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Registration Button -->
-            <button id="openRegistration" class="btn-primary px-12 py-4 rounded-full text-lg font-bold">
-                ЗАРЕГИСТРИРОВАТЬ КОМАНДУ
-            </button>
-        </div>
-    </section>
-    
-    <!-- Live Ticker -->
-    <div class="ticker-container">
-        <div class="ticker-content">
-            <span class="ticker-item">🔴 РЕГИСТРАЦИЯ ОТКРЫТА</span>
-            <span class="ticker-separator">•</span>
-            <span class="ticker-item">ОСТАЛОСЬ 12 МЕСТ</span>
-            <span class="ticker-separator">•</span>
-            <span class="ticker-item">🏆 ПРИЗОВОЙ ФОНД 1.000.000₽</span>
-            <span class="ticker-separator">•</span>
-            <span class="ticker-item">⏰ ДО НАЧАЛА 128 ДНЕЙ</span>
-            <span class="ticker-separator">•</span>
-            <!-- Duplicate for seamless loop -->
-            <span class="ticker-item">🔴 РЕГИСТРАЦИЯ ОТКРЫТА</span>
-            <span class="ticker-separator">•</span>
-            <span class="ticker-item">ОСТАЛОСЬ 12 МЕСТ</span>
-            <span class="ticker-separator">•</span>
-            <span class="ticker-item">🏆 ПРИЗОВОЙ ФОНД 1.000.000₽</span>
-            <span class="ticker-separator">•</span>
-            <span class="ticker-item">⏰ ДО НАЧАЛА 128 ДНЕЙ</span>
-            <span class="ticker-separator">•</span>
         </div>
     </div>
     
-    <!-- Road of Glory Timeline -->
-    <section id="timeline" class="section-spacing bg-gradient-to-b from-gray-900 to-black">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-16 gold-glow" style="color: #d4af37;">
-                ДОРОГА СЛАВЫ
-            </h2>
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+    <div id="cursor-dot"></div>
+    
+    <!-- Navigation -->
+    <nav id="mainNav" class="glass-strong rounded-2xl p-2 flex flex-col md:flex-row gap-1">
+        <a href="#hero" class="nav-link magnetic">Главная</a>
+        <a href="#match" class="nav-link magnetic">Матч</a>
+        <a href="#bracket" class="nav-link magnetic">Сетка</a>
+        <a href="#road" class="nav-link magnetic">История</a>
+        <a href="#prize" class="nav-link magnetic">Призы</a>
+        <a href="#registration" class="nav-link magnetic text-gold">Регистрация</a>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Video -->
+        <div class="absolute inset-0 z-0">
+            <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-30">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            </video>
+            <div class="absolute inset-0 bg-gradient-to-b from-cup-dark/50 via-cup-dark/70 to-cup-dark"></div>
+        </div>
+        
+        <!-- Audio Controls -->
+        <div class="absolute top-6 left-6 z-20 glass rounded-xl p-3 flex items-center gap-3">
+            <button id="audioToggle" class="text-gold hover:text-gold-light transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            </button>
+            <div id="audioVisualizer" class="flex items-end gap-1 h-5" style="display: none;">
+                <div class="audio-bar" style="height: 8px;"></div>
+                <div class="audio-bar" style="height: 16px;"></div>
+                <div class="audio-bar" style="height: 12px;"></div>
+                <div class="audio-bar" style="height: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+            <div class="mb-4">
+                <span class="text-gold text-sm tracking-[0.3em] uppercase">Официальный сайт турнира</span>
+            </div>
+            <h1 class="hero-mask-text mb-6 reveal">РАМЕНСКОЕ</h1>
+            <p class="text-2xl md:text-4xl font-light mb-8 text-white/90 reveal" style="animation-delay: 0.2s;">
+                Любительский Кубок <span class="text-gold font-semibold">2026</span>
+            </p>
             
-            <div class="timeline-container">
-                <div class="timeline-line"></div>
+            <!-- Countdown -->
+            <div class="glass rounded-2xl p-6 md:p-8 mb-10 max-w-3xl mx-auto reveal" style="animation-delay: 0.4s;">
+                <p class="text-white/70 text-sm uppercase tracking-wider mb-4">До начала турнира</p>
+                <div class="flex justify-center gap-4 md:gap-8">
+                    <div class="countdown-item text-center">
+                        <div id="days" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Дней</div>
+                    </div>
+                    <div class="countdown-item text-center">
+                        <div id="hours" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Часов</div>
+                    </div>
+                    <div class="countdown-item text-center">
+                        <div id="minutes" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Минут</div>
+                    </div>
+                    <div class="countdown-item text-center">
+                        <div id="seconds" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Секунд</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="openRegistrationModal()" class="magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-lg hover:bg-gold-light transition-all duration-300 gold-box-glow reveal" style="animation-delay: 0.6s;">
+                Зарегистрировать команду
+            </button>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+    </section>
+    
+    <!-- Match Center Section -->
+    <section id="match" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-12 gradient-text reveal">MATCH CENTER</h2>
+            
+            <div class="glass rounded-3xl p-8 md:p-12 reveal">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div class="live-pulse"></div>
+                        <span class="text-red-500 font-bold tracking-wider">LIVE</span>
+                    </div>
+                    <span class="text-white/60 text-sm">65' • Стадион Жуковский</span>
+                </div>
                 
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-morphism rounded-xl p-8 max-w-md">
-                        <div class="text-3xl font-black mb-4 text-yellow-400">23 ИЮНЯ</div>
-                        <div class="text-xl font-bold mb-2">НАЧАЛО ТУРНИРА</div>
-                        <p class="text-gray-300">Открытие чемпионата и первые матчи группового этапа. 8 команд начинают свою битву за кубок.</p>
+                <!-- Match Info -->
+                <div class="text-center mb-10">
+                    <div class="flex items-center justify-center gap-8 md:gap-16 mb-6">
+                        <div class="text-center">
+                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center mb-3 mx-auto">
+                                <span class="text-2xl md:text-3xl font-bold text-white">FC</span>
+                            </div>
+                            <h3 class="text-lg md:text-xl font-bold">Раменское</h3>
+                        </div>
+                        
+                        <div class="text-5xl md:text-7xl font-black text-gold gold-glow">
+                            2 <span class="text-white/40">:</span> 1
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center mb-3 mx-auto">
+                                <span class="text-2xl md:text-3xl font-bold text-white">М</span>
+                            </div>
+                            <h3 class="text-lg md:text-xl font-bold">Метеор</h3>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-morphism rounded-xl p-8 max-w-md">
-                        <div class="text-3xl font-black mb-4 text-yellow-400">10 ИЮЛЯ</div>
-                        <div class="text-xl font-bold mb-2">ПЛЕЙ-ОФФ</div>
-                        <p class="text-gray-300">Четвертьфиналы и полуфиналы. Самые напряженные и драматичные матчи турнира.</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-morphism rounded-xl p-8 max-w-md">
-                        <div class="text-3xl font-black mb-4 text-yellow-400">20 ИЮЛЯ</div>
-                        <div class="text-xl font-bold mb-2">ГРАНД-ФИНАЛ</div>
-                        <p class="text-gray-300">Великая битва двух лучших команд. Коронация чемпиона и торжественная церемония награждения.</p>
+                <!-- Timeline -->
+                <div class="relative">
+                    <div class="h-1 bg-white/10 rounded-full mb-6"></div>
+                    <div class="flex justify-between items-center relative">
+                        <div class="timeline-event">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">0'</div>
+                        </div>
+                        <div class="timeline-event">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">15'</div>
+                        </div>
+                        <div class="timeline-event">
+                            <div class="w-10 h-10 rounded-full bg-yellow-500/20 border border-yellow-500 flex items-center justify-center text-sm text-yellow-500">🟨</div>
+                            <div class="event-tooltip">
+                                <p class="font-bold">Желтая карточка</p>
+                                <p class="text-sm text-white/70">Петров (Метеор) • 24'</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event">
+                            <div class="w-12 h-12 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center text-lg">⚽</div>
+                            <div class="event-tooltip">
+                                <p class="font-bold text-gold">ГОЛ!</p>
+                                <p class="text-sm text-white/70">Иванов (Раменское) • 45'</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">60'</div>
+                        </div>
+                        <div class="timeline-event">
+                            <div class="w-10 h-10 rounded-full bg-red-500/20 border border-red-500 flex items-center justify-center text-sm text-red-500">🟥</div>
+                            <div class="event-tooltip">
+                                <p class="font-bold text-red-500">Красная карточка</p>
+                                <p class="text-sm text-white/70">Сидоров (Метеор) • 78'</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">90'</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     
-    <!-- Live Match Center -->
-    <section class="section-spacing bg-gradient-to-b from-black to-gray-900">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="bento-item glass-morphism rounded-xl p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-2xl font-bold text-yellow-400">MATCH CENTER</h3>
-                    <div class="live-indicator">
-                        <div class="live-dot"></div>
-                        <span>LIVE</span>
-                    </div>
-                </div>
-                
-                <!-- Current Match -->
-                <div class="text-center mb-8">
-                    <h4 class="text-xl font-bold mb-4">FC Ramenskoe vs. Meteor</h4>
-                    <div class="text-5xl font-black mb-4">
-                        <span class="text-yellow-400">2</span> - <span>1</span>
-                    </div>
-                    <div class="text-gray-400">65' • Стадион "Раменское"</div>
-                </div>
-                
-                <!-- Match Timeline -->
-                <div class="match-timeline">
-                    <!-- Minutes -->
-                    <div class="timeline-minute" data-minute="0">0'</div>
-                    <div class="timeline-minute" data-minute="15">15'</div>
-                    <div class="timeline-minute" data-minute="24">24'</div>
-                    <div class="timeline-minute event-goal" data-minute="45" style="position: relative;">
-                        ⚽
-                        <div class="event-card">
-                            <strong>ГОЛ!</strong><br>
-                            Иванов • 45'<br>
-                            FC Ramenskoe 2-1
-                        </div>
-                    </div>
-                    <div class="timeline-minute" data-minute="60">60'</div>
-                    <div class="timeline-minute" data-minute="78">78'</div>
-                    <div class="timeline-minute event-foul" data-minute="90" style="position: relative;">
-                        🟨
-                        <div class="event-card">
-                            <strong>ФОЛ!</strong><br>
-                            Петров • 78'<br>
-                            Желтая карточка
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Team Profiles with Radar Chart -->
-    <div class="preloader-overlay" id="preloader">
-        <div class="preloader-split">
-            <div class="preloader-split-top" id="preloaderTop"></div>
-            <div class="preloader-split-bottom" id="preloaderBottom"></div>
-        </div>
-        <svg width="400" height="400" viewBox="0 0 400 400" style="position: absolute;">
-            <!-- Animated Football Pitch -->
-            <path d="M50 100 L350 100 L350 300 L50 300 Z" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="10 5" opacity="0.8">
-                <animate attributeName="stroke-dashoffset" values="0;15" dur="2s" repeatCount="indefinite"/>
-            </path>
-            <path d="M100 150 Q200 50 300 150" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="8 4" opacity="0.6">
-                <animate attributeName="stroke-dashoffset" values="0;12" dur="1.5s" repeatCount="indefinite"/>
-            </path>
-            <path d="M150 200 Q250 250 350 200" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="6 3" opacity="0.4">
-                <animate attributeName="stroke-dashoffset" values="0;9" dur="1s" repeatCount="indefinite"/>
-            </path>
+    <!-- Interactive Bracket Section -->
+    <section id="bracket" class="py-20 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/20">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">ТУРНИРНАЯ СЕТКА</h2>
+            <p class="text-center text-white/60 mb-12 reveal">Нажмите на команду для просмотра статистики</p>
             
-            <!-- Audio Controls -->
-            <div class="absolute top-8 right-8 z-20 glass-morphism rounded-lg p-4">
-                <div class="flex items-center gap-3">
-                    <button id="audioToggle" class="text-yellow-400 hover:text-yellow-300 transition">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"/>
-            
-            <!-- Swiss Grid Layout -->
-            <div class="swiss-grid">
-                <!-- Left Column -->
-                <div class="swiss-column">
-                    <!-- Draw Module -->
-                    <div class="bento-item glass-morphism rounded-xl p-8 tilt-card">
-                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ЖЕРЕБЬЕВКА</h3>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div class="text-center">
-                                <div class="text-3xl font-black mb-4 text-yellow-400">КОРЗИНА 1</div>
-                                <div class="space-y-3">
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Стадион Школа 21</div>
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Стадион Жуковский</div>
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">ТПУСТЫМИ</div>
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">ОАЗИС</div>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-3xl font-black mb-4 text-yellow-400">КОРЗИНА 2</div>
-                                <div class="space-y-3">
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда А</div>
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Б</div>
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда В</div>
-                                    <div class="glass-morphism rounded-lg p-3 font-semibold">Команда Г</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="glass rounded-3xl p-8 overflow-x-auto reveal">
+                <svg viewBox="0 0 800 400" class="w-full min-w-[600px]" style="max-height: 400px;">
+                    <!-- Quarter Finals -->
+                    <g class="quarter-finals">
+                        <rect x="20" y="40" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('ramenskoe')"/>
+                        <text x="80" y="65" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Раменское</text>
+                        
+                        <rect x="20" y="100" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('meteor')"/>
+                        <text x="80" y="125" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Метеор</text>
+                        
+                        <rect x="20" y="180" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('victory')"/>
+                        <text x="80" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Victory</text>
+                        
+                        <rect x="20" y="240" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('storm')"/>
+                        <text x="80" y="265" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Storm</text>
+                    </g>
                     
-                    <!-- Prize Pool Section -->
-                    <div class="bento-item glass-morphism rounded-xl p-8 text-center tilt-card">
-                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ОБЩИЙ ПРИЗОВОЙ ФОНД</h3>
-                        <div class="prize-amount mb-8">1.000.000 ₽</div>
-                        <button onclick="openSponsorshipModal()" class="sponsorship-cta">
-                            СТАТЬ ПАРТНЕРОМ ТУРНИРА
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
+                    <!-- Semi Finals -->
+                    <g class="semi-finals">
+                        <rect x="280" y="70" width="120" height="40" rx="8" class="bracket-team"/>
+                        <text x="340" y="95" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Полуфинал 1</text>
+                        
+                        <rect x="280" y="210" width="120" height="40" rx="8" class="bracket-team"/>
+                        <text x="340" y="235" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Полуфинал 2</text>
+                    </g>
+                    
+                    <!-- Final -->
+                    <g class="final">
+                        <rect x="540" y="140" width="120" height="40" rx="8" class="bracket-team"/>
+                        <text x="600" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">ФИНАЛ</text>
+                    </g>
+                    
+                    <!-- Connection Lines -->
+                    <path d="M140 60 L200 60 L200 90 L280 90" class="bracket-line"/>
+                    <path d="M140 120 L200 120 L200 90" class="bracket-line"/>
+                    <path d="M140 200 L200 200 L200 230 L280 230" class="bracket-line"/>
+                    <path d="M140 260 L200 260 L200 230" class="bracket-line"/>
+                    <path d="M400 90 L470 90 L470 160 L540 160" class="bracket-line"/>
+                    <path d="M400 230 L470 230 L470 160" class="bracket-line"/>
+                    
+                    <!-- Champion Trophy -->
+                    <g transform="translate(700, 130)">
+                        <circle cx="40" cy="30" r="30" fill="rgba(212, 175, 55, 0.2)" stroke="#d4af37" stroke-width="2"/>
+                        <text x="40" y="35" text-anchor="middle" fill="#d4af37" font-size="20">🏆</text>
+                    </g>
+                </svg>
+            </div>
+            
+            <!-- Draw Pots -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 reveal">
+                <div class="glass rounded-2xl p-6 text-center">
+                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 1</h4>
+                    <div class="space-y-2">
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">Стадион Школа 21</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">Стадион Жуковский</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">ТПУСТЫМИ</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">ОАЗИС</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center">
+                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 2</h4>
+                    <div class="space-y-2">
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Раменское</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Метеор</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Victory</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Storm</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center">
+                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 3</h4>
+                    <div class="space-y-2">
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Thunder</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Legion</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Spartak</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Dynamo</div>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-2xl p-6 text-center">
+                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 4</h4>
+                    <div class="space-y-2">
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Zenit</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC CSKA</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Lokomotiv</div>
+                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Torpedo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Road of Glory Timeline Section -->
+    <section id="road" class="py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">ДОРОГА СЛАВЫ</h2>
+            <p class="text-center text-white/60 mb-16 reveal">История турнира от первого матча до сегодняшнего дня</p>
+            
+            <div class="road-timeline">
+                <!-- Timeline Node 1 -->
+                <div class="timeline-node mb-12 md:mb-20">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2 md:text-right">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2019</div>
+                                <h3 class="text-xl font-bold mb-2">Основание турнира</h3>
+                                <p class="text-white/70 text-sm">Первый Раменский Кубок собрал 8 команд и стал началом большой футбольной истории.</p>
+                            </div>
+                        </div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2"></div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Node 2 -->
+                <div class="timeline-node mb-12 md:mb-20">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2"></div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2 md:text-left">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2021</div>
+                                <h3 class="text-xl font-bold mb-2">Расширение формата</h3>
+                                <p class="text-white/70 text-sm">Рост до 16 команд и введение плей-офф стадии с четвертьфиналами.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Node 3 -->
+                <div class="timeline-node mb-12 md:mb-20">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2 md:text-right">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2023</div>
+                                <h3 class="text-xl font-bold mb-2">Новый стадион</h3>
+                                <p class="text-white/70 text-sm">Открытие стадиона Жуковский с современным покрытием и освещением.</p>
+                            </div>
+                        </div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2"></div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Node 4 -->
+                <div class="timeline-node">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2"></div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2 md:text-left">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2026</div>
+                                <h3 class="text-xl font-bold mb-2">Рекордный призовой фонд</h3>
+                                <p class="text-white/70 text-sm">1 000 000₽ — самый большой призовой фонд в истории любительского футбола региона.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Prize Pool Section -->
+    <section id="prize" class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-12 gradient-text reveal">ПРИЗОВОЙ ФОНД</h2>
+            
+            <div class="glass rounded-3xl p-8 md:p-16 text-center mb-12 reveal">
+                <div class="prize-shimmer text-6xl md:text-8xl font-black mb-6">1 000 000₽</div>
+                <p class="text-white/70 text-lg mb-8">Общий призовой фонд турнира 2026</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="glass rounded-2xl p-6">
+                        <div class="text-5xl mb-2">🥇</div>
+                        <div class="text-3xl font-black text-gold mb-2">500 000₽</div>
+                        <div class="text-white/60">1 место</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6">
+                        <div class="text-5xl mb-2">🥈</div>
+                        <div class="text-3xl font-black text-gray-300 mb-2">300 000₽</div>
+                        <div class="text-white/60">2 место</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6">
+                        <div class="text-5xl mb-2">🥉</div>
+                        <div class="text-3xl font-black text-orange-400 mb-2">200 000₽</div>
+                        <div class="text-white/60">3 место</div>
+                    </div>
+                </div>
+                
+                <button onclick="openSponsorshipModal()" class="magnetic bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 border border-gold/30">
+                    Стать спонсором турнира
+                </button>
+            </div>
+            
+            <!-- Fan Voting -->
+            <div class="glass rounded-3xl p-8 reveal">
+                <h3 class="text-2xl font-bold text-center mb-8">ГОЛОСОВАНИЕ ЗА ЧЕМПИОНА</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-3">FC Раменское</div>
+                        <button onclick="vote('ramenskoe')" class="w-full bg-gold/20 hover:bg-gold/30 text-gold py-3 rounded-lg font-semibold transition-all mb-3">
+                            Голосовать
                         </button>
-                    </div>
-                </div>
-                
-                <!-- Right Column -->
-                <div class="swiss-column">
-                    <!-- Interactive Bracket -->
-                    <div class="bento-item glass-morphism rounded-xl p-8 tilt-card">
-                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ТУРНИРНАЯ СЕТКА</h3>
-                        <svg viewBox="0 0 400 300" class="w-full h-64">
-                            <!-- Quarter Finals -->
-                            <rect x="20" y="20" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                            <rect x="20" y="70" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                            <rect x="20" y="120" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                            <rect x="20" y="170" width="60" height="30" fill="#d4af37" opacity="0.3" rx="4"/>
-                            
-                            <!-- Semi Finals -->
-                            <rect x="140" y="45" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
-                            <rect x="140" y="145" width="60" height="30" fill="#d4af37" opacity="0.5" rx="4"/>
-                            
-                            <!-- Final -->
-                            <rect x="260" y="95" width="60" height="30" fill="#d4af37" opacity="0.8" rx="4"/>
-                            
-                            <!-- Connectors -->
-                            <path class="bracket-line" d="M 80 35 L 140 60"/>
-                            <path class="bracket-line" d="M 80 85 L 140 60"/>
-                            <path class="bracket-line" d="M 80 135 L 140 160"/>
-                            <path class="bracket-line" d="M 80 185 L 140 160"/>
-                            <path class="bracket-line" d="M 200 60 L 260 110"/>
-                            <path class="bracket-line" d="M 200 160 L 260 110"/>
-                        </svg>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div id="ramenskoe-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div id="ramenskoe-percent" class="text-sm text-white/60 mt-1">0%</div>
                     </div>
                     
-                    <!-- Prize Podium -->
-                    <div class="bento-item glass-morphism rounded-xl p-8 tilt-card">
-                        <h3 class="text-2xl font-bold mb-6 text-yellow-400">ПРИЗОВЫЕ МЕСТА</h3>
-                        <div class="flex justify-center items-end gap-6">
-                            <!-- Silver -->
-                            <div class="podium-block text-center">
-                                <div class="text-5xl font-black mb-2" style="color: #C0C0C0;">02</div>
-                                <div class="w-16 h-24 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg flex items-center justify-center">
-                                    <span class="text-xl font-bold text-gray-800">2</span>
-                                </div>
-                                <div class="mt-2 text-sm font-semibold">СЕРЕБРО</div>
-                            </div>
-                            
-                            <!-- Gold -->
-                            <div class="podium-block text-center">
-                                <div class="text-5xl font-black mb-2 gold-glow" style="color: #d4af37;">01</div>
-                                <div class="w-16 h-32 bg-gradient-to-t from-yellow-600 to-yellow-400 rounded-t-lg flex items-center justify-center">
-                                    <span class="text-2xl font-bold text-yellow-900">1</span>
-                                </div>
-                                <div class="mt-2 text-sm font-semibold">ЗОЛОТО</div>
-                            </div>
-                            
-                            <!-- Bronze -->
-                            <div class="podium-block text-center">
-                                <div class="text-5xl font-black mb-2" style="color: #CD7F32;">03</div>
-                                <div class="w-16 h-20 bg-gradient-to-t from-orange-700 to-orange-500 rounded-t-lg flex items-center justify-center">
-                                    <span class="text-xl font-bold text-orange-100">3</span>
-                                </div>
-                                <div class="mt-2 text-sm font-semibold">БРОНЗА</div>
-                            </div>
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-3">FC Метеор</div>
+                        <button onclick="vote('meteor')" class="w-full bg-gold/20 hover:bg-gold/30 text-gold py-3 rounded-lg font-semibold transition-all mb-3">
+                            Голосовать
+                        </button>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div id="meteor-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
                         </div>
+                        <div id="meteor-percent" class="text-sm text-white/60 mt-1">0%</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-3">FC Victory</div>
+                        <button onclick="vote('victory')" class="w-full bg-gold/20 hover:bg-gold/30 text-gold py-3 rounded-lg font-semibold transition-all mb-3">
+                            Голосовать
+                        </button>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div id="victory-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div id="victory-percent" class="text-sm text-white/60 mt-1">0%</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     
-    <!-- Sponsorship Modal -->
-    <div id="sponsorshipModal" class="fixed inset-0 z-50 hidden">
-        <div class="modal-backdrop absolute inset-0" onclick="closeSponsorshipModal()"></div>
-        <div class="relative flex items-center justify-center min-h-screen p-4">
-            <div class="sponsorship-modal max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-yellow-400">СТАНЬТЕ ПАРТНЕРОМ ТУРНИРА</h2>
-                    <button onclick="closeSponsorshipModal()" class="text-gray-400 hover:text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="mb-8">
-                    <p class="text-lg text-gray-300 mb-6">Партнерство с Раменским Любительским Кубком — это уникальная возможность для вашего бренда получить максимальную видимость среди целевой аудитории.</p>
+    <!-- Registration Section -->
+    <section id="registration" class="py-20 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/20">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-black mb-6 gradient-text reveal">РЕГИСТРАЦИЯ</h2>
+            <p class="text-white/70 text-lg mb-10 reveal">Присоединяйтесь к лучшему любительскому турниру региона</p>
+            
+            <div class="glass rounded-3xl p-8 md:p-12 reveal">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h3 class="font-bold mb-2">16 команд</h3>
+                        <p class="text-white/60 text-sm">Участвуют лучшие любительские коллективы</p>
+                    </div>
                     
-                    <h3 class="text-xl font-bold mb-4 text-yellow-400">Что вы получаете:</h3>
-                    <ul class="sponsorship-benefits">
-                        <li class="sponsorship-benefit">
-                            <div class="sponsorship-icon">📺</div>
-                            <div>
-                                <strong>Media Coverage:</strong> Логотип на всех трансляциях и в соцсетях турнира
-                            </div>
-                        </li>
-                        <li class="sponsorship-benefit">
-                            <div class="sponsorship-icon">🏟️</div>
-                            <div>
-                                <strong>Field Presence:</strong> Размещение баннеров на стадионе в Раменском
-                            </div>
-                        </li>
-                        <li class="sponsorship-benefit">
-                            <div class="sponsorship-icon">🏆</div>
-                            <div>
-                                <strong>Awarding:</strong> Участие в торжественной церемонии награждения победителей
-                            </div>
-                        </li>
-                        <li class="sponsorship-benefit">
-                            <div class="sponsorship-icon">👥</div>
-                            <div>
-                                <strong>Direct Access:</strong> Прямой контакт с аудиторией более 500+ игроков и болельщиков
-                            </div>
-                        </li>
-                    </ul>
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <h3 class="font-bold mb-2">4 недели</h3>
+                        <p class="text-white/60 text-sm">Интенсивный турнир с июня по июль</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        </div>
+                        <h3 class="font-bold mb-2">1 000 000₽</h3>
+                        <p class="text-white/60 text-sm">Рекордный призовой фонд</p>
+                    </div>
                 </div>
                 
-                <div class="text-center">
-                    <a href="https://t.me/your_username" target="_blank" class="sponsorship-cta">
-                        Связаться в Telegram
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.56l-1.68 7.92c-.12.54-.54.67-.97.42l-2.67-1.98-1.29 1.23c-.14.14-.26.26-.52.26l.18-2.79 4.95-4.48c.22-.19-.05-.3-.34-.11l-6.12 3.86-2.64-.83c-.57-.18-.58-.57.12-.84l10.32-3.97c.47-.17.88.11.73.84z"/>
-                        </svg>
+                <button onclick="openRegistrationModal()" class="magnetic bg-gold text-cup-dark px-10 py-5 rounded-full font-bold text-xl hover:bg-gold-light transition-all duration-300 gold-box-glow">
+                    Зарегистрировать команду
+                </button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-white/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="text-center md:text-left">
+                    <h3 class="text-2xl font-black text-gold mb-2">РАМЕНСКИЙ КУБОК</h3>
+                    <p class="text-white/60 text-sm">Любительский футбольный турнир с 2019 года</p>
+                </div>
+                
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-gold/20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                     </a>
-                    <p class="text-sm text-gray-400 mt-3">Наш менеджер ответит в течение 15 минут</p>
+                    <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-gold/20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-gold/20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                    </a>
+                </div>
+                
+                <div class="text-center md:text-right text-white/60 text-sm">
+                    <p>© 2026 Раменский Кубок</p>
+                    <p>Все права защищены</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Team Stats Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeTeamDrawer()"></div>
+    <div class="side-drawer" id="teamDrawer">
+        <div class="p-8">
+            <div class="flex items-center justify-between mb-8">
+                <h3 id="drawerTitle" class="text-2xl font-bold text-gold">СТАТИСТИКА КОМАНДЫ</h3>
+                <button onclick="closeTeamDrawer()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <!-- Radar Chart -->
+            <div class="mb-8">
+                <svg viewBox="0 0 300 300" class="w-full">
+                    <g class="radar-grid">
+                        <polygon points="150,30 270,90 270,210 150,270 30,210 30,90"/>
+                        <polygon points="150,60 240,100 240,200 150,240 60,200 60,100"/>
+                        <polygon points="150,90 210,120 210,180 150,210 90,180 90,120"/>
+                        <line x1="150" y1="150" x2="150" y2="30"/>
+                        <line x1="150" y1="150" x2="270" y2="90"/>
+                        <line x1="150" y1="150" x2="270" y2="210"/>
+                        <line x1="150" y1="150" x2="150" y2="270"/>
+                        <line x1="150" y1="150" x2="30" y2="210"/>
+                        <line x1="150" y1="150" x2="30" y2="90"/>
+                    </g>
+                    <polygon id="radarData" class="radar-polygon" points="150,90 210,120 210,180 150,210 90,180 90,120"/>
+                    <text x="150" y="20" text-anchor="middle" fill="#d4af37" font-size="12" font-weight="bold">АТАКА</text>
+                    <text x="280" y="85" text-anchor="middle" fill="white" font-size="10">ЗАЩИТА</text>
+                    <text x="280" y="225" text-anchor="middle" fill="white" font-size="10">СКОРОСТЬ</text>
+                    <text x="150" y="290" text-anchor="middle" fill="white" font-size="10">ТАКТИКА</text>
+                    <text x="20" y="225" text-anchor="middle" fill="white" font-size="10">ФИЗИКА</text>
+                    <text x="20" y="85" text-anchor="middle" fill="white" font-size="10">ТЕХНИКА</text>
+                </svg>
+            </div>
+            
+            <!-- Team Info -->
+            <div id="teamInfo" class="space-y-4">
+                <div class="glass rounded-xl p-4">
+                    <div class="text-white/60 text-sm mb-1">Сыграно матчей</div>
+                    <div class="text-2xl font-bold">12</div>
+                </div>
+                <div class="glass rounded-xl p-4">
+                    <div class="text-white/60 text-sm mb-1">Победы</div>
+                    <div class="text-2xl font-bold text-green-400">8</div>
+                </div>
+                <div class="glass rounded-xl p-4">
+                    <div class="text-white/60 text-sm mb-1">Забито голов</div>
+                    <div class="text-2xl font-bold text-gold">24</div>
                 </div>
             </div>
         </div>
     </div>
     
     <!-- Registration Modal -->
-    <div id="registrationModal" class="fixed inset-0 z-50 hidden">
-        <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>
-        <div class="relative flex items-center justify-center min-h-screen p-4">
-            <div class="glass-morphism rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                <!-- Modal Header -->
-                <div class="p-6 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-yellow-400">РЕГИСТРАЦИЯ КОМАНДЫ</h2>
-                        <button onclick="closeModal()" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
+    <div class="modal-backdrop" id="registrationBackdrop" onclick="closeRegistrationModal()"></div>
+    <div class="modal-content glass" id="registrationModal">
+        <div class="p-8">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold text-gold">РЕГИСТРАЦИЯ КОМАНДЫ</h3>
+                <button onclick="closeRegistrationModal()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <!-- Step Indicators -->
+            <div class="flex items-center justify-center gap-4 mb-8">
+                <div class="step-dot active" data-step="1">1</div>
+                <div class="h-1 w-8 bg-white/10 rounded-full"></div>
+                <div class="step-dot" data-step="2">2</div>
+                <div class="h-1 w-8 bg-white/10 rounded-full"></div>
+                <div class="step-dot" data-step="3">3</div>
+                <div class="h-1 w-8 bg-white/10 rounded-full"></div>
+                <div class="step-dot" data-step="4">4</div>
+            </div>
+            
+            <!-- Step 1: Team Info -->
+            <div class="step-panel active" data-panel="1">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-white/70 text-sm mb-2">Название команды</label>
+                        <input type="text" id="teamName" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="Введите название команды">
                     </div>
-                    
-                    <!-- Step Indicators -->
-                    <div class="flex gap-2 mt-4">
-                        <div class="step-indicator active w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
-                        <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center font-bold">2</div>
-                        <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center font-bold">3</div>
-                        <div class="step-indicator w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center font-bold">4</div>
+                    <div>
+                        <label class="block text-white/70 text-sm mb-2">Капитан</label>
+                        <input type="text" id="captainName" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="ФИО капитана">
+                    </div>
+                    <div>
+                        <label class="block text-white/70 text-sm mb-2">Телефон</label>
+                        <input type="tel" id="phone" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="+7 (999) 999-99-99">
                     </div>
                 </div>
-                
-                <!-- Modal Content -->
-                <div class="p-6">
-                    <!-- Step 1: Team Data -->
-                    <div id="step1" class="step-content">
-                        <h3 class="text-xl font-bold mb-6">Данные команды</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Название команды</label>
-                                <input type="text" id="teamName" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="Введите название команды">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Имя капитана</label>
-                                <input type="text" id="captainName" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="Введите имя капитана">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Телефон капитана</label>
-                                <input type="tel" id="phone" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="+7 (___) ___-__-__">
-                            </div>
-                        </div>
-                        <button onclick="nextStep()" class="btn-primary w-full py-3 rounded-lg mt-6 font-bold">
-                            ДАЛЕЕ
-                        </button>
+                <button onclick="nextStep()" class="w-full bg-gold text-cup-dark py-4 rounded-lg font-bold mt-6 hover:bg-gold-light transition-all">
+                    Продолжить
+                </button>
+            </div>
+            
+            <!-- Step 2: Players -->
+            <div class="step-panel" data-panel="2">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-white/70 text-sm mb-2">Количество игроков</label>
+                        <select id="playersCount" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all">
+                            <option value="11">11 игроков</option>
+                            <option value="12">12 игроков</option>
+                            <option value="13">13 игроков</option>
+                            <option value="14">14 игроков</option>
+                            <option value="15">15 игроков</option>
+                        </select>
                     </div>
-                    
-                    <!-- Step 2: File Upload -->
-                    <div id="step2" class="step-content hidden">
-                        <h3 class="text-xl font-bold mb-6">Загрузка состава</h3>
-                        <div id="dropZone" class="drag-zone rounded-lg p-8 text-center cursor-pointer">
-                            <svg class="w-12 h-12 mx-auto mb-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                            </svg>
-                            <p class="text-lg mb-2">Перетащите файл сюда или нажмите для выбора</p>
-                            <p class="text-sm text-gray-400">Поддерживаемые форматы: PDF, DOC, DOCX</p>
-                            <p id="fileSelected" class="text-green-400 mt-4 hidden">Файл выбран: <span id="fileName"></span></p>
-                        </div>
-                        <input type="file" id="fileInput" class="hidden" accept=".pdf,.doc,.docx">
-                        <div class="flex gap-4 mt-6">
-                            <button onclick="prevStep()" class="flex-1 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 font-bold transition">
-                                НАЗАД
-                            </button>
-                            <button onclick="nextStep()" class="btn-primary flex-1 py-3 rounded-lg font-bold">
-                                ДАЛЕЕ
-                            </button>
+                    <div>
+                        <label class="block text-white/70 text-sm mb-2">Загрузить состав (PDF)</label>
+                        <div class="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-gold/50 transition-all cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-white/40"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <p class="text-white/60 text-sm">Перетащите файл или нажмите для загрузки</p>
                         </div>
                     </div>
-                    
-                    <!-- Step 3: Payment -->
-                    <div id="step3" class="step-content hidden">
-                        <h3 class="text-xl font-bold mb-6">Оплата взноса</h3>
-                        <div class="glass-morphism rounded-lg p-6 mb-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-lg">Взнос за участие:</span>
-                                <span class="text-2xl font-bold text-yellow-400">5,000 ₽</span>
-                            </div>
-                            <div class="text-sm text-gray-400 mb-4">Тестовая карта для оплаты: 0000 0000 0000 0000</div>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button onclick="prevStep()" class="flex-1 bg-white/10 text-white py-4 rounded-lg font-bold hover:bg-white/20 transition-all">
+                        Назад
+                    </button>
+                    <button onclick="nextStep()" class="flex-1 bg-gold text-cup-dark py-4 rounded-lg font-bold hover:bg-gold-light transition-all">
+                        Продолжить
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Payment -->
+            <div class="step-panel" data-panel="3">
+                <div class="space-y-4">
+                    <div class="glass rounded-xl p-4 mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-white/60">Взнос за участие</span>
+                            <span class="font-bold">15 000₽</span>
                         </div>
-                        
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Номер карты</label>
-                                <input type="text" id="cardNumber" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="0000 0000 0000 0000" maxlength="19">
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">Срок действия</label>
-                                    <input type="text" id="cardExpiry" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="MM/YY" maxlength="5">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">CVV</label>
-                                    <input type="text" id="cardCVV" class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-yellow-400 focus:outline-none" placeholder="***" maxlength="3">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-2">Получатель</label>
-                                <input type="text" value="RCL Committee" readonly class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700">
-                            </div>
+                        <div class="text-xs text-white/40">Включает страхование, аренду поля, судейство</div>
+                    </div>
+                    <div>
+                        <label class="block text-white/70 text-sm mb-2">Номер карты</label>
+                        <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="0000 0000 0000 0000">
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <label class="block text-white/70 text-sm mb-2">Срок действия</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="MM/YY">
                         </div>
-                        
-                        <div class="flex gap-4 mt-6">
-                            <button onclick="prevStep()" class="flex-1 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 font-bold transition">
-                                НАЗАД
-                            </button>
-                            <button onclick="nextStep()" class="btn-primary flex-1 py-3 rounded-lg font-bold">
-                                ОПЛАТИТЬ
-                            </button>
+                        <div class="flex-1">
+                            <label class="block text-white/70 text-sm mb-2">CVC</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="123">
                         </div>
                     </div>
-                    
-                    <!-- Step 4: Success -->
-                    <div id="step4" class="step-content hidden">
-                        <div class="text-center">
-                            <div class="text-6xl mb-6">🎉</div>
-                            <h3 class="text-2xl font-bold mb-4 text-yellow-400">РЕГИСТРАЦИЯ УСПЕШНА!</h3>
-                            <p class="text-gray-300 mb-8">Ваша команда успешно зарегистрирована на турнир</p>
-                            
-                            <div class="glass-morphism rounded-lg p-6 text-left mb-6">
-                                <h4 class="text-lg font-bold mb-4 text-yellow-400">Правила турнира:</h4>
-                                <div class="space-y-3">
-                                    <div class="flex items-start gap-3">
-                                        <span class="text-yellow-400">1.</span>
-                                        <div>
-                                            <strong>Дисциплина:</strong> Соблюдение правил игры и спортивного поведения
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start gap-3">
-                                        <span class="text-yellow-400">2.</span>
-                                        <div>
-                                            <strong>Снаряжение:</strong> Обязательное наличие футбольной формы и бутс
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start gap-3">
-                                        <span class="text-yellow-400">3.</span>
-                                        <div>
-                                            <strong>Состав:</strong> Максимум 16 игроков в заявке команды
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start gap-3">
-                                        <span class="text-yellow-400">4.</span>
-                                        <div>
-                                            <strong>Уважение:</strong> Уважительное отношение к соперникам и судьям
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <button onclick="closeModal()" class="btn-primary px-8 py-3 rounded-lg font-bold">
-                                ЗАКРЫТЬ
-                            </button>
-                        </div>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button onclick="prevStep()" class="flex-1 bg-white/10 text-white py-4 rounded-lg font-bold hover:bg-white/20 transition-all">
+                        Назад
+                    </button>
+                    <button onclick="nextStep()" class="flex-1 bg-gold text-cup-dark py-4 rounded-lg font-bold hover:bg-gold-light transition-all">
+                        Оплатить
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Success -->
+            <div class="step-panel" data-panel="4">
+                <div class="text-center py-8">
+                    <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     </div>
+                    <h4 class="text-2xl font-bold mb-2">Регистрация завершена!</h4>
+                    <p class="text-white/70 mb-6">Ваша команда успешно зарегистрирована на турнир. Мы свяжемся с вами для подтверждения.</p>
+                    <button onclick="closeRegistrationModal()" class="bg-gold text-cup-dark px-8 py-3 rounded-lg font-bold hover:bg-gold-light transition-all">
+                        Отлично!
+                    </button>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- Sponsorship Modal -->
+    <div class="modal-backdrop" id="sponsorshipBackdrop" onclick="closeSponsorshipModal()"></div>
+    <div class="modal-content glass" id="sponsorshipModal">
+        <div class="p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gold">СТАТЬ СПОНСОРОМ</h3>
+                <button onclick="closeSponsorshipModal()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <p class="text-white/70 mb-6">Партнерство с Раменским Кубком — это уникальная возможность для вашего бренда получить максимальную видимость.</p>
+            
+            <div class="space-y-4 mb-8">
+                <div class="glass rounded-xl p-4 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-gold">📺</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Медиа-покрытие</h4>
+                        <p class="text-white/60 text-sm">Логотип на всех трансляциях и в соцсетях</p>
+                    </div>
+                </div>
+                <div class="glass rounded-xl p-4 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-gold">🏟️</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Размещение на стадионе</h4>
+                        <p class="text-white/60 text-sm">Баннеры и рекламные конструкции</p>
+                    </div>
+                </div>
+                <div class="glass rounded-xl p-4 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-gold">🏆</div>
+                    <div>
+                        <h4 class="font-bold mb-1">Участие в награждении</h4>
+                        <p class="text-white/60 text-sm">Представительство на церемонии</p>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="https://t.me/ramenskoe_cup" target="_blank" class="block w-full bg-gold text-cup-dark text-center py-4 rounded-lg font-bold hover:bg-gold-light transition-all">
+                Связаться в Telegram
+            </a>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
     <script>
-        // State Management
-        const state = {
-            currentStep: 1,
-            audioPlaying: false,
-            registrationData: {
-                teamName: '',
-                captainName: '',
-                phone: '',
-                file: null,
-                payment: {
-                    cardNumber: '',
-                    expiry: '',
-                    cvv: ''
-                }
-            }
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Current step for registration modal
+        let currentStep = 1;
+        
+        // Voting data
+        const votes = {
+            ramenskoe: 0,
+            meteor: 0,
+            victory: 0
         };
+        let totalVotes = 0;
+        
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 2500);
+        });
+        
+        // Custom Cursor (desktop only)
+        if (!window.matchMedia('(pointer: coarse)').matches) {
+            const cursor = document.getElementById('cursor');
+            const cursorDot = document.getElementById('cursor-dot');
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            });
+            
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.1;
+                cursorY += (mouseY - cursorY) * 0.1;
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+            
+            // Hover effect
+            const hoverElements = document.querySelectorAll('a, button, .magnetic');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+            
+            // Magnetic effect
+            const magneticElements = document.querySelectorAll('.magnetic');
+            magneticElements.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+                });
+                el.addEventListener('mouseleave', () => {
+                    el.style.transform = 'translate(0, 0)';
+                });
+            });
+        }
         
         // Countdown Timer
         function updateCountdown() {
             const targetDate = new Date('2026-06-23T14:26:00');
             const now = new Date();
-            const difference = targetDate - now;
+            const diff = targetDate - now;
             
-            if (difference > 0) {
-                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
                 
                 document.getElementById('days').textContent = String(days).padStart(2, '0');
                 document.getElementById('hours').textContent = String(hours).padStart(2, '0');
@@ -1398,939 +1364,149 @@
                 document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
             }
         }
-        
         setInterval(updateCountdown, 1000);
         updateCountdown();
         
-        // Audio Controls
+        // Audio Toggle
         const audioToggle = document.getElementById('audioToggle');
         const audioVisualizer = document.getElementById('audioVisualizer');
+        let audioPlaying = false;
         
-        audioToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            state.audioPlaying = !state.audioPlaying;
-            
-            if (state.audioPlaying) {
-                audioVisualizer.style.display = 'flex';
-                audioToggle.classList.add('text-yellow-300');
-                audioToggle.classList.remove('text-yellow-400');
-                // Audio would play here
-                console.log('Audio started');
-            } else {
-                audioVisualizer.style.display = 'none';
-                audioToggle.classList.add('text-yellow-400');
-                audioToggle.classList.remove('text-yellow-300');
-                // Audio would pause here
-                console.log('Audio paused');
-            }
+        audioToggle.addEventListener('click', () => {
+            audioPlaying = !audioPlaying;
+            audioVisualizer.style.display = audioPlaying ? 'flex' : 'none';
+            audioToggle.innerHTML = audioPlaying 
+                ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
+                : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
         });
         
-        // Modal Controls
-        document.getElementById('openRegistration').addEventListener('click', function() {
-            document.getElementById('registrationModal').classList.remove('hidden');
-        });
+        // Scroll Reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
         
-        // Sponsorship Modal Controls
-        function openSponsorshipModal() {
-            document.getElementById('sponsorshipModal').classList.remove('hidden');
-        }
-        
-        function closeSponsorshipModal() {
-            document.getElementById('sponsorshipModal').classList.add('hidden');
-        }
-        
-        function closeModal() {
-            document.getElementById('registrationModal').classList.add('hidden');
-            resetRegistration();
-        }
-        
-        function resetRegistration() {
-            state.currentStep = 1;
-            state.registrationData = {
-                teamName: '',
-                captainName: '',
-                phone: '',
-                file: null,
-                payment: {
-                    cardNumber: '',
-                    expiry: '',
-                    cvv: ''
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.reveal, .timeline-node').forEach(el => observer.observe(el));
+        
+        // Team Drawer
+        function openTeamDrawer(team) {
+            document.getElementById('drawerOverlay').classList.add('open');
+            document.getElementById('teamDrawer').classList.add('open');
+            document.getElementById('drawerTitle').textContent = team.toUpperCase();
+            
+            // Update radar chart based on team
+            const radarData = document.getElementById('radarData');
+            const stats = {
+                ramenskoe: "150,70 230,110 230,190 150,230 70,190 70,110",
+                meteor: "150,80 220,120 220,180 150,220 80,180 80,120",
+                victory: "150,60 240,100 240,200 150,240 60,200 60,100",
+                storm: "150,75 225,115 225,185 150,225 75,185 75,115"
             };
+            radarData.setAttribute('points', stats[team] || stats.ramenskoe);
+        }
+        
+        function closeTeamDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('open');
+            document.getElementById('teamDrawer').classList.remove('open');
+        }
+        
+        // Registration Modal
+        function openRegistrationModal() {
+            document.getElementById('registrationBackdrop').classList.add('open');
+            document.getElementById('registrationModal').classList.add('open');
+            currentStep = 1;
             updateStepDisplay();
         }
         
-        // Step Navigation
+        function closeRegistrationModal() {
+            document.getElementById('registrationBackdrop').classList.remove('open');
+            document.getElementById('registrationModal').classList.remove('open');
+        }
+        
         function nextStep() {
-            if (validateCurrentStep()) {
-                if (state.currentStep < 4) {
-                    state.currentStep++;
-                    updateStepDisplay();
-                    
-                    if (state.currentStep === 4) {
-                        createConfetti();
-                    }
-                }
+            if (currentStep < 4) {
+                currentStep++;
+                updateStepDisplay();
             }
         }
         
         function prevStep() {
-            if (state.currentStep > 1) {
-                state.currentStep--;
+            if (currentStep > 1) {
+                currentStep--;
                 updateStepDisplay();
             }
         }
         
         function updateStepDisplay() {
-            // Hide all steps
-            document.querySelectorAll('.step-content').forEach(step => {
-                step.classList.add('hidden');
-            });
-            
-            // Show current step
-            document.getElementById(`step${state.currentStep}`).classList.remove('hidden');
-            
-            // Update indicators
-            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
-                if (index < state.currentStep) {
-                    indicator.classList.add('active');
-                    indicator.classList.remove('bg-gray-700');
-                } else {
-                    indicator.classList.remove('active');
-                    indicator.classList.add('bg-gray-700');
+            // Update step dots
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index + 1 === currentStep) {
+                    dot.classList.add('active');
+                } else if (index + 1 < currentStep) {
+                    dot.classList.add('completed');
                 }
             });
-        }
-        
-        function validateCurrentStep() {
-            switch(state.currentStep) {
-                case 1:
-                    const teamName = document.getElementById('teamName').value;
-                    const captainName = document.getElementById('captainName').value;
-                    const phone = document.getElementById('phone').value;
-                    
-                    if (!teamName || !captainName || !phone) {
-                        alert('Заполните все поля');
-                        return false;
-                    }
-                    
-                    state.registrationData.teamName = teamName;
-                    state.registrationData.captainName = captainName;
-                    state.registrationData.phone = phone;
-                    return true;
-                    
-                case 2:
-                    if (!state.registrationData.file) {
-                        alert('Загрузите файл состава');
-                        return false;
-                    }
-                    return true;
-                    
-                case 3:
-                    const cardNumber = document.getElementById('cardNumber').value;
-                    const expiry = document.getElementById('cardExpiry').value;
-                    const cvv = document.getElementById('cardCVV').value;
-                    
-                    if (!cardNumber || !expiry || !cvv) {
-                        alert('Заполните все поля карты');
-                        return false;
-                    }
-                    
-                    state.registrationData.payment = { cardNumber, expiry, cvv };
-                    return true;
-                    
-                default:
-                    return true;
-            }
-        }
-        
-        // File Upload
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        
-        dropZone.addEventListener('click', () => fileInput.click());
-        
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-        
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
-        });
-        
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
             
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
-            }
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
-            }
-        });
-        
-        function handleFileSelect(file) {
-            state.registrationData.file = file;
-            document.getElementById('fileSelected').classList.remove('hidden');
-            document.getElementById('fileName').textContent = file.name;
-        }
-        
-        // Card Input Formatting
-        document.getElementById('cardNumber').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '');
-            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
-            e.target.value = formattedValue;
-        });
-        
-        document.getElementById('cardExpiry').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
-            }
-            e.target.value = value;
-        });
-        
-        document.getElementById('cardCVV').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '');
-        });
-        
-        // Phone Input Formatting
-        document.getElementById('phone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0 && value[0] === '7') {
-                value = value.slice(1);
-            }
-            
-            let formatted = '+7';
-            if (value.length > 0) {
-                formatted += ' (' + value.slice(0, 3);
-            }
-            if (value.length > 3) {
-                formatted += ') ' + value.slice(3, 6);
-            }
-            if (value.length > 6) {
-                formatted += '-' + value.slice(6, 8);
-            }
-            if (value.length > 8) {
-                formatted += '-' + value.slice(8, 10);
-            }
-            
-            e.target.value = formatted;
-        });
-        
-        // Confetti Effect
-        function createConfetti() {
-            const colors = ['#d4af37', '#FF3B00', '#001a3d', '#ffffff'];
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
-                    document.body.appendChild(confetti);
-                    
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 50);
-            }
-        }
-        
-        // Initialize
-        updateStepDisplay();
-        
-        // GSAP Animations
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // Dummy Data for Modules
-        const matchData = {
-            homeTeam: 'FC Ramenskoe',
-            awayTeam: 'FC Meteor',
-            homeScore: 2,
-            awayScore: 1,
-            venue: 'Стадион "Раменское"',
-            minute: 65
-        };
-        
-        const teamStats = {
-            ramenskoe: {
-                name: 'FC Ramenskoe',
-                players: {
-                    gk: { name: 'Иванов А.', position: 'Вратарь' },
-                    def: [
-                        { name: 'Петров Б.', position: 'Защитник' },
-                        { name: 'Сидоров В.', position: 'Защитник' }
-                    ],
-                    mid: [
-                        { name: 'Козлов Д.', position: 'Полузащитник' }
-                    ],
-                    str: [
-                        { name: 'Николаев М.', position: 'Нападающий' }
-                    ]
-                },
-                radar: {
-                    attack: 85,
-                    defense: 72,
-                    stamina: 88,
-                    tactics: 65,
-                    aggression: 90
-                }
-            },
-            meteor: {
-                name: 'FC Meteor',
-                players: {
-                    gk: { name: 'Сергеев И.', position: 'Вратарь' },
-                    def: [
-                        { name: 'Васильев К.', position: 'Защитник' },
-                        { name: 'Михайлов А.', position: 'Защитник' }
-                    ],
-                    mid: [
-                        { name: 'Федоров С.', position: 'Полузащитник' },
-                        { name: 'Алексеев П.', position: 'Полузащитник' }
-                    ],
-                    str: [
-                        { name: 'Дмитриев Н.', position: 'Нападающий' },
-                        { name: 'Егоров В.', position: 'Нападающий' }
-                    ]
-                },
-                radar: {
-                    attack: 78,
-                    defense: 85,
-                    stamina: 82,
-                    tactics: 70,
-                    aggression: 75
-                }
-            },
-            victory: {
-                name: 'FC Victory',
-                players: {
-                    gk: { name: 'Зайцев А.', position: 'Вратарь' },
-                    def: [
-                        { name: 'Орлов П.', position: 'Защитник' },
-                        { name: 'Тихонов М.', position: 'Защитник' }
-                    ],
-                    mid: [
-                        { name: 'Ковалёв С.', position: 'Полузащитник' },
-                        { name: 'Белов Д.', position: 'Полузащитник' }
-                    ],
-                    str: [
-                        { name: 'Соколов Р.', position: 'Нападающий' },
-                        { name: 'Павлов К.', position: 'Нападающий' }
-                    ]
-                },
-                radar: {
-                    attack: 92,
-                    defense: 88,
-                    stamina: 76,
-                    tactics: 80,
-                    aggression: 85
-                }
-            }
-        };
-        
-        const votingData = {
-            ramenskoe: 0,
-            meteor: 0,
-            victory: 0,
-            totalVotes: 0
-        };
-        
-        // Cinematic Preloader
-        function initPreloader() {
-            const preloader = document.getElementById('preloader');
-            const preloaderTop = document.getElementById('preloaderTop');
-            const preloaderBottom = document.getElementById('preloaderBottom');
-            
-            // Animate SVG pitch
-            setTimeout(() => {
-                preloaderTop.classList.add('slide-out-top');
-                preloaderBottom.classList.add('slide-out-bottom');
-            }, 500);
-            
-            // Hide preloader and show hero
-            setTimeout(() => {
-                preloader.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }, 2500);
-        }
-        
-        // Team Profiles Drawer
-        function openTeamDrawer(team) {
-            const drawer = document.getElementById('teamDrawer');
-            const title = document.getElementById('teamDrawerTitle');
-            const stats = teamStats[team];
-            
-            title.textContent = `${stats.name} - СТАТИСТИКА`;
-            
-            // Update radar chart
-            updateRadarChart(stats.radar);
-            
-            // Update player list
-            updatePlayerList(stats.players);
-            
-            drawer.classList.add('open');
-        }
-        
-        function closeTeamDrawer() {
-            const drawer = document.getElementById('teamDrawer');
-            drawer.classList.remove('open');
-        }
-        
-        function updateRadarChart(radar) {
-            const polygon = document.getElementById('radarPolygon');
-            const points = [
-                [200, 120 - (100 - radar.attack) * 0.8], // Attack
-                [200 + (100 - radar.defense) * 0.8, 120], // Defense
-                [200 + (100 - radar.stamina) * 0.8, 200 + (100 - radar.stamina) * 0.8], // Stamina
-                [200, 200 + (100 - radar.tactics) * 0.8], // Tactics
-                [200 - (100 - radar.aggression) * 0.8, 200] // Aggression
-            ];
-            
-            polygon.setAttribute('points', points.join(' '));
-            
-            // Animate the change
-            gsap.to(polygon, {
-                attr: { points: points.join(' ') },
-                duration: 1,
-                ease: "power2.inOut"
+            // Update panels
+            document.querySelectorAll('.step-panel').forEach(panel => {
+                panel.classList.remove('active');
             });
+            document.querySelector(`.step-panel[data-panel="${currentStep}"]`).classList.add('active');
         }
         
-        function updatePlayerList(players) {
-            const container = document.querySelector('.team-drawer .space-y-2');
-            const positions = ['gk', 'def', 'mid', 'str'];
-            const badges = { gk: 'badge-gk', def: 'badge-def', mid: 'badge-mid', str: 'badge-str' };
-            
-            let html = '';
-            positions.forEach(pos => {
-                const playerList = players.filter(p => p.position === pos);
-                playerList.forEach(player => {
-                    html += `
-                        <div class="flex items-center gap-3">
-                            <span class="player-badge ${badges[pos]}">${pos.toUpperCase()}</span>
-                            <span>${player.name} - ${player.position}</span>
-                        </div>
-                    `;
-                });
-            });
-            
-            container.innerHTML = html;
+        // Sponsorship Modal
+        function openSponsorshipModal() {
+            document.getElementById('sponsorshipBackdrop').classList.add('open');
+            document.getElementById('sponsorshipModal').classList.add('open');
         }
         
-        // Fan Prediction Engine
+        function closeSponsorshipModal() {
+            document.getElementById('sponsorshipBackdrop').classList.remove('open');
+            document.getElementById('sponsorshipModal').classList.remove('open');
+        }
+        
+        // Voting
         function vote(team) {
-            votingData[team]++;
-            votingData.totalVotes++;
-            
-            updatePredictionBars();
+            votes[team]++;
+            totalVotes++;
+            updateVotingDisplay();
         }
         
-        function updatePredictionBars() {
-            const teams = ['ramenskoe', 'meteor', 'victory'];
-            
-            teams.forEach(team => {
-                const votes = votingData[team];
-                const percentage = votingData.totalVotes > 0 ? (votes / votingData.totalVotes) * 100 : 0;
-                
-                const bar = document.getElementById(`${team}Votes`);
-                const percent = document.getElementById(`${team}Percent`);
-                
-                gsap.to(bar, {
-                    width: `${percentage}%`,
-                    duration: 1,
-                    ease: "cubic-bezier(0.4, 0, 0.2, 1)"
-                });
-                
-                gsap.to(percent, {
-                    textContent: `${Math.round(percentage)}%`,
-                    duration: 1,
-                    ease: "cubic-bezier(0.4, 0, 0.2, 1)"
-                });
+        function updateVotingDisplay() {
+            Object.keys(votes).forEach(team => {
+                const percentage = totalVotes > 0 ? Math.round((votes[team] / totalVotes) * 100) : 0;
+                document.getElementById(`${team}-bar`).style.width = percentage + '%';
+                document.getElementById(`${team}-percent`).textContent = percentage + '%';
             });
         }
         
-        // Venue Map Interactions
-        document.querySelectorAll('.venue-pin').forEach(pin => {
-            pin.addEventListener('mouseenter', (e) => {
-                e.stopPropagation();
-                const tooltip = pin.querySelector('.pin-tooltip');
-                const rect = pin.getBoundingClientRect();
-                const containerRect = pin.parentElement.getBoundingClientRect();
-                
-                // Calculate position relative to container
-                const relativeX = rect.left - containerRect.left + rect.width / 2;
-                const relativeY = rect.top - containerRect.top + rect.height / 2;
-                
-                gsap.to(tooltip, {
-                    opacity: 1,
-                    bottom: '120%',
-                    left: '50%',
-                    x: `${relativeX}px`,
-                    y: `${relativeY}px`,
-                    transform: 'translateX(-50%)',
-                    duration: 0.3
-                });
-            });
-            
-            pin.addEventListener('mouseleave', (e) => {
-                e.stopPropagation();
-                const tooltip = pin.querySelector('.pin-tooltip');
-                gsap.to(tooltip, {
-                    opacity: 0,
-                    duration: 0.3
-                });
-            });
-        });
-        
-        // Initialize
-        initPreloader();
-        
-        // GSAP Animations
-        gsap.registerPlugin(ScrollTrigger);
-        
-        // Dynamic Cursor System
-        const cursor = document.getElementById('cursorGlow');
-        const cursorRing = document.getElementById('cursorRing');
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        
-        // Cursor trailing effect
-        function animateCursor() {
-            const speed = 0.15;
-            cursorX += (mouseX - cursorX) * speed;
-            cursorY += (mouseY - cursorY) * speed;
-            
-            cursor.style.left = cursorX - 10 + 'px';
-            cursor.style.top = cursorY - 10 + 'px';
-            
-            cursorRing.style.left = cursorX + 'px';
-            cursorRing.style.top = cursorY + 'px';
-            
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-        
-        // Hover effects for cursor
-        const interactiveElements = document.querySelectorAll('a, button, .bento-item, .tilt-card');
-        interactiveElements.forEach(elem => {
-            elem.addEventListener('mouseenter', () => {
-                cursorRing.classList.add('hover');
-            });
-            elem.addEventListener('mouseleave', () => {
-                cursorRing.classList.remove('hover');
-            });
-        });
-        
-        // Hero Parallax Effect
-        const heroParallax = document.getElementById('heroParallax');
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallaxSpeed = 0.5;
-            heroParallax.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
-        });
-        
-        // Hero Text Reveal Animation
-        gsap.from('#heroText', {
-            y: 100,
-            opacity: 0,
-            duration: 1.2,
-            ease: "power3.out",
-            delay: 0.5
-        });
-        
-        // 3D Tilt Effect for Cards
-        document.querySelectorAll('.tilt-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = (y - centerY) / 10;
-                const rotateY = (centerX - x) / 10;
-                
-                gsap.to(card, {
-                    rotationX: rotateX,
-                    rotationY: rotateY,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-                
-                // Glare effect
-                const glare = card.querySelector('::before') || card;
-                const glareX = (x / rect.width) * 100;
-                gsap.to(card, {
-                    '--glare-x': `${glareX}%`,
-                    duration: 0.3
-                });
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                gsap.to(card, {
-                    rotationX: 0,
-                    rotationY: 0,
-                    duration: 0.5,
-                    ease: "power2.out"
-                });
-            });
-        });
-        
-        // Enhanced Audio Visualizer
-        const audioBars = document.querySelectorAll('.audio-bar-enhanced');
-        let audioAnimationId;
-        
-        function animateAudioBars() {
-            audioBars.forEach((bar, index) => {
-                const height = Math.random() * 16 + 8;
-                gsap.to(bar, {
-                    height: height,
-                    duration: 0.2,
-                    ease: "power2.inOut"
-                });
-            });
-        }
-        
-        // Update existing audio toggle
-        audioToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            state.audioPlaying = !state.audioPlaying;
-            
-            if (state.audioPlaying) {
-                audioVisualizer.style.display = 'flex';
-                audioToggle.classList.add('text-yellow-300');
-                audioToggle.classList.remove('text-yellow-400');
-                
-                // Start audio visualization
-                audioAnimationId = setInterval(animateAudioBars, 200);
-                console.log('Audio started');
-            } else {
-                audioVisualizer.style.display = 'none';
-                audioToggle.classList.add('text-yellow-400');
-                audioToggle.classList.remove('text-yellow-300');
-                
-                // Stop audio visualization
-                clearInterval(audioAnimationId);
-                console.log('Audio paused');
-            }
-        });
-        
-        // Magnetic Navigation
-        const magneticBtns = document.querySelectorAll('.magnetic-btn');
-        magneticBtns.forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                gsap.to(btn, {
-                    x: x * 0.3,
-                    y: y * 0.3,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            });
-            
-            btn.addEventListener('mouseleave', () => {
-                gsap.to(btn, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
-            });
-        });
-        
-        // Timeline Animations
-        gsap.utils.toArray('.timeline-item').forEach((item, index) => {
-            gsap.to(item, {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                delay: index * 0.2,
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 80%",
-                    end: "bottom 20%",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        });
-        
-        // Trophy 3D Effect
-        const trophy = document.getElementById('trophy3d');
-        const trophyContainer = document.querySelector('.trophy-container');
-        
-        trophyContainer.addEventListener('mousemove', (e) => {
-            const rect = trophyContainer.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            
-            gsap.to(trophy, {
-                rotationY: x * 20,
-                rotationX: -y * 20,
-                duration: 0.5,
-                ease: "power2.out"
-            });
-        });
-        
-        trophyContainer.addEventListener('mouseleave', () => {
-            gsap.to(trophy, {
-                rotationY: 0,
-                rotationX: 0,
-                duration: 0.5,
-                ease: "power2.out"
-            });
-        });
-        
-        // Create Particles
-        const particlesContainer = document.getElementById('particlesContainer');
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 6 + 's';
-            particle.style.animationDuration = (6 + Math.random() * 4) + 's';
-            particlesContainer.appendChild(particle);
-        }
-        
-        // Hero Text Mask Animation
-        gsap.from('.text-mask', {
-            scale: 0.8,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power3.out"
-        });
-        
-        // Countdown Animation
-        gsap.from('.countdown-digit', {
-            scale: 0,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.1,
-            delay: 0.5,
-            ease: "back.out(1.7)"
-        });
-        
-        // Bento Items Animation
-        gsap.utils.toArray('.bento-item').forEach((item, index) => {
-            gsap.from(item, {
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                delay: index * 0.1,
-                scrollTrigger: {
-                    trigger: item,
-                    start: "top 85%",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        });
-        
-        // Smooth Scroll for Navigation
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href === '#registration') {
-                    e.preventDefault();
-                    document.getElementById('openRegistration').click();
-                    return; // Skip smooth scroll for registration modal
-                }
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(href);
+                const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    gsap.to(window, {
-                        duration: 1.5,
-                        scrollTo: {
-                            y: target,
-                            offsetY: 100 // Account for fixed navigation
-                        },
-                        ease: "power2.inOut"
-                    });
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
         
-        // Initialize app when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fix any missing elements
-            const missingElements = [];
-            
-            if (!document.getElementById('cursorGlow')) missingElements.push('cursorGlow');
-            if (!document.getElementById('cursorRing')) missingElements.push('cursorRing');
-            if (!document.getElementById('preloader')) missingElements.push('preloader');
-            if (!document.getElementById('teamDrawer')) missingElements.push('teamDrawer');
-            if (!document.getElementById('drawerOverlay')) missingElements.push('drawerOverlay');
-            
-            if (missingElements.length > 0) {
-                console.warn('Missing elements:', missingElements);
+        // Close modals on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeTeamDrawer();
+                closeRegistrationModal();
+                closeSponsorshipModal();
             }
-            
-            // Initialize countdown safely
-            function updateCountdown() {
-                const targetDate = new Date('2026-06-23T14:26:00');
-                const now = new Date();
-                const difference = targetDate - now;
-                
-                if (difference > 0) {
-                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-                    
-                    const daysEl = document.getElementById('days');
-                    const hoursEl = document.getElementById('hours');
-                    const minutesEl = document.getElementById('minutes');
-                    const secondsEl = document.getElementById('seconds');
-                    
-                    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
-                    if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
-                    if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
-                    if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
-                }
-            }
-            
-            setInterval(updateCountdown, 1000);
-            updateCountdown();
-            
-            // Initialize preloader safely
-            const preloader = document.getElementById('preloader');
-            const preloaderTop = document.getElementById('preloaderTop');
-            const preloaderBottom = document.getElementById('preloaderBottom');
-            
-            if (preloader && preloaderTop && preloaderBottom) {
-                setTimeout(() => {
-                    preloaderTop.classList.add('slide-out-top');
-                    preloaderBottom.classList.add('slide-out-bottom');
-                }, 500);
-                
-                setTimeout(() => {
-                    preloader.classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }, 2500);
-            }
-            
-            // Initialize cursor safely (disable on mobile)
-            if (!window.matchMedia('(pointer: coarse)').matches) {
-                const cursor = document.getElementById('cursorGlow');
-                const cursorRing = document.getElementById('cursorRing');
-                
-                if (cursor && cursorRing) {
-                    let mouseX = 0, mouseY = 0;
-                    let cursorX = 0, cursorY = 0;
-                    
-                    document.addEventListener('mousemove', (e) => {
-                        mouseX = e.clientX;
-                        mouseY = e.clientY;
-                    });
-                    
-                    function animateCursor() {
-                        const speed = 0.15;
-                        cursorX += (mouseX - cursorX) * speed;
-                        cursorY += (mouseY - cursorY) * speed;
-                        
-                        cursor.style.left = cursorX - 10 + 'px';
-                        cursor.style.top = cursorY - 10 + 'px';
-                        
-                        cursorRing.style.left = cursorX + 'px';
-                        cursorRing.style.top = cursorY + 'px';
-                        
-                        requestAnimationFrame(animateCursor);
-                    }
-                    animateCursor();
-                    
-                    // Hover effects
-                    const interactiveElements = document.querySelectorAll('a, button, .bento-item, .tilt-card');
-                    interactiveElements.forEach(elem => {
-                        elem.addEventListener('mouseenter', () => {
-                            cursorRing.classList.add('hover');
-                        });
-                        elem.addEventListener('mouseleave', () => {
-                            cursorRing.classList.remove('hover');
-                        });
-                    });
-                }
-            }
-            
-            // Initialize voting safely
-            const votingData = {
-                ramenskoe: 0,
-                meteor: 0,
-                victory: 0,
-                totalVotes: 0
-            };
-            
-            window.vote = function(team) {
-                if (!votingData.hasOwnProperty(team)) return;
-                
-                votingData[team]++;
-                votingData.totalVotes++;
-                
-                const teams = ['ramenskoe', 'meteor', 'victory'];
-                
-                teams.forEach(team => {
-                    const votes = votingData[team];
-                    const percentage = votingData.totalVotes > 0 ? (votes / votingData.totalVotes) * 100 : 0;
-                    
-                    const bar = document.getElementById(`${team}Votes`);
-                    const percent = document.getElementById(`${team}Percent`);
-                    
-                    if (bar && percent) {
-                        gsap.to(bar, {
-                            width: `${percentage}%`,
-                            duration: 1,
-                            ease: "cubic-bezier(0.4, 0, 0.2, 1)"
-                        });
-                        
-                        gsap.to(percent, {
-                            textContent: `${Math.round(percentage)}%`,
-                            duration: 1,
-                            ease: "cubic-bezier(0.4, 0, 0.2, 1)"
-                        });
-                    }
-                });
-            };
-            
-            // Initialize venue map safely
-            const pins = document.querySelectorAll('.venue-pin');
-            pins.forEach(pin => {
-                pin.addEventListener('mouseenter', (e) => {
-                    e.stopPropagation();
-                    const tooltip = pin.querySelector('.pin-tooltip');
-                    if (tooltip) {
-                        gsap.to(tooltip, {
-                            opacity: 1,
-                            bottom: '120%',
-                            duration: 0.3
-                        });
-                    }
-                });
-                
-                pin.addEventListener('mouseleave', (e) => {
-                    e.stopPropagation();
-                    const tooltip = pin.querySelector('.pin-tooltip');
-                    if (tooltip) {
-                        gsap.to(tooltip, {
-                            opacity: 0,
-                            duration: 0.3
-                        });
-                    }
-                });
-            });
         });
     </script>
 </body>
