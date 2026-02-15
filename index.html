@@ -4,426 +4,762 @@
   <meta charset="UTF-8">
   <title>Футбольный Турнир 2024</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Tailwind CSS CDN for demo purpose -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;900&family=Montserrat:wght@400;600;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Fonts for UI and main content -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    html,body {
-      min-height:100vh;
-      /* Allow parallax effect for background */
-      overflow-x:hidden;
+    :root {
+      --c-white: #fff;
+      --c-light: #F8FAFC;
+      --c-black: #111827;
+      --c-glass: rgba(255,255,255,0.52);
+      --c-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      --c-accent: #4979FF;
+      --border: 1.5px solid #e5e7eb;
+      --transition: .22s cubic-bezier(.43,.2,.37,1.22);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--c-light);
+      color: var(--c-black);
+      min-height: 100vh;
+      height: 100%;
     }
     body {
-      font-family: 'Barlow', 'Montserrat', 'Inter', Arial, sans-serif;
-      background: #0a0a0a;
-      color: #f4f8fa;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .parallax-bg {
-      z-index: 0;
-      position: fixed;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      object-fit:cover;
-      pointer-events: none;
-      min-height:100vh;
-      /* fallback bg for overlay */
-      background: #15141A;
+    #root {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    .bg-gradient-overlay {
-      pointer-events:none;
-      position:fixed;
-      left:0;right:0;top:0;bottom:0;
-      z-index:1;
-      background: linear-gradient(180deg,rgba(10,10,10,.1) 0%,rgba(10,10,10,0.72) 79%,#090a13 100%);
-      min-height:100vh;
-      width:100vw;
+
+    /* Header */
+    .t-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--c-white);
+      padding: 0 38px 0 24px;
+      height: 70px;
+      box-shadow: var(--c-shadow);
+      font-family: Inter, sans-serif;
+      z-index: 2;
+      position: relative;
     }
-    /* Animate wave icon */
-    @keyframes soundPulse {
-      0% { opacity:.65; transform:scale(.98);}
-      70%{ opacity:1; transform:scale(1.13);}
-      100%{ opacity:.77;transform:scale(.96);}
+    .t-header__logo {
+      font-family: 'Lora', serif;
+      font-size: 1.67rem;
+      font-weight: 700;
+      letter-spacing: .042em;
+      color: var(--c-accent);
+      text-shadow: 0 2px 24px rgba(50,120,220,.035);
     }
-    .sound-active .icon-wave { animation: soundPulse 1s infinite; filter:drop-shadow(0 0 8px #7bfdff); }
-    /* Fade/slide-in utility for blocks */
-    .fade-in-up {
-      opacity:0;
-      transform:translateY(25px);
-      transition: opacity .75s cubic-bezier(.25,.75,.74,1.27), transform .7s cubic-bezier(.2,.89,.34,1);
-      will-change:opacity,transform;
+    .t-header__nav {
+      display: flex;
+      gap: 20px;
     }
-    .fade-in-up.visible { opacity:1; transform:none; }
-    /* Hide scroll for sponsors on mobile */
-    @media (max-width: 640px) {
-      .marquee { font-size:.91rem; }
+    .t-header__nav-btn {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 1.08rem;
+      color: var(--c-black);
+      padding: 8px 12px;
+      border-radius: 5.5px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      font-weight: 500;
+      position: relative;
     }
-    ::-webkit-scrollbar {width:9px;background:#161a24;}
-    ::-webkit-scrollbar-thumb {background:#18e6f7;border-radius:7px;}
+    .t-header__nav-btn.active,
+    .t-header__nav-btn:hover {
+      background: var(--c-accent);
+      color: #fff;
+    }
+    /* Container/panels */
+    .t-main {
+      display: flex;
+      flex: 1 1 auto;
+      background: linear-gradient(115deg, var(--c-white) 80%, var(--c-light) 100%);
+      min-height: 0;
+      min-width: 0;
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+    /* TAB PANELS */
+    .tab-panel {
+      flex: 1 1 auto;
+      display: none;
+      padding: 38px 22px 40px 22px;
+      min-width: 0;
+      min-height: 0;
+      background: transparent;
+      position: relative;
+      animation: fadeInTab 0.26s;
+    }
+    @keyframes fadeInTab {
+      from { opacity: .6; transform: translateY(12px);}
+      to { opacity: 1; transform: none;}
+    }
+    .tab-panel.visible { display: block; }
+    /* MAIN TAB: Tournament */
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      justify-content: stretch;
+      min-width: 0;
+    }
+    /* Info Column */
+    .main-info {
+      flex: 1 1 260px;
+      min-width: 246px;
+      max-width: 320px;
+      background: var(--c-glass);
+      backdrop-filter: blur(24px);
+      border-radius: 22px;
+      box-shadow: var(--c-shadow);
+      padding: 32px 34px 32px 28px;
+      margin-bottom: 18px;
+      margin-right: 0;
+    }
+    .main-info h2 {
+      margin-top: 0; font-family: Lora, serif; font-size:1.25rem;
+    }
+    .main-info ul {
+      padding-left: 18px;
+      margin:0;
+      margin-bottom: 10px;
+    }
+    /* Group Column */
+    .main-groups {
+      flex: 2 1 520px;
+      min-width: 350px;
+      max-width: 660px;
+    }
+    .groups-header {
+      display:flex; gap:48px; align-items: flex-end; margin-bottom: 12px;
+    }
+    .group-block {
+      background: var(--c-white);
+      box-shadow: var(--c-shadow);
+      border-radius: 17px;
+      margin-bottom: 22px;
+      padding: 18px 14px 20px 20px;
+      min-width: 260px;
+      overflow-x: auto;
+    }
+    .group-block h3 {
+      margin-top: 0;font-family: Lora, serif;font-size:1.16rem;color: var(--c-accent);
+      font-weight: 700;margin-bottom:8px;
+    }
+    .team-list {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .team-list li {
+      display: flex; align-items: center;
+      border-bottom: 1.5px solid #ededed;
+      font-size: 1.09rem; font-family: Lora, serif;
+      padding: 3px 0 3px 0;
+      font-weight: 500;
+      min-height: 34px;
+    }
+    .team-logo {
+      width:26px;height:26px;object-fit:contain; border-radius:6px; background:#f2f2f2;
+      margin-right:9px; border:1px solid #f0f0f4;
+      box-shadow: 0 2px 11px rgba(20,40,80,.06);
+    }
+    /* Playoff bracket grid */
+    .playoff-block {
+      background: var(--c-white);
+      border-radius: 18px;
+      padding: 22px 16px 18px 24px;
+      box-shadow: var(--c-shadow);
+      min-width: 328px;
+    }
+    .playoff-title {
+      font-family: Lora, serif; font-size: 1.23rem;
+      font-weight: bold; color: #374151; margin-top: 0;
+      margin-bottom: 8px;
+    }
+    .bracket {
+      display: flex; gap:34px; align-items: flex-start;flex-wrap:wrap;
+    }
+    .bracket-col {
+      display: flex; flex-direction: column; gap: 30px;
+    }
+    .bracket-game {
+      min-width: 105px;
+      min-height: 60px;
+      background:var(--c-light);
+      border-radius:12px;
+      border:1.5px solid #e1e6ea;
+      box-shadow: 0 2px 16px rgba(160,180,200,.03);
+      padding:6px 14px 8px 10px;
+      display: flex; flex-direction:column; justify-content: center;align-items: flex-start;
+    }
+    .bracket-game .game-stage {
+      font-size: .82rem; color: #697194; margin-bottom:2px; font-family: Inter, sans-serif;
+    }
+    .bracket-game .game-teams {
+      font-family: Lora, serif; font-size:1.08rem; color: #161c26;
+    }
+    .bracket-game .game-score {
+      font-size:.98rem;font-family:Inter,sans-serif;color:#4979FF;
+      margin-left:10px;
+    }
+
+    /* MERCH TAB */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+      gap: 26px;
+      margin-top: 24px;
+    }
+    .bento-card {
+      background: var(--c-glass);
+      border-radius: 18px;
+      box-shadow: var(--c-shadow);
+      padding: 24px 18px 20px 18px;
+      display: flex; flex-direction: column; align-items: center;
+      transition: box-shadow .27s cubic-bezier(.43,.2,.37,1.22), transform .18s;
+      position: relative;
+      border: var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .bento-card:hover {
+      box-shadow: 0 18px 48px rgba(24,64,235,0.13);
+      transform: translateY(-4px) scale(1.018);
+      z-index: 2;
+    }
+    .bento-img {
+      width:110px;height:110px;object-fit:contain; border-radius:16px; background:#f0f0f3;
+      margin-bottom:16px;
+      box-shadow:0 3px 12px rgba(80,120,220,.06);
+    }
+    .bento-title {
+      font-family: Lora, serif;
+      font-size: 1.13rem;
+      margin-bottom: 7px;
+      font-weight: 700;
+      color: #111827;
+      text-align: center;
+    }
+    .bento-desc {
+      font-size:.97rem;color:#45496B;text-align:center;margin-bottom:16px;
+    }
+    .bento-cta {
+      background: var(--c-accent);
+      color: #fff;
+      border: none;
+      border-radius:7px;
+      padding:7px 15px;
+      font-size:1rem;
+      font-family: Inter, sans-serif;
+      cursor:pointer;
+      font-weight: 600;
+      box-shadow:0 3px 14px rgba(40,120,240,0.065);
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+    .bento-cta:hover {
+      background: #2a56db;
+      box-shadow:0 7px 30px rgba(42,86,219,0.13);
+    }
+
+    /* PRIZES & PARTNERS TAB */
+    .prize-section {
+      margin-bottom: 48px;
+      padding: 12px 0 0 0;
+    }
+    .prize-title {
+      font-family: Lora, serif; font-size:1.22rem;color: var(--c-accent);font-weight:700;
+      margin-bottom:8px;
+    }
+    .prize-list {
+      display: flex; gap:36px; flex-wrap:wrap; margin-top:12px;
+    }
+    .prize-card {
+      background: #fff;
+      border-radius: 13px;
+      box-shadow: var(--c-shadow);
+      min-width:200px;
+      max-width:260px;
+      padding:17px 22px 18px 18px;
+      font-family: Inter, sans-serif;
+      border: var(--border);
+      margin-bottom: 8px;
+    }
+    .prize-card h4 {
+      margin: 0 0 6px 0; font-size: 1rem; color: #4979FF;
+    }
+    .prize-card .prize-amount {
+      font-size:27px;color:#111827;font-family:Lora,serif;font-weight:700;
+      margin-bottom: 2px; margin-top:8px;
+    }
+    .prize-card ul {
+      margin:0 0 6px 12px; font-size:.95em;
+    }
+    /* Partners grid */
+    .partners-section {
+      padding: 14px 0 0 0;
+    }
+    .partners-title {
+      font-family: Lora, serif; font-size:1.18rem;color: var(--c-accent);font-weight:600;
+      margin-bottom:15px;margin-top:0;
+    }
+    .partners-logos {
+      display: flex;flex-wrap:wrap;gap:30px 48px;
+      align-items:center;
+      margin-bottom: 11vw;
+      margin-top: 10px;
+    }
+    .partner-logo-box {
+      background: var(--c-white);
+      border-radius: 12px;
+      box-shadow:var(--c-shadow);
+      display: flex; align-items: center; justify-content: center;
+      padding:18px 22px;
+      min-width:128px;
+      min-height:66px;
+      border: var(--border);
+      margin-bottom: 18px;
+    }
+    .partner-logo {
+      max-width:96px; max-height:38px; object-fit:contain;
+    }
+    /* scroll bars, etc */
+    * {
+      scrollbar-color: #d8d8ff #fff;
+      scrollbar-width: thin;
+      }
+    ::-webkit-scrollbar {width:7px;background:#f8fafc;}
+    ::-webkit-scrollbar-thumb {background:#c5c8d6;border-radius:7px;}
+    @media (max-width:1100px) {
+      .main-container {flex-direction:column; gap:0;}
+      .main-info {max-width:unset;margin-bottom:13px;}
+      .main-groups,
+      .playoff-block {max-width:100vw;}
+    }
+    @media (max-width:750px) {
+      .t-header { padding:0 10px;}
+      .main-info,
+      .playoff-block {padding:18px 9px;}
+      .tab-panel {padding:20px 4vw;}
+      .bento-grid {gap:12px;}
+      .partners-logos{gap:18px 24px;}
+    }
+    /* Print: show only main bracket for final game */
+    @media print {
+      body, html { background: #fff !important; }
+      .t-header, .t-header *, #main-tab, #merch-tab, #partners-tab, .main-info, .main-groups, .bento-grid, .partners-section, .prize-section {
+        display: none !important;
+        height: 0 !important;
+        overflow: hidden;
+      }
+      .print-bracket-final { display: block !important; }
+    }
+    .print-bracket-final { display: none;}
+    /* Animations etc */
+    .bounce-in {
+      animation: bounceIn .63s cubic-bezier(.41,.91,.41,.91);
+    }
+    @keyframes bounceIn {
+      0% {transform:scale(.6) translateY(70px);opacity:0;}
+      75% {transform:scale(1.07) translateY(-4px);}
+      100% {transform:scale(1) translateY(0);opacity:1;}
+    }
   </style>
 </head>
-<body class="relative min-h-screen flex flex-col">
-  <!-- Immersive stadium background with parallax -->
-  <img id="parallaxBg" class="parallax-bg" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80" alt="stadium-bg">
-  <div class="bg-gradient-overlay"></div>
-
-  <!-- Sponsors Marquee -->
-  <div class="fixed top-0 left-0 w-full z-30 bg-black/30 border-b border-[#36f4c4]/10 shadow-sm">
-    <div class="overflow-hidden whitespace-nowrap py-2">
-      <div class="marquee flex gap-6 animate-[scrollmarquee_18s_linear_infinite]" id="sponsors-marquee"></div>
-    </div>
-  </div>
-
-  <!-- Sound Toggle Button + audio -->
-  <button id="soundToggleBtn" aria-label="toggle-sound"
-    class="fixed right-4 top-4 z-50 flex items-center gap-2 rounded-2xl px-5 py-2.5 bg-[#191f26] bg-opacity-90 text-[#61ffe7] border border-[#2efbf5]/40
-      shadow-[0_8px_40px_0_rgba(60,255,228,0.25)] transition hover:bg-[#21f1d8] hover:text-black sound-active"
-    style="backdrop-filter: blur(7px); font-family:'Barlow',sans-serif;">
-    <span id="soundIcon" class="icon-wave">
-      <svg width="28" height="28" fill="none" viewBox="0 0 28 28"><path d="M3 11v6h5l6 6V5l-6 6H3z" fill="currentColor"/><path id="sndonwave" d="M22 14c0-2.97-1.02-5.12-2.97-6.45A1 1 0 1 1 21 5.64C24.032 7.6 26 10.57 26 14c0 3.43-1.97 6.4-5 8.36a1 1 0 1 1-1.97-1.9C20.972 19.12 22 16.98 22 14z" fill="currentColor"/></svg>
-    </span>
-    <span class="uppercase font-bold text-sm tracking-widest text-shadow">Звук</span>
-  </button>
-  <audio id="crowdAudio" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12e8674933.mp3" loop preload="auto"></audio>
-
-  <!-- Main Root -->
-  <main id="main-root" class="flex flex-col grow relative z-10">
-    <!-- Header -->
-    <header class="flex items-center justify-between gap-8 pt-16 pb-8 px-7 sm:px-4" style="z-index:22;">
-      <div class="font-extrabold text-3xl sm:text-xl md:text-2xl tracking-widest text-[#08ffee] uppercase font-barlow drop-shadow-[0_3px_16px_#2cfaf8a4]">Турнир 2024</div>
-      <nav class="flex gap-3 md:gap-0 rounded-2xl bg-black/50 shadow-lg border border-[#35ffe4]/10 px-3 py-1.5 md:px-2 md:py-1.5 backdrop-blur-md">
-        <button class="tab-btn font-barlow font-bold tracking-widest text-base px-6 py-2 mx-1 rounded-2xl uppercase transition border-2 border-transparent text-[#7ffdff] hover:text-[#1bfad0] hover:border-[#61ffe8]" data-tab="group">Групповой этап</button>
-        <button class="tab-btn font-barlow font-bold tracking-widest text-base px-6 py-2 mx-1 rounded-2xl uppercase transition border-2 border-transparent text-[#7ffdff] hover:text-[#1bfad0] hover:border-[#61ffe8]" data-tab="playoff">Плей-офф</button>
-        <button class="tab-btn font-barlow font-bold tracking-widest text-base px-6 py-2 mx-1 rounded-2xl uppercase transition border-2 border-transparent text-[#7ffdff] hover:text-[#1bfad0] hover:border-[#61ffe8]" data-tab="prizes">Призовой фонд</button>
-      </nav>
-    </header>
-    <!-- Content Panels -->
-    <section class="relative flex flex-col grow container mx-auto px-6 max-w-7xl">
-      <!-- Groups Panel -->
-      <div id="groupPanel" class="fade-in-up block">
-        <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-8">
-          <!-- Group A Table -->
-          <div class="relative rounded-3xl shadow-glass bg-white/10 border border-white/10 backdrop-blur-2xl p-8 pt-7 glass-card overflow-x-auto">
-            <div class="uppercase text-lg font-extrabold font-barlow text-[#0efad0] tracking-wider mb-5 drop-shadow">Группа A</div>
-            <table class="w-full">
-              <thead>
-                <tr class="border-b border-white/30 text-left font-barlow text-[#09ffe2] text-xs uppercase tracking-widest">
-                  <th class="py-2 font-bold">#</th>
-                  <th class="py-2 font-bold">Клуб</th>
-                  <th class="py-2 font-bold text-center">И</th>
-                  <th class="py-2 font-bold text-center">В</th>
-                  <th class="py-2 font-bold text-center">Н</th>
-                  <th class="py-2 font-bold text-center">П</th>
-                  <th class="py-2 font-bold text-center">Г</th>
-                  <th class="py-2 font-bold text-center">О</th>
-                </tr>
-              </thead>
-              <tbody id="group-a-table"></tbody>
-            </table>
+<body>
+<div id="root">
+  <!-- HEADER -->
+  <header class="t-header">
+    <div class="t-header__logo">Футбольный Турнир 2024</div>
+    <nav class="t-header__nav">
+      <button class="t-header__nav-btn active" data-tab="main-tab">Главная</button>
+      <button class="t-header__nav-btn" data-tab="merch-tab">Мерч</button>
+      <button class="t-header__nav-btn" data-tab="partners-tab">Призы и партнёры</button>
+    </nav>
+  </header>
+  <!-- MAIN TABS -->
+  <main class="t-main">
+    <!-- Главная: турнирная таблица, группы, плей-офф -->
+    <section class="tab-panel visible" id="main-tab">
+      <div class="main-container">
+        <aside class="main-info">
+          <h2>О турнире</h2>
+          <p>Добро пожаловать на ежегодный Летний футбольный турнир 2024! Сражаются 8 команд в двух группах, далее — плей-офф.<br/><b>Место:</b> Спорткомплекс «Лидер», Москва.<br/><b>Даты:</b> 15–17 июня 2024.<br/><b>Формат:</b> 2 группы по 4, финал — кубок!</p>
+          <ul>
+            <li>⚽ 2 тайма по 20 минут</li>
+            <li>⏰ Начало игр: 09:30</li>
+            <li>🟢 Открытая регистрация команд</li>
+            <li>🎥 Прямая трансляция/судейство</li>
+          </ul>
+          <p style="margin-top:2.5em;font-size:.96rem;color:#6572a3;">Контакты для заявок:<br/><b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru" style="color:var(--c-accent);text-decoration:underline;">support@foot-tournament.ru</a></p>
+        </aside>
+        <!-- middle: groups -->
+        <section class="main-groups">
+          <div class="groups-header">
+            <div><h2 style="margin:0;font-family:Lora,serif;font-weight:700;font-size:1.18rem;">Группы</h2></div>
+            <div><h2 style="margin:0;font-family:Lora,serif;font-size:1.03rem;color:#939AD8;">Этап: групповой</h2></div>
           </div>
-          <!-- Group B Table -->
-          <div class="relative rounded-3xl shadow-glass bg-white/10 border border-white/10 backdrop-blur-2xl p-8 pt-7 glass-card overflow-x-auto">
-            <div class="uppercase text-lg font-extrabold font-barlow text-[#0efad0] tracking-wider mb-5 drop-shadow">Группа B</div>
-            <table class="w-full">
-              <thead>
-                <tr class="border-b border-white/30 text-left font-barlow text-[#09ffe2] text-xs uppercase tracking-widest">
-                  <th class="py-2 font-bold">#</th>
-                  <th class="py-2 font-bold">Клуб</th>
-                  <th class="py-2 font-bold text-center">И</th>
-                  <th class="py-2 font-bold text-center">В</th>
-                  <th class="py-2 font-bold text-center">Н</th>
-                  <th class="py-2 font-bold text-center">П</th>
-                  <th class="py-2 font-bold text-center">Г</th>
-                  <th class="py-2 font-bold text-center">О</th>
-                </tr>
-              </thead>
-              <tbody id="group-b-table"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <!-- Playoff Panel -->
-      <div id="playoffPanel" class="fade-in-up hidden">
-        <div class="flex flex-col md:flex-row items-start justify-center gap-10 md:gap-20">
-          <!-- Bracket Grid Placeholder -->
-          <div class="relative w-full rounded-3xl shadow-glass bg-white/10 border border-white/10 backdrop-blur-2xl p-9 pt-7 flex flex-col items-center glass-card min-h-[320px]">
-            <div class="uppercase text-lg font-extrabold font-barlow text-[#0efad0] tracking-wider mb-6">
-              Плей-офф Сетка
+          <!-- two groups -->
+          <div style="display:flex;gap:22px;flex-wrap:wrap;">
+            <!-- Group A -->
+            <div class="group-block">
+              <h3>ГРУППА A</h3>
+              <ol class="team-list" id="group-a-list">
+                <!-- Автоматически заполнится ниже скриптом -->
+              </ol>
             </div>
-            <div class="flex items-center justify-center h-40 text-2xl md:text-3xl font-extrabold text-[#e8ffbc] tracking-widest drop-shadow animate-pulse select-none">
-              Сетка скоро!
+            <!-- Group B -->
+            <div class="group-block">
+              <h3>ГРУППА B</h3>
+              <ol class="team-list" id="group-b-list"></ol>
             </div>
-            <!-- Если есть матчи, тут будет нарисована турнирная сетка -->
           </div>
-        </div>
-      </div>
-      <!-- Prizes/Podium Panel -->
-      <div id="prizesPanel" class="fade-in-up hidden mt-6 mb-20">
-        <div class="mx-auto w-full flex flex-col items-center justify-center min-h-[320px]">
-          <div class="uppercase text-center text-2xl md:text-3xl font-extrabold font-barlow text-[#bced09] tracking-widest mb-12"
-            style="text-shadow:0_5px_32px_#bced0994;">
-            Призовой Пьедестал
+          <!-- Playoff bracket -->
+          <div class="playoff-block">
+            <div class="playoff-title">Плей-офф Сетка</div>
+            <div class="bracket" id="playoff-bracket"></div>
           </div>
-          <div id="podium" class="flex md:flex-row flex-col items-end justify-center gap-5 w-full max-w-3xl">
-            <!-- Подставляем пьедестал из скрипта -->
-          </div>
-        </div>
+        </section>
       </div>
     </section>
-    <!-- Partners (marquee also at top) -->
-    <footer class="mt-auto py-8 text-center z-10 text-[#08ffe6] font-barlow font-semibold text-sm tracking-widest backdrop-blur-2xl bg-black/20">
-      <span>© 2024 SUMMER FOOTBALL TOURNAMENT — Все права защищены</span>
-    </footer>
-  </main>
-  <!-- Data/Logic -->
-  <script>
-  // -------- DATA (add teams for Group A as per last instruction) --------
-  const sponsors = [
-    {
-      name: "SportLife",
-      img: "https://seeklogo.com/images/A/adidas-logo-FD7F5DEF12-seeklogo.com.png",
-      url: "https://adidas.com/"
-    },
-    {
-      name: "SoccerShop",
-      img: "https://seeklogo.com/images/N/nike-logo-7F31D4B897-seeklogo.com.png",
-      url: "https://nike.com/"
-    },
-    {
-      name: "ЛигаСпорт",
-      img: "https://seeklogo.com/images/P/pepsi-logo-8749D7BEAE-seeklogo.com.png",
-      url: "https://pepsi.com/"
-    },
-    {
-      name: "МегаФитнес",
-      img: "https://seeklogo.com/images/G/gazprom-logo-2E7B52FA08-seeklogo.com.png",
-      url: "https://gazprom.ru"
-    },
-    {
-      name: "СпонсорФонд",
-      img: "https://seeklogo.com/images/U/uefa-champions-league-logo-29E9E7980B-seeklogo.com.png",
-      url: "#"
-    }
-  ];
-  // for Group A -- 8 teams, as requested
-  const groupA = [
-    {team: "Беркута", img:"https://upload.wikimedia.org/wikipedia/commons/6/6c/Eagles-fc.png", played: 7, wins: 5, draws: 2, loses: 0, goals: "14-5", pts: 17},
-    {team: "Легенда", img:"https://upload.wikimedia.org/wikipedia/commons/c/c2/Crystal_Palace_FC_logo_%282013%29.svg", played: 7, wins: 5, draws: 1, loses: 1, goals: "13-6", pts: 16},
-    {team: "Север", img:"https://upload.wikimedia.org/wikipedia/commons/1/18/FK_North_Badge.png", played: 7, wins: 4, draws: 1, loses: 2, goals: "13-8", pts: 13},
-    {team: "Молния", img:"https://upload.wikimedia.org/wikipedia/commons/e/e3/Shinoda_lightning_logo.png", played: 7, wins: 3, draws: 3, loses: 1, goals: "11-9", pts: 12},
-    {team: "8 чудес света", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Seven_Wonders_of_the_World.svg/200px-Seven_Wonders_of_the_World.svg.png", played: 7, wins: 3, draws: 0, loses: 4, goals: "8-14", pts: 9},
-    {team: "Артемида", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Diana-Artemis-symbol.svg", played: 7, wins: 2, draws: 1, loses: 4, goals: "6-11", pts: 7},
-    {team: "Сатурн", img:"https://upload.wikimedia.org/wikipedia/commons/9/9e/Saturn_%28planet%29.svg", played: 7, wins: 1, draws: 2, loses: 4, goals: "5-13", pts: 5},
-    {team: "ЦСКА", img:"https://upload.wikimedia.org/wikipedia/commons/6/61/CSKA_Moscow_logo.png", played: 7, wins: 0, draws: 0, loses: 7, goals: "4-18", pts: 0}
-  ];
-  const groupB = [
-    {team: "Дельта", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Delta_logo_example.svg", played: 3, wins: 2, draws: 1, loses: 0, goals: "6-2", pts: 7},
-    {team: "Торнадо", img:"https://upload.wikimedia.org/wikipedia/commons/a/ad/Tornado_Sport_Club_Badge.png", played: 3, wins: 1, draws: 2, loses: 0, goals: "5-3", pts: 5},
-    {team: "Атлант", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Atalanta_BC_logo.svg", played: 3, wins: 1, draws: 0, loses: 2, goals: "3-5", pts: 3},
-    {team: "Ветераны", img:"https://upload.wikimedia.org/wikipedia/commons/9/99/Veterans-Logo-real.png", played: 3, wins: 0, draws: 1, loses: 2, goals: "2-6", pts: 1}
-  ];
-
-  const prizes = [
-    {
-      place: 1,
-      label: "I Место",
-      style: "from-yellow-200 via-yellow-400 to-[#f8fa5a]",
-      icon: "🏆",
-      money: "30 000₽",
-      items: ["Золотой кубок", "Gold-медали", "Крутые худи", "Сертификат на инвентарь"]
-    },
-    {
-      place: 2,
-      label: "II Место",
-      style: "from-slate-300 via-gray-200 to-sky-200",
-      icon: "🥈",
-      money: "15 000₽",
-      items: ["Silver-медали", "Сертификат", "Фирменные футболки"]
-    },
-    {
-      place: 3,
-      label: "III Место",
-      style: "from-amber-300 via-orange-400 to-amber-500",
-      icon: "🥉",
-      money: "7 500₽",
-      items: ["Bronze-медали", "Памятная кружка"]
-    }
-  ];
-
-  // ---- Animates fade-in-up for all .fade-in-up blocks ----
-  function animateVisibleBlocks(){
-    const blocks = document.querySelectorAll('.fade-in-up');
-    for (const b of blocks) {
-      const rect = b.getBoundingClientRect();
-      if (rect.top < window.innerHeight - 80) b.classList.add('visible');
-    }
-  }
-  window.addEventListener('scroll', animateVisibleBlocks);
-  window.addEventListener('load', animateVisibleBlocks);
-
-  // --------- Fill group tables ----------
-  function fillTable(tbodyId, arr) {
-    const tbody = document.getElementById(tbodyId);
-    tbody.innerHTML = "";
-    arr.forEach((row, idx) => {
-      tbody.insertAdjacentHTML(
-        'beforeend',
-        `<tr class="hover:bg-[#0cfafa]/10 border-b border-white/10 transition">
-          <td class="py-2 font-extrabold text-[#45f9e3] text-center text-lg">${idx+1}</td>
-          <td class="py-2 flex items-center gap-3 font-barlow font-bold">
-              <img src="${row.img}" class="h-9 w-9 bg-white/10 rounded-md object-contain border border-[#00fff4]/30 shadow-md" style="filter:drop-shadow(0_3px_7px_#13faf55d);" />
-              <span class="uppercase text-white">${row.team}</span>
-          </td>
-          <td class="py-2 text-center">${row.played}</td>
-          <td class="py-2 text-center">${row.wins}</td>
-          <td class="py-2 text-center">${row.draws}</td>
-          <td class="py-2 text-center">${row.loses}</td>
-          <td class="py-2 text-center">${row.goals}</td>
-          <td class="py-2 text-center font-bold text-[#61ffe8] text-lg">${row.pts}</td>
-        </tr>`
-      );
-    });
-  }
-  fillTable('group-a-table', groupA);
-  fillTable('group-b-table', groupB);
-
-  // ------ Sponsors Marquee ------
-  function renderSponsorsMarquee() {
-    const marquee = document.getElementById('sponsors-marquee');
-    if (!marquee) return;
-    let items = '';
-    // repeat 2x for infinite illusion
-    for (let i = 0; i < 2; i++) {
-      for (const s of sponsors) {
-        items += `<a href="${s.url}" target="_blank" class="inline-flex items-center gap-2 mr-5 md:mr-12 font-extrabold font-barlow uppercase text-[#09ffcf] text-shadow hover:text-[#e7fd2e] transition">
-          <img src="${s.img}" class="w-9 h-9 object-contain bg-white/0 rounded-md" alt="${s.name}" style="filter:drop-shadow(0 1px 10px #49ffd969);" />
-          <span>${s.name}</span>
-        </a>`;
-      }
-    }
-    marquee.innerHTML = items;
-  }
-  renderSponsorsMarquee();
-
-  // ------ Sound Toggle Logic ------
-  const crowdAudio = document.getElementById("crowdAudio");
-  crowdAudio.volume = 0.18;
-  const soundBtn = document.getElementById("soundToggleBtn");
-  let isSound = false;
-  function updateIcon() {
-    if (isSound) {
-      soundBtn.classList.add('sound-active');
-      document.getElementById("soundIcon").innerHTML = `
-      <svg width="28" height="28" fill="none" viewBox="0 0 28 28"><path d="M3 11v6h5l6 6V5l-6 6H3z" fill="currentColor"/><path class="icon-wave" d="M22 14c0-2.97-1.02-5.12-2.97-6.45A1 1 0 1 1 21 5.64C24.032 7.6 26 10.57 26 14c0 3.43-1.97 6.4-5 8.36a1 1 0 1 1-1.97-1.9C20.972 19.12 22 16.98 22 14z" fill="currentColor"/></svg>
-      `;
-    } else {
-      soundBtn.classList.remove('sound-active');
-      document.getElementById("soundIcon").innerHTML = `
-      <svg width="28" height="28" fill="none" viewBox="0 0 28 28"><path d="M3 11v6h5l6 6V5l-6 6H3z" fill="currentColor"/><path d="M22 6L6 22" stroke="currentColor" stroke-width="2.2"/><path d="M22 22L6 6" stroke="currentColor" stroke-width="2.2"/></svg>
-      `;
-    }
-  }
-  soundBtn.addEventListener('click', ()=>{
-    if (!isSound) {
-      crowdAudio.currentTime = 0;
-      crowdAudio.play();
-      isSound = true;
-    } else {
-      crowdAudio.pause();
-      isSound = false;
-    }
-    updateIcon();
-  });
-  crowdAudio.addEventListener('pause', ()=>{isSound=false;updateIcon()});
-  crowdAudio.addEventListener('play', ()=>{isSound=true;updateIcon()});
-  updateIcon();
-
-  // ------ Tab switching ------
-  const tabBtns = Array.from(document.querySelectorAll('.tab-btn'));
-  const groupPanel = document.getElementById('groupPanel');
-  const playoffPanel = document.getElementById('playoffPanel');
-  const prizesPanel = document.getElementById('prizesPanel');
-  function showPanel(type){
-    groupPanel.classList.add('hidden');
-    playoffPanel.classList.add('hidden');
-    prizesPanel.classList.add('hidden');
-    groupPanel.classList.remove('block');
-    playoffPanel.classList.remove('block');
-    prizesPanel.classList.remove('block');
-    tabBtns.forEach(b=>b.classList.remove('bg-[#61ffe8]','text-black','border-[#0afbfa]'));
-    if(type==="group"){
-      groupPanel.classList.remove('hidden');
-      groupPanel.classList.add('block');
-      tabBtns[0].classList.add('bg-[#61ffe8]','text-black','border-[#0afbfa]');
-    }
-    if(type==="playoff"){
-      playoffPanel.classList.remove('hidden');
-      playoffPanel.classList.add('block');
-      tabBtns[1].classList.add('bg-[#61ffe8]','text-black','border-[#0afbfa]');
-    }
-    if(type==="prizes"){
-      prizesPanel.classList.remove('hidden');
-      prizesPanel.classList.add('block');
-      tabBtns[2].classList.add('bg-[#61ffe8]','text-black','border-[#0afbfa]');
-    }
-    animateVisibleBlocks();
-  }
-  // Set default tab
-  showPanel('group');
-  tabBtns[0].classList.add('bg-[#61ffe8]','text-black','border-[#0afbfa]');
-  tabBtns.forEach(b=>b.addEventListener('click',e=>{
-    showPanel(b.dataset.tab);
-  }));
-
-  // ------ 3D Podium Block ------
-  function renderPodium(){
-    const podiumEl = document.getElementById("podium");
-    // Adaptive for mobile: column order [2,1,3] and vertical
-    let html = `
-      <div class="flex flex-col-reverse md:flex-row w-full gap-3 justify-center items-end md:items-end">
-        <div class="podium-block mb-0 md:mb-10 flex-1 flex flex-col items-center ${getPodiumGlow(2)}">
-          <div class="bg-gradient-to-t ${prizes[1].style} w-28 md:w-32 h-36 md:h-40 rounded-xl flex flex-col items-center justify-end shadow-lg border-2 border-slate-100/25 relative z-10">
-            <span class="text-4xl md:text-5xl absolute -top-8 left-1/2 -translate-x-1/2 drop-shadow-xl">${prizes[1].icon}</span>
-            <span class="absolute bottom-[88px] left-1/2 -translate-x-1/2 font-barlow text-slate-900 bg-white/40 px-5 py-1.5 rounded-md text-xs uppercase shadow font-extrabold">${prizes[1].label}</span>
-            <div class="text-slate-900 font-extrabold text-lg md:text-2xl mb-3 mt-10">${prizes[1].money}</div>
-            <ul class="text-center text-slate-700 font-bold text-xs space-y-1 mb-2">${prizes[1].items.map(i=>`<li>${i}</li>`).join('')}</ul>
-          </div>
-        </div>
-        <div class="podium-block flex-1 flex flex-col items-center ${getPodiumGlow(1)}">
-          <div class="bg-gradient-to-t ${prizes[0].style} w-32 md:w-44 h-52 md:h-72 -mb-7 rounded-2xl flex flex-col items-center justify-end shadow-2xl border-2 border-yellow-200/60 relative z-20 scale-110">
-            <span class="text-5xl md:text-6xl absolute -top-9 left-1/2 -translate-x-1/2 drop-shadow-2xl">${prizes[0].icon}</span>
-            <span class="absolute bottom-[135px] left-1/2 -translate-x-1/2 font-barlow text-[#9b7c0e] bg-white/60 px-7 py-1.5 rounded-xl uppercase shadow font-extrabold tracking-wide">${prizes[0].label}</span>
-            <div class="text-[#ba8d13] font-extrabold text-xl md:text-3xl mb-4 mt-16">${prizes[0].money}</div>
-            <ul class="text-center text-[#4b491a] font-extrabold text-base space-y-1 mb-3">${prizes[0].items.map(i=>`<li>${i}</li>`).join('')}</ul>
-          </div>
-        </div>
-        <div class="podium-block mb-0 md:mb-5 flex-1 flex flex-col items-center ${getPodiumGlow(3)}">
-          <div class="bg-gradient-to-t ${prizes[2].style} w-24 md:w-28 h-32 md:h-32 rounded-lg flex flex-col items-center justify-end shadow-lg border-2 border-amber-800/60 relative z-10">
-            <span class="text-3xl md:text-4xl absolute -top-6 left-1/2 -translate-x-1/2 drop-shadow">${prizes[2].icon}</span>
-            <span class="absolute bottom-[72px] left-1/2 -translate-x-1/2 font-barlow text-amber-800 bg-white/40 px-4 py-1 rounded font-extrabold uppercase">${prizes[2].label}</span>
-            <div class="text-amber-900 font-extrabold text-lg md:text-xl mb-3 mt-10">${prizes[2].money}</div>
-            <ul class="text-center text-amber-900 font-bold text-xs space-y-1 mb-2">${prizes[2].items.map(i=>`<li>${i}</li>`).join('')}</ul>
-          </div>
-        </div>
+    <!-- MERCH TAB -->
+    <section class="tab-panel" id="merch-tab">
+      <div style="font-family:Lora,serif;font-size:1.27rem;font-weight:700;color:#425194;margin-bottom:22px;">Мерч и клубная атрибутика</div>
+      <div class="bento-grid" id="merch-grid"></div>
+      <div style="margin-top:32px;font-size:.94rem;color:#6375a2;">
+        Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:var(--c-accent);">merch@foot-tournament.ru</a>
       </div>
-    `;
-    podiumEl.innerHTML = html;
+    </section>
+    <!-- PRIZES & PARTNERS TAB -->
+    <section class="tab-panel" id="partners-tab">
+      <div class="prize-section">
+        <div class="prize-title">Призовой фонд</div>
+        <div class="prize-list" id="prize-list"></div>
+      </div>
+      <div class="partners-section">
+        <div class="partners-title">Наши партнёры</div>
+        <div class="partners-logos" id="partners-logos"></div>
+      </div>
+    </section>
+    <!-- For printing (Final bracket only) -->
+    <section class="print-bracket-final" id="print-bracket-final"></section>
+  </main>
+</div>
+<!-- JS: All data and logic -->
+<script>
+'use strict';
+// ---------------------  ДАННЫЕ --------------------------
+const GROUPS = [
+  {
+    title: "Группа A",
+    teams: [
+      {name: "Беркута", img: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Eagles-fc.png"},
+      {name: "Легенда", img: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Crystal_Palace_FC_logo_%282013%29.svg"},
+      {name: "Север", img: "https://upload.wikimedia.org/wikipedia/commons/1/18/FK_North_Badge.png"},
+      {name: "Молния", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Shinoda_lightning_logo.png"}
+    ]
+  },
+  {
+    title: "Группа B",
+    teams: [
+      {name: "Дельта", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Delta_logo_example.svg"},
+      {name: "Торнадо", img:"https://upload.wikimedia.org/wikipedia/commons/a/ad/Tornado_Sport_Club_Badge.png"},
+      {name: "Ветераны", img:"https://upload.wikimedia.org/wikipedia/commons/9/99/Veterans-Logo-real.png"},
+      {name: "Атлант", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Atalanta_BC_logo.svg"}
+    ]
   }
-  function getPodiumGlow(place){
-    if(place===1) return "drop-shadow-[0_0_44px_#ffe96f99]"; 
-    if(place===2) return "drop-shadow-[0_0_24px_#b2ebf966]";
-    if(place===3) return "drop-shadow-[0_0_15px_#ffbc3b66]";
-    return "";
-  }
-  renderPodium();
+];
 
-  // -- Parallax effect for stadium background on scroll --
-  window.addEventListener('scroll', function() {
-    const bg = document.getElementById('parallaxBg');
-    if (!bg) return;
-    const offset = window.scrollY * 0.25;
-    bg.style.transform = `translateY(${offset}px) scale(1.07)`;
+// Групповой этап: имитация результатов как объекты (Может быть расширено)
+const GROUP_RESULTS = {
+  "Группа A": [
+    {team: "Беркута", played: 3, wins: 2, draws: 1, loses: 0, goals: "7-3", pts: 7},
+    {team: "Легенда", played: 3, wins: 2, draws: 0, loses: 1, goals: "5-4", pts: 6},
+    {team: "Север", played: 3, wins: 1, draws: 1, loses: 1, goals: "3-4", pts: 4},
+    {team: "Молния", played: 3, wins: 0, draws: 0, loses: 3, goals: "2-6", pts: 0}
+  ],
+  "Группа B": [
+    {team: "Дельта", played: 3, wins: 2, draws: 1, loses: 0, goals: "6-2", pts: 7},
+    {team: "Торнадо", played: 3, wins: 1, draws: 2, loses: 0, goals: "5-3", pts: 5},
+    {team: "Атлант", played: 3, wins: 1, draws: 0, loses: 2, goals: "3-5", pts: 3},
+    {team: "Ветераны", played: 3, wins: 0, draws: 1, loses: 2, goals: "2-6", pts: 1}
+  ]
+};
+
+// Плей-офф (полуфиналы, финал, матч за 3 место)
+const PLAYOFF = [
+  // 1/2 финала
+  {
+    round: "Полуфиналы",
+    games: [
+      {stage: "1/2 финала", teams: ["Беркута", "Торнадо"], score: "2:1"},
+      {stage: "1/2 финала", teams: ["Дельта", "Легенда"], score: "1:3"}
+    ]
+  },
+  // Матч за 3-е место
+  {
+    round: "За 3 место",
+    games: [
+      {stage: "3-е место", teams: ["Дельта", "Торнадо"], score: "2:1"}
+    ]
+  },
+  // Финал
+  {
+    round: "Финал",
+    games: [
+      {stage: "Финал", teams: ["Беркута", "Легенда"], score: "1:2"}
+    ]
+  }
+];
+
+// МЕРЧ
+const MERCH_LIST = [
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3847/3847278.png",
+    title: "Футбольная форма турнира (набор)",
+    desc: "Доступна в двух расцветках, номера и фамилия на спине. Лимитированная коллекция!",
+    price: "3500₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3208/3208707.png",
+    title: "Шарф фаната",
+    desc: "Тёплый сувенир и клубная поддержка. С надписью 'Лето 2024'.",
+    price: "900₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3225/3225092.png",
+    title: "Бутылка для воды",
+    desc: "Стильная и экологичная бутылка объемом 700 мл с символикой турнира.",
+    price: "650₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3208/3208715.png",
+    title: "Бейсболка",
+    desc: "Базовая защита от солнца — с логотипом турнира.",
+    price: "800₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/2941/2941559.png",
+    title: "Кружка",
+    desc: "Брендированная кружка для настоящих болельщиков.",
+    price: "450₽",
+    url: "#"
+  },
+];
+// ПРИЗЫ
+const PRIZES = [
+  {
+    place: "I место",
+    amount: "30 000₽",
+    items: ["Кубок⚽", "Медали", "Сертификат на инвентарь", "Фирменные толстовки"]
+  },
+  {
+    place: "II место",
+    amount: "15 000₽",
+    items: ["Медали", "Памятный приз", "Фирменные футболки"]
+  },
+  {
+    place: "III место",
+    amount: "7 500₽",
+    items: ["Медали", "Памятная кружка"]
+  },
+  {
+    place: "Лучший бомбардир",
+    amount: "Подарок",
+    items: ["Памятный мяч", "Гравировка"]
+  }
+];
+// ПАРТНЁРЫ
+const PARTNERS = [
+  {
+    name: "SportLife",
+    img: "https://seeklogo.com/images/A/adidas-logo-FD7F5DEF12-seeklogo.com.png",
+    url: "https://adidas.com/"
+  },
+  {
+    name: "SoccerShop",
+    img: "https://seeklogo.com/images/N/nike-logo-7F31D4B897-seeklogo.com.png",
+    url: "https://nike.com/"
+  },
+  {
+    name: "ЛигаСпорт",
+    img: "https://seeklogo.com/images/P/pepsi-logo-8749D7BEAE-seeklogo.com.png",
+    url: "https://pepsi.com/"
+  },
+  {
+    name: "МегаФитнес",
+    img:"https://seeklogo.com/images/G/gazprom-logo-2E7B52FA08-seeklogo.com.png",
+    url: "https://gazprom.ru"
+  },
+  {
+    name: "СпонсорФонд",
+    img:"https://seeklogo.com/images/U/uefa-champions-league-logo-29E9E7980B-seeklogo.com.png",
+    url:"#"
+  }
+];
+// ----------- ФУНКЦИИ РЕНДЕРИНГА --------------------------
+
+// GROUPS - Render table
+function renderGroups() {
+  // Sort by group results
+  GROUPS.forEach((group, index) => {
+    const id = index===0?'group-a-list':'group-b-list';
+    const el = document.getElementById(id);
+    el.innerHTML = '';
+    const scoreData = GROUP_RESULTS[group.title];
+    // header row
+    el.insertAdjacentHTML('beforeend',
+      `<li style="color:#6377ad;background:#f2f7fc;font-size:.95em;border:none;padding-bottom:0;">
+        <span style="flex:1 1 60px;min-width:72px;">Команда</span>
+        <span style="width:43px;text-align:center;">И</span>
+        <span style="width:43px;text-align:center;">В</span>
+        <span style="width:43px;text-align:center;">Н</span>
+        <span style="width:43px;text-align:center;">П</span>
+        <span style="width:64px;text-align:center;">Голы</span>
+        <span style="width:44px;text-align:center;">Очки</span></li>`);
+    scoreData.forEach(teamRes => {
+      const team = group.teams.find(t => t.name === teamRes.team);
+      el.insertAdjacentHTML('beforeend',
+        `<li>
+          <img class="team-logo" src="${team?.img||''}" alt="" loading="lazy"/>
+          <span style="flex:1 1 70px;min-width:68px;">${teamRes.team}</span>
+          <span style="width:43px;text-align:center;">${teamRes.played}</span>
+          <span style="width:43px;text-align:center;">${teamRes.wins}</span>
+          <span style="width:43px;text-align:center;">${teamRes.draws}</span>
+          <span style="width:43px;text-align:center;">${teamRes.loses}</span>
+          <span style="width:64px;text-align:center;">${teamRes.goals}</span>
+          <span style="width:44px;text-align:center;font-weight:700;color:#5171f7;">${teamRes.pts}</span>
+        </li>`);
+    });
   });
-  </script>
+}
+
+// PLAYOFF BRACKET
+function renderBracket() {
+  const bracket = document.getElementById("playoff-bracket");
+  bracket.innerHTML = '';
+  // Render bracket columns (semi, 3rd, final)
+  // 1 col: полуфиналы; 2 col: бронза; 3 col: финал
+  const cols = [[],[],[]];
+  for (const round of PLAYOFF) {
+    if (round.round.startsWith('Полуфин')) cols[0] = round.games;
+    else if (round.round == 'За 3 место') cols[1] = round.games;
+    else if (round.round === 'Финал') cols[2] = round.games;
+  }
+  ["Полуфиналы", "Матч за бронзу", "Финал"].forEach((header,i)=>{
+    bracket.insertAdjacentHTML('beforeend',`
+      <div class="bracket-col">
+        <div class="bracket-stage" style="font-family:Inter,sans-serif;color:#9daadc;font-size:.98em;font-weight:600;margin-bottom:8px;text-align:left;">
+          ${header}
+        </div>
+        ${cols[i].map(game =>
+          `<div class="bracket-game bounce-in">
+            <div class="game-stage">${game.stage||""}</div>
+            <div class="game-teams">${game.teams[0]} <span class="game-score">${game.score||""}</span> ${game.teams[1]}</div>
+          </div>`
+        ).join('')}
+      </div>`);
+  });
+  // ----- Print Only: финал -----
+  const printFinal = document.getElementById('print-bracket-final');
+  printFinal.innerHTML = `<div style="font-family:Lora,serif;font-size:2.1rem;text-align:center;margin-top:2em;color:#4979FF;">ФИНАЛ</div>
+    <div style="margin:2.3em auto 1.2em auto;max-width:440px;background:#f6f8fe;border-radius:22px;padding:45px 0 22px 0;box-shadow:0 18px 55px rgba(100,120,220,0.07);letter-spacing:0.02em;">
+      <div style="font-family:Lora,serif;font-size:1.5rem;font-weight:600;letter-spacing:.008em;">
+        ${cols[2][0].teams[0]} <span style="font-size:2rem;color:#333;">${cols[2][0].score}</span> ${cols[2][0].teams[1]}
+      </div>
+      <div style="margin-top:.5em;">
+        <img src="${GROUPS[0].teams[0].img}" style="height:34px;width:34px;border-radius:50%;margin:0 26px 0 0;" alt="">
+        <img src="${GROUPS[0].teams[1].img}" style="height:34px;width:34px;border-radius:50%;margin:0 0 0 26px;" alt="">
+      </div>
+      <div style="margin-top:.9em;color:#7a92c7;font-family:Inter,sans-serif;font-size:1.11rem;">17 июня 2024, 17:00, поле A</div>
+    </div>
+  `;
+}
+
+// MERCH
+function renderMerch() {
+  const grid = document.getElementById("merch-grid");
+  grid.innerHTML = '';
+  for (const merch of MERCH_LIST) {
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="bento-card">
+        <img src="${merch.img}" alt="" class="bento-img" loading="lazy"/>
+        <div class="bento-title">${merch.title}</div>
+        <div class="bento-desc">${merch.desc}</div>
+        <button class="bento-cta" disabled>Купить за ${merch.price}</button>
+      </div>
+    `);
+  }
+}
+
+// PRIZES
+function renderPrizes() {
+  const pl = document.getElementById("prize-list");
+  pl.innerHTML = '';
+  for (const p of PRIZES) {
+    pl.insertAdjacentHTML('beforeend',`
+      <div class="prize-card">
+        <h4>${p.place}</h4>
+        <div class="prize-amount">${p.amount}</div>
+        <ul>${p.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+      </div>
+    `);
+  }
+}
+// PARTNERS
+function renderPartners() {
+  const box = document.getElementById("partners-logos");
+  box.innerHTML = '';
+  for (const p of PARTNERS) {
+    box.insertAdjacentHTML('beforeend', `
+      <a href="${p.url}" target="_blank" title="${p.name}" class="partner-logo-box">
+        <img src="${p.img}" alt="${p.name}" class="partner-logo" loading="lazy"/>
+      </a>
+    `);
+  }
+}
+
+// ------------------- Навигация и табы ------------------
+const tabBtns = Array.from(document.querySelectorAll('.t-header__nav-btn'));
+const panels = {
+  'main-tab': document.getElementById('main-tab'),
+  'merch-tab': document.getElementById('merch-tab'),
+  'partners-tab': document.getElementById('partners-tab')
+};
+// Tab switch
+tabBtns.forEach(btn => btn.addEventListener('click', e=>{
+  if(btn.classList.contains('active')) return;
+  tabBtns.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  Object.values(panels).forEach(p=>p.classList.remove('visible'));
+  panels[btn.dataset.tab]?.classList.add('visible');
+  window.scrollTo({top:0, behavior:'smooth'});
+}));
+
+// --------------------- INIT (запуск) ---------------------
+renderGroups();
+renderBracket();
+renderMerch();
+renderPrizes();
+renderPartners();
+
+</script>
+<!-- FOOTER, optional -->
+<footer style="font-family:Inter,Arial,sans-serif;text-align:center;color:#b0b8d2;background:rgba(248,250,252,.72);padding:18px 0 9px 0;font-size:.99rem;letter-spacing:.01em;border-top:1.5px solid #ECEEF4;margin-top:auto;box-shadow:0 2px 7px rgba(10,16,23,.02);">
+  © 2024 Summer Football Tournament — Все права защищены
+</footer>
 </body>
 </html>
