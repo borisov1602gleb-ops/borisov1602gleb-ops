@@ -535,6 +535,259 @@
             border-radius: 2px;
             transition: all 0.2s ease;
         }
+        
+        /* Cinematic Preloader */
+        .preloader-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000814;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preloader-split {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .preloader-split-top {
+            flex: 1;
+            background: #000814;
+            transform: translateY(0);
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .preloader-split-bottom {
+            flex: 1;
+            background: #000814;
+            transform: translateY(0);
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .preloader-split.slide-out-top {
+            transform: translateY(-100%);
+        }
+        
+        .preloader-split.slide-out-bottom {
+            transform: translateY(100%);
+        }
+        
+        /* Match Center */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(239, 68, 68, 0.9);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse-red 2s infinite;
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .match-timeline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .timeline-minute {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-minute:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .event-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            transition: all 0.3s ease;
+        }
+        
+        .event-goal {
+            background: #d4af37;
+            color: #000814;
+        }
+        
+        .event-foul {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .event-card {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 150px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .event-marker:hover .event-card {
+            opacity: 1;
+            bottom: 120%;
+        }
+        
+        /* Team Profiles Drawer */
+        .team-drawer {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: rgba(0, 26, 61, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(212, 175, 55, 0.3);
+            z-index: 200;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+        
+        .team-drawer.open {
+            right: 0;
+        }
+        
+        .radar-chart {
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+        }
+        
+        .player-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 0.25rem;
+        }
+        
+        .badge-gk { background: #10b981; color: white; }
+        .badge-def { background: #3b82f6; color: white; }
+        .badge-mid { background: #8b5cf6; color: white; }
+        .badge-str { background: #ef4444; color: white; }
+        
+        /* Isometric Venue Map */
+        .isometric-container {
+            perspective: 1000px;
+            margin: 4rem 0;
+        }
+        
+        .isometric-grid {
+            width: 600px;
+            height: 400px;
+            transform: rotateX(60deg) rotateZ(-45deg);
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(135deg, #001a3d 0%, #000814 100%);
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .venue-pin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #d4af37;
+            border-radius: 50%;
+            border: 3px solid #000814;
+            transform: translateZ(20px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        }
+        
+        .venue-pin:hover {
+            transform: translateZ(30px) scale(1.2);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+        }
+        
+        .pin-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 26, 61, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .venue-pin:hover .pin-tooltip {
+            opacity: 1;
+            bottom: 120%;
+        }
+        
+        /* Fan Prediction Engine */
+        .prediction-progress {
+            height: 8px;
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .prediction-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #d4af37, #ffd700);
+            border-radius: 4px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
     </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden">
@@ -695,6 +948,259 @@
             </div>
         </div>
     </section>
+    
+    <!-- Cinematic Preloader -->
+    <div class="preloader-overlay" id="preloader">
+        <div class="preloader-split">
+            <div class="preloader-split-top" id="preloaderTop"></div>
+            <div class="preloader-split-bottom" id="preloaderBottom"></div>
+        </div>
+        <svg width="400" height="400" viewBox="0 0 400 400" style="position: absolute;">
+            <!-- Animated Football Pitch -->
+            <path d="M50 100 L350 100 L350 300 L50 300 Z" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="10 5" opacity="0.8">
+                <animate attributeName="stroke-dashoffset" values="0;15" dur="2s" repeatCount="indefinite"/>
+            </path>
+            <path d="M100 150 Q200 50 300 150" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="8 4" opacity="0.6">
+                <animate attributeName="stroke-dashoffset" values="0;12" dur="1.5s" repeatCount="indefinite"/>
+            </path>
+            <path d="M150 200 Q250 250 350 200" fill="none" stroke="#d4af37" stroke-width="2" stroke-dasharray="6 3" opacity="0.4">
+                <animate attributeName="stroke-dashoffset" values="0;9" dur="1s" repeatCount="indefinite"/>
+            </path>
+            <!-- Center Circle -->
+            <circle cx="200" cy="200" r="30" fill="none" stroke="#d4af37" stroke-width="3" opacity="0.9">
+                <animate attributeName="r" values="30;35;30" dur="2s" repeatCount="indefinite"/>
+            </circle>
+        </svg>
+    </div>
+    
+    <!-- Live Match Center -->
+    <section class="section-spacing bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bento-item glass-morphism rounded-xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-yellow-400">MATCH CENTER</h3>
+                    <div class="live-indicator">
+                        <div class="live-dot"></div>
+                        <span>LIVE</span>
+                    </div>
+                </div>
+                
+                <!-- Current Match -->
+                <div class="text-center mb-8">
+                    <h4 class="text-xl font-bold mb-4">FC Ramenskoe vs. Meteor</h4>
+                    <div class="text-5xl font-black mb-4">
+                        <span class="text-yellow-400">2</span> - <span>1</span>
+                    </div>
+                    <div class="text-gray-400">65' • Стадион "Раменское"</div>
+                </div>
+                
+                <!-- Match Timeline -->
+                <div class="match-timeline">
+                    <!-- Minutes -->
+                    <div class="timeline-minute" data-minute="0">0'</div>
+                    <div class="timeline-minute" data-minute="15">15'</div>
+                    <div class="timeline-minute" data-minute="24">24'</div>
+                    <div class="timeline-minute event-goal" data-minute="45" style="position: relative;">
+                        ⚽
+                        <div class="event-card">
+                            <strong>ГОЛ!</strong><br>
+                            Иванов • 45'<br>
+                            FC Ramenskoe 2-1
+                        </div>
+                    </div>
+                    <div class="timeline-minute" data-minute="60">60'</div>
+                    <div class="timeline-minute" data-minute="78">78'</div>
+                    <div class="timeline-minute event-foul" data-minute="90" style="position: relative;">
+                        🟨
+                        <div class="event-card">
+                            <strong>ФОЛ!</strong><br>
+                            Петров • 78'<br>
+                            Желтая карточка
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Profiles with Radar Chart -->
+    <section class="section-spacing bg-gradient-to-b from-gray-900 to-black">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bento-item glass-morphism rounded-xl p-8">
+                <h3 class="text-2xl font-bold mb-6 text-yellow-400">TEAM PROFILES</h3>
+                <div class="text-center mb-6">
+                    <p class="text-gray-300 mb-4">Нажмите на команду для детальной статистики</p>
+                    <div class="flex justify-center gap-4 flex-wrap">
+                        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-bold" onclick="openTeamDrawer('ramenskoe')">
+                            FC Ramenskoe
+                        </button>
+                        <button class="btn-primary px-4 py-2 rounded-lg text-sm font-bold" onclick="openTeamDrawer('meteor')">
+                            FC Meteor
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Isometric Venue Map -->
+    <section class="section-spacing bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bento-item glass-morphism rounded-xl p-8">
+                <h3 class="text-2xl font-bold mb-6 text-yellow-400">VENUE & LOGISTICS</h3>
+                <div class="isometric-container">
+                    <div class="isometric-grid" id="isometricMap">
+                        <!-- Venue Pins -->
+                        <div class="venue-pin" style="top: 100px; left: 200px;" data-location="Main Pitch">
+                            <div class="pin-tooltip">
+                                <strong>ОСНОВНОЕ ПОЛЕ</strong><br>
+                                Натуральный газон • 3000 мест<br>
+                                Освещение: 4x1000 люкс
+                            </div>
+                        </div>
+                        <div class="venue-pin" style="top: 150px; left: 400px;" data-location="Locker Rooms">
+                            <div class="pin-tooltip">
+                                <strong>РАЗДЕВАЛКИ</strong><br>
+                                16 командных комнат<br>
+                                Душевые и массажные зоны
+                            </div>
+                        </div>
+                        <div class="venue-pin" style="top: 200px; left: 100px;" data-location="Fan Zone">
+                            <div class="pin-tooltip">
+                                <strong>FAN ZONE</strong><br>
+                                Фудбольный магазин<br>
+                                Кафе и зона отдыха
+                            </div>
+                        </div>
+                        <div class="venue-pin" style="top: 250px; left: 300px;" data-location="Parking">
+                            <div class="pin-tooltip">
+                                <strong>ПАРКОВКА</strong><br>
+                                500 машиномест<br>
+                                Бесплатная для участников
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Fan Prediction Engine -->
+    <section class="section-spacing bg-gradient-to-b from-black to-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="bento-item glass-morphism rounded-xl p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-yellow-400">FAN ZONE: PREDICT THE CHAMPION</h3>
+                    <div class="text-sm text-gray-400">Голосование closes in 2h 45m</div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-6 mb-6">
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-2">FC Ramenskoe</div>
+                        <button class="btn-primary px-6 py-3 rounded-lg font-bold" onclick="vote('ramenskoe')">
+                            ГОЛОСОВАТЬ
+                        </button>
+                        <div class="prediction-progress">
+                            <div class="prediction-bar" id="ramenskoeVotes" style="width: 0%;"></div>
+                        </div>
+                        <div class="text-2xl font-black mt-2" id="ramenskoePercent">0%</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-2">FC Meteor</div>
+                        <button class="btn-primary px-6 py-3 rounded-lg font-bold" onclick="vote('meteor')">
+                            ГОЛОСОВАТЬ
+                        </button>
+                        <div class="prediction-progress">
+                            <div class="prediction-bar" id="meteorVotes" style="width: 0%;"></div>
+                        </div>
+                        <div class="text-2xl font-black mt-2" id="meteorPercent">0%</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-2">FC Victory</div>
+                        <button class="btn-primary px-6 py-3 rounded-lg font-bold" onclick="vote('victory')">
+                            ГОЛОСОВАТЬ
+                        </button>
+                        <div class="prediction-progress">
+                            <div class="prediction-bar" id="victoryVotes" style="width: 0%;"></div>
+                        </div>
+                        <div class="text-2xl font-black mt-2" id="victoryPercent">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Profiles Drawer -->
+    <div class="team-drawer" id="teamDrawer">
+        <div class="p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-yellow-400" id="teamDrawerTitle">TEAM PROFILE</h3>
+                <button onclick="closeTeamDrawer()" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="radar-chart">
+                <svg viewBox="0 0 400 400" id="radarChart">
+                    <!-- Radar Grid -->
+                    <g stroke="rgba(212, 175, 55, 0.2)" stroke-width="1" fill="none">
+                        <polygon points="200,50 350,150 350,250 350,350 200,350 50,250 50,150"/>
+                        <line x1="200" y1="200" x2="350" y2="150"/>
+                        <line x1="200" y1="200" x2="350" y2="250"/>
+                        <line x1="200" y1="200" x2="350" y2="350"/>
+                        <line x1="200" y1="200" x2="200" y2="350"/>
+                        <line x1="200" y1="200" x2="50" y2="350"/>
+                        <line x1="200" y1="200" x2="50" y2="250"/>
+                        <line x1="200" y1="200" x2="50" y2="150"/>
+                    </g>
+                    
+                    <!-- Radar Polygon -->
+                    <polygon id="radarPolygon" points="200,120 320,160 280,240 120,240 80,160" 
+                             fill="rgba(212, 175, 55, 0.2)" 
+                             stroke="#d4af37" 
+                             stroke-width="2"/>
+                    
+                    <!-- Labels -->
+                    <text x="200" y="40" text-anchor="middle" fill="#d4af37" font-size="14" font-weight="bold">АТАКА</text>
+                    <text x="350" y="140" text-anchor="middle" fill="#fff" font-size="12">ЗАЩИТА</text>
+                    <text x="350" y="270" text-anchor="middle" fill="#fff" font-size="12">ВЫНОСЛИВОСТЬ</text>
+                    <text x="200" y="370" text-anchor="middle" fill="#fff" font-size="12">ФИЗИЧЕСКАЯ</text>
+                    <text x="50" y="270" text-anchor="middle" fill="#fff" font-size="12">СКОРОСТЬ</text>
+                    <text x="50" y="140" text-anchor="middle" fill="#fff" font-size="12">АГРЕССИЯ</text>
+                </svg>
+            </div>
+            
+            <div class="mt-6">
+                <h4 class="text-lg font-bold mb-4 text-yellow-400">СОСТАВ КОМАНДЫ</h4>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                        <span class="player-badge badge-gk">GK</span>
+                        <span>Иванов А. - Вратарь</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="player-badge badge-def">DEF</span>
+                        <span>Петров Б. - Защитник</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="player-badge badge-def">DEF</span>
+                        <span>Сидоров В. - Защитник</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="player-badge badge-mid">MID</span>
+                        <span>Козлов Д. - Полузащитник</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="player-badge badge-str">STR</span>
+                        <span>Николаев М. - Нападающий</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Tournament Intelligence Dashboard -->
     <section id="registration" class="mega-spacing bg-gradient-to-b from-black to-gray-900">
@@ -1313,6 +1819,240 @@
         
         // Initialize
         updateStepDisplay();
+        
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Dummy Data for Modules
+        const matchData = {
+            homeTeam: 'FC Ramenskoe',
+            awayTeam: 'FC Meteor',
+            homeScore: 2,
+            awayScore: 1,
+            venue: 'Стадион "Раменское"',
+            minute: 65
+        };
+        
+        const teamStats = {
+            ramenskoe: {
+                name: 'FC Ramenskoe',
+                players: {
+                    gk: { name: 'Иванов А.', position: 'Вратарь' },
+                    def: [
+                        { name: 'Петров Б.', position: 'Защитник' },
+                        { name: 'Сидоров В.', position: 'Защитник' }
+                    ],
+                    mid: [
+                        { name: 'Козлов Д.', position: 'Полузащитник' }
+                    ],
+                    str: [
+                        { name: 'Николаев М.', position: 'Нападающий' }
+                    ]
+                },
+                radar: {
+                    attack: 85,
+                    defense: 72,
+                    stamina: 88,
+                    tactics: 65,
+                    aggression: 90
+                }
+            },
+            meteor: {
+                name: 'FC Meteor',
+                players: {
+                    gk: { name: 'Сергеев И.', position: 'Вратарь' },
+                    def: [
+                        { name: 'Васильев К.', position: 'Защитник' },
+                        { name: 'Михайлов А.', position: 'Защитник' }
+                    ],
+                    mid: [
+                        { name: 'Федоров С.', position: 'Полузащитник' },
+                        { name: 'Алексеев П.', position: 'Полузащитник' }
+                    ],
+                    str: [
+                        { name: 'Дмитриев Н.', position: 'Нападающий' },
+                        { name: 'Егоров В.', position: 'Нападающий' }
+                    ]
+                },
+                radar: {
+                    attack: 78,
+                    defense: 85,
+                    stamina: 82,
+                    tactics: 70,
+                    aggression: 75
+                }
+            },
+            victory: {
+                name: 'FC Victory',
+                players: {
+                    gk: { name: 'Зайцев А.', position: 'Вратарь' },
+                    def: [
+                        { name: 'Орлов П.', position: 'Защитник' },
+                        { name: 'Тихонов М.', position: 'Защитник' }
+                    ],
+                    mid: [
+                        { name: 'Ковалёв С.', position: 'Полузащитник' },
+                        { name: 'Белов Д.', position: 'Полузащитник' }
+                    ],
+                    str: [
+                        { name: 'Соколов Р.', position: 'Нападающий' },
+                        { name: 'Павлов К.', position: 'Нападающий' }
+                    ]
+                },
+                radar: {
+                    attack: 92,
+                    defense: 88,
+                    stamina: 76,
+                    tactics: 80,
+                    aggression: 85
+                }
+            }
+        };
+        
+        const votingData = {
+            ramenskoe: 0,
+            meteor: 0,
+            victory: 0,
+            totalVotes: 0
+        };
+        
+        // Cinematic Preloader
+        function initPreloader() {
+            const preloader = document.getElementById('preloader');
+            const preloaderTop = document.getElementById('preloaderTop');
+            const preloaderBottom = document.getElementById('preloaderBottom');
+            
+            // Animate SVG pitch
+            setTimeout(() => {
+                preloaderTop.classList.add('slide-out-top');
+                preloaderBottom.classList.add('slide-out-bottom');
+            }, 500);
+            
+            // Hide preloader and show hero
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 2500);
+        }
+        
+        // Team Profiles Drawer
+        function openTeamDrawer(team) {
+            const drawer = document.getElementById('teamDrawer');
+            const title = document.getElementById('teamDrawerTitle');
+            const stats = teamStats[team];
+            
+            title.textContent = `${stats.name} - СТАТИСТИКА`;
+            
+            // Update radar chart
+            updateRadarChart(stats.radar);
+            
+            // Update player list
+            updatePlayerList(stats.players);
+            
+            drawer.classList.add('open');
+        }
+        
+        function closeTeamDrawer() {
+            const drawer = document.getElementById('teamDrawer');
+            drawer.classList.remove('open');
+        }
+        
+        function updateRadarChart(radar) {
+            const polygon = document.getElementById('radarPolygon');
+            const points = [
+                [200, 120 - (100 - radar.attack) * 0.8], // Attack
+                [200 + (100 - radar.defense) * 0.8, 120], // Defense
+                [200 + (100 - radar.stamina) * 0.8, 200 + (100 - radar.stamina) * 0.8], // Stamina
+                [200, 200 + (100 - radar.tactics) * 0.8], // Tactics
+                [200 - (100 - radar.aggression) * 0.8, 200] // Aggression
+            ];
+            
+            polygon.setAttribute('points', points.join(' '));
+            
+            // Animate the change
+            gsap.to(polygon, {
+                attr: { points: points.join(' ') },
+                duration: 1,
+                ease: "power2.inOut"
+            });
+        }
+        
+        function updatePlayerList(players) {
+            const container = document.querySelector('.team-drawer .space-y-2');
+            const positions = ['gk', 'def', 'mid', 'str'];
+            const badges = { gk: 'badge-gk', def: 'badge-def', mid: 'badge-mid', str: 'badge-str' };
+            
+            let html = '';
+            positions.forEach(pos => {
+                const playerList = players.filter(p => p.position === pos);
+                playerList.forEach(player => {
+                    html += `
+                        <div class="flex items-center gap-3">
+                            <span class="player-badge ${badges[pos]}">${pos.toUpperCase()}</span>
+                            <span>${player.name} - ${player.position}</span>
+                        </div>
+                    `;
+                });
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Fan Prediction Engine
+        function vote(team) {
+            votingData[team]++;
+            votingData.totalVotes++;
+            
+            updatePredictionBars();
+        }
+        
+        function updatePredictionBars() {
+            const teams = ['ramenskoe', 'meteor', 'victory'];
+            
+            teams.forEach(team => {
+                const votes = votingData[team];
+                const percentage = votingData.totalVotes > 0 ? (votes / votingData.totalVotes) * 100 : 0;
+                
+                const bar = document.getElementById(`${team}Votes`);
+                const percent = document.getElementById(`${team}Percent`);
+                
+                gsap.to(bar, {
+                    width: `${percentage}%`,
+                    duration: 1,
+                    ease: "cubic-bezier(0.4, 0, 0.2, 1)"
+                });
+                
+                gsap.to(percent, {
+                    textContent: `${Math.round(percentage)}%`,
+                    duration: 1,
+                    ease: "cubic-bezier(0.4, 0, 0.2, 1)"
+                });
+            });
+        }
+        
+        // Venue Map Interactions
+        document.querySelectorAll('.venue-pin').forEach(pin => {
+            pin.addEventListener('mouseenter', (e) => {
+                const tooltip = pin.querySelector('.pin-tooltip');
+                gsap.to(tooltip, {
+                    opacity: 1,
+                    bottom: '120%',
+                    duration: 0.3
+                });
+            });
+            
+            pin.addEventListener('mouseleave', (e) => {
+                const tooltip = pin.querySelector('.pin-tooltip');
+                gsap.to(tooltip, {
+                    opacity: 0,
+                    bottom: '100%',
+                    duration: 0.3
+                });
+            });
+        });
+        
+        // Initialize
+        initPreloader();
         
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
