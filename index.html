@@ -1,232 +1,765 @@
-<!--
-Интерпретируя ваш follow-up как просьбу реализовать "код для Марио" — имея в виду минимальную игру или анимацию в стиле Mario прямо в index.html, но согласно первоначальному требованию использовать только один файл и Vanilla JS.
-Пример ниже: игра "Марио" (super-basic runner demo in JS) на canvas. Просто вставьте этот фрагмент внутрь index.html. 
--->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Mini Mario Runner</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Футбольный Турнир 2024</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Fonts for UI and main content -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      background: #F8FAFC;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      font-family: Inter, sans-serif;
+    :root {
+      --c-white: #fff;
+      --c-light: #F8FAFC;
+      --c-black: #111827;
+      --c-glass: rgba(255,255,255,0.52);
+      --c-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      --c-accent: #4979FF;
+      --border: 1.5px solid #e5e7eb;
+      --transition: .22s cubic-bezier(.43,.2,.37,1.22);
     }
-    #game {
-      border-radius: 24px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-      background: #FFFFFFCC;
-      backdrop-filter: blur(8px);
-      border: 2px solid #F8FAFC;
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--c-light);
+      color: var(--c-black);
+      min-height: 100vh;
+      height: 100%;
+    }
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #root {
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .t-header {
+      display: flex;
       align-items: center;
-      padding: 32px 24px;
+      justify-content: space-between;
+      background: var(--c-white);
+      padding: 0 38px 0 24px;
+      height: 70px;
+      box-shadow: var(--c-shadow);
+      font-family: Inter, sans-serif;
+      z-index: 2;
+      position: relative;
     }
-    canvas {
-      background: linear-gradient(#a2e3fa 80%, #63ceff 100%);
-      display: block;
-      border-radius: 20px;
-      margin-top: 12px;
-      box-shadow: 0 6px 24px rgba(17,24,39,0.08);
-    }
-    h1 {
-      margin: 0;
-      color: #111827;
+    .t-header__logo {
       font-family: 'Lora', serif;
-      font-size: 2rem;
-      letter-spacing: 0.03em;
+      font-size: 1.67rem;
+      font-weight: 700;
+      letter-spacing: .042em;
+      color: var(--c-accent);
+      text-shadow: 0 2px 24px rgba(50,120,220,.035);
     }
-    p {
-      font-size: 1rem;
-      color: #888;
-      margin: 0;
+    .t-header__nav {
+      display: flex;
+      gap: 20px;
+    }
+    .t-header__nav-btn {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 1.08rem;
+      color: var(--c-black);
+      padding: 8px 12px;
+      border-radius: 5.5px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      font-weight: 500;
+      position: relative;
+    }
+    .t-header__nav-btn.active,
+    .t-header__nav-btn:hover {
+      background: var(--c-accent);
+      color: #fff;
+    }
+    /* Container/panels */
+    .t-main {
+      display: flex;
+      flex: 1 1 auto;
+      background: linear-gradient(115deg, var(--c-white) 80%, var(--c-light) 100%);
+      min-height: 0;
+      min-width: 0;
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+    /* TAB PANELS */
+    .tab-panel {
+      flex: 1 1 auto;
+      display: none;
+      padding: 38px 22px 40px 22px;
+      min-width: 0;
+      min-height: 0;
+      background: transparent;
+      position: relative;
+      animation: fadeInTab 0.26s;
+    }
+    @keyframes fadeInTab {
+      from { opacity: .6; transform: translateY(12px);}
+      to { opacity: 1; transform: none;}
+    }
+    .tab-panel.visible { display: block; }
+    /* MAIN TAB: Tournament */
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      justify-content: stretch;
+      min-width: 0;
+    }
+    /* Info Column */
+    .main-info {
+      flex: 1 1 260px;
+      min-width: 246px;
+      max-width: 320px;
+      background: var(--c-glass);
+      backdrop-filter: blur(24px);
+      border-radius: 22px;
+      box-shadow: var(--c-shadow);
+      padding: 32px 34px 32px 28px;
+      margin-bottom: 18px;
+      margin-right: 0;
+    }
+    .main-info h2 {
+      margin-top: 0; font-family: Lora, serif; font-size:1.25rem;
+    }
+    .main-info ul {
+      padding-left: 18px;
+      margin:0;
+      margin-bottom: 10px;
+    }
+    /* Group Column */
+    .main-groups {
+      flex: 2 1 520px;
+      min-width: 350px;
+      max-width: 660px;
+    }
+    .groups-header {
+      display:flex; gap:48px; align-items: flex-end; margin-bottom: 12px;
+    }
+    .group-block {
+      background: var(--c-white);
+      box-shadow: var(--c-shadow);
+      border-radius: 17px;
+      margin-bottom: 22px;
+      padding: 18px 14px 20px 20px;
+      min-width: 260px;
+      overflow-x: auto;
+    }
+    .group-block h3 {
+      margin-top: 0;font-family: Lora, serif;font-size:1.16rem;color: var(--c-accent);
+      font-weight: 700;margin-bottom:8px;
+    }
+    .team-list {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .team-list li {
+      display: flex; align-items: center;
+      border-bottom: 1.5px solid #ededed;
+      font-size: 1.09rem; font-family: Lora, serif;
+      padding: 3px 0 3px 0;
+      font-weight: 500;
+      min-height: 34px;
+    }
+    .team-logo {
+      width:26px;height:26px;object-fit:contain; border-radius:6px; background:#f2f2f2;
+      margin-right:9px; border:1px solid #f0f0f4;
+      box-shadow: 0 2px 11px rgba(20,40,80,.06);
+    }
+    /* Playoff bracket grid */
+    .playoff-block {
+      background: var(--c-white);
+      border-radius: 18px;
+      padding: 22px 16px 18px 24px;
+      box-shadow: var(--c-shadow);
+      min-width: 328px;
+    }
+    .playoff-title {
+      font-family: Lora, serif; font-size: 1.23rem;
+      font-weight: bold; color: #374151; margin-top: 0;
       margin-bottom: 8px;
+    }
+    .bracket {
+      display: flex; gap:34px; align-items: flex-start;flex-wrap:wrap;
+    }
+    .bracket-col {
+      display: flex; flex-direction: column; gap: 30px;
+    }
+    .bracket-game {
+      min-width: 105px;
+      min-height: 60px;
+      background:var(--c-light);
+      border-radius:12px;
+      border:1.5px solid #e1e6ea;
+      box-shadow: 0 2px 16px rgba(160,180,200,.03);
+      padding:6px 14px 8px 10px;
+      display: flex; flex-direction:column; justify-content: center;align-items: flex-start;
+    }
+    .bracket-game .game-stage {
+      font-size: .82rem; color: #697194; margin-bottom:2px; font-family: Inter, sans-serif;
+    }
+    .bracket-game .game-teams {
+      font-family: Lora, serif; font-size:1.08rem; color: #161c26;
+    }
+    .bracket-game .game-score {
+      font-size:.98rem;font-family:Inter,sans-serif;color:#4979FF;
+      margin-left:10px;
+    }
+
+    /* MERCH TAB */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+      gap: 26px;
+      margin-top: 24px;
+    }
+    .bento-card {
+      background: var(--c-glass);
+      border-radius: 18px;
+      box-shadow: var(--c-shadow);
+      padding: 24px 18px 20px 18px;
+      display: flex; flex-direction: column; align-items: center;
+      transition: box-shadow .27s cubic-bezier(.43,.2,.37,1.22), transform .18s;
+      position: relative;
+      border: var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .bento-card:hover {
+      box-shadow: 0 18px 48px rgba(24,64,235,0.13);
+      transform: translateY(-4px) scale(1.018);
+      z-index: 2;
+    }
+    .bento-img {
+      width:110px;height:110px;object-fit:contain; border-radius:16px; background:#f0f0f3;
+      margin-bottom:16px;
+      box-shadow:0 3px 12px rgba(80,120,220,.06);
+    }
+    .bento-title {
+      font-family: Lora, serif;
+      font-size: 1.13rem;
+      margin-bottom: 7px;
+      font-weight: 700;
+      color: #111827;
+      text-align: center;
+    }
+    .bento-desc {
+      font-size:.97rem;color:#45496B;text-align:center;margin-bottom:16px;
+    }
+    .bento-cta {
+      background: var(--c-accent);
+      color: #fff;
+      border: none;
+      border-radius:7px;
+      padding:7px 15px;
+      font-size:1rem;
+      font-family: Inter, sans-serif;
+      cursor:pointer;
+      font-weight: 600;
+      box-shadow:0 3px 14px rgba(40,120,240,0.065);
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+    .bento-cta:hover {
+      background: #2a56db;
+      box-shadow:0 7px 30px rgba(42,86,219,0.13);
+    }
+
+    /* PRIZES & PARTNERS TAB */
+    .prize-section {
+      margin-bottom: 48px;
+      padding: 12px 0 0 0;
+    }
+    .prize-title {
+      font-family: Lora, serif; font-size:1.22rem;color: var(--c-accent);font-weight:700;
+      margin-bottom:8px;
+    }
+    .prize-list {
+      display: flex; gap:36px; flex-wrap:wrap; margin-top:12px;
+    }
+    .prize-card {
+      background: #fff;
+      border-radius: 13px;
+      box-shadow: var(--c-shadow);
+      min-width:200px;
+      max-width:260px;
+      padding:17px 22px 18px 18px;
+      font-family: Inter, sans-serif;
+      border: var(--border);
+      margin-bottom: 8px;
+    }
+    .prize-card h4 {
+      margin: 0 0 6px 0; font-size: 1rem; color: #4979FF;
+    }
+    .prize-card .prize-amount {
+      font-size:27px;color:#111827;font-family:Lora,serif;font-weight:700;
+      margin-bottom: 2px; margin-top:8px;
+    }
+    .prize-card ul {
+      margin:0 0 6px 12px; font-size:.95em;
+    }
+    /* Partners grid */
+    .partners-section {
+      padding: 14px 0 0 0;
+    }
+    .partners-title {
+      font-family: Lora, serif; font-size:1.18rem;color: var(--c-accent);font-weight:600;
+      margin-bottom:15px;margin-top:0;
+    }
+    .partners-logos {
+      display: flex;flex-wrap:wrap;gap:30px 48px;
+      align-items:center;
+      margin-bottom: 11vw;
+      margin-top: 10px;
+    }
+    .partner-logo-box {
+      background: var(--c-white);
+      border-radius: 12px;
+      box-shadow:var(--c-shadow);
+      display: flex; align-items: center; justify-content: center;
+      padding:18px 22px;
+      min-width:128px;
+      min-height:66px;
+      border: var(--border);
+      margin-bottom: 18px;
+    }
+    .partner-logo {
+      max-width:96px; max-height:38px; object-fit:contain;
+    }
+    /* scroll bars, etc */
+    * {
+      scrollbar-color: #d8d8ff #fff;
+      scrollbar-width: thin;
+      }
+    ::-webkit-scrollbar {width:7px;background:#f8fafc;}
+    ::-webkit-scrollbar-thumb {background:#c5c8d6;border-radius:7px;}
+    @media (max-width:1100px) {
+      .main-container {flex-direction:column; gap:0;}
+      .main-info {max-width:unset;margin-bottom:13px;}
+      .main-groups,
+      .playoff-block {max-width:100vw;}
+    }
+    @media (max-width:750px) {
+      .t-header { padding:0 10px;}
+      .main-info,
+      .playoff-block {padding:18px 9px;}
+      .tab-panel {padding:20px 4vw;}
+      .bento-grid {gap:12px;}
+      .partners-logos{gap:18px 24px;}
+    }
+    /* Print: show only main bracket for final game */
+    @media print {
+      body, html { background: #fff !important; }
+      .t-header, .t-header *, #main-tab, #merch-tab, #partners-tab, .main-info, .main-groups, .bento-grid, .partners-section, .prize-section {
+        display: none !important;
+        height: 0 !important;
+        overflow: hidden;
+      }
+      .print-bracket-final { display: block !important; }
+    }
+    .print-bracket-final { display: none;}
+    /* Animations etc */
+    .bounce-in {
+      animation: bounceIn .63s cubic-bezier(.41,.91,.41,.91);
+    }
+    @keyframes bounceIn {
+      0% {transform:scale(.6) translateY(70px);opacity:0;}
+      75% {transform:scale(1.07) translateY(-4px);}
+      100% {transform:scale(1) translateY(0);opacity:1;}
     }
   </style>
 </head>
 <body>
-  <div id="game">
-    <h1>Mini Mario Runner</h1>
-    <p>Пробел — прыгнуть</p>
-    <canvas id="mario" width="480" height="240"></canvas>
-    <p><small>Demo</small></p>
-  </div>
-  <script>
-    // Простая "раннер" игра: Марио бежит, перепрыгивает препятствия
-    const canvas = document.getElementById('mario');
-    const ctx = canvas.getContext('2d');
+<div id="root">
+  <!-- HEADER -->
+  <header class="t-header">
+    <div class="t-header__logo">Футбольный Турнир 2024</div>
+    <nav class="t-header__nav">
+      <button class="t-header__nav-btn active" data-tab="main-tab">Главная</button>
+      <button class="t-header__nav-btn" data-tab="merch-tab">Мерч</button>
+      <button class="t-header__nav-btn" data-tab="partners-tab">Призы и партнёры</button>
+    </nav>
+  </header>
+  <!-- MAIN TABS -->
+  <main class="t-main">
+    <!-- Главная: турнирная таблица, группы, плей-офф -->
+    <section class="tab-panel visible" id="main-tab">
+      <div class="main-container">
+        <aside class="main-info">
+          <h2>О турнире</h2>
+          <p>Добро пожаловать на ежегодный Летний футбольный турнир 2024! Сражаются 8 команд в двух группах, далее — плей-офф.<br/><b>Место:</b> Спорткомплекс «Лидер», Москва.<br/><b>Даты:</b> 15–17 июня 2024.<br/><b>Формат:</b> 2 группы по 4, финал — кубок!</p>
+          <ul>
+            <li>⚽ 2 тайма по 20 минут</li>
+            <li>⏰ Начало игр: 09:30</li>
+            <li>🟢 Открытая регистрация команд</li>
+            <li>🎥 Прямая трансляция/судейство</li>
+          </ul>
+          <p style="margin-top:2.5em;font-size:.96rem;color:#6572a3;">Контакты для заявок:<br/><b>+7 999 333-11-22</b> (Иван), <a href="mailto:support@foot-tournament.ru" style="color:var(--c-accent);text-decoration:underline;">support@foot-tournament.ru</a></p>
+        </aside>
+        <!-- middle: groups -->
+        <section class="main-groups">
+          <div class="groups-header">
+            <div><h2 style="margin:0;font-family:Lora,serif;font-weight:700;font-size:1.18rem;">Группы</h2></div>
+            <div><h2 style="margin:0;font-family:Lora,serif;font-size:1.03rem;color:#939AD8;">Этап: групповой</h2></div>
+          </div>
+          <!-- two groups -->
+          <div style="display:flex;gap:22px;flex-wrap:wrap;">
+            <!-- Group A -->
+            <div class="group-block">
+              <h3>ГРУППА A</h3>
+              <ol class="team-list" id="group-a-list">
+                <!-- Автоматически заполнится ниже скриптом -->
+              </ol>
+            </div>
+            <!-- Group B -->
+            <div class="group-block">
+              <h3>ГРУППА B</h3>
+              <ol class="team-list" id="group-b-list"></ol>
+            </div>
+          </div>
+          <!-- Playoff bracket -->
+          <div class="playoff-block">
+            <div class="playoff-title">Плей-офф Сетка</div>
+            <div class="bracket" id="playoff-bracket"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+    <!-- MERCH TAB -->
+    <section class="tab-panel" id="merch-tab">
+      <div style="font-family:Lora,serif;font-size:1.27rem;font-weight:700;color:#425194;margin-bottom:22px;">Мерч и клубная атрибутика</div>
+      <div class="bento-grid" id="merch-grid"></div>
+      <div style="margin-top:32px;font-size:.94rem;color:#6375a2;">
+        Для заказа: <a href="mailto:merch@foot-tournament.ru" style="color:var(--c-accent);">merch@foot-tournament.ru</a>
+      </div>
+    </section>
+    <!-- PRIZES & PARTNERS TAB -->
+    <section class="tab-panel" id="partners-tab">
+      <div class="prize-section">
+        <div class="prize-title">Призовой фонд</div>
+        <div class="prize-list" id="prize-list"></div>
+      </div>
+      <div class="partners-section">
+        <div class="partners-title">Наши партнёры</div>
+        <div class="partners-logos" id="partners-logos"></div>
+      </div>
+    </section>
+    <!-- For printing (Final bracket only) -->
+    <section class="print-bracket-final" id="print-bracket-final"></section>
+  </main>
+</div>
+<!-- JS: All data and logic -->
+<script>
+'use strict';
+// ---------------------  ДАННЫЕ --------------------------
+const GROUPS = [
+  {
+    title: "Группа A",
+    teams: [
+      {name: "Беркута", img: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Eagles-fc.png"},
+      {name: "Легенда", img: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Crystal_Palace_FC_logo_%282013%29.svg"},
+      {name: "Север", img: "https://upload.wikimedia.org/wikipedia/commons/1/18/FK_North_Badge.png"},
+      {name: "Молния", img: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Shinoda_lightning_logo.png"}
+    ]
+  },
+  {
+    title: "Группа B",
+    teams: [
+      {name: "Дельта", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Delta_logo_example.svg"},
+      {name: "Торнадо", img:"https://upload.wikimedia.org/wikipedia/commons/a/ad/Tornado_Sport_Club_Badge.png"},
+      {name: "Ветераны", img:"https://upload.wikimedia.org/wikipedia/commons/9/99/Veterans-Logo-real.png"},
+      {name: "Атлант", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Atalanta_BC_logo.svg"}
+    ]
+  }
+];
 
-    // Mario params
-    let mario = {
-      x: 48,
-      y: 180,
-      width: 32,
-      height: 32,
-      vy: 0,
-      onGround: true
-    };
+// Групповой этап: имитация результатов как объекты (Может быть расширено)
+const GROUP_RESULTS = {
+  "Группа A": [
+    {team: "Беркута", played: 3, wins: 2, draws: 1, loses: 0, goals: "7-3", pts: 7},
+    {team: "Легенда", played: 3, wins: 2, draws: 0, loses: 1, goals: "5-4", pts: 6},
+    {team: "Север", played: 3, wins: 1, draws: 1, loses: 1, goals: "3-4", pts: 4},
+    {team: "Молния", played: 3, wins: 0, draws: 0, loses: 3, goals: "2-6", pts: 0}
+  ],
+  "Группа B": [
+    {team: "Дельта", played: 3, wins: 2, draws: 1, loses: 0, goals: "6-2", pts: 7},
+    {team: "Торнадо", played: 3, wins: 1, draws: 2, loses: 0, goals: "5-3", pts: 5},
+    {team: "Атлант", played: 3, wins: 1, draws: 0, loses: 2, goals: "3-5", pts: 3},
+    {team: "Ветераны", played: 3, wins: 0, draws: 1, loses: 2, goals: "2-6", pts: 1}
+  ]
+};
 
-    // Platform params
-    const groundY = 212;
-    // Obstacle params
-    let obstacles = [
-      {x: 480, width: 18, height: 38, speed: 3}
-    ];
-    let score = 0;
-    let gameOver = false;
+// Плей-офф (полуфиналы, финал, матч за 3 место)
+const PLAYOFF = [
+  // 1/2 финала
+  {
+    round: "Полуфиналы",
+    games: [
+      {stage: "1/2 финала", teams: ["Беркута", "Торнадо"], score: "2:1"},
+      {stage: "1/2 финала", teams: ["Дельта", "Легенда"], score: "1:3"}
+    ]
+  },
+  // Матч за 3-е место
+  {
+    round: "За 3 место",
+    games: [
+      {stage: "3-е место", teams: ["Дельта", "Торнадо"], score: "2:1"}
+    ]
+  },
+  // Финал
+  {
+    round: "Финал",
+    games: [
+      {stage: "Финал", teams: ["Беркута", "Легенда"], score: "1:2"}
+    ]
+  }
+];
 
-    document.addEventListener('keydown', e=>{
-      if(e.code === "Space" && mario.onGround && !gameOver) {
-        mario.vy = -11.5;
-        mario.onGround = false;
-      }
-      if(e.code === "Enter" && gameOver){
-        resetGame();
-      }
+// МЕРЧ
+const MERCH_LIST = [
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3847/3847278.png",
+    title: "Футбольная форма турнира (набор)",
+    desc: "Доступна в двух расцветках, номера и фамилия на спине. Лимитированная коллекция!",
+    price: "3500₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3208/3208707.png",
+    title: "Шарф фаната",
+    desc: "Тёплый сувенир и клубная поддержка. С надписью 'Лето 2024'.",
+    price: "900₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3225/3225092.png",
+    title: "Бутылка для воды",
+    desc: "Стильная и экологичная бутылка объемом 700 мл с символикой турнира.",
+    price: "650₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/3208/3208715.png",
+    title: "Бейсболка",
+    desc: "Базовая защита от солнца — с логотипом турнира.",
+    price: "800₽",
+    url: "#"
+  },
+  {
+    img: "https://cdn-icons-png.flaticon.com/512/2941/2941559.png",
+    title: "Кружка",
+    desc: "Брендированная кружка для настоящих болельщиков.",
+    price: "450₽",
+    url: "#"
+  },
+];
+// ПРИЗЫ
+const PRIZES = [
+  {
+    place: "I место",
+    amount: "30 000₽",
+    items: ["Кубок⚽", "Медали", "Сертификат на инвентарь", "Фирменные толстовки"]
+  },
+  {
+    place: "II место",
+    amount: "15 000₽",
+    items: ["Медали", "Памятный приз", "Фирменные футболки"]
+  },
+  {
+    place: "III место",
+    amount: "7 500₽",
+    items: ["Медали", "Памятная кружка"]
+  },
+  {
+    place: "Лучший бомбардир",
+    amount: "Подарок",
+    items: ["Памятный мяч", "Гравировка"]
+  }
+];
+// ПАРТНЁРЫ
+const PARTNERS = [
+  {
+    name: "SportLife",
+    img: "https://seeklogo.com/images/A/adidas-logo-FD7F5DEF12-seeklogo.com.png",
+    url: "https://adidas.com/"
+  },
+  {
+    name: "SoccerShop",
+    img: "https://seeklogo.com/images/N/nike-logo-7F31D4B897-seeklogo.com.png",
+    url: "https://nike.com/"
+  },
+  {
+    name: "ЛигаСпорт",
+    img: "https://seeklogo.com/images/P/pepsi-logo-8749D7BEAE-seeklogo.com.png",
+    url: "https://pepsi.com/"
+  },
+  {
+    name: "МегаФитнес",
+    img:"https://seeklogo.com/images/G/gazprom-logo-2E7B52FA08-seeklogo.com.png",
+    url: "https://gazprom.ru"
+  },
+  {
+    name: "СпонсорФонд",
+    img:"https://seeklogo.com/images/U/uefa-champions-league-logo-29E9E7980B-seeklogo.com.png",
+    url:"#"
+  }
+];
+// ----------- ФУНКЦИИ РЕНДЕРИНГА --------------------------
+
+// GROUPS - Render table
+function renderGroups() {
+  // Sort by group results
+  GROUPS.forEach((group, index) => {
+    const id = index===0?'group-a-list':'group-b-list';
+    const el = document.getElementById(id);
+    el.innerHTML = '';
+    const scoreData = GROUP_RESULTS[group.title];
+    // header row
+    el.insertAdjacentHTML('beforeend',
+      `<li style="color:#6377ad;background:#f2f7fc;font-size:.95em;border:none;padding-bottom:0;">
+        <span style="flex:1 1 60px;min-width:72px;">Команда</span>
+        <span style="width:43px;text-align:center;">И</span>
+        <span style="width:43px;text-align:center;">В</span>
+        <span style="width:43px;text-align:center;">Н</span>
+        <span style="width:43px;text-align:center;">П</span>
+        <span style="width:64px;text-align:center;">Голы</span>
+        <span style="width:44px;text-align:center;">Очки</span></li>`);
+    scoreData.forEach(teamRes => {
+      const team = group.teams.find(t => t.name === teamRes.team);
+      el.insertAdjacentHTML('beforeend',
+        `<li>
+          <img class="team-logo" src="${team?.img||''}" alt="" loading="lazy"/>
+          <span style="flex:1 1 70px;min-width:68px;">${teamRes.team}</span>
+          <span style="width:43px;text-align:center;">${teamRes.played}</span>
+          <span style="width:43px;text-align:center;">${teamRes.wins}</span>
+          <span style="width:43px;text-align:center;">${teamRes.draws}</span>
+          <span style="width:43px;text-align:center;">${teamRes.loses}</span>
+          <span style="width:64px;text-align:center;">${teamRes.goals}</span>
+          <span style="width:44px;text-align:center;font-weight:700;color:#5171f7;">${teamRes.pts}</span>
+        </li>`);
     });
+  });
+}
 
-    function drawMario(){
-      // simple pixel-art "Mario"
-      ctx.save();
-      ctx.translate(mario.x, mario.y);
-      ctx.fillStyle = "#FBAA19"; // face
-      ctx.fillRect(8,1,14,8);
-      ctx.fillStyle = "#3366AA"; // body
-      ctx.fillRect(10,13,12,16);
-      ctx.fillStyle = "#E06926"; // hat
-      ctx.fillRect(7,0,17,6);
-      ctx.fillStyle = "#865117"; // boots
-      ctx.fillRect(10,27,5,5);
-      ctx.fillRect(17,27,5,5);
-      ctx.fillStyle = "#fff"; // gloves
-      ctx.fillRect(7,18,6,5);
-      ctx.fillRect(20,18,5,5);
-      ctx.restore();
-    }
+// PLAYOFF BRACKET
+function renderBracket() {
+  const bracket = document.getElementById("playoff-bracket");
+  bracket.innerHTML = '';
+  // Render bracket columns (semi, 3rd, final)
+  // 1 col: полуфиналы; 2 col: бронза; 3 col: финал
+  const cols = [[],[],[]];
+  for (const round of PLAYOFF) {
+    if (round.round.startsWith('Полуфин')) cols[0] = round.games;
+    else if (round.round == 'За 3 место') cols[1] = round.games;
+    else if (round.round === 'Финал') cols[2] = round.games;
+  }
+  ["Полуфиналы", "Матч за бронзу", "Финал"].forEach((header,i)=>{
+    bracket.insertAdjacentHTML('beforeend',`
+      <div class="bracket-col">
+        <div class="bracket-stage" style="font-family:Inter,sans-serif;color:#9daadc;font-size:.98em;font-weight:600;margin-bottom:8px;text-align:left;">
+          ${header}
+        </div>
+        ${cols[i].map(game =>
+          `<div class="bracket-game bounce-in">
+            <div class="game-stage">${game.stage||""}</div>
+            <div class="game-teams">${game.teams[0]} <span class="game-score">${game.score||""}</span> ${game.teams[1]}</div>
+          </div>`
+        ).join('')}
+      </div>`);
+  });
+  // ----- Print Only: финал -----
+  const printFinal = document.getElementById('print-bracket-final');
+  printFinal.innerHTML = `<div style="font-family:Lora,serif;font-size:2.1rem;text-align:center;margin-top:2em;color:#4979FF;">ФИНАЛ</div>
+    <div style="margin:2.3em auto 1.2em auto;max-width:440px;background:#f6f8fe;border-radius:22px;padding:45px 0 22px 0;box-shadow:0 18px 55px rgba(100,120,220,0.07);letter-spacing:0.02em;">
+      <div style="font-family:Lora,serif;font-size:1.5rem;font-weight:600;letter-spacing:.008em;">
+        ${cols[2][0].teams[0]} <span style="font-size:2rem;color:#333;">${cols[2][0].score}</span> ${cols[2][0].teams[1]}
+      </div>
+      <div style="margin-top:.5em;">
+        <img src="${GROUPS[0].teams[0].img}" style="height:34px;width:34px;border-radius:50%;margin:0 26px 0 0;" alt="">
+        <img src="${GROUPS[0].teams[1].img}" style="height:34px;width:34px;border-radius:50%;margin:0 0 0 26px;" alt="">
+      </div>
+      <div style="margin-top:.9em;color:#7a92c7;font-family:Inter,sans-serif;font-size:1.11rem;">17 июня 2024, 17:00, поле A</div>
+    </div>
+  `;
+}
 
-    function drawObstacle(ob) {
-      ctx.save();
-      ctx.fillStyle="#228B22";
-      ctx.fillRect(ob.x, groundY-ob.height, ob.width, ob.height);
-      ctx.fillStyle="#387d18";
-      ctx.fillRect(ob.x-2, groundY-ob.height-6, ob.width+4, 8); // Top bushy part
-      ctx.restore();
-    }
+// MERCH
+function renderMerch() {
+  const grid = document.getElementById("merch-grid");
+  grid.innerHTML = '';
+  for (const merch of MERCH_LIST) {
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="bento-card">
+        <img src="${merch.img}" alt="" class="bento-img" loading="lazy"/>
+        <div class="bento-title">${merch.title}</div>
+        <div class="bento-desc">${merch.desc}</div>
+        <button class="bento-cta" disabled>Купить за ${merch.price}</button>
+      </div>
+    `);
+  }
+}
 
-    function drawGround() {
-      ctx.save();
-      ctx.fillStyle="#d1a469";
-      ctx.fillRect(0, groundY, 480, 28);
-      // "Dirt" details
-      ctx.fillStyle = "#cc9257";
-      for(let i=0;i<24;i++){
-        ctx.fillRect(i*20 + (i%4)*4, groundY+18, 8,4);
-      }
-      ctx.restore();
-    }
+// PRIZES
+function renderPrizes() {
+  const pl = document.getElementById("prize-list");
+  pl.innerHTML = '';
+  for (const p of PRIZES) {
+    pl.insertAdjacentHTML('beforeend',`
+      <div class="prize-card">
+        <h4>${p.place}</h4>
+        <div class="prize-amount">${p.amount}</div>
+        <ul>${p.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+      </div>
+    `);
+  }
+}
+// PARTNERS
+function renderPartners() {
+  const box = document.getElementById("partners-logos");
+  box.innerHTML = '';
+  for (const p of PARTNERS) {
+    box.insertAdjacentHTML('beforeend', `
+      <a href="${p.url}" target="_blank" title="${p.name}" class="partner-logo-box">
+        <img src="${p.img}" alt="${p.name}" class="partner-logo" loading="lazy"/>
+      </a>
+    `);
+  }
+}
 
-    function physics(){
-      mario.y += mario.vy;
-      mario.vy += 0.7;
-      if(mario.y >= groundY-mario.height){
-        mario.y = groundY-mario.height;
-        mario.vy = 0;
-        mario.onGround = true;
-      }
-      // Collision with obstacles
-      for(const ob of obstacles){
-        if(
-          mario.x + mario.width > ob.x &&
-          mario.x < ob.x + ob.width &&
-          mario.y + mario.height > groundY-ob.height
-        ){
-          gameOver = true;
-        }
-      }
-    }
+// ------------------- Навигация и табы ------------------
+const tabBtns = Array.from(document.querySelectorAll('.t-header__nav-btn'));
+const panels = {
+  'main-tab': document.getElementById('main-tab'),
+  'merch-tab': document.getElementById('merch-tab'),
+  'partners-tab': document.getElementById('partners-tab')
+};
+// Tab switch
+tabBtns.forEach(btn => btn.addEventListener('click', e=>{
+  if(btn.classList.contains('active')) return;
+  tabBtns.forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  Object.values(panels).forEach(p=>p.classList.remove('visible'));
+  panels[btn.dataset.tab]?.classList.add('visible');
+  window.scrollTo({top:0, behavior:'smooth'});
+}));
 
-    function updateObstacles(){
-      for(const ob of obstacles){
-        ob.x -= ob.speed;
-      }
-      // Increase score and add obstacle if needed
-      if(obstacles[0].x + obstacles[0].width < 0){
-        obstacles.shift();
-        score++;
-        const gap = 120 + Math.floor(Math.random()*60);
-        obstacles.push({
-          x: 480 + gap,
-          width: 16+Math.floor(Math.random()*10),
-          height: 32+Math.floor(Math.random()*16),
-          speed: 3 + Math.min(2, Math.floor(score/5))
-        });
-      }
-    }
+// --------------------- INIT (запуск) ---------------------
+renderGroups();
+renderBracket();
+renderMerch();
+renderPrizes();
+renderPartners();
 
-    function render(){
-      ctx.clearRect(0, 0, 480, 240);
-      drawGround();
-      for(const ob of obstacles){
-        drawObstacle(ob);
-      }
-      drawMario();
-      ctx.save();
-      ctx.font = "bold 18px Inter, sans-serif";
-      ctx.fillStyle = "#111827";
-      ctx.fillText("Счёт: "+score, 12, 28);
-      if(gameOver){
-        ctx.font = "bold 40px Lora, serif";
-        ctx.fillStyle="#111827";
-        ctx.textAlign="center";
-        ctx.fillText("Game over!", 240, 128);
-        ctx.font = "bold 22px Inter,sans-serif";
-        ctx.fillStyle = "#E06926";
-        ctx.fillText("Enter — начать заново", 240, 162);
-        ctx.textAlign="left";
-      }
-      ctx.restore();
-    }
-
-    function resetGame(){
-      score = 0;
-      obstacles = [
-        {x: 480, width: 18, height: 38, speed: 3}
-      ];
-      mario.y = 180;
-      mario.vy = 0;
-      mario.onGround = true;
-      gameOver = false;
-    }
-
-    function step(){
-      if(!gameOver){
-        physics();
-        updateObstacles();
-        render();
-        requestAnimationFrame(step);
-      }else{
-        render();
-      }
-    }
-
-    // Font loading for Inter/Lora
-    (function(){
-      const style = document.createElement("style");
-      style.textContent = `
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:wght@700&display=swap');
-      `;
-      document.head.appendChild(style);
-    })();
-
-    render();
-    setTimeout(()=>{step();}, 900);
-  </script>
+</script>
+<!-- FOOTER, optional -->
+<footer style="font-family:Inter,Arial,sans-serif;text-align:center;color:#b0b8d2;background:rgba(248,250,252,.72);padding:18px 0 9px 0;font-size:.99rem;letter-spacing:.01em;border-top:1.5px solid #ECEEF4;margin-top:auto;box-shadow:0 2px 7px rgba(10,16,23,.02);">
+  © 2024 Summer Football Tournament — Все права защищены
+</footer>
 </body>
 </html>
