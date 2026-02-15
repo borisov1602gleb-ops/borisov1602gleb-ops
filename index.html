@@ -12,6 +12,7 @@
     <style>
         * {
             font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
         }
         
         .glass-morphism {
@@ -232,7 +233,7 @@
             top: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 100;
+            z-index: 50;
             display: flex;
             gap: 2rem;
             padding: 1rem 2rem;
@@ -251,6 +252,7 @@
             border-radius: 25px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            cursor: pointer;
         }
         
         .magnetic-btn::before {
@@ -432,7 +434,7 @@
         <a href="#hero" class="magnetic-btn">ГЛАВНАЯ</a>
         <a href="#timeline" class="magnetic-btn">ДОРОГА СЛАВЫ</a>
         <a href="#trophy" class="magnetic-btn">КУБОК</a>
-        <a href="#registration" class="magnetic-btn">РЕГИСТРАЦИЯ</a>
+        <a href="#registration" class="magnetic-btn" onclick="event.preventDefault(); document.getElementById('openRegistration').click();">РЕГИСТРАЦИЯ</a>
     </nav>
     
     <!-- Custom Cursor -->
@@ -937,16 +939,26 @@
         updateCountdown();
         
         // Audio Controls
-        document.getElementById('audioToggle').addEventListener('click', function() {
+        const audioToggle = document.getElementById('audioToggle');
+        const audioVisualizer = document.getElementById('audioVisualizer');
+        
+        audioToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             state.audioPlaying = !state.audioPlaying;
-            const visualizer = document.getElementById('audioVisualizer');
             
             if (state.audioPlaying) {
-                visualizer.style.display = 'flex';
+                audioVisualizer.style.display = 'flex';
+                audioToggle.classList.add('text-yellow-300');
+                audioToggle.classList.remove('text-yellow-400');
                 // Audio would play here
+                console.log('Audio started');
             } else {
-                visualizer.style.display = 'none';
+                audioVisualizer.style.display = 'none';
+                audioToggle.classList.add('text-yellow-400');
+                audioToggle.classList.remove('text-yellow-300');
                 // Audio would pause here
+                console.log('Audio paused');
             }
         });
         
@@ -1295,8 +1307,12 @@
         // Smooth Scroll for Navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#registration') {
+                    return; // Skip smooth scroll for registration modal
+                }
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(href);
                 if (target) {
                     gsap.to(window, {
                         duration: 1.5,
