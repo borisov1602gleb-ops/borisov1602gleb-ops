@@ -231,16 +231,18 @@
         .magnetic-nav {
             position: fixed;
             top: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 2rem;
+            left: auto;
+            transform: none;
             z-index: 50;
             display: flex;
-            gap: 2rem;
-            padding: 1rem 2rem;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
             background: rgba(0, 26, 61, 0.8);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 50px;
+            border-radius: 20px;
         }
         
         .magnetic-btn {
@@ -541,7 +543,7 @@
         <a href="#hero" class="magnetic-btn">ГЛАВНАЯ</a>
         <a href="#timeline" class="magnetic-btn">ДОРОГА СЛАВЫ</a>
         <a href="#trophy" class="magnetic-btn">КУБОК</a>
-        <a href="#registration" class="magnetic-btn" onclick="event.preventDefault(); document.getElementById('openRegistration').click();">РЕГИСТРАЦИЯ</a>
+        <a href="#registration" class="magnetic-btn">РЕГИСТРАЦИЯ</a>
     </nav>
     
     <!-- Dynamic Cursor -->
@@ -706,7 +708,7 @@
                 <!-- Left Column -->
                 <div class="swiss-column">
                     <!-- Draw Module -->
-                    <div class="bento-item glass-morphism rounded-xl p-8">
+                    <div class="bento-item glass-morphism rounded-xl p-8 tilt-card">
                         <h3 class="text-2xl font-bold mb-6 text-yellow-400">ЖЕРЕБЬЕВКА</h3>
                         <div class="grid grid-cols-2 gap-6">
                             <div class="text-center">
@@ -731,7 +733,7 @@
                     </div>
                     
                     <!-- Prize Pool Section -->
-                    <div class="bento-item glass-morphism rounded-xl p-8 text-center">
+                    <div class="bento-item glass-morphism rounded-xl p-8 text-center tilt-card">
                         <h3 class="text-2xl font-bold mb-6 text-yellow-400">ОБЩИЙ ПРИЗОВОЙ ФОНД</h3>
                         <div class="prize-amount mb-8">1.000.000 ₽</div>
                         <button onclick="openSponsorshipModal()" class="sponsorship-cta">
@@ -746,7 +748,7 @@
                 <!-- Right Column -->
                 <div class="swiss-column">
                     <!-- Interactive Bracket -->
-                    <div class="bento-item glass-morphism rounded-xl p-8">
+                    <div class="bento-item glass-morphism rounded-xl p-8 tilt-card">
                         <h3 class="text-2xl font-bold mb-6 text-yellow-400">ТУРНИРНАЯ СЕТКА</h3>
                         <svg viewBox="0 0 400 300" class="w-full h-64">
                             <!-- Quarter Finals -->
@@ -773,7 +775,7 @@
                     </div>
                     
                     <!-- Prize Podium -->
-                    <div class="bento-item glass-morphism rounded-xl p-8">
+                    <div class="bento-item glass-morphism rounded-xl p-8 tilt-card">
                         <h3 class="text-2xl font-bold mb-6 text-yellow-400">ПРИЗОВЫЕ МЕСТА</h3>
                         <div class="flex justify-center items-end gap-6">
                             <!-- Silver -->
@@ -1315,11 +1317,138 @@
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
         
-        // Custom Cursor
+        // Dynamic Cursor System
         const cursor = document.getElementById('cursorGlow');
+        const cursorRing = document.getElementById('cursorRing');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX - 10 + 'px';
-            cursor.style.top = e.clientY - 10 + 'px';
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        // Cursor trailing effect
+        function animateCursor() {
+            const speed = 0.15;
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            
+            cursorRing.style.left = cursorX + 'px';
+            cursorRing.style.top = cursorY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        
+        // Hover effects for cursor
+        const interactiveElements = document.querySelectorAll('a, button, .bento-item, .tilt-card');
+        interactiveElements.forEach(elem => {
+            elem.addEventListener('mouseenter', () => {
+                cursorRing.classList.add('hover');
+            });
+            elem.addEventListener('mouseleave', () => {
+                cursorRing.classList.remove('hover');
+            });
+        });
+        
+        // Hero Parallax Effect
+        const heroParallax = document.getElementById('heroParallax');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxSpeed = 0.5;
+            heroParallax.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+        });
+        
+        // Hero Text Reveal Animation
+        gsap.from('#heroText', {
+            y: 100,
+            opacity: 0,
+            duration: 1.2,
+            ease: "power3.out",
+            delay: 0.5
+        });
+        
+        // 3D Tilt Effect for Cards
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                gsap.to(card, {
+                    rotationX: rotateX,
+                    rotationY: rotateY,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+                
+                // Glare effect
+                const glare = card.querySelector('::before') || card;
+                const glareX = (x / rect.width) * 100;
+                gsap.to(card, {
+                    '--glare-x': `${glareX}%`,
+                    duration: 0.3
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    rotationX: 0,
+                    rotationY: 0,
+                    duration: 0.5,
+                    ease: "power2.out"
+                });
+            });
+        });
+        
+        // Enhanced Audio Visualizer
+        const audioBars = document.querySelectorAll('.audio-bar-enhanced');
+        let audioAnimationId;
+        
+        function animateAudioBars() {
+            audioBars.forEach((bar, index) => {
+                const height = Math.random() * 16 + 8;
+                gsap.to(bar, {
+                    height: height,
+                    duration: 0.2,
+                    ease: "power2.inOut"
+                });
+            });
+        }
+        
+        // Update existing audio toggle
+        audioToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            state.audioPlaying = !state.audioPlaying;
+            
+            if (state.audioPlaying) {
+                audioVisualizer.style.display = 'flex';
+                audioToggle.classList.add('text-yellow-300');
+                audioToggle.classList.remove('text-yellow-400');
+                
+                // Start audio visualization
+                audioAnimationId = setInterval(animateAudioBars, 200);
+                console.log('Audio started');
+            } else {
+                audioVisualizer.style.display = 'none';
+                audioToggle.classList.add('text-yellow-400');
+                audioToggle.classList.remove('text-yellow-300');
+                
+                // Stop audio visualization
+                clearInterval(audioAnimationId);
+                console.log('Audio paused');
+            }
         });
         
         // Magnetic Navigation
@@ -1439,6 +1568,8 @@
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 if (href === '#registration') {
+                    e.preventDefault();
+                    document.getElementById('openRegistration').click();
                     return; // Skip smooth scroll for registration modal
                 }
                 e.preventDefault();
@@ -1446,7 +1577,10 @@
                 if (target) {
                     gsap.to(window, {
                         duration: 1.5,
-                        scrollTo: target,
+                        scrollTo: {
+                            y: target,
+                            offsetY: 100 // Account for fixed navigation
+                        },
                         ease: "power2.inOut"
                     });
                 }
