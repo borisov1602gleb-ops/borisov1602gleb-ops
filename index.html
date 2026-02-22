@@ -773,6 +773,11 @@
             pointer-events: none;
         }
         
+        /* Pot Card Active */
+        .pot-card.active {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        
         /* Revealed Card Animation */
         .revealed-card-enter {
             animation: cardEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -1759,41 +1764,82 @@
                     <div id="drawStudioContainer" class="flex-grow relative bg-black/40 rounded-2xl border border-white/10 overflow-hidden flex items-center justify-center">
                         <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
                         
-                        <!-- Groups Corners -->
-                        <div class="studio-group-card absolute top-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-a" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'A')">
-                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">A</h3>
-                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА A</div>
-                            <div class="space-y-1 studio-list text-xs"></div>
-                        </div>
-                        <div class="studio-group-card absolute top-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-b" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'B')">
-                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">B</h3>
-                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА B</div>
-                            <div class="space-y-1 studio-list text-xs"></div>
-                        </div>
-                        <div class="studio-group-card absolute bottom-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-c" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'C')">
-                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">C</h3>
-                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА C</div>
-                            <div class="space-y-1 studio-list text-xs"></div>
-                        </div>
-                        <div class="studio-group-card absolute bottom-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-d" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'D')">
-                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">D</h3>
-                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА D</div>
-                            <div class="space-y-1 studio-list text-xs"></div>
-                        </div>
+                    <!-- Draw Studio Container (Redesigned) -->
+                    <div id="drawStudioContainer" class="flex-grow relative bg-black/40 rounded-2xl border border-white/10 overflow-hidden flex flex-col">
+                        <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
                         
-                        <!-- Central Action -->
-                        <div class="relative z-10 flex flex-col items-center">
-                            <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
-                            
-                            <button id="drawBowlBtn" onclick="drawNextTeam()" class="draw-pot-btn mb-8 relative group">
-                                <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                <span class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">НАЖМИТЕ ЧТОБЫ ВЫТЯНУТЬ</span>
-                            </button>
-                            
-                            <button id="finishDrawBtn" onclick="finalizeDraw()" class="hidden magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-xl hover:bg-gold-light transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-bounce">
-                                ПРИМЕНИТЬ И ОПУБЛИКОВАТЬ
-                            </button>
+                        <!-- Main Stage (Pots + Bowl) -->
+                        <div class="flex-grow flex items-center justify-between px-4 md:px-12 py-4 relative z-10">
+                            <!-- Left Pots -->
+                            <div class="flex flex-col gap-6 w-48">
+                                <div id="pot-1-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
+                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 1</div>
+                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                </div>
+                                <div id="pot-3-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
+                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 3</div>
+                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                </div>
+                            </div>
+
+                            <!-- Center Bowl -->
+                            <div class="flex flex-col items-center justify-center">
+                                <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
+                                
+                                <button id="drawBowlBtn" onclick="drawNextTeam()" class="draw-pot-btn mb-8 relative group">
+                                    <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                    <span class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">НАЖМИТЕ ЧТОБЫ ВЫТЯНУТЬ</span>
+                                </button>
+                                
+                                <button id="finishDrawBtn" onclick="finalizeDraw()" class="hidden magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-xl hover:bg-gold-light transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-bounce">
+                                    ПРИМЕНИТЬ И ОПУБЛИКОВАТЬ
+                                </button>
+                            </div>
+
+                            <!-- Right Pots -->
+                            <div class="flex flex-col gap-6 w-48">
+                                <div id="pot-2-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
+                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 2</div>
+                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                </div>
+                                <div id="pot-4-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
+                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 4</div>
+                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Groups -->
+                        <div class="h-[40%] border-t border-white/10 bg-black/40 p-4 grid grid-cols-4 gap-4 z-10 overflow-y-auto">
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-a" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'A')">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
+                                    <span class="text-gold font-bold">ГРУППА A</span>
+                                    <span class="text-white/20 font-black text-xl">A</span>
+                                </div>
+                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
+                            </div>
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-b" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'B')">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
+                                    <span class="text-gold font-bold">ГРУППА B</span>
+                                    <span class="text-white/20 font-black text-xl">B</span>
+                                </div>
+                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
+                            </div>
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-c" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'C')">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
+                                    <span class="text-gold font-bold">ГРУППА C</span>
+                                    <span class="text-white/20 font-black text-xl">C</span>
+                                </div>
+                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
+                            </div>
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-d" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'D')">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
+                                    <span class="text-gold font-bold">ГРУППА D</span>
+                                    <span class="text-white/20 font-black text-xl">D</span>
+                                </div>
+                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
