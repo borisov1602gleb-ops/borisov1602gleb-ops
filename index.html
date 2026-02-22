@@ -3,20 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Раменский Кубок | Ramenskoe Cup 2026</title>
+    <title>Жеребьевка | Раменский Кубок 2026</title>
     
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
@@ -64,21 +60,10 @@
         }
         
         /* Gold Effects */
-        .text-gold {
-            color: #d4af37;
-        }
-        
-        .text-gold-light {
-            color: #ffd700;
-        }
-        
-        .bg-gold {
-            background-color: #d4af37;
-        }
-        
-        .border-gold {
-            border-color: #d4af37;
-        }
+        .text-gold { color: #d4af37; }
+        .text-gold-light { color: #ffd700; }
+        .bg-gold { background-color: #d4af37; }
+        .border-gold { border-color: #d4af37; }
         
         .gold-glow {
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3);
@@ -121,9 +106,7 @@
         }
         
         @keyframes drawLine {
-            to {
-                stroke-dashoffset: 0;
-            }
+            to { stroke-dashoffset: 0; }
         }
         
         .pitch-circle {
@@ -194,9 +177,7 @@
         }
         
         @media (pointer: coarse) {
-            #cursor, #cursor-dot {
-                display: none !important;
-            }
+            #cursor, #cursor-dot { display: none !important; }
         }
         
         /* Hero Text Mask */
@@ -229,10 +210,7 @@
         .audio-bar:nth-child(4) { animation-delay: 0.3s; }
         
         /* Countdown */
-        .countdown-item {
-            position: relative;
-        }
-        
+        .countdown-item { position: relative; }
         .countdown-item::after {
             content: ':';
             position: absolute;
@@ -243,131 +221,10 @@
             font-size: 2rem;
             font-weight: 300;
         }
-        
-        .countdown-item:last-child::after {
-            display: none;
-        }
-        
-        /* Live Indicator */
-        .live-pulse {
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-            animation: livePulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        /* Match Timeline */
-        .timeline-event {
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .timeline-event:hover {
-            transform: scale(1.2);
-        }
-        
-        .event-tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 26, 61, 0.95);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, bottom 0.3s ease;
-            z-index: 10;
-        }
-        
-        .timeline-event:hover .event-tooltip {
-            opacity: 1;
-            bottom: 120%;
-        }
-        
-        /* Bracket */
-        .bracket-line {
-            stroke: #d4af37;
-            stroke-width: 2;
-            fill: none;
-            opacity: 0.6;
-        }
-        
-        .bracket-team {
-            fill: rgba(212, 175, 55, 0.2);
-            stroke: #d4af37;
-            stroke-width: 1;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .bracket-team:hover {
-            fill: rgba(212, 175, 55, 0.4);
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
-        }
-        
-        /* Radar Chart */
-        .radar-grid {
-            stroke: rgba(212, 175, 55, 0.2);
-            stroke-width: 1;
-            fill: none;
-        }
-        
-        .radar-polygon {
-            fill: rgba(212, 175, 55, 0.2);
-            stroke: #d4af37;
-            stroke-width: 2;
-            transition: all 0.5s ease;
-        }
-        
-        /* Side Drawer */
-        .side-drawer {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: rgba(0, 26, 61, 0.98);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(212, 175, 55, 0.3);
-            z-index: 200;
-            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-y: auto;
-        }
-        
-        .side-drawer.open {
-            right: 0;
-        }
-        
-        .drawer-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 199;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        
-        .drawer-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .countdown-item:last-child::after { display: none; }
         
         /* Timeline (Road of Glory) */
-        .road-timeline {
-            position: relative;
-        }
-        
+        .road-timeline { position: relative; }
         .road-timeline::before {
             content: '';
             position: absolute;
@@ -385,116 +242,13 @@
             transform: translateY(30px);
             transition: all 0.6s ease;
         }
-        
         .timeline-node.visible {
             opacity: 1;
             transform: translateY(0);
         }
         
-        /* Prize Pool Shimmer */
-        .prize-shimmer {
-            background: linear-gradient(
-                90deg,
-                #d4af37 0%,
-                #ffd700 25%,
-                #fff 50%,
-                #ffd700 75%,
-                #d4af37 100%
-            );
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 3s linear infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        /* Modal */
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 300;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        
-        .modal-backdrop.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        
-        .modal-content {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 301;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .modal-content.open {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-        
-        /* Step Indicator */
-        .step-dot {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            transition: all 0.3s ease;
-        }
-        
-        .step-dot.active {
-            background: #d4af37;
-            border-color: #d4af37;
-            color: #000814;
-        }
-        
-        .step-dot.completed {
-            background: rgba(212, 175, 55, 0.3);
-            border-color: #d4af37;
-        }
-        
-        /* Step Content */
-        .step-panel {
-            display: none;
-        }
-        
-        .step-panel.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
         /* Magnetic Effect */
-        .magnetic {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .magnetic { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         
         /* Scroll Reveal */
         .reveal {
@@ -502,12 +256,11 @@
             transform: translateY(30px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        
         .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         /* Collapsible Navigation */
         .nav-container {
             position: fixed;
@@ -518,637 +271,134 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-bottom: 25px;
         }
-        
-        .nav-container.collapsed {
-            top: 1rem;
-        }
-        
+        .nav-container.collapsed { top: 1rem; }
         .nav-container.collapsed #mainNav {
             padding: 0.5rem;
             min-height: 44px;
         }
-        
-        .nav-container.collapsed .nav-link {
-            opacity: 0;
-            width: 0;
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-            display: none;
-        }
-        
+        .nav-container.collapsed .nav-link,
         .nav-container.collapsed .weather-widget {
-            opacity: 0;
-            width: 0;
-            overflow: hidden;
-            margin: 0;
-            display: none;
+            opacity: 0; width: 0; padding: 0; margin: 0; overflow: hidden; display: none;
         }
         
         .nav-toggle {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(0, 26, 61, 0.95);
-            border: 2px solid rgba(212, 175, 55, 0.5);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 101;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(0, 26, 61, 0.95); border: 2px solid rgba(212, 175, 55, 0.5);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; z-index: 101; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        
         .nav-toggle:hover {
-            background: rgba(212, 175, 55, 0.3);
-            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.3); border-color: #d4af37;
             transform: translateX(-50%) translateY(2px);
         }
-        
-        .nav-toggle svg {
-            transition: transform 0.3s ease;
-            color: #d4af37;
-            width: 18px;
-            height: 18px;
-        }
-        
-        .nav-container.collapsed .nav-toggle svg {
-            transform: rotate(180deg);
-        }
-        
-        @media (max-width: 768px) {
-            .nav-container {
-                top: 1rem;
-                left: 1rem;
-                right: 1rem;
-                transform: none;
-            }
-            
-            .nav-container.collapsed {
-                left: auto;
-                right: 1rem;
-                width: auto;
-            }
-            
-            .nav-container.collapsed #mainNav {
-                width: auto;
-                display: inline-flex;
-            }
-        }
-        
-        /* Bento Grid */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 1.5rem;
-        }
-        
-        .bento-item {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .bento-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
-        }
-        
-        @media (max-width: 768px) {
-            .bento-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .road-timeline::before {
-                left: 20px;
-            }
-            
-            #mainNav {
-                top: auto;
-                bottom: 1rem;
-                right: 50%;
-                transform: translateX(50%);
-                flex-direction: row;
-            }
-            
-            .side-drawer {
-                width: 100%;
-                right: -100%;
-            }
-        }
-        
-        /* Golden Shine Animation for Buttons */
-        .golden-shine {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .golden-shine::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 100%; }
-            100% { left: 100%; }
-        }
-        
-        /* Urgency Banner */
-        .urgency-banner {
-            animation: urgencyPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes urgencyPulse {
-            0%, 100% { 
-                box-shadow: 0 0 10px rgba(239, 68, 68, 0.5), 0 0 20px rgba(239, 68, 68, 0.3);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), 0 0 40px rgba(239, 68, 68, 0.5);
-                transform: scale(1.02);
-            }
-        }
-        
-        /* Hall of Fame Cards */
-        .hof-card {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s ease;
-            filter: grayscale(100%) contrast(1.2);
-        }
-        
-        .hof-card:hover {
-            filter: grayscale(0%) contrast(1);
-            transform: translateY(-10px);
-        }
-        
-        .hof-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(212, 175, 55, 0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        
-        .hof-card:hover::after {
-            opacity: 1;
-        }
-        
-        .hof-card img {
-            transition: all 0.5s ease;
-            filter: brightness(0.7);
-        }
-        
-        .hof-card:hover img {
-            filter: brightness(1.1) sepia(0.3) saturate(1.5);
-        }
-        
+        .nav-toggle svg { transition: transform 0.3s ease; color: #d4af37; width: 18px; height: 18px; }
+        .nav-container.collapsed .nav-toggle svg { transform: rotate(180deg); }
+
         /* Weather Widget */
-        .weather-widget {
-            animation: weatherFloat 3s ease-in-out infinite;
-        }
-        
+        .weather-widget { animation: weatherFloat 3s ease-in-out infinite; }
         @keyframes weatherFloat {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-3px); }
         }
-        
-        /* Stats Counter */
-        .stat-number {
-            font-variant-numeric: tabular-nums;
-        }
-        
-        /* Back to Top Button */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #001a3d, #000814);
-            border: 2px solid #d4af37;
-            z-index: 90;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .back-to-top:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-        }
-        
-        .football-icon {
-            width: 28px;
-            height: 28px;
-            transition: transform 0.1s linear;
-        }
-        
-        /* Enhanced Tooltip */
-        .enhanced-tooltip {
-            position: absolute;
-            bottom: 120%;
-            left: 50%;
-            transform: translateX(-50%) scale(0.8);
-            background: rgba(0, 26, 61, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 12px;
-            padding: 12px 16px;
-            min-width: 180px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 100;
-            pointer-events: none;
-        }
-        
-        .enhanced-tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 8px solid transparent;
-            border-top-color: rgba(0, 26, 61, 0.95);
-        }
-        
-        .timeline-event:hover .enhanced-tooltip {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) scale(1);
-        }
-        
-        /* Horizontal Scroll Container */
-        .horizontal-scroll {
-            display: flex;
-            gap: 1.5rem;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding-bottom: 1rem;
-            scrollbar-width: thin;
-            scrollbar-color: #d4af37 rgba(255, 255, 255, 0.1);
-        }
-        
-        .horizontal-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .horizontal-scroll::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-        
-        .horizontal-scroll::-webkit-scrollbar-thumb {
-            background: #d4af37;
-            border-radius: 3px;
-        }
-        
-        .horizontal-scroll > * {
-            scroll-snap-align: start;
-            flex-shrink: 0;
-        }
-        
+
         /* Smart Footer */
         .smart-footer {
             background: linear-gradient(to top, #000814, #001a3d);
             position: relative;
         }
-        
         .smart-footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, #d4af37, transparent);
         }
-        
-        /* Social Icon Hover */
-        .social-icon {
-            transition: all 0.3s ease;
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px;
+            border-radius: 50%; background: linear-gradient(135deg, #001a3d, #000814);
+            border: 2px solid #d4af37; z-index: 90; opacity: 0; visibility: hidden;
+            transition: all 0.3s ease; cursor: pointer; display: flex;
+            align-items: center; justify-content: center;
         }
-        
-        .social-icon:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+        .football-icon { width: 28px; height: 28px; transition: transform 0.1s linear; }
+
+        @media (max-width: 768px) {
+            .nav-container { top: 1rem; left: 1rem; right: 1rem; transform: none; }
+            .nav-container.collapsed { left: auto; right: 1rem; width: auto; }
+            .road-timeline::before { left: 20px; }
         }
-        
-        /* Corporate Elite Governance Section */
-        .governance-section {
-            background: linear-gradient(135deg, #000814 0%, #001a3d 50%, #000814 100%);
+
+        /* NEW: Beautiful Draw Pots */
+        .pot-container {
             position: relative;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
             overflow: hidden;
         }
-        
-        .governance-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-        }
-        
-        .governance-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-        
-        .governance-card {
-            background: rgba(0, 26, 61, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 20px;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-        
-        .governance-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 20px;
-            padding: 2px;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.5), transparent, rgba(212, 175, 55, 0.5));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        
-        .governance-card:hover::before {
-            opacity: 1;
-        }
-        
-        .governance-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.6);
+        .pot-container:hover {
+            transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
         }
-        
-        .governance-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
+        .pot-container::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+        .pot-team-item {
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+        }
+        .pot-team-item:hover {
             background: rgba(212, 175, 55, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
+            border-left: 2px solid #d4af37;
+            padding-left: 1rem;
         }
-        
-        .governance-card:hover .governance-icon {
-            background: rgba(212, 175, 55, 0.2);
-            transform: scale(1.1);
-        }
-        
-        .governance-content {
-            transition: all 0.3s ease;
-        }
-        
-        .governance-card:hover .governance-content {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        
-        .governance-reveal {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 2rem;
-            background: linear-gradient(to top, rgba(0, 26, 61, 0.95), rgba(0, 26, 61, 0.8));
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 0 0 20px 20px;
-        }
-        
-        .governance-card:hover .governance-reveal {
-            transform: translateY(0);
-        }
-        
-        .governance-lead {
-            color: #d4af37;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .governance-name {
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .governance-contact {
-            background: rgba(212, 175, 55, 0.2);
-            color: #d4af37;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            padding: 0.75rem 1.5rem;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            font-size: 0.9rem;
-        }
-        
-        .governance-contact:hover {
-            background: #d4af37;
-            color: #000814;
-        }
-        
-        /* Vault Sidebar */
-        .vault-container {
-            background: rgba(0, 26, 61, 0.4);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 24px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-        }
-        
-        .vault-title {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            color: #d4af37;
-            font-weight: 700;
-        }
-        
-        .vault-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            margin-bottom: 0.75rem;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-        
-        .vault-item:hover {
-            background: rgba(212, 175, 55, 0.1);
-            border-color: rgba(212, 175, 55, 0.3);
-            transform: translateX(5px);
-        }
-        
-        .vault-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(212, 175, 55, 0.15);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #d4af37;
-        }
-        
-        .vault-info h4 {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            font-size: 0.95rem;
-        }
-        
-        .vault-info p {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.8rem;
-        }
-        
-        .vault-download {
-            margin-left: auto;
-            color: #d4af37;
-            transition: transform 0.3s ease;
-        }
-        
-        .vault-item:hover .vault-download {
-            transform: translateY(3px);
-        }
-        
-        @media (max-width: 1024px) {
-            .governance-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 640px) {
-            .governance-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .governance-card {
-                padding: 1.5rem;
-            }
-        }
+
     </style>
 </head>
 <body class="antialiased">
-    <!-- Preloader -->
+    
     <div id="preloader">
         <div class="relative">
             <svg width="300" height="300" viewBox="0 0 300 300" class="mb-8">
-                <!-- Outer Field -->
                 <rect x="30" y="30" width="240" height="240" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0s;"/>
-                
-                <!-- Center Line -->
                 <line x1="150" y1="30" x2="150" y2="270" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.2s;"/>
-                
-                <!-- Center Circle -->
                 <circle cx="150" cy="150" r="40" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-circle"/>
-                
-                <!-- Penalty Areas -->
                 <rect x="30" y="80" width="60" height="140" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.4s;"/>
                 <rect x="210" y="80" width="60" height="140" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.6s;"/>
-                
-                <!-- Goal Areas -->
                 <rect x="30" y="110" width="30" height="80" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 0.8s;"/>
                 <rect x="240" y="110" width="30" height="80" fill="none" stroke="#d4af37" stroke-width="2" class="pitch-line" style="animation-delay: 1s;"/>
-                
-                <!-- Corner Arcs -->
-                <path d="M30 40 A10 10 0 0 1 40 30" fill="none" stroke="#d4af37" stroke-width="2"/>
-                <path d="M260 30 A10 10 0 0 1 270 40" fill="none" stroke="#d4af37" stroke-width="2"/>
-                <path d="M30 260 A10 10 0 0 0 40 270" fill="none" stroke="#d4af37" stroke-width="2"/>
-                <path d="M260 270 A10 10 0 0 0 270 260" fill="none" stroke="#d4af37" stroke-width="2"/>
             </svg>
             <div class="text-center">
-                <p class="text-gold text-lg font-semibold tracking-widest">РАМЕНСКИЙ КУБОК</p>
+                <p class="text-gold text-lg font-semibold tracking-widest">РАМЕНСКОЕ ЖЕРЕБЬЕВКА</p>
                 <p class="text-white/60 text-sm mt-2">Загрузка...</p>
             </div>
         </div>
     </div>
     
-    <!-- Custom Cursor -->
     <div id="cursor"></div>
     <div id="cursor-dot"></div>
     
-    <!-- Navigation -->
     <div class="nav-container" id="navContainer">
         <nav id="mainNav" class="glass-strong rounded-2xl p-2 flex flex-col md:flex-row gap-1 items-center">
-            <a href="#hero" class="nav-link magnetic">Главная</a>
-            <a href="#match" class="nav-link magnetic">Матч</a>
-            <a href="#bracket" class="nav-link magnetic">Сетка</a>
+            <a href="#hero" class="nav-link magnetic text-gold">Главная</a>
+            <a href="#pots" class="nav-link magnetic">Корзины</a>
             <a href="#road" class="nav-link magnetic">История</a>
-            <a href="#prize" class="nav-link magnetic">Призы</a>
-            <a href="#registration" class="nav-link magnetic text-gold">Регистрация</a>
             
-            <!-- Weather Widget -->
             <div class="weather-widget glass rounded-xl px-3 py-2 ml-2 flex items-center gap-2 text-xs">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 <span class="text-white/80">Раменское: <span class="text-gold font-semibold">22°C</span></span>
             </div>
         </nav>
         
-        <!-- Nav Toggle Button -->
-        <button class="nav-toggle" id="navToggle" onclick="toggleNav()" title="Свернуть/развернуть навигацию">
+        <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="18 15 12 9 6 15"></polyline>
             </svg>
         </button>
     </div>
     
-    <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Video -->
         <div class="absolute inset-0 z-0">
             <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-30">
                 <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
@@ -1156,7 +406,6 @@
             <div class="absolute inset-0 bg-gradient-to-b from-cup-dark/50 via-cup-dark/70 to-cup-dark"></div>
         </div>
         
-        <!-- Audio Controls -->
         <div class="absolute top-6 left-6 z-20 glass rounded-xl p-3 flex items-center gap-3">
             <button id="audioToggle" class="text-gold hover:text-gold-light transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
@@ -1169,132 +418,138 @@
             </div>
         </div>
         
-        <!-- Hero Content -->
-        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto mt-16 md:mt-0">
             <div class="mb-4">
-                <span class="text-gold text-sm tracking-[0.3em] uppercase">Официальный сайт турнира</span>
+                <span class="text-gold text-sm tracking-[0.3em] uppercase">Официальная жеребьевка турнира</span>
             </div>
             <h1 class="hero-mask-text mb-6 reveal">РАМЕНСКОЕ</h1>
-            <p class="text-2xl md:text-4xl font-light mb-8 text-white/90 reveal" style="animation-delay: 0.2s;">
+            <p class="text-2xl md:text-4xl font-light mb-12 text-white/90 reveal" style="animation-delay: 0.2s;">
                 Любительский Кубок <span class="text-gold font-semibold">2026</span>
             </p>
             
-            <!-- Countdown -->
-            <div class="glass rounded-2xl p-6 md:p-8 mb-10 max-w-3xl mx-auto reveal" style="animation-delay: 0.4s;">
-                <p class="text-white/70 text-sm uppercase tracking-wider mb-4">До начала турнира</p>
-                <div class="flex justify-center gap-4 md:gap-8">
+            <div class="glass rounded-2xl p-6 md:p-10 mb-10 max-w-4xl mx-auto reveal border-gold/30 shadow-[0_0_50px_rgba(212,175,55,0.1)]" style="animation-delay: 0.4s;">
+                <p class="text-white/70 text-sm uppercase tracking-wider mb-6">До начала жеребьевки</p>
+                <div class="flex justify-center gap-6 md:gap-12">
                     <div class="countdown-item text-center">
-                        <div id="days" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
-                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Дней</div>
+                        <div id="days" class="text-5xl md:text-7xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-2 uppercase tracking-wider">Дней</div>
                     </div>
                     <div class="countdown-item text-center">
-                        <div id="hours" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
-                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Часов</div>
+                        <div id="hours" class="text-5xl md:text-7xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-2 uppercase tracking-wider">Часов</div>
                     </div>
                     <div class="countdown-item text-center">
-                        <div id="minutes" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
-                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Минут</div>
+                        <div id="minutes" class="text-5xl md:text-7xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-2 uppercase tracking-wider">Минут</div>
                     </div>
                     <div class="countdown-item text-center">
-                        <div id="seconds" class="text-4xl md:text-6xl font-black text-gold gold-glow">00</div>
-                        <div class="text-xs md:text-sm text-white/60 mt-1 uppercase tracking-wider">Секунд</div>
+                        <div id="seconds" class="text-5xl md:text-7xl font-black text-gold gold-glow">00</div>
+                        <div class="text-xs md:text-sm text-white/60 mt-2 uppercase tracking-wider">Секунд</div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Urgency Banner -->
-            <button onclick="openRegistrationModal()" class="urgency-banner glass rounded-xl px-6 py-3 mb-6 mx-auto block border border-red-500/50 reveal" style="animation-delay: 0.5s;">
-                <span class="flex items-center gap-2 text-red-400 font-semibold">
-                    <span class="live-pulse"></span>
-                    🔥 LIMITED ENTRY: Только 4 слота осталось для команд!
-                </span>
-            </button>
-            
-            <button onclick="openRegistrationModal()" class="magnetic golden-shine bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-lg hover:bg-gold-light transition-all duration-300 gold-box-glow reveal" style="animation-delay: 0.6s;">
-                Зарегистрировать команду
-            </button>
         </div>
         
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce cursor-pointer" onclick="document.getElementById('pots').scrollIntoView({behavior: 'smooth'})">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
     </section>
     
-    <!-- Match Center Section -->
-    <section id="match" class="py-20 px-4">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-12 gradient-text reveal">MATCH CENTER</h2>
+    <section id="pots" class="py-24 px-4 relative">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">СОСТАВ КОРЗИН</h2>
+            <p class="text-center text-white/60 mb-16 reveal">Распределение команд перед официальной жеребьевкой</p>
             
-            <div class="glass rounded-3xl p-8 md:p-12 reveal">
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-8">
-                    <div class="flex items-center gap-3">
-                        <div class="live-pulse"></div>
-                        <span class="text-red-500 font-bold tracking-wider">LIVE</span>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+                <div class="pot-container glass rounded-3xl p-8 bg-gradient-to-b from-white/5 to-transparent">
+                    <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold text-xl font-bold">1</div>
+                            <h4 class="text-xl font-bold tracking-widest text-white">КОРЗИНА</h4>
+                        </div>
+                        <span class="text-gold text-2xl">🏆</span>
                     </div>
-                    <span class="text-white/60 text-sm">65' • Стадион Жуковский</span>
-                </div>
-                
-                <!-- Match Info -->
-                <div class="text-center mb-10">
-                    <div class="flex items-center justify-center gap-8 md:gap-16 mb-6">
-                        <div class="text-center">
-                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center mb-3 mx-auto">
-                                <span class="text-2xl md:text-3xl font-bold text-white">FC</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold">Раменское</h3>
+                    <div class="space-y-3">
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Раменское</span> <span class="text-white/30 text-sm">#1</span>
                         </div>
-                        
-                        <div class="text-5xl md:text-7xl font-black text-gold gold-glow">
-                            2 <span class="text-white/40">:</span> 1
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Метеор</span> <span class="text-white/30 text-sm">#2</span>
                         </div>
-                        
-                        <div class="text-center">
-                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center mb-3 mx-auto">
-                                <span class="text-2xl md:text-3xl font-bold text-white">М</span>
-                            </div>
-                            <h3 class="text-lg md:text-xl font-bold">Метеор</h3>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Victory</span> <span class="text-white/30 text-sm">#3</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Storm</span> <span class="text-white/30 text-sm">#4</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Timeline -->
-                <div class="relative">
-                    <div class="h-1 bg-white/10 rounded-full mb-6"></div>
-                    <div class="flex justify-between items-center relative">
-                        <div class="timeline-event">
-                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">0'</div>
+                <div class="pot-container glass rounded-3xl p-8 bg-gradient-to-b from-white/5 to-transparent">
+                    <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold text-xl font-bold">2</div>
+                            <h4 class="text-xl font-bold tracking-widest text-white">КОРЗИНА</h4>
                         </div>
-                        <div class="timeline-event">
-                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">15'</div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>Стадион Школа 21</span>
                         </div>
-                        <div class="timeline-event">
-                            <div class="w-10 h-10 rounded-full bg-yellow-500/20 border border-yellow-500 flex items-center justify-center text-sm text-yellow-500">🟨</div>
-                            <div class="event-tooltip enhanced-tooltip">
-                                <p class="font-bold">Желтая карточка</p>
-                                <p class="text-sm text-white/70">Петров (Метеор) • 24'</p>
-                            </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>Стадион Жуковский</span>
                         </div>
-                        <div class="timeline-event">
-                            <div class="w-12 h-12 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center text-lg">⚽</div>
-                            <div class="event-tooltip enhanced-tooltip">
-                                <p class="font-bold text-gold">ГОЛ!</p>
-                                <p class="text-sm text-white/70">Иванов (Раменское) • 45'</p>
-                            </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>ТПУСТЫМИ</span>
                         </div>
-                        <div class="timeline-event">
-                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">60'</div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>ОАЗИС</span>
                         </div>
-                        <div class="timeline-event">
-                            <div class="w-10 h-10 rounded-full bg-red-500/20 border border-red-500 flex items-center justify-center text-sm text-red-500">🟥</div>
-                            <div class="event-tooltip enhanced-tooltip">
-                                <p class="font-bold text-red-500">Красная карточка</p>
-                                <p class="text-sm text-white/70">Сидоров (Метеор) • 78'</p>
-                            </div>
+                    </div>
+                </div>
+                
+                <div class="pot-container glass rounded-3xl p-8 bg-gradient-to-b from-white/5 to-transparent">
+                    <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold text-xl font-bold">3</div>
+                            <h4 class="text-xl font-bold tracking-widest text-white">КОРЗИНА</h4>
                         </div>
-                        <div class="timeline-event">
-                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">90'</div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Thunder</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Legion</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Spartak</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Dynamo</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pot-container glass rounded-3xl p-8 bg-gradient-to-b from-white/5 to-transparent">
+                    <div class="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold text-xl font-bold">4</div>
+                            <h4 class="text-xl font-bold tracking-widest text-white">КОРЗИНА</h4>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Zenit</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC CSKA</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Lokomotiv</span>
+                        </div>
+                        <div class="pot-team-item py-3 px-4 rounded-xl bg-white/5 font-semibold text-lg flex items-center justify-between">
+                            <span>FC Torpedo</span>
                         </div>
                     </div>
                 </div>
@@ -1302,311 +557,65 @@
         </div>
     </section>
     
-    <!-- Interactive Bracket Section -->
-    <section id="bracket" class="py-20 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/20">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">ТУРНИРНАЯ СЕТКА</h2>
-            <p class="text-center text-white/60 mb-12 reveal">Нажмите на команду для просмотра статистики</p>
-            
-            <div class="glass rounded-3xl p-8 overflow-x-auto reveal">
-                <svg viewBox="0 0 800 400" class="w-full min-w-[600px]" style="max-height: 400px;">
-                    <!-- Quarter Finals -->
-                    <g class="quarter-finals">
-                        <rect x="20" y="40" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('ramenskoe')"/>
-                        <text x="80" y="65" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Раменское</text>
-                        
-                        <rect x="20" y="100" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('meteor')"/>
-                        <text x="80" y="125" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Метеор</text>
-                        
-                        <rect x="20" y="180" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('victory')"/>
-                        <text x="80" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Victory</text>
-                        
-                        <rect x="20" y="240" width="120" height="40" rx="8" class="bracket-team" onclick="openTeamDrawer('storm')"/>
-                        <text x="80" y="265" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Storm</text>
-                    </g>
-                    
-                    <!-- Semi Finals -->
-                    <g class="semi-finals">
-                        <rect x="280" y="70" width="120" height="40" rx="8" class="bracket-team"/>
-                        <text x="340" y="95" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Полуфинал 1</text>
-                        
-                        <rect x="280" y="210" width="120" height="40" rx="8" class="bracket-team"/>
-                        <text x="340" y="235" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">Полуфинал 2</text>
-                    </g>
-                    
-                    <!-- Final -->
-                    <g class="final">
-                        <rect x="540" y="140" width="120" height="40" rx="8" class="bracket-team"/>
-                        <text x="600" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="600" pointer-events="none">ФИНАЛ</text>
-                    </g>
-                    
-                    <!-- Connection Lines -->
-                    <path d="M140 60 L200 60 L200 90 L280 90" class="bracket-line"/>
-                    <path d="M140 120 L200 120 L200 90" class="bracket-line"/>
-                    <path d="M140 200 L200 200 L200 230 L280 230" class="bracket-line"/>
-                    <path d="M140 260 L200 260 L200 230" class="bracket-line"/>
-                    <path d="M400 90 L470 90 L470 160 L540 160" class="bracket-line"/>
-                    <path d="M400 230 L470 230 L470 160" class="bracket-line"/>
-                    
-                    <!-- Champion Trophy -->
-                    <g transform="translate(700, 130)">
-                        <circle cx="40" cy="30" r="30" fill="rgba(212, 175, 55, 0.2)" stroke="#d4af37" stroke-width="2"/>
-                        <text x="40" y="35" text-anchor="middle" fill="#d4af37" font-size="20">🏆</text>
-                    </g>
-                </svg>
-            </div>
-            
-            <!-- Draw Pots -->
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 reveal">
-                <div class="glass rounded-2xl p-6 text-center">
-                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 1</h4>
-                    <div class="space-y-2">
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">Стадион Школа 21</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">Стадион Жуковский</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">ТПУСТЫМИ</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">ОАЗИС</div>
-                    </div>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 text-center">
-                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 2</h4>
-                    <div class="space-y-2">
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Раменское</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Метеор</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Victory</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Storm</div>
-                    </div>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 text-center">
-                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 3</h4>
-                    <div class="space-y-2">
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Thunder</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Legion</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Spartak</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Dynamo</div>
-                    </div>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 text-center">
-                    <h4 class="text-gold font-bold mb-4">КОРЗИНА 4</h4>
-                    <div class="space-y-2">
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Zenit</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC CSKA</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Lokomotiv</div>
-                        <div class="py-2 px-3 rounded-lg bg-white/5 text-sm">FC Torpedo</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Hall of Fame Section -->
-    <section id="halloffame" class="py-20 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/10">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">ЗАЛ СЛАВЫ</h2>
-            <p class="text-center text-white/60 mb-12 reveal">Легенды Раменского Кубка</p>
-            
-            <div class="horizontal-scroll pb-6">
-                <!-- Player 1 -->
-                <div class="hof-card glass rounded-3xl overflow-hidden w-72 reveal">
-                    <div class="relative h-80 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=400&h=500&fit=crop" alt="Legend 1" class="w-full h-full object-cover">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-gold text-cup-dark px-3 py-1 rounded-full text-xs font-bold">MVP 2025</span>
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 to-transparent">
-                            <h3 class="text-2xl font-bold text-white mb-1">Алексей Петров</h3>
-                            <p class="text-gold text-sm">FC Раменское • Нападающий</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">24</div>
-                                <div class="text-xs text-white/60">Гола</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">8</div>
-                                <div class="text-xs text-white/60">Ассистов</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">12</div>
-                                <div class="text-xs text-white/60">Матчей</div>
-                            </div>
-                        </div>
-                        <p class="text-white/70 text-sm">Лучший бомбардир турнира 2025. Забил решающий гол в финале.</p>
-                    </div>
-                </div>
-                
-                <!-- Player 2 -->
-                <div class="hof-card glass rounded-3xl overflow-hidden w-72 reveal">
-                    <div class="relative h-80 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=400&h=500&fit=crop" alt="Legend 2" class="w-full h-full object-cover">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-gold text-cup-dark px-3 py-1 rounded-full text-xs font-bold">MVP 2024</span>
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 to-transparent">
-                            <h3 class="text-2xl font-bold text-white mb-1">Дмитрий Соколов</h3>
-                            <p class="text-gold text-sm">FC Метеор • Полузащитник</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">15</div>
-                                <div class="text-xs text-white/60">Голов</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">18</div>
-                                <div class="text-xs text-white/60">Ассистов</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">14</div>
-                                <div class="text-xs text-white/60">Матчей</div>
-                            </div>
-                        </div>
-                        <p class="text-white/70 text-sm">Мозг команды. Лучший ассистент в истории турнира.</p>
-                    </div>
-                </div>
-                
-                <!-- Player 3 -->
-                <div class="hof-card glass rounded-3xl overflow-hidden w-72 reveal">
-                    <div class="relative h-80 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=400&h=500&fit=crop" alt="Legend 3" class="w-full h-full object-cover">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-gold text-cup-dark px-3 py-1 rounded-full text-xs font-bold">MVP 2023</span>
-                        </div>
-                        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 to-transparent">
-                            <h3 class="text-2xl font-bold text-white mb-1">Игорь Волков</h3>
-                            <p class="text-gold text-sm">FC Victory • Вратарь</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">9</div>
-                                <div class="text-xs text-white/60">Сухих</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">85%</div>
-                                <div class="text-xs text-white/60">Сейвов</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-black text-gold">16</div>
-                                <div class="text-xs text-white/60">Матчей</div>
-                            </div>
-                        </div>
-                        <p class="text-white/70 text-sm">Непробиваемая стена. Рекордсмен по сухим матчам.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Tournament Stats Infographic -->
-    <section id="stats" class="py-20 px-4 bg-gradient-to-b from-cup-blue/10 to-cup-dark">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-12 gradient-text reveal">ЦИФРЫ ТУРНИРА</h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-                <div class="glass rounded-2xl p-6 md:p-8 text-center reveal">
-                    <div class="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <div class="stat-number text-4xl md:text-5xl font-black text-gold mb-2" data-target="16">0</div>
-                    <div class="text-white/60 text-sm uppercase tracking-wider">Команд</div>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 md:p-8 text-center reveal">
-                    <div class="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg>
-                    </div>
-                    <div class="stat-number text-4xl md:text-5xl font-black text-gold mb-2" data-target="582">0</div>
-                    <div class="text-white/60 text-sm uppercase tracking-wider">Голов</div>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 md:p-8 text-center reveal">
-                    <div class="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    </div>
-                    <div class="stat-number text-4xl md:text-5xl font-black text-gold mb-2" data-target="120">0</div>
-                    <div class="text-white/60 text-sm uppercase tracking-wider">Матчей</div>
-                </div>
-                
-                <div class="glass rounded-2xl p-6 md:p-8 text-center reveal">
-                    <div class="w-14 h-14 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-                    </div>
-                    <div class="stat-number text-4xl md:text-5xl font-black text-gold mb-2" data-target="15">0</div>
-                    <div class="text-white/60 text-sm uppercase tracking-wider">Судей</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Road of Glory Timeline Section -->
-    <section id="road" class="py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark">
+    <section id="road" class="py-24 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/20 relative">
         <div class="max-w-4xl mx-auto">
             <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">ДОРОГА СЛАВЫ</h2>
-            <p class="text-center text-white/60 mb-16 reveal">История турнира от первого матча до сегодняшнего дня</p>
+            <p class="text-center text-white/60 mb-20 reveal">История турнира от первого матча до сегодняшнего дня</p>
             
             <div class="road-timeline">
-                <!-- Timeline Node 1 -->
-                <div class="timeline-node mb-12 md:mb-20">
+                <div class="timeline-node mb-16 md:mb-24">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="w-full md:w-1/2 md:text-right">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2019</div>
-                                <h3 class="text-xl font-bold mb-2">Основание турнира</h3>
-                                <p class="text-white/70 text-sm">Первый Раменский Кубок собрал 8 команд и стал началом большой футбольной истории.</p>
+                            <div class="glass rounded-2xl p-8 inline-block shadow-[0_0_30px_rgba(212,175,55,0.05)] border-gold/30">
+                                <div class="text-gold text-lg font-black mb-2 tracking-widest">2019</div>
+                                <h3 class="text-2xl font-bold mb-3">Основание турнира</h3>
+                                <p class="text-white/70 text-base leading-relaxed">Первый Раменский Кубок собрал 8 команд и стал началом большой футбольной истории нашего региона.</p>
                             </div>
                         </div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-6 h-6 rounded-full bg-gold relative z-10 gold-box-glow"></div>
                         <div class="w-full md:w-1/2"></div>
                     </div>
                 </div>
                 
-                <!-- Timeline Node 2 -->
-                <div class="timeline-node mb-12 md:mb-20">
+                <div class="timeline-node mb-16 md:mb-24">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="w-full md:w-1/2"></div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-6 h-6 rounded-full bg-gold relative z-10 gold-box-glow"></div>
                         <div class="w-full md:w-1/2 md:text-left">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2021</div>
-                                <h3 class="text-xl font-bold mb-2">Расширение формата</h3>
-                                <p class="text-white/70 text-sm">Рост до 16 команд и введение плей-офф стадии с четвертьфиналами.</p>
+                            <div class="glass rounded-2xl p-8 inline-block shadow-[0_0_30px_rgba(212,175,55,0.05)] border-gold/30">
+                                <div class="text-gold text-lg font-black mb-2 tracking-widest">2021</div>
+                                <h3 class="text-2xl font-bold mb-3">Расширение формата</h3>
+                                <p class="text-white/70 text-base leading-relaxed">Рост до 16 команд и введение полноценной стадии плей-офф с трансляциями матчей четвертьфиналов.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Timeline Node 3 -->
-                <div class="timeline-node mb-12 md:mb-20">
+                <div class="timeline-node mb-16 md:mb-24">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="w-full md:w-1/2 md:text-right">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2023</div>
-                                <h3 class="text-xl font-bold mb-2">Новый стадион</h3>
-                                <p class="text-white/70 text-sm">Открытие стадиона Жуковский с современным покрытием и освещением.</p>
+                            <div class="glass rounded-2xl p-8 inline-block shadow-[0_0_30px_rgba(212,175,55,0.05)] border-gold/30">
+                                <div class="text-gold text-lg font-black mb-2 tracking-widest">2023</div>
+                                <h3 class="text-2xl font-bold mb-3">Новый стадион</h3>
+                                <p class="text-white/70 text-base leading-relaxed">Официальное открытие стадиона Жуковский с современным искусственным покрытием и профессиональным освещением.</p>
                             </div>
                         </div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-6 h-6 rounded-full bg-gold relative z-10 gold-box-glow"></div>
                         <div class="w-full md:w-1/2"></div>
                     </div>
                 </div>
                 
-                <!-- Timeline Node 4 -->
                 <div class="timeline-node">
                     <div class="flex flex-col md:flex-row items-center gap-8">
                         <div class="w-full md:w-1/2"></div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-8 h-8 rounded-full bg-white relative z-10 shadow-[0_0_40px_rgba(255,255,255,0.8)] flex items-center justify-center">
+                            <div class="w-4 h-4 rounded-full bg-gold animate-ping"></div>
+                        </div>
                         <div class="w-full md:w-1/2 md:text-left">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2026</div>
-                                <h3 class="text-xl font-bold mb-2">Рекордный призовой фонд</h3>
-                                <p class="text-white/70 text-sm">1 000 000₽ — самый большой призовой фонд в истории любительского футбола региона.</p>
+                            <div class="glass-strong rounded-2xl p-8 inline-block gold-box-glow">
+                                <div class="text-gold-light text-xl font-black mb-2 tracking-widest">2026</div>
+                                <h3 class="text-3xl font-bold mb-3 text-white">Главное событие</h3>
+                                <p class="text-white/90 text-base leading-relaxed">Рекордный призовой фонд, 16 лучших команд региона и полностью обновленный формат жеребьевки.</p>
                             </div>
                         </div>
                     </div>
@@ -1615,306 +624,34 @@
         </div>
     </section>
     
-    <!-- Prize Pool Section -->
-    <section id="prize" class="py-20 px-4">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-12 gradient-text reveal">ПРИЗОВОЙ ФОНД</h2>
-            
-            <div class="glass rounded-3xl p-8 md:p-16 text-center mb-12 reveal">
-                <div class="prize-shimmer text-6xl md:text-8xl font-black mb-6">1 000 000₽</div>
-                <p class="text-white/70 text-lg mb-8">Общий призовой фонд турнира 2026</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="glass rounded-2xl p-6">
-                        <div class="text-5xl mb-2">🥇</div>
-                        <div class="text-3xl font-black text-gold mb-2">500 000₽</div>
-                        <div class="text-white/60">1 место</div>
-                    </div>
-                    <div class="glass rounded-2xl p-6">
-                        <div class="text-5xl mb-2">🥈</div>
-                        <div class="text-3xl font-black text-gray-300 mb-2">300 000₽</div>
-                        <div class="text-white/60">2 место</div>
-                    </div>
-                    <div class="glass rounded-2xl p-6">
-                        <div class="text-5xl mb-2">🥉</div>
-                        <div class="text-3xl font-black text-orange-400 mb-2">200 000₽</div>
-                        <div class="text-white/60">3 место</div>
-                    </div>
-                </div>
-                
-                <button onclick="openSponsorshipModal()" class="magnetic golden-shine bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 border border-gold/30">
-                    Стать спонсором турнира
-                </button>
-            </div>
-            
-            <!-- Fan Voting -->
-            <div class="glass rounded-3xl p-8 reveal">
-                <h3 class="text-2xl font-bold text-center mb-8">ГОЛОСОВАНИЕ ЗА ЧЕМПИОНА</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="text-center">
-                        <div class="text-lg font-bold mb-3">FC Раменское</div>
-                        <button onclick="vote('ramenskoe')" class="golden-shine w-full bg-gold/20 hover:bg-gold/30 text-gold py-3 rounded-lg font-semibold transition-all mb-3">
-                            Голосовать
-                        </button>
-                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
-                            <div id="ramenskoe-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                        <div id="ramenskoe-percent" class="text-sm text-white/60 mt-1">0%</div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <div class="text-lg font-bold mb-3">FC Метеор</div>
-                        <button onclick="vote('meteor')" class="golden-shine w-full bg-gold/20 hover:bg-gold/30 text-gold py-3 rounded-lg font-semibold transition-all mb-3">
-                            Голосовать
-                        </button>
-                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
-                            <div id="meteor-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                        <div id="meteor-percent" class="text-sm text-white/60 mt-1">0%</div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <div class="text-lg font-bold mb-3">FC Victory</div>
-                        <button onclick="vote('victory')" class="golden-shine w-full bg-gold/20 hover:bg-gold/30 text-gold py-3 rounded-lg font-semibold transition-all mb-3">
-                            Голосовать
-                        </button>
-                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
-                            <div id="victory-bar" class="h-full bg-gold transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                        <div id="victory-percent" class="text-sm text-white/60 mt-1">0%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Corporate Elite Governance Section -->
-    <section id="governance" class="governance-section py-20 px-4">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">СТРУКТУРА УПРАВЛЕНИЯ ТУРНИРОМ</h2>
-            <p class="text-center text-white/60 mb-16 reveal">Профессиональная система управления и контроля</p>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- Governance Cards Grid -->
-                <div class="governance-grid lg:col-span-3">
-                    <!-- Card 1: Org Committee -->
-                    <div class="governance-card reveal" data-governance="org">
-                        <div class="governance-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                        </div>
-                        <div class="governance-content">
-                            <h3 class="text-xl font-bold text-white mb-2">Оргкомитет</h3>
-                            <p class="text-white/60 text-sm">Стратегическое планирование и исполнительное руководство</p>
-                        </div>
-                        <div class="governance-reveal">
-                            <p class="governance-lead">Глава Оргкомитета</p>
-                            <p class="governance-name">Александр Морозов</p>
-                            <button class="governance-contact" onclick="showContactModal('org')">Связаться</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card 2: Referee Department -->
-                    <div class="governance-card reveal" data-governance="referee">
-                        <div class="governance-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
-                        </div>
-                        <div class="governance-content">
-                            <h3 class="text-xl font-bold text-white mb-2">Судейский Департамент</h3>
-                            <p class="text-white/60 text-sm">Контроль честности и справедливости игры</p>
-                        </div>
-                        <div class="governance-reveal">
-                            <p class="governance-lead">Главный судья</p>
-                            <p class="governance-name">Виктор Степанов</p>
-                            <button class="governance-contact" onclick="showContactModal('referee')">Связаться</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card 3: KDK -->
-                    <div class="governance-card reveal" data-governance="kdk">
-                        <div class="governance-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
-                        </div>
-                        <div class="governance-content">
-                            <h3 class="text-xl font-bold text-white mb-2">КДК</h3>
-                            <p class="text-white/60 text-sm">Контрольно-Дисциплинарный Комитет и этика</p>
-                        </div>
-                        <div class="governance-reveal">
-                            <p class="governance-lead">Председатель КДК</p>
-                            <p class="governance-name">Наталья Волкова</p>
-                            <button class="governance-contact" onclick="showContactModal('kdk')">Связаться</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card 4: Media Center -->
-                    <div class="governance-card reveal" data-governance="media">
-                        <div class="governance-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                        </div>
-                        <div class="governance-content">
-                            <h3 class="text-xl font-bold text-white mb-2">Медиа-центр</h3>
-                            <p class="text-white/60 text-sm">ПР, социальные сети и прямые трансляции</p>
-                        </div>
-                        <div class="governance-reveal">
-                            <p class="governance-lead">Руководитель медиа</p>
-                            <p class="governance-name">Дмитрий Козлов</p>
-                            <button class="governance-contact" onclick="showContactModal('media')">Связаться</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card 5: Technical Commission -->
-                    <div class="governance-card reveal lg:col-span-2" data-governance="tech">
-                        <div class="governance-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                        </div>
-                        <div class="governance-content">
-                            <h3 class="text-xl font-bold text-white mb-2">Техническая Комиссия</h3>
-                            <p class="text-white/60 text-sm">Логистика стадионов, безопасность и инфраструктура</p>
-                        </div>
-                        <div class="governance-reveal">
-                            <p class="governance-lead">Технический директор</p>
-                            <p class="governance-name">Сергей Павлов</p>
-                            <button class="governance-contact" onclick="showContactModal('tech')">Связаться</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Vault Sidebar -->
-                <div class="lg:col-span-1">
-                    <div class="vault-container sticky top-24">
-                        <div class="vault-title">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            <span>ДОКУМЕНТЫ</span>
-                        </div>
-                        
-                        <div class="vault-item" onclick="downloadDoc('regulations')">
-                            <div class="vault-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                            </div>
-                            <div class="vault-info">
-                                <h4>Регламент</h4>
-                                <p>PDF • 2.4 MB</p>
-                            </div>
-                            <div class="vault-download">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            </div>
-                        </div>
-                        
-                        <div class="vault-item" onclick="downloadDoc('fairplay')">
-                            <div class="vault-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
-                            </div>
-                            <div class="vault-info">
-                                <h4>Кодекс Fair Play</h4>
-                                <p>PDF • 1.1 MB</p>
-                            </div>
-                            <div class="vault-download">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            </div>
-                        </div>
-                        
-                        <div class="vault-item" onclick="downloadDoc('insurance')">
-                            <div class="vault-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                            </div>
-                            <div class="vault-info">
-                                <h4>Страхование</h4>
-                                <p>PDF • 890 KB</p>
-                            </div>
-                            <div class="vault-download">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            </div>
-                        </div>
-                        
-                        <div class="vault-item" onclick="downloadDoc('antidoping')">
-                            <div class="vault-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
-                            </div>
-                            <div class="vault-info">
-                                <h4>Антидопинг</h4>
-                                <p>PDF • 1.5 MB</p>
-                            </div>
-                            <div class="vault-download">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Registration Section -->
-    <section id="registration" class="py-20 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/20">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl font-black mb-6 gradient-text reveal">РЕГИСТРАЦИЯ</h2>
-            <p class="text-white/70 text-lg mb-10 reveal">Присоединяйтесь к лучшему любительскому турниру региона</p>
-            
-            <div class="glass rounded-3xl p-8 md:p-12 reveal">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="text-center">
-                        <div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        </div>
-                        <h3 class="font-bold mb-2">16 команд</h3>
-                        <p class="text-white/60 text-sm">Участвуют лучшие любительские коллективы</p>
-                    </div>
-                    
-                    <div class="text-center">
-                        <div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        </div>
-                        <h3 class="font-bold mb-2">4 недели</h3>
-                        <p class="text-white/60 text-sm">Интенсивный турнир с июня по июль</p>
-                    </div>
-                    
-                    <div class="text-center">
-                        <div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                        </div>
-                        <h3 class="font-bold mb-2">1 000 000₽</h3>
-                        <p class="text-white/60 text-sm">Рекордный призовой фонд</p>
-                    </div>
-                </div>
-                
-                <button onclick="openRegistrationModal()" class="magnetic bg-gold text-cup-dark px-10 py-5 rounded-full font-bold text-xl hover:bg-gold-light transition-all duration-300 gold-box-glow">
-                    Зарегистрировать команду
-                </button>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Smart Footer -->
     <footer class="smart-footer py-16 px-4">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div class="text-center md:text-left">
                     <h3 class="text-3xl font-black text-gold mb-3">РАМЕНСКИЙ КУБОК</h3>
-                    <p class="text-white/60 text-sm mb-4">Любительский футбольный турнир с 2019 года.</p>
+                    <p class="text-white/60 text-sm mb-4">Любительский футбольный турнир с 2019 года. Официальная страница жеребьевки команд.</p>
                     <p class="text-gold/60 text-xs">© 2026 Все права защищены</p>
                 </div>
                 <div class="text-center">
-                    <h4 class="text-gold font-bold mb-4 uppercase text-sm">Навигация</h4>
-                    <div class="flex flex-col gap-2">
-                        <a href="#hero" class="text-white/60 hover:text-gold text-sm">Главная</a>
-                        <a href="#match" class="text-white/60 hover:text-gold text-sm">Матч-центр</a>
-                        <a href="#bracket" class="text-white/60 hover:text-gold text-sm">Турнирная сетка</a>
-                        <a href="#halloffame" class="text-white/60 hover:text-gold text-sm">Зал славы</a>
+                    <h4 class="text-gold font-bold mb-4 uppercase text-sm tracking-widest">Навигация</h4>
+                    <div class="flex flex-col gap-3">
+                        <a href="#hero" class="text-white/60 hover:text-gold text-sm font-medium transition-colors">Главная</a>
+                        <a href="#pots" class="text-white/60 hover:text-gold text-sm font-medium transition-colors">Корзины</a>
+                        <a href="#road" class="text-white/60 hover:text-gold text-sm font-medium transition-colors">История турнира</a>
                     </div>
                 </div>
                 <div class="text-center md:text-right">
-                    <h4 class="text-gold font-bold mb-4 uppercase text-sm">Соцсети</h4>
+                    <h4 class="text-gold font-bold mb-4 uppercase text-sm tracking-widest">Следите за нами</h4>
                     <div class="flex justify-center md:justify-end gap-4">
-                        <a href="https://t.me/ramenskoe_cup" target="_blank" class="social-icon w-12 h-12 rounded-full glass flex items-center justify-center text-gold">TG</a>
-                        <a href="#" class="social-icon w-12 h-12 rounded-full glass flex items-center justify-center text-gold">VK</a>
-                        <a href="#" class="social-icon w-12 h-12 rounded-full glass flex items-center justify-center text-gold">YT</a>
+                        <a href="https://t.me/ramenskoe_cup" target="_blank" class="w-12 h-12 rounded-full glass flex items-center justify-center text-gold hover:bg-gold hover:text-cup-dark transition-all magnetic">TG</a>
+                        <a href="#" class="w-12 h-12 rounded-full glass flex items-center justify-center text-gold hover:bg-gold hover:text-cup-dark transition-all magnetic">VK</a>
+                        <a href="#" class="w-12 h-12 rounded-full glass flex items-center justify-center text-gold hover:bg-gold hover:text-cup-dark transition-all magnetic">YT</a>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
     
-    <!-- Back to Top Button -->
     <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
         <svg class="football-icon" id="footballIcon" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -1923,242 +660,11 @@
         </svg>
     </button>
     
-    <!-- Team Stats Drawer -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="closeTeamDrawer()"></div>
-    <div class="side-drawer" id="teamDrawer">
-        <div class="p-8">
-            <div class="flex items-center justify-between mb-8">
-                <h3 id="drawerTitle" class="text-2xl font-bold text-gold">СТАТИСТИКА КОМАНДЫ</h3>
-                <button onclick="closeTeamDrawer()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            
-            <!-- Radar Chart -->
-            <div class="mb-8">
-                <svg viewBox="0 0 300 300" class="w-full">
-                    <g class="radar-grid">
-                        <polygon points="150,30 270,90 270,210 150,270 30,210 30,90"/>
-                        <polygon points="150,60 240,100 240,200 150,240 60,200 60,100"/>
-                        <polygon points="150,90 210,120 210,180 150,210 90,180 90,120"/>
-                        <line x1="150" y1="150" x2="150" y2="30"/>
-                        <line x1="150" y1="150" x2="270" y2="90"/>
-                        <line x1="150" y1="150" x2="270" y2="210"/>
-                        <line x1="150" y1="150" x2="150" y2="270"/>
-                        <line x1="150" y1="150" x2="30" y2="210"/>
-                        <line x1="150" y1="150" x2="30" y2="90"/>
-                    </g>
-                    <polygon id="radarData" class="radar-polygon" points="150,90 210,120 210,180 150,210 90,180 90,120"/>
-                    <text x="150" y="20" text-anchor="middle" fill="#d4af37" font-size="12" font-weight="bold">АТАКА</text>
-                    <text x="280" y="85" text-anchor="middle" fill="white" font-size="10">ЗАЩИТА</text>
-                    <text x="280" y="225" text-anchor="middle" fill="white" font-size="10">СКОРОСТЬ</text>
-                    <text x="150" y="290" text-anchor="middle" fill="white" font-size="10">ТАКТИКА</text>
-                    <text x="20" y="225" text-anchor="middle" fill="white" font-size="10">ФИЗИКА</text>
-                    <text x="20" y="85" text-anchor="middle" fill="white" font-size="10">ТЕХНИКА</text>
-                </svg>
-            </div>
-            
-            <!-- Team Info -->
-            <div id="teamInfo" class="space-y-4">
-                <div class="glass rounded-xl p-4">
-                    <div class="text-white/60 text-sm mb-1">Сыграно матчей</div>
-                    <div class="text-2xl font-bold">12</div>
-                </div>
-                <div class="glass rounded-xl p-4">
-                    <div class="text-white/60 text-sm mb-1">Победы</div>
-                    <div class="text-2xl font-bold text-green-400">8</div>
-                </div>
-                <div class="glass rounded-xl p-4">
-                    <div class="text-white/60 text-sm mb-1">Забито голов</div>
-                    <div class="text-2xl font-bold text-gold">24</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Registration Modal -->
-    <div class="modal-backdrop" id="registrationBackdrop" onclick="closeRegistrationModal()"></div>
-    <div class="modal-content glass" id="registrationModal">
-        <div class="p-8">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="text-2xl font-bold text-gold">РЕГИСТРАЦИЯ КОМАНДЫ</h3>
-                <button onclick="closeRegistrationModal()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            
-            <!-- Step Indicators -->
-            <div class="flex items-center justify-center gap-4 mb-8">
-                <div class="step-dot active" data-step="1">1</div>
-                <div class="h-1 w-8 bg-white/10 rounded-full"></div>
-                <div class="step-dot" data-step="2">2</div>
-                <div class="h-1 w-8 bg-white/10 rounded-full"></div>
-                <div class="step-dot" data-step="3">3</div>
-                <div class="h-1 w-8 bg-white/10 rounded-full"></div>
-                <div class="step-dot" data-step="4">4</div>
-            </div>
-            
-            <!-- Step 1: Team Info -->
-            <div class="step-panel active" data-panel="1">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-white/70 text-sm mb-2">Название команды</label>
-                        <input type="text" id="teamName" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="Введите название команды">
-                    </div>
-                    <div>
-                        <label class="block text-white/70 text-sm mb-2">Капитан</label>
-                        <input type="text" id="captainName" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="ФИО капитана">
-                    </div>
-                    <div>
-                        <label class="block text-white/70 text-sm mb-2">Телефон</label>
-                        <input type="tel" id="phone" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="+7 (999) 999-99-99">
-                    </div>
-                </div>
-                <button onclick="nextStep()" class="w-full bg-gold text-cup-dark py-4 rounded-lg font-bold mt-6 hover:bg-gold-light transition-all">
-                    Продолжить
-                </button>
-            </div>
-            
-            <!-- Step 2: Players -->
-            <div class="step-panel" data-panel="2">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-white/70 text-sm mb-2">Количество игроков</label>
-                        <select id="playersCount" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all">
-                            <option value="11">11 игроков</option>
-                            <option value="12">12 игроков</option>
-                            <option value="13">13 игроков</option>
-                            <option value="14">14 игроков</option>
-                            <option value="15">15 игроков</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-white/70 text-sm mb-2">Загрузить состав (PDF)</label>
-                        <div class="border-2 border-dashed border-white/20 rounded-lg p-6 text-center hover:border-gold/50 transition-all cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-white/40"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                            <p class="text-white/60 text-sm">Перетащите файл или нажмите для загрузки</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex gap-4 mt-6">
-                    <button onclick="prevStep()" class="flex-1 bg-white/10 text-white py-4 rounded-lg font-bold hover:bg-white/20 transition-all">
-                        Назад
-                    </button>
-                    <button onclick="nextStep()" class="flex-1 bg-gold text-cup-dark py-4 rounded-lg font-bold hover:bg-gold-light transition-all">
-                        Продолжить
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Step 3: Payment -->
-            <div class="step-panel" data-panel="3">
-                <div class="space-y-4">
-                    <div class="glass rounded-xl p-4 mb-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-white/60">Взнос за участие</span>
-                            <span class="font-bold">15 000₽</span>
-                        </div>
-                        <div class="text-xs text-white/40">Включает страхование, аренду поля, судейство</div>
-                    </div>
-                    <div>
-                        <label class="block text-white/70 text-sm mb-2">Номер карты</label>
-                        <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="0000 0000 0000 0000">
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="flex-1">
-                            <label class="block text-white/70 text-sm mb-2">Срок действия</label>
-                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="MM/YY">
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-white/70 text-sm mb-2">CVC</label>
-                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:border-gold transition-all" placeholder="123">
-                        </div>
-                    </div>
-                </div>
-                <div class="flex gap-4 mt-6">
-                    <button onclick="prevStep()" class="flex-1 bg-white/10 text-white py-4 rounded-lg font-bold hover:bg-white/20 transition-all">
-                        Назад
-                    </button>
-                    <button onclick="nextStep()" class="flex-1 bg-gold text-cup-dark py-4 rounded-lg font-bold hover:bg-gold-light transition-all">
-                        Оплатить
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Step 4: Success -->
-            <div class="step-panel" data-panel="4">
-                <div class="text-center py-8">
-                    <div class="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    </div>
-                    <h4 class="text-2xl font-bold mb-2">Регистрация завершена!</h4>
-                    <p class="text-white/70 mb-6">Ваша команда успешно зарегистрирована на турнир. Мы свяжемся с вами для подтверждения.</p>
-                    <button onclick="closeRegistrationModal()" class="bg-gold text-cup-dark px-8 py-3 rounded-lg font-bold hover:bg-gold-light transition-all">
-                        Отлично!
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Sponsorship Modal -->
-    <div class="modal-backdrop" id="sponsorshipBackdrop" onclick="closeSponsorshipModal()"></div>
-    <div class="modal-content glass" id="sponsorshipModal">
-        <div class="p-8">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-gold">СТАТЬ СПОНСОРОМ</h3>
-                <button onclick="closeSponsorshipModal()" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            
-            <p class="text-white/70 mb-6">Партнерство с Раменским Кубком — это уникальная возможность для вашего бренда получить максимальную видимость.</p>
-            
-            <div class="space-y-4 mb-8">
-                <div class="glass rounded-xl p-4 flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-gold">📺</div>
-                    <div>
-                        <h4 class="font-bold mb-1">Медиа-покрытие</h4>
-                        <p class="text-white/60 text-sm">Логотип на всех трансляциях и в соцсетях</p>
-                    </div>
-                </div>
-                <div class="glass rounded-xl p-4 flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-gold">🏟️</div>
-                    <div>
-                        <h4 class="font-bold mb-1">Размещение на стадионе</h4>
-                        <p class="text-white/60 text-sm">Баннеры и рекламные конструкции</p>
-                    </div>
-                </div>
-                <div class="glass rounded-xl p-4 flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 text-gold">🏆</div>
-                    <div>
-                        <h4 class="font-bold mb-1">Участие в награждении</h4>
-                        <p class="text-white/60 text-sm">Представительство на церемонии</p>
-                    </div>
-                </div>
-            </div>
-            
-            <a href="https://t.me/ramenskoe_cup" target="_blank" class="block w-full bg-gold text-cup-dark text-center py-4 rounded-lg font-bold hover:bg-gold-light transition-all">
-                Связаться в Telegram
-            </a>
-        </div>
-    </div>
-    
-    <!-- JavaScript -->
     <script>
         // Initialize Lucide Icons
-        lucide.createIcons();
-        
-        // Current step for registration modal
-        let currentStep = 1;
-        
-        // Voting data
-        const votes = {
-            ramenskoe: 0,
-            meteor: 0,
-            victory: 0
-        };
-        let totalVotes = 0;
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
         
         // Preloader
         window.addEventListener('load', () => {
@@ -2191,7 +697,7 @@
             animateCursor();
             
             // Hover effect
-            const hoverElements = document.querySelectorAll('a, button, .magnetic');
+            const hoverElements = document.querySelectorAll('a, button, .magnetic, .pot-team-item');
             hoverElements.forEach(el => {
                 el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -2246,7 +752,7 @@
                 : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
         });
         
-        // Scroll Reveal
+        // Scroll Reveal Animation (GSAP alternative built with Intersection Observer)
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -2256,184 +762,30 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    // Optional: stop observing once revealed
+                    // observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
         
         document.querySelectorAll('.reveal, .timeline-node').forEach(el => observer.observe(el));
         
-        // Team Drawer
-        function openTeamDrawer(team) {
-            document.getElementById('drawerOverlay').classList.add('open');
-            document.getElementById('teamDrawer').classList.add('open');
-            document.getElementById('drawerTitle').textContent = team.toUpperCase();
-            
-            // Update radar chart based on team
-            const radarData = document.getElementById('radarData');
-            const stats = {
-                ramenskoe: "150,70 230,110 230,190 150,230 70,190 70,110",
-                meteor: "150,80 220,120 220,180 150,220 80,180 80,120",
-                victory: "150,60 240,100 240,200 150,240 60,200 60,100",
-                storm: "150,75 225,115 225,185 150,225 75,185 75,115"
-            };
-            radarData.setAttribute('points', stats[team] || stats.ramenskoe);
-        }
-        
-        function closeTeamDrawer() {
-            document.getElementById('drawerOverlay').classList.remove('open');
-            document.getElementById('teamDrawer').classList.remove('open');
-        }
-        
-        // Registration Modal
-        function openRegistrationModal() {
-            document.getElementById('registrationBackdrop').classList.add('open');
-            document.getElementById('registrationModal').classList.add('open');
-            currentStep = 1;
-            updateStepDisplay();
-        }
-        
-        function closeRegistrationModal() {
-            document.getElementById('registrationBackdrop').classList.remove('open');
-            document.getElementById('registrationModal').classList.remove('open');
-        }
-        
-        function nextStep() {
-            if (currentStep < 4) {
-                currentStep++;
-                updateStepDisplay();
-            }
-        }
-        
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                updateStepDisplay();
-            }
-        }
-        
-        function updateStepDisplay() {
-            // Update step dots
-            document.querySelectorAll('.step-dot').forEach((dot, index) => {
-                dot.classList.remove('active', 'completed');
-                if (index + 1 === currentStep) {
-                    dot.classList.add('active');
-                } else if (index + 1 < currentStep) {
-                    dot.classList.add('completed');
-                }
-            });
-            
-            // Update panels
-            document.querySelectorAll('.step-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
-            document.querySelector(`.step-panel[data-panel="${currentStep}"]`).classList.add('active');
-        }
-        
-        // Sponsorship Modal
-        function openSponsorshipModal() {
-            document.getElementById('sponsorshipBackdrop').classList.add('open');
-            document.getElementById('sponsorshipModal').classList.add('open');
-        }
-        
-        function closeSponsorshipModal() {
-            document.getElementById('sponsorshipBackdrop').classList.remove('open');
-            document.getElementById('sponsorshipModal').classList.remove('open');
-        }
-        
-        // Voting
-        function vote(team) {
-            votes[team]++;
-            totalVotes++;
-            updateVotingDisplay();
-        }
-        
-        function updateVotingDisplay() {
-            Object.keys(votes).forEach(team => {
-                const percentage = totalVotes > 0 ? Math.round((votes[team] / totalVotes) * 100) : 0;
-                document.getElementById(`${team}-bar`).style.width = percentage + '%';
-                document.getElementById(`${team}-percent`).textContent = percentage + '%';
-            });
-        }
-        
-        // Smooth Scroll
+        // Smooth Scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
+                    // If on mobile and clicked a link, close the collapsed nav menu implicitly
                 }
             });
         });
-        
-        // Close modals on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeTeamDrawer();
-                closeRegistrationModal();
-                closeSponsorshipModal();
-            }
-        });
-        
-        // Stats Counter Animation
-        function animateCounters() {
-            const counters = document.querySelectorAll('.stat-number');
-            counters.forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-target'));
-                const duration = 2000;
-                const step = target / (duration / 16);
-                let current = 0;
-                
-                const updateCounter = () => {
-                    current += step;
-                    if (current < target) {
-                        counter.textContent = Math.floor(current);
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        counter.textContent = target;
-                    }
-                };
-                updateCounter();
-            });
-        }
-        
-        // Intersection Observer for stats section
-        const statsSection = document.getElementById('tournamentStats');
-        if (statsSection) {
-            const statsObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        animateCounters();
-                        statsObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.5 });
-            statsObserver.observe(statsSection);
-        }
-        
-        // Back to Top Button with Football Rotation
-        const backToTop = document.getElementById('backToTop');
-        const footballIcon = document.getElementById('footballIcon');
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-            
-            // Rotate football based on scroll position
-            if (footballIcon) {
-                const rotation = window.scrollY * 0.2;
-                footballIcon.style.transform = `rotate(${rotation}deg)`;
-            }
-        });
-        
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // Toggle Navigation
+
+        // Toggle Navigation Container (Collapsible Logic)
         function toggleNav() {
             const navContainer = document.getElementById('navContainer');
             navContainer.classList.toggle('collapsed');
@@ -2456,58 +808,27 @@
             
             lastScrollY = currentScrollY;
         });
+
+        // Back to Top Button with Football Rotation
+        const backToTop = document.getElementById('backToTop');
+        const footballIcon = document.getElementById('footballIcon');
         
-        // GSAP Stagger Animation for Governance Cards
-        const governanceCards = document.querySelectorAll('.governance-card');
-        const governanceObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }, index * 150);
-                    governanceObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-        
-        governanceCards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            governanceObserver.observe(card);
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+            
+            // Rotate football based on scroll position
+            if (footballIcon) {
+                const rotation = window.scrollY * 0.2;
+                footballIcon.style.transform = `rotate(${rotation}deg)`;
+            }
         });
         
-        // Governance Contact Modal
-        function showContactModal(dept) {
-            const contacts = {
-                org: { name: 'Александр Морозов', role: 'Глава Оргкомитета', email: 'org@ramenskoe-cup.ru', phone: '+7 (495) 123-45-67' },
-                referee: { name: 'Виктор Степанов', role: 'Главный судья', email: 'referee@ramenskoe-cup.ru', phone: '+7 (495) 234-56-78' },
-                kdk: { name: 'Наталья Волкова', role: 'Председатель КДК', email: 'kdk@ramenskoe-cup.ru', phone: '+7 (495) 345-67-89' },
-                media: { name: 'Дмитрий Козлов', role: 'Руководитель медиа', email: 'media@ramenskoe-cup.ru', phone: '+7 (495) 456-78-90' },
-                tech: { name: 'Сергей Павлов', role: 'Технический директор', email: 'tech@ramenskoe-cup.ru', phone: '+7 (495) 567-89-01' }
-            };
-            
-            const contact = contacts[dept];
-            if (contact) {
-                alert(`${contact.role}\n${contact.name}\n\nEmail: ${contact.email}\nТелефон: ${contact.phone}`);
-            }
-        }
-        
-        // Document Download
-        function downloadDoc(docType) {
-            const docs = {
-                regulations: 'Регламент турнира 2026.pdf',
-                fairplay: 'Кодекс Fair Play.pdf',
-                insurance: 'Страхование участников.pdf',
-                antidoping: 'Антидопинговые правила.pdf'
-            };
-            
-            const docName = docs[docType];
-            if (docName) {
-                alert(`Загрузка: ${docName}\n\n(В реальном проекте здесь будет скачивание PDF)`);
-            }
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
