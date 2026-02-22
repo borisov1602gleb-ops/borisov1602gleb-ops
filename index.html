@@ -428,6 +428,13 @@
             transition: opacity 0.3s ease;
         }
         
+        /* Editing Mode Highlight */
+        .editing-active {
+            outline: 2px dashed #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            cursor: text;
+        }
+        
         .modal-backdrop.open {
             opacity: 1;
             pointer-events: auto;
@@ -659,6 +666,60 @@
         
         .flip-card:hover {
             z-index: 10;
+        }
+        
+        /* Draw Studio Styles */
+        #drawStudio {
+            background: radial-gradient(circle at center, #001a3d 0%, #000814 100%);
+        }
+        
+        .draw-pot-btn {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #d4af37, #8a6d1c);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 20;
+        }
+        
+        .draw-pot-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.6);
+        }
+        
+        .draw-pot-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .draw-pot-btn.spinning {
+            animation: spinPot 0.5s linear infinite;
+        }
+        
+        @keyframes spinPot {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(0.95); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        .flying-team {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #d4af37;
+            color: #000814;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: 900;
+            font-size: 1.5rem;
+            z-index: 100;
+            pointer-events: none;
         }
         
         @media (max-width: 768px) {
@@ -1175,6 +1236,50 @@
         <p class="text-white/60 text-xl text-center px-4">Мы готовим обновление. Скоро вернемся.</p>
     </div>
     
+    <!-- Draw Studio Overlay -->
+    <div id="drawStudio" class="fixed inset-0 z-[8000] hidden flex-col">
+        <!-- Studio Header -->
+        <div class="p-6 flex justify-between items-center bg-black/20 backdrop-blur-md border-b border-white/10">
+            <div class="text-gold font-black text-2xl tracking-widest">LIVE DRAW STUDIO</div>
+            <button onclick="closeDrawStudio()" class="text-white/50 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        
+        <!-- Studio Content -->
+        <div class="flex-grow relative flex items-center justify-center overflow-hidden">
+            <!-- Groups Corners -->
+            <div class="absolute top-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-a">
+                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">A</h3>
+                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА A</div>
+                <div class="space-y-2 studio-list"></div>
+            </div>
+            <div class="absolute top-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-b">
+                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">B</h3>
+                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА B</div>
+                <div class="space-y-2 studio-list"></div>
+            </div>
+            <div class="absolute bottom-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-c">
+                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">C</h3>
+                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА C</div>
+                <div class="space-y-2 studio-list"></div>
+            </div>
+            <div class="absolute bottom-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-d">
+                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">D</h3>
+                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА D</div>
+                <div class="space-y-2 studio-list"></div>
+            </div>
+            
+            <!-- Central Action -->
+            <div class="relative z-10 flex flex-col items-center">
+                <button id="startDrawBtn" onclick="startDrawCeremony()" class="draw-pot-btn mb-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                </button>
+                <h2 class="text-3xl font-black text-gold tracking-widest" id="studioStatus">НАЧАТЬ ЖЕРЕБЬЕВКУ</h2>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Video -->
@@ -1201,10 +1306,10 @@
         <!-- Hero Content -->
         <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
             <div class="mb-4">
-                <span class="text-gold text-sm tracking-[0.3em] uppercase">Официальный сайт турнира</span>
+                <span class="text-gold text-sm tracking-[0.3em] uppercase editable-content" data-id="hero-subtitle">Официальный сайт турнира</span>
             </div>
-            <h1 class="hero-mask-text mb-6 reveal">РАМЕНСКОЕ</h1>
-            <p class="text-2xl md:text-4xl font-light mb-8 text-white/90 reveal" style="animation-delay: 0.2s;">
+            <h1 class="hero-mask-text mb-6 reveal editable-content" data-id="hero-title">РАМЕНСКОЕ</h1>
+            <p class="text-2xl md:text-4xl font-light mb-8 text-white/90 reveal editable-content" data-id="hero-desc" style="animation-delay: 0.2s;">
                 Любительский Кубок <span class="text-gold font-semibold">2026</span>
             </p>
             
@@ -1242,7 +1347,7 @@
     <!-- Official Draw Section -->
     <section id="draw" class="py-20 px-4 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal">ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА</h2>
+            <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal editable-content" data-id="draw-title">ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА</h2>
             
             <div id="potsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
                 <!-- Pot 1 -->
@@ -1368,8 +1473,8 @@
     <!-- Road of Glory Timeline Section -->
     <section id="road" class="py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark">
         <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal">ДОРОГА СЛАВЫ</h2>
-            <p class="text-center text-white/60 mb-16 reveal">История турнира от первого матча до сегодняшнего дня</p>
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal editable-content" data-id="road-title">ДОРОГА СЛАВЫ</h2>
+            <p class="text-center text-white/60 mb-16 reveal editable-content" data-id="road-desc">История турнира от первого матча до сегодняшнего дня</p>
             
             <div class="road-timeline">
                 <!-- Timeline Node 1 -->
@@ -1489,8 +1594,11 @@
             
             <div id="adminLoginBlock">
                 <p class="text-white/60 mb-4 text-sm">Система управления турниром. Введите код доступа.</p>
+                <div class="relative mb-4">
+                    <input type="text" id="adminLogin" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold transition-all" placeholder="Login">
+                </div>
                 <div class="relative mb-6">
-                    <input type="password" id="adminPass" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold transition-all" placeholder="Access Code">
+                    <input type="password" id="adminPass" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold transition-all" placeholder="Password">
                 </div>
                 <button onclick="checkAdmin()" class="w-full bg-gold text-cup-dark font-bold py-3 rounded-xl hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                     Войти в систему
@@ -1601,6 +1709,7 @@
             checkDrawResults(); // Check if draw already happened
             renderPots(); // Render teams in pots
             checkMaintenance(); // Check maintenance mode
+            loadSiteContent(); // Load edited content
         });
         
         function updateCountdown() {
@@ -1718,16 +1827,24 @@
         }
 
         function checkAdmin() {
+            const login = document.getElementById('adminLogin').value;
             const pass = document.getElementById('adminPass').value;
-            if (pass === 'admin') {
+            
+            // Admin: admin / 123
+            // Organizer: org / root
+            
+            if (login === 'admin' && pass === '123') {
+                // Simple Admin
                 document.getElementById('adminLoginBlock').classList.add('hidden');
                 document.getElementById('adminControls').classList.remove('hidden');
+                document.getElementById('organizerControls').classList.add('hidden');
+            } else if (login === 'org' && pass === 'root') {
+                // Organizer
+                document.getElementById('adminLoginBlock').classList.add('hidden');
+                document.getElementById('adminControls').classList.remove('hidden');
+                document.getElementById('organizerControls').classList.remove('hidden');
             } else {
-                const input = document.getElementById('adminPass');
-                input.classList.add('border-red-500', 'text-red-500');
-                setTimeout(() => {
-                    input.classList.remove('border-red-500', 'text-red-500');
-                }, 1000);
+                alert('Неверный логин или пароль');
             }
         }
         
@@ -2079,6 +2196,167 @@
                 link.click();
                 btn.innerHTML = originalText;
             });
+        }
+        
+        // --- SITE EDITING ---
+        let isEditMode = false;
+        
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById('editModeBtn');
+            const elements = document.querySelectorAll('.editable-content');
+            
+            if (isEditMode) {
+                btn.textContent = "Выключить режим редактирования";
+                btn.classList.add('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+                
+                elements.forEach(el => {
+                    el.contentEditable = "true";
+                    el.classList.add('editing-active');
+                    el.addEventListener('blur', saveSiteContent);
+                });
+            } else {
+                btn.textContent = "Включить режим редактирования";
+                btn.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+                
+                elements.forEach(el => {
+                    el.contentEditable = "false";
+                    el.classList.remove('editing-active');
+                });
+            }
+        }
+        
+        function saveSiteContent() {
+            const content = {};
+            document.querySelectorAll('.editable-content').forEach(el => {
+                const id = el.dataset.id;
+                if (id) content[id] = el.innerHTML;
+            });
+            localStorage.setItem('siteContent', JSON.stringify(content));
+        }
+        
+        function loadSiteContent() {
+            const content = JSON.parse(localStorage.getItem('siteContent'));
+            if (content) {
+                document.querySelectorAll('.editable-content').forEach(el => {
+                    const id = el.dataset.id;
+                    if (content[id]) el.innerHTML = content[id];
+                });
+            }
+        }
+        
+        // --- DRAW STUDIO ---
+        function openDrawStudio() {
+            document.getElementById('drawStudio').classList.remove('hidden');
+            document.getElementById('drawStudio').classList.add('flex');
+            closeAdminModal();
+        }
+        
+        function closeDrawStudio() {
+            document.getElementById('drawStudio').classList.add('hidden');
+            document.getElementById('drawStudio').classList.remove('flex');
+        }
+        
+        async function startDrawCeremony() {
+            const btn = document.getElementById('startDrawBtn');
+            const status = document.getElementById('studioStatus');
+            
+            // 1. Start Spinning
+            btn.classList.add('spinning');
+            status.textContent = "ПЕРЕМЕШИВАНИЕ...";
+            
+            // Generate Groups Logic
+            const groups = { A: [], B: [], C: [], D: [] };
+            const groupKeys = ['A', 'B', 'C', 'D'];
+            const allTeams = [];
+            
+            // Flatten and shuffle pots
+            for (let i = 1; i <= 4; i++) {
+                const potTeams = [...pots[i]];
+                potTeams.sort(() => Math.random() - 0.5);
+                
+                potTeams.forEach((team, idx) => {
+                    const group = groupKeys[idx];
+                    allTeams.push({ team, group: group });
+                    groups[group].push(team);
+                });
+            }
+            
+            localStorage.setItem('drawResults', JSON.stringify(groups));
+            renderDrawResults(groups); // Update main site
+            
+            // 2. Animation Sequence
+            await new Promise(r => setTimeout(r, 2000)); // Spin for 2s
+            btn.classList.remove('spinning');
+            status.textContent = "РАСПРЕДЕЛЕНИЕ...";
+            
+            // Clear studio lists
+            document.querySelectorAll('.studio-list').forEach(el => el.innerHTML = '');
+            
+            for (const item of allTeams) {
+                // Create flying element
+                const flyer = document.createElement('div');
+                flyer.className = 'flying-team';
+                flyer.textContent = typeof item.team === 'string' ? item.team : item.team.name;
+                document.getElementById('drawStudio').appendChild(flyer);
+                
+                // Animate appearance
+                gsap.to(flyer, { scale: 1, duration: 0.5, ease: "back.out(1.7)" });
+                
+                await new Promise(r => setTimeout(r, 1000)); // Wait to read
+                
+                // Animate to corner
+                const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
+                const rect = targetGroup.getBoundingClientRect();
+                
+                gsap.to(flyer, { 
+                    top: rect.top + rect.height/2, 
+                    left: rect.left + rect.width/2, 
+                    scale: 0.2, 
+                    opacity: 0, 
+                    duration: 0.8, 
+                    ease: "power2.in" 
+                });
+                
+                // Add to list
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'bg-white/10 p-2 rounded text-white text-sm font-bold animate-pulse';
+                    div.textContent = typeof item.team === 'string' ? item.team : item.team.name;
+                    targetGroup.querySelector('.studio-list').appendChild(div);
+                    flyer.remove();
+                }, 800);
+                
+                await new Promise(r => setTimeout(r, 500)); // Pause between teams
+            }
+            
+            status.textContent = "ЖЕРЕБЬЕВКА ЗАВЕРШЕНА";
+            celebrate();
+        }
+        
+        function celebrate() {
+            const colors = ['#d4af37', '#ffd700', '#ffffff', '#ef4444'];
+            const container = document.getElementById('drawStudio');
+            
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `position:absolute;width:8px;height:8px;left:50%;top:50%;z-index:100;border-radius:50%`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                container.appendChild(confetti);
+                
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 100 + Math.random() * 400;
+                
+                gsap.to(confetti, {
+                    x: Math.cos(angle) * velocity,
+                    y: Math.sin(angle) * velocity,
+                    opacity: 0,
+                    scale: 0,
+                    duration: 1.5 + Math.random(),
+                    ease: "power2.out",
+                    onComplete: () => confetti.remove()
+                });
+            }
         }
         
     </script>
