@@ -201,7 +201,7 @@
         
         /* Hero Text Mask */
         .hero-mask-text {
-            font-size: clamp(4rem, 15vw, 12rem);
+            font-size: clamp(3rem, 11vw, 9rem);
             font-weight: 900;
             line-height: 0.9;
             background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
@@ -655,7 +655,6 @@
         }
         
         .flip-card:hover {
-            transform: translateY(-10px);
             z-index: 10;
         }
         
@@ -1235,7 +1234,7 @@
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal">ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+            <div id="potsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
                 <!-- Pot 1 -->
                 <div class="flip-card group cursor-pointer" onclick="flipCard(this)">
                     <div class="flip-card-inner">
@@ -1251,12 +1250,7 @@
                         <!-- Back -->
                         <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 1</h3>
-                            <div class="space-y-3 w-full relative z-10">
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">Стадион Школа 21</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">Стадион Жуковский</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">ТПУСТЫМИ</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">ОАЗИС</div>
-                            </div>
+                            <div class="space-y-3 w-full relative z-10" id="pot-1-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1276,12 +1270,7 @@
                         <!-- Back -->
                         <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 2</h3>
-                            <div class="space-y-3 w-full relative z-10">
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Раменское</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Метеор</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Victory</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Storm</div>
-                            </div>
+                            <div class="space-y-3 w-full relative z-10" id="pot-2-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1301,12 +1290,7 @@
                         <!-- Back -->
                         <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 3</h3>
-                            <div class="space-y-3 w-full relative z-10">
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Thunder</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Legion</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Spartak</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Dynamo</div>
-                            </div>
+                            <div class="space-y-3 w-full relative z-10" id="pot-3-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1326,13 +1310,35 @@
                         <!-- Back -->
                         <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 4</h3>
-                            <div class="space-y-3 w-full relative z-10">
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Zenit</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC CSKA</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Lokomotiv</div>
-                                <div class="py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors">FC Torpedo</div>
-                            </div>
+                            <div class="space-y-3 w-full relative z-10" id="pot-4-teams"></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Groups Results (Hidden by default) -->
+            <div id="groupsResults" class="hidden mt-16 max-w-7xl mx-auto reveal">
+                <h3 class="text-3xl md:text-5xl font-black text-center mb-12 text-gold">ИТОГИ ЖЕРЕБЬЕВКИ</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Group A -->
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                        <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА A</h4>
+                        <div id="group-a-list" class="space-y-3"></div>
+                    </div>
+                    <!-- Group B -->
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                        <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА B</h4>
+                        <div id="group-b-list" class="space-y-3"></div>
+                    </div>
+                    <!-- Group C -->
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                        <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА C</h4>
+                        <div id="group-c-list" class="space-y-3"></div>
+                    </div>
+                    <!-- Group D -->
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                        <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА D</h4>
+                        <div id="group-d-list" class="space-y-3"></div>
                     </div>
                 </div>
             </div>
@@ -1484,6 +1490,22 @@
                     <h4 class="text-gold font-bold mb-3 text-sm uppercase">Таймер</h4>
                     <button onclick="toggleCountdown()" id="timerBtn" class="w-full bg-white/10 text-white border border-white/20 py-2 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Пауза таймера</button>
                 </div>
+                
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <h4 class="text-gold font-bold mb-3 text-sm uppercase">Жеребьевка</h4>
+                    <button onclick="conductDraw()" class="w-full bg-gold text-cup-dark border border-gold py-2 rounded-lg text-sm font-bold hover:bg-gold-light transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)]">ПРОВЕСТИ ЖЕРЕБЬЕВКУ</button>
+                    <button onclick="resetDraw()" class="w-full mt-2 bg-red-500/20 text-red-400 border border-red-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">Сбросить результаты</button>
+                    <button onclick="openTeamEditor()" class="w-full mt-2 bg-blue-500/20 text-blue-400 border border-blue-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-blue-500/30 transition-all">Редактировать команды</button>
+                </div>
+            </div>
+            
+            <div id="adminTeamEditor" class="hidden space-y-4">
+                <h4 class="text-gold font-bold mb-3 text-sm uppercase">Редактор команд</h4>
+                <div id="teamInputs" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar"></div>
+                <div class="grid grid-cols-2 gap-3 pt-4">
+                    <button onclick="closeTeamEditor()" class="bg-white/10 text-white border border-white/20 py-2 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Отмена</button>
+                    <button onclick="saveTeams()" class="bg-gold text-cup-dark border border-gold py-2 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1546,7 +1568,14 @@
         }
         
         // Countdown Timer
-        let isTimerPaused = false;
+        let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
+        
+        // Initialize button state based on storage
+        window.addEventListener('load', () => {
+            updateTimerBtnState();
+            checkDrawResults(); // Check if draw already happened
+            renderPots(); // Render teams in pots
+        });
         
         function updateCountdown() {
             if (isTimerPaused) return;
@@ -1695,7 +1724,14 @@
         
         function toggleCountdown() {
             isTimerPaused = !isTimerPaused;
+            localStorage.setItem('timerPaused', isTimerPaused);
+            updateTimerBtnState();
+        }
+        
+        function updateTimerBtnState() {
             const btn = document.getElementById('timerBtn');
+            if (!btn) return;
+            
             if (isTimerPaused) {
                 btn.textContent = "Возобновить таймер";
                 btn.classList.remove('bg-white/10', 'text-white');
@@ -1706,6 +1742,152 @@
                 btn.classList.remove('bg-yellow-500/20', 'text-yellow-400', 'border-yellow-500/30');
             }
         }
+        
+        // Draw Logic
+        const defaultPots = {
+            1: ['Стадион Школа 21', 'Стадион Жуковский', 'ТПУСТЫМИ', 'ОАЗИС'],
+            2: ['FC Раменское', 'FC Метеор', 'FC Victory', 'FC Storm'],
+            3: ['FC Thunder', 'FC Legion', 'FC Spartak', 'FC Dynamo'],
+            4: ['FC Zenit', 'FC CSKA', 'FC Lokomotiv', 'FC Torpedo']
+        };
+        
+        let pots = JSON.parse(localStorage.getItem('potsData')) || defaultPots;
+
+        function renderPots() {
+            for(let i=1; i<=4; i++) {
+                const container = document.getElementById(`pot-${i}-teams`);
+                if(!container) continue;
+                container.innerHTML = '';
+                pots[i].forEach(team => {
+                    const div = document.createElement('div');
+                    div.className = 'py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors';
+                    div.textContent = team;
+                    container.appendChild(div);
+                });
+            }
+        }
+        
+        function conductDraw() {
+            const groups = { A: [], B: [], C: [], D: [] };
+            const groupKeys = ['A', 'B', 'C', 'D'];
+            
+            for (let i = 1; i <= 4; i++) {
+                const potTeams = [...pots[i]];
+                // Shuffle
+                potTeams.sort(() => Math.random() - 0.5);
+                
+                groupKeys.forEach((key, index) => {
+                    groups[key].push(potTeams[index]);
+                });
+            }
+            
+            localStorage.setItem('drawResults', JSON.stringify(groups));
+            renderDrawResults(groups);
+            
+            // Scroll to results
+            document.getElementById('groupsResults').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function resetDraw() {
+            if(confirm('Вы уверены? Результаты будут удалены у всех.')) {
+                localStorage.removeItem('drawResults');
+                location.reload();
+            }
+        }
+        
+        function checkDrawResults() {
+            const saved = localStorage.getItem('drawResults');
+            if (saved) {
+                renderDrawResults(JSON.parse(saved));
+            }
+        }
+        
+        function renderDrawResults(groups) {
+            // Hide Pots
+            const pots = document.getElementById('potsContainer');
+            if (pots) pots.classList.add('hidden');
+            
+            // Show Groups
+            document.getElementById('groupsResults').classList.remove('hidden');
+            
+            ['A', 'B', 'C', 'D'].forEach(key => {
+                const list = document.getElementById(`group-${key.toLowerCase()}-list`);
+                list.innerHTML = '';
+                groups[key].forEach(team => {
+                    const div = document.createElement('div');
+                    div.className = 'py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-2 border-gold';
+                    div.textContent = team;
+                    list.appendChild(div);
+                });
+            });
+        }
+        
+        // Team Editor Functions
+        function openTeamEditor() {
+            document.getElementById('adminControls').classList.add('hidden');
+            document.getElementById('adminTeamEditor').classList.remove('hidden');
+            
+            const container = document.getElementById('teamInputs');
+            container.innerHTML = '';
+            
+            for(let i=1; i<=4; i++) {
+                const potDiv = document.createElement('div');
+                potDiv.innerHTML = `<h5 class="text-gold text-xs font-bold mb-2">Корзина ${i}</h5>`;
+                
+                pots[i].forEach((team, index) => {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = team;
+                    input.className = 'w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white mb-2 focus:border-gold outline-none';
+                    input.dataset.pot = i;
+                    input.dataset.index = index;
+                    potDiv.appendChild(input);
+                });
+                container.appendChild(potDiv);
+            }
+        }
+
+        function closeTeamEditor() {
+            document.getElementById('adminTeamEditor').classList.add('hidden');
+            document.getElementById('adminControls').classList.remove('hidden');
+        }
+
+        function saveTeams() {
+            const inputs = document.querySelectorAll('#teamInputs input');
+            const newPots = { 1: [], 2: [], 3: [], 4: [] };
+            
+            inputs.forEach(input => {
+                const pot = input.dataset.pot;
+                if (input.value.trim()) {
+                    newPots[pot].push(input.value.trim());
+                }
+            });
+
+            pots = newPots;
+            localStorage.setItem('potsData', JSON.stringify(pots));
+            renderPots();
+            closeTeamEditor();
+            // If draw results exist, they might be invalid now, but we leave them until reset
+        }
+        
+        // Sync across tabs
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'timerPaused') {
+                isTimerPaused = e.newValue === 'true';
+                updateTimerBtnState();
+            }
+            if (e.key === 'drawResults') {
+                if (e.newValue) {
+                    renderDrawResults(JSON.parse(e.newValue));
+                } else {
+                    location.reload();
+                }
+            }
+            if (e.key === 'potsData') {
+                pots = JSON.parse(e.newValue);
+                renderPots();
+            }
+        });
         
     </script>
 </body>
