@@ -722,6 +722,60 @@
             pointer-events: none;
         }
         
+        /* Revealed Card Animation */
+        .revealed-card-enter {
+            animation: cardEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes cardEnter {
+            from { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        /* Studio Group Expansion */
+        .studio-group-card {
+            cursor: pointer;
+            z-index: 30;
+        }
+        
+        .studio-group-card:hover {
+            border-color: #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .studio-group-card.expanded {
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) scale(1.5) !important;
+            z-index: 100 !important;
+            background: rgba(0, 26, 61, 0.95);
+            border-color: #d4af37;
+            box-shadow: 0 0 100px rgba(212, 175, 55, 0.5);
+            cursor: zoom-out;
+        }
+        
+        .studio-group-card.expanded:hover {
+            transform: translate(-50%, -50%) scale(1.5) !important;
+        }
+
+        #studioOverlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 90;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        #studioOverlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
         @media (max-width: 768px) {
             .bento-grid {
                 grid-template-columns: 1fr;
@@ -1248,23 +1302,25 @@
         
         <!-- Studio Content -->
         <div class="flex-grow relative flex items-center justify-center overflow-hidden">
+            <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
+            
             <!-- Groups Corners -->
-            <div class="absolute top-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-a">
+            <div class="studio-group-card absolute top-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-a" onclick="expandGroup(this)">
                 <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">A</h3>
                 <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА A</div>
                 <div class="space-y-2 studio-list"></div>
             </div>
-            <div class="absolute top-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-b">
+            <div class="studio-group-card absolute top-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-b" onclick="expandGroup(this)">
                 <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">B</h3>
                 <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА B</div>
                 <div class="space-y-2 studio-list"></div>
             </div>
-            <div class="absolute bottom-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-c">
+            <div class="studio-group-card absolute bottom-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-c" onclick="expandGroup(this)">
                 <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">C</h3>
                 <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА C</div>
                 <div class="space-y-2 studio-list"></div>
             </div>
-            <div class="absolute bottom-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-d">
+            <div class="studio-group-card absolute bottom-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-d" onclick="expandGroup(this)">
                 <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">D</h3>
                 <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА D</div>
                 <div class="space-y-2 studio-list"></div>
@@ -1272,10 +1328,24 @@
             
             <!-- Central Action -->
             <div class="relative z-10 flex flex-col items-center">
-                <button id="startDrawBtn" onclick="startDrawCeremony()" class="draw-pot-btn mb-8">
+                <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
+                
+                <button id="drawBowlBtn" onclick="drawNextTeam()" class="draw-pot-btn mb-8 relative group">
+                    <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    <span class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">НАЖМИТЕ ЧТОБЫ ВЫТЯНУТЬ</span>
                 </button>
-                <h2 class="text-3xl font-black text-gold tracking-widest" id="studioStatus">НАЧАТЬ ЖЕРЕБЬЕВКУ</h2>
+                
+                <button id="finishDrawBtn" onclick="finalizeDraw()" class="hidden magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-xl hover:bg-gold-light transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-bounce">
+                    ЗАВЕРШИТЬ И ОПУБЛИКОВАТЬ
+                </button>
+            </div>
+            
+            <!-- Revealed Card Overlay -->
+            <div id="revealedTeamCard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[280px] glass-strong border-2 border-gold rounded-3xl flex flex-col items-center justify-center z-50 hidden shadow-[0_0_100px_rgba(212,175,55,0.5)]">
+                <img id="revealedTeamLogo" src="" class="w-24 h-24 object-contain mb-4 hidden drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                <h3 id="revealedTeamName" class="text-3xl font-black text-white text-center px-4 mb-2 leading-tight">TEAM NAME</h3>
+                <div class="mt-2 text-gold text-xs tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full border border-gold/20">Группа <span id="revealedTeamGroup" class="font-bold text-lg ml-1">A</span></div>
             </div>
         </div>
     </div>
@@ -2257,81 +2327,154 @@
             document.getElementById('drawStudio').classList.remove('flex');
         }
         
-        async function startDrawCeremony() {
-            const btn = document.getElementById('startDrawBtn');
-            const status = document.getElementById('studioStatus');
+        // --- INTERACTIVE DRAW LOGIC ---
+        let drawQueue = [];
+        let currentDrawIndex = 0;
+        let drawGroupsState = { A: [], B: [], C: [], D: [] };
+
+        function initDrawSession() {
+            // Reset State
+            drawQueue = [];
+            currentDrawIndex = 0;
+            drawGroupsState = { A: [], B: [], C: [], D: [] };
             
-            // 1. Start Spinning
-            btn.classList.add('spinning');
-            status.textContent = "ПЕРЕМЕШИВАНИЕ...";
+            // Clear UI
+            document.querySelectorAll('.studio-list').forEach(el => el.innerHTML = '');
+            document.getElementById('finishDrawBtn').classList.add('hidden');
+            document.getElementById('drawBowlBtn').classList.remove('hidden');
+            document.getElementById('currentPotDisplay').classList.remove('opacity-0');
             
-            // Generate Groups Logic
-            const groups = { A: [], B: [], C: [], D: [] };
+            // Generate Queue
             const groupKeys = ['A', 'B', 'C', 'D'];
-            const allTeams = [];
             
-            // Flatten and shuffle pots
             for (let i = 1; i <= 4; i++) {
                 const potTeams = [...pots[i]];
                 potTeams.sort(() => Math.random() - 0.5);
                 
                 potTeams.forEach((team, idx) => {
-                    const group = groupKeys[idx];
-                    allTeams.push({ team, group: group });
-                    groups[group].push(team);
+                    drawQueue.push({
+                        team: team,
+                        group: groupKeys[idx],
+                        pot: i
+                    });
                 });
             }
             
-            localStorage.setItem('drawResults', JSON.stringify(groups));
-            renderDrawResults(groups); // Update main site
+            updatePotDisplay(1);
+            openDrawStudio();
+        }
+
+        function drawNextTeam() {
+            if (currentDrawIndex >= drawQueue.length) return;
             
-            // 2. Animation Sequence
-            await new Promise(r => setTimeout(r, 2000)); // Spin for 2s
-            btn.classList.remove('spinning');
-            status.textContent = "РАСПРЕДЕЛЕНИЕ...";
+            const item = drawQueue[currentDrawIndex];
+            const btn = document.getElementById('drawBowlBtn');
             
-            // Clear studio lists
-            document.querySelectorAll('.studio-list').forEach(el => el.innerHTML = '');
+            // 1. Spin
+            btn.classList.add('spinning');
             
-            for (const item of allTeams) {
-                // Create flying element
-                const flyer = document.createElement('div');
-                flyer.className = 'flying-team';
-                flyer.textContent = typeof item.team === 'string' ? item.team : item.team.name;
-                document.getElementById('drawStudio').appendChild(flyer);
-                
-                // Animate appearance
-                gsap.to(flyer, { scale: 1, duration: 0.5, ease: "back.out(1.7)" });
-                
-                await new Promise(r => setTimeout(r, 1000)); // Wait to read
-                
-                // Animate to corner
-                const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
-                const rect = targetGroup.getBoundingClientRect();
-                
-                gsap.to(flyer, { 
-                    top: rect.top + rect.height/2, 
-                    left: rect.left + rect.width/2, 
-                    scale: 0.2, 
-                    opacity: 0, 
-                    duration: 0.8, 
-                    ease: "power2.in" 
-                });
-                
+            // 2. Reveal
+            setTimeout(() => {
+                btn.classList.remove('spinning');
+                showRevealedCard(item);
+            }, 800);
+        }
+
+        function showRevealedCard(item) {
+            const card = document.getElementById('revealedTeamCard');
+            const nameEl = document.getElementById('revealedTeamName');
+            const logoEl = document.getElementById('revealedTeamLogo');
+            const groupEl = document.getElementById('revealedTeamGroup');
+            
+            const teamName = typeof item.team === 'string' ? item.team : item.team.name;
+            const teamLogo = typeof item.team === 'string' ? '' : item.team.logo;
+            
+            nameEl.textContent = teamName;
+            groupEl.textContent = item.group;
+            
+            if (teamLogo) {
+                logoEl.src = teamLogo;
+                logoEl.classList.remove('hidden');
+            } else {
+                logoEl.classList.add('hidden');
+            }
+            
+            card.classList.remove('hidden');
+            card.classList.add('revealed-card-enter');
+            
+            // Sound
+            const sound = document.getElementById('flipSound');
+            if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
+            
+            // Auto move after delay
+            setTimeout(() => {
+                moveCardToGroup(item);
+            }, 2000);
+        }
+
+        function moveCardToGroup(item) {
+            const card = document.getElementById('revealedTeamCard');
+            const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
+            const rect = targetGroup.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
+            
+            // Calculate flight path
+            const deltaX = rect.left + rect.width/2 - (cardRect.left + cardRect.width/2);
+            const deltaY = rect.top + rect.height/2 - (cardRect.top + cardRect.height/2);
+            
+            card.style.transition = 'transform 0.8s cubic-bezier(0.2, 0, 0, 1), opacity 0.8s';
+            card.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.1)`;
+            card.style.opacity = '0';
+            
+            setTimeout(() => {
                 // Add to list
-                setTimeout(() => {
-                    const div = document.createElement('div');
-                    div.className = 'bg-white/10 p-2 rounded text-white text-sm font-bold animate-pulse';
-                    div.textContent = typeof item.team === 'string' ? item.team : item.team.name;
-                    targetGroup.querySelector('.studio-list').appendChild(div);
-                    flyer.remove();
-                }, 800);
+                const div = document.createElement('div');
+                div.className = 'bg-white/10 p-2 rounded text-white text-sm font-bold animate-pulse flex items-center gap-2';
                 
-                await new Promise(r => setTimeout(r, 500)); // Pause between teams
-            }
-            
-            status.textContent = "ЖЕРЕБЬЕВКА ЗАВЕРШЕНА";
-            celebrate();
+                const teamName = typeof item.team === 'string' ? item.team : item.team.name;
+                const teamLogo = typeof item.team === 'string' ? '' : item.team.logo;
+                
+                if(teamLogo) {
+                    div.innerHTML = `<img src="${teamLogo}" class="w-6 h-6 object-contain"> <span>${teamName}</span>`;
+                } else {
+                    div.textContent = teamName;
+                }
+                
+                targetGroup.querySelector('.studio-list').appendChild(div);
+                
+                // Update State
+                drawGroupsState[item.group].push(item.team);
+                
+                // Reset Card
+                card.classList.add('hidden');
+                card.classList.remove('revealed-card-enter');
+                card.style.transform = 'translate(-50%, -50%)';
+                card.style.opacity = '1';
+                card.style.transition = '';
+                
+                // Next
+                currentDrawIndex++;
+                if (currentDrawIndex < drawQueue.length) {
+                    updatePotDisplay(drawQueue[currentDrawIndex].pot);
+                } else {
+                    document.getElementById('drawBowlBtn').classList.add('hidden');
+                    document.getElementById('finishDrawBtn').classList.remove('hidden');
+                    document.getElementById('currentPotDisplay').textContent = "ЖЕРЕБЬЕВКА ЗАВЕРШЕНА";
+                    celebrate();
+                }
+            }, 800);
+        }
+
+        function updatePotDisplay(potNum) {
+            const display = document.getElementById('currentPotDisplay');
+            display.textContent = `КОРЗИНА ${potNum}`;
+        }
+
+        function finalizeDraw() {
+            localStorage.setItem('drawResults', JSON.stringify(drawGroupsState));
+            renderDrawResults(drawGroupsState);
+            closeDrawStudio();
+            document.getElementById('groupsResults').scrollIntoView({ behavior: 'smooth' });
         }
         
         function celebrate() {
@@ -2357,6 +2500,29 @@
                     onComplete: () => confetti.remove()
                 });
             }
+        }
+        
+        // --- STUDIO GROUP EXPANSION ---
+        let activeExpandedGroup = null;
+
+        function expandGroup(element) {
+            if (activeExpandedGroup === element) {
+                closeExpandedGroup();
+                return;
+            }
+            if (activeExpandedGroup) {
+                activeExpandedGroup.classList.remove('expanded');
+            }
+            activeExpandedGroup = element;
+            element.classList.add('expanded');
+            document.getElementById('studioOverlay').classList.add('visible');
+        }
+
+        function closeExpandedGroup() {
+            if (!activeExpandedGroup) return;
+            activeExpandedGroup.classList.remove('expanded');
+            document.getElementById('studioOverlay').classList.remove('visible');
+            activeExpandedGroup = null;
         }
         
     </script>
