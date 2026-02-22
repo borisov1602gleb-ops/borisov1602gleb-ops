@@ -455,6 +455,57 @@
             overflow-y: auto;
         }
         
+        /* Admin Fullscreen Mode */
+        .modal-content.admin-fullscreen {
+            width: 98%;
+            height: 95%;
+            max-width: 1600px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .admin-layout {
+            display: flex;
+            height: 100%;
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.3);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .admin-main {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .admin-tab-btn {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .admin-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+        
+        .admin-tab-btn.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            border-left-color: #d4af37;
+        }
+        
         .modal-content.open {
             transform: translate(-50%, -50%) scale(1);
             opacity: 1;
@@ -670,7 +721,7 @@
         
         /* Draw Studio Styles */
         #drawStudio {
-            background: radial-gradient(circle at center, #001a3d 0%, #000814 100%);
+            /* background: radial-gradient(circle at center, #001a3d 0%, #000814 100%); Removed to fit in modal */
         }
         
         .draw-pot-btn {
@@ -1282,6 +1333,8 @@
     
     <!-- Sound Effect -->
     <audio id="flipSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="drumSound" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
+    <audio id="whooshSound" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" preload="auto"></audio>
     
     <!-- Maintenance Overlay -->
     <div id="maintenanceOverlay" class="fixed inset-0 z-[9000] bg-cup-dark flex flex-col items-center justify-center hidden transition-opacity duration-500">
@@ -1290,66 +1343,6 @@
         <p class="text-white/60 text-xl text-center px-4">Мы готовим обновление. Скоро вернемся.</p>
     </div>
     
-    <!-- Draw Studio Overlay -->
-    <div id="drawStudio" class="fixed inset-0 z-[8000] hidden flex-col">
-        <!-- Studio Header -->
-        <div class="p-6 flex justify-between items-center bg-black/20 backdrop-blur-md border-b border-white/10">
-            <div class="text-gold font-black text-2xl tracking-widest">LIVE DRAW STUDIO</div>
-            <button onclick="closeDrawStudio()" class="text-white/50 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-        
-        <!-- Studio Content -->
-        <div class="flex-grow relative flex items-center justify-center overflow-hidden">
-            <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
-            
-            <!-- Groups Corners -->
-            <div class="studio-group-card absolute top-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-a" onclick="expandGroup(this)">
-                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">A</h3>
-                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА A</div>
-                <div class="space-y-2 studio-list"></div>
-            </div>
-            <div class="studio-group-card absolute top-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-b" onclick="expandGroup(this)">
-                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">B</h3>
-                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА B</div>
-                <div class="space-y-2 studio-list"></div>
-            </div>
-            <div class="studio-group-card absolute bottom-10 left-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-c" onclick="expandGroup(this)">
-                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">C</h3>
-                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА C</div>
-                <div class="space-y-2 studio-list"></div>
-            </div>
-            <div class="studio-group-card absolute bottom-10 right-10 w-80 h-96 glass rounded-3xl p-6 border-2 border-gold/30 transition-all duration-500" id="studio-group-d" onclick="expandGroup(this)">
-                <h3 class="text-4xl font-black text-white/20 absolute top-4 right-4">D</h3>
-                <div class="text-gold font-bold text-xl mb-4 border-b border-white/10 pb-2">ГРУППА D</div>
-                <div class="space-y-2 studio-list"></div>
-            </div>
-            
-            <!-- Central Action -->
-            <div class="relative z-10 flex flex-col items-center">
-                <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
-                
-                <button id="drawBowlBtn" onclick="drawNextTeam()" class="draw-pot-btn mb-8 relative group">
-                    <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                    <span class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">НАЖМИТЕ ЧТОБЫ ВЫТЯНУТЬ</span>
-                </button>
-                
-                <button id="finishDrawBtn" onclick="finalizeDraw()" class="hidden magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-xl hover:bg-gold-light transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-bounce">
-                    ЗАВЕРШИТЬ И ОПУБЛИКОВАТЬ
-                </button>
-            </div>
-            
-            <!-- Revealed Card Overlay -->
-            <div id="revealedTeamCard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[280px] glass-strong border-2 border-gold rounded-3xl flex flex-col items-center justify-center z-50 hidden shadow-[0_0_100px_rgba(212,175,55,0.5)]">
-                <img id="revealedTeamLogo" src="" class="w-24 h-24 object-contain mb-4 hidden drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                <h3 id="revealedTeamName" class="text-3xl font-black text-white text-center px-4 mb-2 leading-tight">TEAM NAME</h3>
-                <div class="mt-2 text-gold text-xs tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full border border-gold/20">Группа <span id="revealedTeamGroup" class="font-bold text-lg ml-1">A</span></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Video -->
@@ -1651,7 +1644,8 @@
     <!-- Admin Modal -->
     <div class="modal-backdrop" id="adminBackdrop" onclick="closeAdminModal()"></div>
     <div class="modal-content glass-strong" id="adminModal" style="border: 1px solid #d4af37;">
-        <div class="p-8">
+        <!-- Login View -->
+        <div id="adminLoginView" class="p-8">
             <div class="flex items-center justify-between mb-8">
                 <h3 class="text-2xl font-bold text-gold flex items-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -1662,7 +1656,7 @@
                 </button>
             </div>
             
-            <div id="adminLoginBlock">
+            <div>
                 <p class="text-white/60 mb-4 text-sm">Система управления турниром. Введите код доступа.</p>
                 <div class="relative mb-4">
                     <input type="text" id="adminLogin" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold transition-all" placeholder="Login">
@@ -1674,40 +1668,131 @@
                     Войти в систему
                 </button>
             </div>
-            
-            <div id="adminControls" class="hidden space-y-4">
-                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-                    <h4 class="text-gold font-bold mb-3 text-sm uppercase">Управление жеребьевкой</h4>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="resetAllCards()" class="bg-red-500/20 text-red-400 border border-red-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">Сбросить карты</button>
-                        <button onclick="openAllCards()" class="bg-green-500/20 text-green-400 border border-green-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-green-500/30 transition-all">Открыть все</button>
-                    </div>
+        </div>
+        
+        <!-- Dashboard View (Hidden by default) -->
+        <div id="adminDashboardView" class="hidden admin-layout">
+            <!-- Sidebar -->
+            <div class="admin-sidebar">
+                <div class="p-6 border-b border-white/10">
+                    <h3 class="text-xl font-bold text-gold">ADMIN</h3>
+                    <p class="text-xs text-white/40" id="adminRoleLabel">Organizer</p>
                 </div>
-                
-                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-                    <h4 class="text-gold font-bold mb-3 text-sm uppercase">Таймер</h4>
-                    <button onclick="toggleCountdown()" id="timerBtn" class="w-full bg-white/10 text-white border border-white/20 py-2 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Пауза таймера</button>
-                </div>
-                
-                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-                    <h4 class="text-gold font-bold mb-3 text-sm uppercase">Жеребьевка</h4>
-                    <button onclick="conductDraw()" class="w-full bg-gold text-cup-dark border border-gold py-2 rounded-lg text-sm font-bold hover:bg-gold-light transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)]">ПРОВЕСТИ ЖЕРЕБЬЕВКУ</button>
-                    <button onclick="resetDraw()" class="w-full mt-2 bg-red-500/20 text-red-400 border border-red-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">Сбросить результаты</button>
-                    <button onclick="openTeamEditor()" class="w-full mt-2 bg-blue-500/20 text-blue-400 border border-blue-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-blue-500/30 transition-all">Редактировать команды</button>
-                </div>
-                
-                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
-                    <h4 class="text-gold font-bold mb-3 text-sm uppercase">Система</h4>
-                    <button onclick="toggleMaintenance()" id="maintBtn" class="w-full bg-white/10 text-white border border-white/20 py-2 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Технические работы</button>
+                <nav class="flex-grow py-4">
+                    <button onclick="switchAdminTab('dashboard')" class="admin-tab-btn w-full active" id="tab-btn-dashboard">
+                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Дашборд</span>
+                    </button>
+                    <button onclick="switchAdminTab('teams')" class="admin-tab-btn w-full" id="tab-btn-teams">
+                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Команды</span>
+                    </button>
+                    <button onclick="switchAdminTab('draw')" class="admin-tab-btn w-full" id="tab-btn-draw">
+                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg> Жеребьевка</span>
+                    </button>
+                </nav>
+                <div class="p-4 border-t border-white/10">
+                    <button onclick="closeAdminModal()" class="w-full py-2 text-white/60 hover:text-white text-sm flex items-center gap-2 justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Выйти
+                    </button>
                 </div>
             </div>
             
-            <div id="adminTeamEditor" class="hidden space-y-4">
-                <h4 class="text-gold font-bold mb-3 text-sm uppercase">Редактор команд</h4>
-                <div id="teamInputs" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar"></div>
-                <div class="grid grid-cols-2 gap-3 pt-4">
-                    <button onclick="closeTeamEditor()" class="bg-white/10 text-white border border-white/20 py-2 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Отмена</button>
-                    <button onclick="saveTeams()" class="bg-gold text-cup-dark border border-gold py-2 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
+            <!-- Main Content -->
+            <div class="admin-main">
+                <!-- Tab: Dashboard -->
+                <div id="tab-dashboard" class="space-y-6">
+                    <h2 class="text-2xl font-bold text-white mb-6">Панель управления</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Timer Control -->
+                        <div class="glass p-6 rounded-xl">
+                            <h4 class="text-gold font-bold mb-4 uppercase text-sm">Таймер</h4>
+                            <button onclick="toggleCountdown()" id="timerBtn" class="w-full bg-white/10 text-white border border-white/20 py-3 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Пауза таймера</button>
+                        </div>
+                        
+                        <!-- System Control -->
+                        <div class="glass p-6 rounded-xl">
+                            <h4 class="text-gold font-bold mb-4 uppercase text-sm">Система</h4>
+                            <button onclick="toggleMaintenance()" id="maintBtn" class="w-full bg-white/10 text-white border border-white/20 py-3 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all mb-3">Технические работы</button>
+                            <button onclick="toggleEditMode()" id="editModeBtn" class="w-full bg-white/10 text-white border border-white/20 py-3 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Режим редактирования</button>
+                        </div>
+                        
+                        <!-- Cards Control -->
+                        <div class="glass p-6 rounded-xl">
+                            <h4 class="text-gold font-bold mb-4 uppercase text-sm">Карточки на сайте</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="resetAllCards()" class="bg-white/10 text-white border border-white/20 py-3 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Сбросить</button>
+                                <button onclick="openAllCards()" class="bg-white/10 text-white border border-white/20 py-3 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Открыть все</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Data Control -->
+                        <div class="glass p-6 rounded-xl">
+                            <h4 class="text-gold font-bold mb-4 uppercase text-sm">Данные</h4>
+                            <button onclick="resetDraw()" class="w-full bg-red-500/20 text-red-400 border border-red-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">Сбросить результаты жеребьевки</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab: Teams -->
+                <div id="tab-teams" class="hidden space-y-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">Редактор команд</h2>
+                        <button onclick="saveTeams()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить изменения</button>
+                    </div>
+                    <div id="teamInputs" class="space-y-6"></div>
+                </div>
+                
+                <!-- Tab: Draw (The Studio) -->
+                <div id="tab-draw" class="hidden h-full flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-white">Студия Жеребьевки</h2>
+                        <div class="flex gap-3">
+                            <button onclick="cancelDraw()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Отмена</button>
+                            <button onclick="initDrawSession()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Сброс</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Draw Studio Container -->
+                    <div id="drawStudioContainer" class="flex-grow relative bg-black/40 rounded-2xl border border-white/10 overflow-hidden flex items-center justify-center">
+                        <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
+                        
+                        <!-- Groups Corners -->
+                        <div class="studio-group-card absolute top-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-a" onclick="expandGroup(this)">
+                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">A</h3>
+                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА A</div>
+                            <div class="space-y-1 studio-list text-xs"></div>
+                        </div>
+                        <div class="studio-group-card absolute top-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-b" onclick="expandGroup(this)">
+                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">B</h3>
+                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА B</div>
+                            <div class="space-y-1 studio-list text-xs"></div>
+                        </div>
+                        <div class="studio-group-card absolute bottom-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-c" onclick="expandGroup(this)">
+                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">C</h3>
+                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА C</div>
+                            <div class="space-y-1 studio-list text-xs"></div>
+                        </div>
+                        <div class="studio-group-card absolute bottom-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-d" onclick="expandGroup(this)">
+                            <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">D</h3>
+                            <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА D</div>
+                            <div class="space-y-1 studio-list text-xs"></div>
+                        </div>
+                        
+                        <!-- Central Action -->
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
+                            
+                            <button id="drawBowlBtn" onclick="drawNextTeam()" class="draw-pot-btn mb-8 relative group">
+                                <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                <span class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">НАЖМИТЕ ЧТОБЫ ВЫТЯНУТЬ</span>
+                            </button>
+                            
+                            <button id="finishDrawBtn" onclick="finalizeDraw()" class="hidden magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-xl hover:bg-gold-light transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-bounce">
+                                ПРИМЕНИТЬ И ОПУБЛИКОВАТЬ
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1781,6 +1866,15 @@
             checkMaintenance(); // Check maintenance mode
             loadSiteContent(); // Load edited content
         });
+        
+        // Revealed Card Overlay (Moved to body for fixed positioning)
+        const revealedCardHTML = `
+            <div id="revealedTeamCard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[280px] glass-strong border-2 border-gold rounded-3xl flex flex-col items-center justify-center z-[9999] hidden shadow-[0_0_100px_rgba(212,175,55,0.5)]">
+                <img id="revealedTeamLogo" src="" class="w-24 h-24 object-contain mb-4 hidden drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                <h3 id="revealedTeamName" class="text-3xl font-black text-white text-center px-4 mb-2 leading-tight">TEAM NAME</h3>
+                <div class="mt-2 text-gold text-xs tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full border border-gold/20">Группа <span id="revealedTeamGroup" class="font-bold text-lg ml-1">A</span></div>
+            </div>`;
+        document.body.insertAdjacentHTML('beforeend', revealedCardHTML);
         
         function updateCountdown() {
             if (isTimerPaused) return;
@@ -1900,22 +1994,53 @@
             const login = document.getElementById('adminLogin').value;
             const pass = document.getElementById('adminPass').value;
             
-            // Admin: admin / 123
-            // Organizer: org / root
+            const modalContent = document.getElementById('adminModal');
+            const loginView = document.getElementById('adminLoginView');
+            const dashboardView = document.getElementById('adminDashboardView');
+            const roleLabel = document.getElementById('adminRoleLabel');
+            const teamsTab = document.getElementById('tab-btn-teams');
+            const drawTab = document.getElementById('tab-btn-draw');
             
             if (login === 'admin' && pass === '123') {
-                // Simple Admin
-                document.getElementById('adminLoginBlock').classList.add('hidden');
-                document.getElementById('adminControls').classList.remove('hidden');
-                document.getElementById('organizerControls').classList.add('hidden');
+                // Simple Admin (Limited)
+                modalContent.classList.add('admin-fullscreen');
+                loginView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+                roleLabel.textContent = "Administrator";
+                
+                // Hide restricted tabs
+                teamsTab.style.display = 'none';
+                drawTab.style.display = 'none';
+                
+                switchAdminTab('dashboard');
             } else if (login === 'org' && pass === 'root') {
-                // Organizer
-                document.getElementById('adminLoginBlock').classList.add('hidden');
-                document.getElementById('adminControls').classList.remove('hidden');
-                document.getElementById('organizerControls').classList.remove('hidden');
+                // Organizer (Full Access)
+                modalContent.classList.add('admin-fullscreen');
+                loginView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+                roleLabel.textContent = "Organizer";
+                
+                // Show all tabs
+                teamsTab.style.display = 'block';
+                drawTab.style.display = 'block';
+                
+                switchAdminTab('dashboard');
             } else {
                 alert('Неверный логин или пароль');
             }
+        }
+        
+        function switchAdminTab(tabId) {
+            // Update Buttons
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            if(activeBtn) activeBtn.classList.add('active');
+            
+            // Update Content
+            document.querySelectorAll('.admin-main > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            
+            if(tabId === 'teams') loadTeamEditor();
         }
         
         // Admin Actions
@@ -2098,10 +2223,7 @@
         }
         
         // Team Editor Functions
-        function openTeamEditor() {
-            document.getElementById('adminControls').classList.add('hidden');
-            document.getElementById('adminTeamEditor').classList.remove('hidden');
-            
+        function loadTeamEditor() {
             const container = document.getElementById('teamInputs');
             container.innerHTML = '';
             
@@ -2219,7 +2341,7 @@
             pots = newPots;
             localStorage.setItem('potsData', JSON.stringify(pots));
             renderPots();
-            closeTeamEditor();
+            alert('Команды сохранены!');
             
             btn.textContent = originalText;
             btn.disabled = false;
@@ -2315,18 +2437,6 @@
             }
         }
         
-        // --- DRAW STUDIO ---
-        function openDrawStudio() {
-            document.getElementById('drawStudio').classList.remove('hidden');
-            document.getElementById('drawStudio').classList.add('flex');
-            closeAdminModal();
-        }
-        
-        function closeDrawStudio() {
-            document.getElementById('drawStudio').classList.add('hidden');
-            document.getElementById('drawStudio').classList.remove('flex');
-        }
-        
         // --- INTERACTIVE DRAW LOGIC ---
         let drawQueue = [];
         let currentDrawIndex = 0;
@@ -2361,7 +2471,6 @@
             }
             
             updatePotDisplay(1);
-            openDrawStudio();
         }
 
         function drawNextTeam() {
@@ -2403,7 +2512,7 @@
             card.classList.add('revealed-card-enter');
             
             // Sound
-            const sound = document.getElementById('flipSound');
+            const sound = document.getElementById('drumSound');
             if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
             
             // Auto move after delay
@@ -2417,6 +2526,10 @@
             const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
             const rect = targetGroup.getBoundingClientRect();
             const cardRect = card.getBoundingClientRect();
+            
+            // Sound
+            const sound = document.getElementById('whooshSound');
+            if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
             
             // Calculate flight path
             const deltaX = rect.left + rect.width/2 - (cardRect.left + cardRect.width/2);
@@ -2457,7 +2570,7 @@
                 if (currentDrawIndex < drawQueue.length) {
                     updatePotDisplay(drawQueue[currentDrawIndex].pot);
                 } else {
-                    document.getElementById('drawBowlBtn').classList.add('hidden');
+                    document.querySelector('#drawStudioContainer #drawBowlBtn').classList.add('hidden');
                     document.getElementById('finishDrawBtn').classList.remove('hidden');
                     document.getElementById('currentPotDisplay').textContent = "ЖЕРЕБЬЕВКА ЗАВЕРШЕНА";
                     celebrate();
@@ -2473,13 +2586,18 @@
         function finalizeDraw() {
             localStorage.setItem('drawResults', JSON.stringify(drawGroupsState));
             renderDrawResults(drawGroupsState);
-            closeDrawStudio();
-            document.getElementById('groupsResults').scrollIntoView({ behavior: 'smooth' });
+            alert('Результаты опубликованы на сайте!');
+            closeAdminModal();
+        }
+        
+        function cancelDraw() {
+            initDrawSession(); // Reset
+            switchAdminTab('dashboard');
         }
         
         function celebrate() {
             const colors = ['#d4af37', '#ffd700', '#ffffff', '#ef4444'];
-            const container = document.getElementById('drawStudio');
+            const container = document.getElementById('drawStudioContainer');
             
             for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement('div');
