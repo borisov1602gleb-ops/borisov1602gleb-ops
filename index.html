@@ -16,6 +16,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
     
+    <!-- html2canvas -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -419,7 +422,7 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
-            z-index: 300;
+            z-index: 9100;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
@@ -435,7 +438,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.95);
-            z-index: 301;
+            z-index: 9101;
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s ease;
@@ -1165,6 +1168,13 @@
     <!-- Sound Effect -->
     <audio id="flipSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
     
+    <!-- Maintenance Overlay -->
+    <div id="maintenanceOverlay" class="fixed inset-0 z-[9000] bg-cup-dark flex flex-col items-center justify-center hidden transition-opacity duration-500">
+        <div class="text-gold text-6xl mb-8 animate-pulse">⚠️</div>
+        <h2 class="text-4xl md:text-6xl font-black text-gold mb-6 tracking-widest text-center px-4">ТЕХНИЧЕСКИЕ РАБОТЫ</h2>
+        <p class="text-white/60 text-xl text-center px-4">Мы готовим обновление. Скоро вернемся.</p>
+    </div>
+    
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Video -->
@@ -1248,7 +1258,7 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 1</h3>
                             <div class="space-y-3 w-full relative z-10" id="pot-1-teams"></div>
                         </div>
@@ -1268,7 +1278,7 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 2</h3>
                             <div class="space-y-3 w-full relative z-10" id="pot-2-teams"></div>
                         </div>
@@ -1288,7 +1298,7 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 3</h3>
                             <div class="space-y-3 w-full relative z-10" id="pot-3-teams"></div>
                         </div>
@@ -1308,7 +1318,7 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 4</h3>
                             <div class="space-y-3 w-full relative z-10" id="pot-4-teams"></div>
                         </div>
@@ -1318,8 +1328,16 @@
             
             <!-- Groups Results (Hidden by default) -->
             <div id="groupsResults" class="hidden mt-16 max-w-7xl mx-auto reveal">
-                <h3 class="text-3xl md:text-5xl font-black text-center mb-12 text-gold">ИТОГИ ЖЕРЕБЬЕВКИ</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="flex justify-center mb-8">
+                    <button onclick="downloadResults()" class="magnetic bg-gold text-cup-dark px-6 py-3 rounded-full font-bold hover:bg-gold-light transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Скачать итоги
+                    </button>
+                </div>
+                
+                <div id="resultsCapture" class="p-4 md:p-8 rounded-3xl bg-cup-dark/20 backdrop-blur-sm border border-white/5">
+                    <h3 class="text-3xl md:text-5xl font-black text-center mb-12 text-gold">ИТОГИ ЖЕРЕБЬЕВКИ</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Group A -->
                     <div class="glass rounded-3xl p-6 border border-gold/30">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА A</h4>
@@ -1340,6 +1358,8 @@
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА D</h4>
                         <div id="group-d-list" class="space-y-3"></div>
                     </div>
+                    </div>
+                    <div class="text-center mt-8 text-white/40 text-sm font-mono tracking-widest">RAMENSKOE CUP 2026</div>
                 </div>
             </div>
         </div>
@@ -1497,6 +1517,11 @@
                     <button onclick="resetDraw()" class="w-full mt-2 bg-red-500/20 text-red-400 border border-red-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">Сбросить результаты</button>
                     <button onclick="openTeamEditor()" class="w-full mt-2 bg-blue-500/20 text-blue-400 border border-blue-500/30 py-2 rounded-lg text-sm font-semibold hover:bg-blue-500/30 transition-all">Редактировать команды</button>
                 </div>
+                
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <h4 class="text-gold font-bold mb-3 text-sm uppercase">Система</h4>
+                    <button onclick="toggleMaintenance()" id="maintBtn" class="w-full bg-white/10 text-white border border-white/20 py-2 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Технические работы</button>
+                </div>
             </div>
             
             <div id="adminTeamEditor" class="hidden space-y-4">
@@ -1575,6 +1600,7 @@
             updateTimerBtnState();
             checkDrawResults(); // Check if draw already happened
             renderPots(); // Render teams in pots
+            checkMaintenance(); // Check maintenance mode
         });
         
         function updateCountdown() {
@@ -1743,15 +1769,52 @@
             }
         }
         
+        // Maintenance Mode
+        let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
+
+        function checkMaintenance() {
+            const overlay = document.getElementById('maintenanceOverlay');
+            const btn = document.getElementById('maintBtn');
+            
+            if (isMaintenance) {
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                if(btn) {
+                    btn.textContent = "Выключить тех. работы";
+                    btn.classList.add('bg-red-500/20', 'text-red-400', 'border-red-500/30');
+                }
+            } else {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+                if(btn) {
+                    btn.textContent = "Включить тех. работы";
+                    btn.classList.remove('bg-red-500/20', 'text-red-400', 'border-red-500/30');
+                }
+            }
+        }
+
+        function toggleMaintenance() {
+            isMaintenance = !isMaintenance;
+            localStorage.setItem('maintenanceMode', isMaintenance);
+            checkMaintenance();
+        }
+        
         // Draw Logic
         const defaultPots = {
-            1: ['Стадион Школа 21', 'Стадион Жуковский', 'ТПУСТЫМИ', 'ОАЗИС'],
-            2: ['FC Раменское', 'FC Метеор', 'FC Victory', 'FC Storm'],
-            3: ['FC Thunder', 'FC Legion', 'FC Spartak', 'FC Dynamo'],
-            4: ['FC Zenit', 'FC CSKA', 'FC Lokomotiv', 'FC Torpedo']
+            1: [{name: 'Стадион Школа 21', logo: ''}, {name: 'Стадион Жуковский', logo: ''}, {name: 'ТПУСТЫМИ', logo: ''}, {name: 'ОАЗИС', logo: ''}],
+            2: [{name: 'FC Раменское', logo: ''}, {name: 'FC Метеор', logo: ''}, {name: 'FC Victory', logo: ''}, {name: 'FC Storm', logo: ''}],
+            3: [{name: 'FC Thunder', logo: ''}, {name: 'FC Legion', logo: ''}, {name: 'FC Spartak', logo: ''}, {name: 'FC Dynamo', logo: ''}],
+            4: [{name: 'FC Zenit', logo: ''}, {name: 'FC CSKA', logo: ''}, {name: 'FC Lokomotiv', logo: ''}, {name: 'FC Torpedo', logo: ''}]
         };
         
         let pots = JSON.parse(localStorage.getItem('potsData')) || defaultPots;
+        
+        // Migration: Ensure all teams are objects
+        Object.keys(pots).forEach(key => {
+            pots[key] = pots[key].map(team => {
+                return typeof team === 'string' ? { name: team, logo: '' } : team;
+            });
+        });
 
         function renderPots() {
             for(let i=1; i<=4; i++) {
@@ -1760,8 +1823,19 @@
                 container.innerHTML = '';
                 pots[i].forEach(team => {
                     const div = document.createElement('div');
-                    div.className = 'py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors';
-                    div.textContent = team;
+                    div.className = 'py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors flex items-center gap-3';
+                    
+                    if (team.logo) {
+                        const img = document.createElement('img');
+                        img.src = team.logo;
+                        img.className = 'w-8 h-8 object-contain';
+                        div.appendChild(img);
+                    }
+                    
+                    const span = document.createElement('span');
+                    span.textContent = team.name;
+                    div.appendChild(span);
+                    
                     container.appendChild(div);
                 });
             }
@@ -1814,9 +1888,23 @@
                 const list = document.getElementById(`group-${key.toLowerCase()}-list`);
                 list.innerHTML = '';
                 groups[key].forEach(team => {
+                    const teamName = typeof team === 'string' ? team : team.name;
+                    const teamLogo = typeof team === 'string' ? '' : team.logo;
+                    
                     const div = document.createElement('div');
-                    div.className = 'py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-2 border-gold';
-                    div.textContent = team;
+                    div.className = 'py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-2 border-gold flex items-center gap-2';
+                    
+                    if (teamLogo) {
+                        const img = document.createElement('img');
+                        img.src = teamLogo;
+                        img.className = 'w-6 h-6 object-contain';
+                        div.appendChild(img);
+                    }
+                    
+                    const span = document.createElement('span');
+                    span.textContent = teamName;
+                    div.appendChild(span);
+                    
                     list.appendChild(div);
                 });
             });
@@ -1835,13 +1923,51 @@
                 potDiv.innerHTML = `<h5 class="text-gold text-xs font-bold mb-2">Корзина ${i}</h5>`;
                 
                 pots[i].forEach((team, index) => {
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.value = team;
-                    input.className = 'w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white mb-2 focus:border-gold outline-none';
-                    input.dataset.pot = i;
-                    input.dataset.index = index;
-                    potDiv.appendChild(input);
+                    const row = document.createElement('div');
+                    row.className = 'flex gap-2 mb-2 items-center';
+
+                    const inputName = document.createElement('input');
+                    inputName.type = 'text';
+                    inputName.value = team.name;
+                    inputName.className = 'flex-grow bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-gold outline-none';
+                    inputName.dataset.pot = i;
+                    inputName.dataset.index = index;
+                    inputName.dataset.type = 'name';
+
+                    const labelFile = document.createElement('label');
+                    labelFile.className = 'cursor-pointer bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors flex items-center justify-center w-10 h-10 border border-white/10 shrink-0';
+                    labelFile.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
+                    if(team.logo) labelFile.classList.add('border-gold');
+                    
+                    const inputFile = document.createElement('input');
+                    inputFile.type = 'file';
+                    inputFile.accept = 'image/*';
+                    inputFile.className = 'hidden';
+                    inputFile.dataset.pot = i;
+                    inputFile.dataset.index = index;
+                    inputFile.dataset.type = 'logo';
+                    inputFile.onchange = function() {
+                        if(this.files && this.files[0]) {
+                            labelFile.classList.add('bg-green-500/20', 'border-green-500/50');
+                            labelFile.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                        }
+                    };
+
+                    labelFile.appendChild(inputFile);
+                    
+                    // Hidden input to store current logo if not changed
+                    const inputCurrentLogo = document.createElement('input');
+                    inputCurrentLogo.type = 'hidden';
+                    inputCurrentLogo.value = team.logo || '';
+                    inputCurrentLogo.dataset.pot = i;
+                    inputCurrentLogo.dataset.index = index;
+                    inputCurrentLogo.dataset.type = 'currentLogo';
+
+                    row.appendChild(inputName);
+                    row.appendChild(labelFile);
+                    row.appendChild(inputCurrentLogo);
+                    
+                    potDiv.appendChild(row);
                 });
                 container.appendChild(potDiv);
             }
@@ -1852,14 +1978,54 @@
             document.getElementById('adminControls').classList.remove('hidden');
         }
 
-        function saveTeams() {
-            const inputs = document.querySelectorAll('#teamInputs input');
+        async function saveTeams() {
+            const btn = document.querySelector('#adminTeamEditor button:last-child');
+            const originalText = btn.textContent;
+            btn.textContent = 'Сохранение...';
+            btn.disabled = true;
+
             const newPots = { 1: [], 2: [], 3: [], 4: [] };
+            const nameInputs = document.querySelectorAll('#teamInputs input[data-type="name"]');
             
-            inputs.forEach(input => {
-                const pot = input.dataset.pot;
-                if (input.value.trim()) {
-                    newPots[pot].push(input.value.trim());
+            // Helper to read file
+            const readFile = (file) => new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(file);
+            });
+            
+            // Process inputs
+            const promises = Array.from(nameInputs).map(async (nameInput) => {
+                const pot = nameInput.dataset.pot;
+                const index = nameInput.dataset.index;
+                const fileInput = document.querySelector(`input[data-type="logo"][data-pot="${pot}"][data-index="${index}"]`);
+                const currentLogoInput = document.querySelector(`input[data-type="currentLogo"][data-pot="${pot}"][data-index="${index}"]`);
+                
+                let logo = currentLogoInput.value;
+                
+                if (fileInput.files && fileInput.files[0]) {
+                    try {
+                        logo = await readFile(fileInput.files[0]);
+                    } catch (e) {
+                        console.error("Error reading file", e);
+                    }
+                }
+                
+                return {
+                    pot,
+                    name: nameInput.value.trim(),
+                    logo
+                };
+            });
+            
+            const results = await Promise.all(promises);
+            
+            results.forEach(team => {
+                if (team.name) {
+                    newPots[team.pot].push({
+                        name: team.name,
+                        logo: team.logo
+                    });
                 }
             });
 
@@ -1867,7 +2033,9 @@
             localStorage.setItem('potsData', JSON.stringify(pots));
             renderPots();
             closeTeamEditor();
-            // If draw results exist, they might be invalid now, but we leave them until reset
+            
+            btn.textContent = originalText;
+            btn.disabled = false;
         }
         
         // Sync across tabs
@@ -1887,7 +2055,31 @@
                 pots = JSON.parse(e.newValue);
                 renderPots();
             }
+            if (e.key === 'maintenanceMode') {
+                isMaintenance = e.newValue === 'true';
+                checkMaintenance();
+            }
         });
+        
+        // Download Results
+        function downloadResults() {
+            const element = document.getElementById('resultsCapture');
+            const btn = document.querySelector('#groupsResults button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Создание изображения...';
+            
+            html2canvas(element, {
+                backgroundColor: '#000814',
+                scale: 2,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'RamenskoeCup_Results.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                btn.innerHTML = originalText;
+            });
+        }
         
     </script>
 </body>
