@@ -1760,22 +1760,22 @@
                         <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
                         
                         <!-- Groups Corners -->
-                        <div class="studio-group-card absolute top-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-a" onclick="expandGroup(this)">
+                        <div class="studio-group-card absolute top-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-a" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'A')">
                             <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">A</h3>
                             <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА A</div>
                             <div class="space-y-1 studio-list text-xs"></div>
                         </div>
-                        <div class="studio-group-card absolute top-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-b" onclick="expandGroup(this)">
+                        <div class="studio-group-card absolute top-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-b" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'B')">
                             <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">B</h3>
                             <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА B</div>
                             <div class="space-y-1 studio-list text-xs"></div>
                         </div>
-                        <div class="studio-group-card absolute bottom-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-c" onclick="expandGroup(this)">
+                        <div class="studio-group-card absolute bottom-6 left-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-c" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'C')">
                             <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">C</h3>
                             <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА C</div>
                             <div class="space-y-1 studio-list text-xs"></div>
                         </div>
-                        <div class="studio-group-card absolute bottom-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-d" onclick="expandGroup(this)">
+                        <div class="studio-group-card absolute bottom-6 right-6 w-64 h-80 glass rounded-2xl p-4 border-2 border-gold/30 transition-all duration-500" id="studio-group-d" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'D')">
                             <h3 class="text-4xl font-black text-white/20 absolute top-2 right-2">D</h3>
                             <div class="text-gold font-bold text-lg mb-2 border-b border-white/10 pb-1">ГРУППА D</div>
                             <div class="space-y-1 studio-list text-xs"></div>
@@ -2551,17 +2551,7 @@
             
             setTimeout(() => {
                 // Add to list
-                const div = document.createElement('div');
-                div.className = 'bg-white/10 p-2 rounded text-white text-sm font-bold animate-pulse flex items-center gap-2';
-                
-                const teamName = typeof item.team === 'string' ? item.team : item.team.name;
-                const teamLogo = typeof item.team === 'string' ? '' : item.team.logo;
-                
-                if(teamLogo) {
-                    div.innerHTML = `<img src="${teamLogo}" class="w-6 h-6 object-contain"> <span>${teamName}</span>`;
-                } else {
-                    div.textContent = teamName;
-                }
+                const div = createTeamElement(item.team, item.group);
                 
                 targetGroup.querySelector('.studio-list').appendChild(div);
                 
@@ -2652,6 +2642,58 @@
             activeExpandedGroup.classList.remove('expanded');
             document.getElementById('studioOverlay').classList.remove('visible');
             activeExpandedGroup = null;
+        }
+        
+        // --- DRAG AND DROP ---
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function dragTeam(ev, teamName, currentGroup) {
+            ev.dataTransfer.setData("text/plain", JSON.stringify({ name: teamName, group: currentGroup }));
+            ev.target.classList.add('opacity-50');
+        }
+        
+        function dragEnd(ev) {
+            ev.target.classList.remove('opacity-50');
+        }
+
+        function dropTeam(ev, targetGroup) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text/plain");
+            if (!data) return;
+            
+            const { name, group: sourceGroup } = JSON.parse(data);
+            if (sourceGroup === targetGroup) return;
+            
+            const sourceIndex = drawGroupsState[sourceGroup].findIndex(t => (typeof t === 'string' ? t : t.name) === name);
+            if (sourceIndex === -1) return;
+            
+            const team = drawGroupsState[sourceGroup].splice(sourceIndex, 1)[0];
+            drawGroupsState[targetGroup].push(team);
+            
+            refreshGroupUI(sourceGroup);
+            refreshGroupUI(targetGroup);
+        }
+        
+        function refreshGroupUI(group) {
+            const container = document.querySelector(`#studio-group-${group.toLowerCase()} .studio-list`);
+            container.innerHTML = '';
+            drawGroupsState[group].forEach(team => container.appendChild(createTeamElement(team, group)));
+        }
+        
+        function createTeamElement(team, group) {
+            const div = document.createElement('div');
+            div.className = 'bg-white/10 p-2 rounded text-white text-sm font-bold animate-pulse flex items-center gap-2 cursor-grab active:cursor-grabbing hover:bg-white/20 transition-colors';
+            div.draggable = true;
+            const teamName = typeof team === 'string' ? team : team.name;
+            const teamLogo = typeof team === 'string' ? '' : team.logo;
+            if(teamLogo) div.innerHTML = `<img src="${teamLogo}" class="w-6 h-6 object-contain pointer-events-none"> <span class="pointer-events-none">${teamName}</span>`;
+            else div.textContent = teamName;
+            div.ondragstart = (e) => { e.stopPropagation(); dragTeam(e, teamName, group); };
+            div.ondragend = dragEnd;
+            div.onclick = (e) => e.stopPropagation();
+            return div;
         }
         
     </script>
