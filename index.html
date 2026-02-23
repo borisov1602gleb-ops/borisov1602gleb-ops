@@ -1416,6 +1416,14 @@
         <p class="text-white/60 text-xl text-center px-4">Мы готовим обновление. Скоро вернемся.</p>
     </div>
     
+    <!-- Announcement Banner -->
+    <div id="announcementBanner" class="fixed top-0 left-0 right-0 bg-gold text-cup-dark font-bold text-center py-3 z-[8000] hidden shadow-lg transform transition-transform duration-300">
+        <div class="container mx-auto px-4 flex items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span id="announcementText">ВНИМАНИЕ!</span>
+        </div>
+    </div>
+    
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
         <!-- Background Video -->
@@ -1994,6 +2002,7 @@
             renderPots(); // Render teams in pots
             checkMaintenance(); // Check maintenance mode
             loadSiteContent(); // Load edited content
+            initAnnouncement(); // Check announcement
         });
         
         // Revealed Card Overlay (Moved to body for fixed positioning)
@@ -2239,6 +2248,57 @@
             isMaintenance = !isMaintenance;
             localStorage.setItem('maintenanceMode', isMaintenance);
             checkMaintenance();
+        }
+        
+        // Announcement System
+        let isAnnouncementVisible = localStorage.getItem('announceVisible') === 'true';
+        let announcementText = localStorage.getItem('announceText') || '';
+
+        function initAnnouncement() {
+            const banner = document.getElementById('announcementBanner');
+            const input = document.getElementById('announceInput');
+            const btn = document.getElementById('announceBtn');
+            const textEl = document.getElementById('announcementText');
+            
+            if (input) input.value = announcementText;
+            if (textEl) textEl.textContent = announcementText;
+            
+            if (isAnnouncementVisible && announcementText) {
+                banner.classList.remove('hidden');
+                if(btn) {
+                    btn.textContent = "ON";
+                    btn.classList.add('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+                }
+            } else {
+                banner.classList.add('hidden');
+                if(btn) {
+                    btn.textContent = "OFF";
+                    btn.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+                }
+            }
+        }
+
+        function toggleAnnouncement() {
+            const input = document.getElementById('announceInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('Введите текст объявления!');
+                return;
+            }
+            
+            isAnnouncementVisible = !isAnnouncementVisible;
+            announcementText = text;
+            
+            localStorage.setItem('announceVisible', isAnnouncementVisible);
+            localStorage.setItem('announceText', announcementText);
+            
+            initAnnouncement();
+        }
+        
+        function playSoundEffect(id) {
+            const sound = document.getElementById(id);
+            if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
         }
         
         // Draw Logic
@@ -2497,6 +2557,14 @@
             if (e.key === 'maintenanceMode') {
                 isMaintenance = e.newValue === 'true';
                 checkMaintenance();
+            }
+            if (e.key === 'announceVisible' || e.key === 'announceText') {
+                isAnnouncementVisible = localStorage.getItem('announceVisible') === 'true';
+                announcementText = localStorage.getItem('announceText');
+                initAnnouncement();
+            }
+            if (e.key === 'triggerConfetti') {
+                celebrate();
             }
         });
         
@@ -2781,9 +2849,16 @@
             switchAdminTab('dashboard');
         }
         
+        function triggerCelebrate() {
+            celebrate();
+            localStorage.setItem('triggerConfetti', Date.now());
+        }
+        
         function celebrate() {
             const colors = ['#d4af37', '#ffd700', '#ffffff', '#ef4444'];
-            const container = document.getElementById('drawStudioContainer');
+            // Use body if studio is not visible or we are on main page
+            const studio = document.getElementById('drawStudioContainer');
+            const container = (studio && studio.offsetParent !== null) ? studio : document.body;
             
             for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement('div');
