@@ -1877,7 +1877,12 @@
                     
                     <div class="mt-12">
                         <div class="final-info">
-                            <span id="finalDate">23 ИЮНЯ</span> • <span id="finalTime">18:00</span> • <span id="finalStadium">СТАДИОН САТУРН</span>
+                            <div class="flex flex-col items-center">
+                                <div class="flex gap-4 mb-2 text-gold font-mono text-xl" id="finalCountdown">
+                                    <!-- Countdown timer -->
+                                </div>
+                                <span class="text-sm opacity-80"><span id="finalDate">23 ИЮНЯ</span> • <span id="finalTime">18:00</span> • <span id="finalStadium">СТАДИОН САТУРН</span></span>
+                            </div>
                         </div>
                     </div>
                     
@@ -2245,7 +2250,7 @@
         
         // Countdown Timer
         let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
-        let isAdmin = false;
+        let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
         
         // Initialize button state based on storage
         window.addEventListener('load', () => {
@@ -2400,6 +2405,7 @@
                 finalTab.style.display = 'none';
                 
                 isAdmin = true;
+                sessionStorage.setItem('isAdmin', 'true');
                 renderBracket();
                 renderFinal();
                 switchAdminTab('dashboard');
@@ -2417,6 +2423,7 @@
                 finalTab.style.display = 'block';
                 
                 isAdmin = true;
+                sessionStorage.setItem('isAdmin', 'true');
                 renderBracket();
                 renderFinal();
                 switchAdminTab('dashboard');
@@ -2620,13 +2627,6 @@
         }
         
         function renderDrawResults(groups) {
-            // Hide Pots
-            const pots = document.getElementById('potsContainer');
-            if (pots) pots.classList.add('hidden');
-            
-            // Show Groups
-            document.getElementById('groupsResults').classList.remove('hidden');
-            
             ['A', 'B', 'C', 'D'].forEach(key => {
                 const list = document.getElementById(`group-${key.toLowerCase()}-list`);
                 list.innerHTML = '';
@@ -2651,6 +2651,10 @@
                     list.appendChild(div);
                 });
             });
+            
+            // Refresh visibility based on current status
+            const currentStatus = localStorage.getItem('tournamentStatus') || 'draw';
+            applyTournamentStatus(currentStatus, true);
         }
         
         // Team Editor Functions
@@ -3093,6 +3097,30 @@
         function updatePotDisplay(potNum) {
             const display = document.getElementById('currentPotDisplay');
             display.textContent = `КОРЗИНА ${potNum}`;
+        }
+
+        function startFinalCountdown() {
+            const data = JSON.parse(localStorage.getItem('finalData'));
+            if (!data) return;
+            
+            const countdownEl = document.getElementById('finalCountdown');
+            const update = () => {
+                const target = new Date('2026-06-23T18:00:00'); // Можно сделать динамическим из data
+                const now = new Date();
+                const diff = target - now;
+                
+                if (diff <= 0) {
+                    countdownEl.innerHTML = "МАТЧ НАЧАЛСЯ!";
+                    return;
+                }
+                
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                countdownEl.innerHTML = `${h}ч ${m}м ${s}с`;
+            };
+            setInterval(update, 1000);
+            update();
         }
 
         function finalizeDraw() {
