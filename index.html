@@ -1645,7 +1645,7 @@
         <!-- Background Video -->
         <div class="absolute inset-0 z-0">
             <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-30">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-soccer-player-kicking-ball-in-stadium-4658-large.mp4" type="video/mp4">
             </video>
             <div class="absolute inset-0 bg-gradient-to-b from-cup-dark/50 via-cup-dark/70 to-cup-dark"></div>
         </div>
@@ -2210,6 +2210,10 @@
         // Countdown Timer
         let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
         let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+        let bowlEl;
+
+        // Tournament Status Logic
+        let tournamentStatus = localStorage.getItem('tournamentStatus') || 'draw';
         
         // Initialize button state based on storage
         window.addEventListener('load', () => {
@@ -2221,6 +2225,7 @@
             initAnnouncement(); // Check announcement
             initTournamentStatus(); // Check status
             renderBracket(); // Render bracket if data exists
+            bowlEl = document.getElementById('quantumCore');
         });
         
         // Revealed Card Overlay (Moved to body for fixed positioning)
@@ -2458,6 +2463,68 @@
             localStorage.setItem('maintenanceMode', isMaintenance);
             checkMaintenance();
         }
+
+        function initTournamentStatus() {
+            applyTournamentStatus(tournamentStatus);
+        }
+
+        function setTournamentStatus(status) {
+            tournamentStatus = status;
+            localStorage.setItem('tournamentStatus', status);
+            applyTournamentStatus(status);
+            
+            // Update UI buttons in admin
+            document.querySelectorAll('.status-btn').forEach(btn => {
+                btn.classList.remove('bg-gold', 'text-cup-dark');
+                btn.classList.add('bg-white/10', 'text-white');
+            });
+            const activeBtn = document.getElementById(`statusBtn-${status}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-white/10', 'text-white');
+                activeBtn.classList.add('bg-gold', 'text-cup-dark');
+            }
+        }
+
+        function applyTournamentStatus(status, silent = false) {
+            const sections = {
+                'draw': document.getElementById('potsContainer'),
+                'groups': document.getElementById('groupsResults'),
+                'playoffs': document.getElementById('playoffsSection'),
+                'final': document.getElementById('finalSection')
+            };
+
+            Object.values(sections).forEach(sec => {
+                if(sec) sec.classList.add('hidden');
+            });
+
+            if(sections[status]) sections[status].classList.remove('hidden');
+            
+            if(!silent) {
+                const title = {
+                    'draw': 'ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА',
+                    'groups': 'ГРУППОВОЙ ЭТАП',
+                    'playoffs': 'СЕТКА ПЛЕЙ-ОФФ',
+                    'final': 'ФИНАЛ ТУРНИРА'
+                };
+                const titleEl = document.getElementById('sectionTitle');
+                if(titleEl) titleEl.textContent = title[status];
+            }
+        }
+
+        function renderBracket() {
+            // Логика отрисовки сетки плей-офф
+        }
+
+        function renderFinal() {
+            // Логика отрисовки финала
+        }
+
+        function resetAllCards() {
+            localStorage.removeItem('drawResults');
+            location.reload();
+        }
+
+        function openAllCards() { /* Логика открытия всех карточек */ }
         
         // Announcement System
         let isAnnouncementVisible = localStorage.getItem('announceVisible') === 'true';
@@ -2552,6 +2619,39 @@
             }
         }
         
+        function renderStudioPots() {
+            for(let i=1; i<=4; i++) {
+                const container = document.querySelector(`#m-pot-${i} .pot-content`);
+                if(!container) continue;
+                container.innerHTML = '';
+                pots[i].forEach(team => {
+                    const teamName = typeof team === 'string' ? team : team.name;
+                    const div = document.createElement('div');
+                    div.className = 'pot-item-mini';
+                    div.textContent = teamName;
+                    container.appendChild(div);
+                });
+            }
+        }
+
+        function highlightPot(potNum) {
+            document.querySelectorAll('.quantum-pot').forEach(p => p.classList.remove('active'));
+            const activePot = document.getElementById(`m-pot-${potNum}`);
+            if(activePot) activePot.classList.add('active');
+        }
+
+        function removeTeamFromPotDisplay(name, potNum) {
+            const container = document.querySelector(`#m-pot-${potNum} .pot-content`);
+            if(!container) return;
+            const items = container.querySelectorAll('.pot-item-mini');
+            for(let item of items) {
+                if(item.textContent === name) {
+                    item.remove();
+                    break;
+                }
+            }
+        }
+
         function conductDraw() {
             const groups = { A: [], B: [], C: [], D: [] };
             const groupKeys = ['A', 'B', 'C', 'D'];
@@ -2917,7 +3017,7 @@
                 }
                 
                 renderStudioPots();
-                this.highlightPot(1);
+                highlightPot(1);
                 switchAdminTab('draw');
             },
 
@@ -3057,12 +3157,29 @@
                     // Next
                     this.currentIndex++;
                     if (this.currentIndex < this.queue.length) {
-                        this.highlightPot(this.queue[this.currentIndex].pot);
+                        highlightPot(this.queue[this.currentIndex].pot);
                         document.getElementById('coreLabel').textContent = "NEXT TEAM";
                     } else {
                         this.finish();
                     }
                 }, 800);
+            },
+
+            addManualTeam() {
+                const input = document.getElementById('manualTeamAdd');
+                const name = input.value.trim();
+                if(!name) return;
+                input.value = '';
+            },
+
+            autoFill() {
+                const groupKeys = ['A', 'B', 'C', 'D'];
+                for(let i=1; i<=4; i++) {
+                    pots[i].forEach((team, idx) => {
+                        this.groupsState[groupKeys[idx % 4]].push(team);
+                    });
+                }
+                ['A', 'B', 'C', 'D'].forEach(g => refreshGroupUI(g));
             },
 
             finish() {
