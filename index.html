@@ -778,6 +778,56 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
         
+        /* Glass Jar Styles */
+        .pot-jar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            transition: opacity 0.3s;
+        }
+        .pot-jar-container.active {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .pot-jar-container:not(.active) {
+            opacity: 0.4;
+        }
+        .pot-lid {
+            width: 80%;
+            height: 12px;
+            background: linear-gradient(to right, #d4af37, #ffd700, #d4af37);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+        .pot-jar {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: none;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            box-shadow: inset 0 -10px 30px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-end;
+            justify-content: center;
+            padding: 10px;
+            gap: 5px;
+            overflow: hidden;
+        }
+        .pot-ball-item {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #ffd700, #b8860b);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.6), inset 0 0 5px rgba(255,255,255,0.4);
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
         /* Revealed Card Animation */
         .revealed-card-enter {
             animation: cardEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -786,6 +836,24 @@
         @keyframes cardEnter {
             from { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
             to { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        /* Paper Style for Revealed Card */
+        #revealedTeamCard.paper-style {
+            background: #fdfbf7;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        #revealedTeamCard.paper-style h3 {
+            color: #1a1a1a;
+            font-family: 'Times New Roman', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        #revealedTeamCard.paper-style .group-badge {
+            background: #1a1a1a;
+            color: #d4af37;
         }
         
         /* Studio Group Expansion */
@@ -1756,7 +1824,7 @@
                         <h2 class="text-2xl font-bold text-white">Студия Жеребьевки</h2>
                         <div class="flex gap-3">
                             <button onclick="cancelDraw()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Отмена</button>
-                            <button onclick="initDrawSession()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Сброс</button>
+                            <button onclick="DrawManager.init()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Сброс</button>
                         </div>
                     </div>
                     
@@ -1772,13 +1840,15 @@
                         <div class="flex-grow flex items-center justify-between px-4 md:px-12 py-4 relative z-10">
                             <!-- Left Pots -->
                             <div class="flex flex-col gap-6 w-48">
-                                <div id="pot-1-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
-                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 1</div>
-                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                <div id="pot-1-display" class="pot-jar-container">
+                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 1</div>
+                                    <div class="pot-lid"></div>
+                                    <div class="pot-jar" id="pot-1-balls"></div>
                                 </div>
-                                <div id="pot-3-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
-                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 3</div>
-                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                <div id="pot-3-display" class="pot-jar-container">
+                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 3</div>
+                                    <div class="pot-lid"></div>
+                                    <div class="pot-jar" id="pot-3-balls"></div>
                                 </div>
                             </div>
 
@@ -1786,26 +1856,36 @@
                             <div class="flex flex-col items-center justify-center">
                                 <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
                                 
-                                <button id="drawBowlBtn" onclick="drawNextTeam()" class="draw-pot-btn mb-8 relative group">
+                                <button id="drawBowlBtn" onclick="DrawManager.next()" class="draw-pot-btn mb-8 relative group">
                                     <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                    <span class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">НАЖМИТЕ ЧТОБЫ ВЫТЯНУТЬ</span>
+                                    <span id="bowlLabel" class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">ВЫТЯНУТЬ ШАР</span>
                                 </button>
                                 
-                                <button id="finishDrawBtn" onclick="finalizeDraw()" class="hidden magnetic bg-gold text-cup-dark px-8 py-4 rounded-full font-bold text-xl hover:bg-gold-light transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-bounce">
-                                    ПРИМЕНИТЬ И ОПУБЛИКОВАТЬ
-                                </button>
+                                <div id="drawActions" class="hidden flex flex-col items-center gap-4 animate-fade-in">
+                                    <div class="text-white/60 text-sm font-mono tracking-widest bg-black/40 px-4 py-1 rounded-full">Проверьте состав групп</div>
+                                    <div class="flex gap-4">
+                                        <button onclick="cancelDraw()" class="bg-white/10 text-white border border-white/20 px-6 py-3 rounded-full font-bold hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all">
+                                            СБРОСИТЬ
+                                        </button>
+                                        <button onclick="DrawManager.confirm()" class="bg-gold text-cup-dark px-8 py-3 rounded-full font-bold hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                                            УТВЕРДИТЬ
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Right Pots -->
                             <div class="flex flex-col gap-6 w-48">
-                                <div id="pot-2-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
-                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 2</div>
-                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                <div id="pot-2-display" class="pot-jar-container">
+                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 2</div>
+                                    <div class="pot-lid"></div>
+                                    <div class="pot-jar" id="pot-2-balls"></div>
                                 </div>
-                                <div id="pot-4-display" class="pot-card glass p-4 rounded-xl border border-white/10 transition-all duration-300">
-                                    <div class="text-gold font-bold text-sm mb-2">КОРЗИНА 4</div>
-                                    <div class="text-xs text-white/50 pot-count">4 команды</div>
+                                <div id="pot-4-display" class="pot-jar-container">
+                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 4</div>
+                                    <div class="pot-lid"></div>
+                                    <div class="pot-jar" id="pot-4-balls"></div>
                                 </div>
                             </div>
                         </div>
@@ -1923,7 +2003,8 @@
                 <h3 id="revealedTeamName" class="text-3xl font-black text-white text-center px-4 mb-2 leading-tight">TEAM NAME</h3>
                 <div class="mt-2 text-gold text-xs tracking-widest uppercase bg-white/5 px-3 py-1 rounded-full border border-gold/20">Группа <span id="revealedTeamGroup" class="font-bold text-lg ml-1">A</span></div>
             </div>`;
-        document.body.insertAdjacentHTML('beforeend', revealedCardHTML);
+        const drawBallHTML = `<div id="drawBall" class="fixed w-8 h-8 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 shadow-[0_0_15px_rgba(255,215,0,0.8)] z-[100] hidden pointer-events-none"></div>`;
+        document.body.insertAdjacentHTML('beforeend', revealedCardHTML + drawBallHTML);
         
         function updateCountdown() {
             if (isTimerPaused) return;
@@ -2493,136 +2574,194 @@
         }
         
         // --- INTERACTIVE DRAW LOGIC ---
-        let drawQueue = [];
-        let currentDrawIndex = 0;
-        let drawGroupsState = { A: [], B: [], C: [], D: [] };
+        const DrawManager = {
+            queue: [],
+            currentIndex: 0,
+            groupsState: { A: [], B: [], C: [], D: [] },
+            isAnimating: false,
+            ballReady: false,
 
-        function initDrawSession() {
-            // Reset State
-            drawQueue = [];
-            currentDrawIndex = 0;
-            drawGroupsState = { A: [], B: [], C: [], D: [] };
-            
-            // Clear UI
-            document.querySelectorAll('.studio-list').forEach(el => el.innerHTML = '');
-            document.getElementById('finishDrawBtn').classList.add('hidden');
-            document.getElementById('drawBowlBtn').classList.remove('hidden');
-            document.getElementById('currentPotDisplay').classList.remove('opacity-0');
-            
-            // Generate Queue
-            const groupKeys = ['A', 'B', 'C', 'D'];
-            
-            for (let i = 1; i <= 4; i++) {
-                const potTeams = [...pots[i]];
-                potTeams.sort(() => Math.random() - 0.5);
+            init() {
+                this.queue = [];
+                this.currentIndex = 0;
+                this.groupsState = { A: [], B: [], C: [], D: [] };
+                this.isAnimating = false;
+                this.ballReady = false;
                 
-                potTeams.forEach((team, idx) => {
-                    drawQueue.push({
-                        team: team,
-                        group: groupKeys[idx],
-                        pot: i
+                // Clear UI
+                document.querySelectorAll('.studio-list').forEach(el => el.innerHTML = '');
+                document.getElementById('drawActions').classList.add('hidden');
+                document.getElementById('drawBowlBtn').classList.remove('hidden');
+                document.getElementById('currentPotDisplay').classList.remove('opacity-0');
+                document.getElementById('currentPotDisplay').textContent = "КОРЗИНА 1";
+                document.getElementById('bowlLabel').textContent = "ВЫТЯНУТЬ ШАР";
+                
+                // Generate Queue
+                const groupKeys = ['A', 'B', 'C', 'D'];
+                for (let i = 1; i <= 4; i++) {
+                    const potTeams = [...pots[i]];
+                    potTeams.sort(() => Math.random() - 0.5);
+                    potTeams.forEach((team, idx) => {
+                        this.queue.push({
+                            team: team,
+                            group: groupKeys[idx],
+                            pot: i
+                        });
                     });
-                });
-            }
-            
-            updatePotDisplay(1);
-            switchAdminTab('draw');
-        }
-
-        function drawNextTeam() {
-            if (currentDrawIndex >= drawQueue.length) return;
-            
-            const item = drawQueue[currentDrawIndex];
-            const btn = document.getElementById('drawBowlBtn');
-            
-            // 1. Spin
-            btn.classList.add('spinning');
-            
-            // 2. Reveal
-            setTimeout(() => {
-                btn.classList.remove('spinning');
-                showRevealedCard(item);
-            }, 800);
-        }
-
-        function showRevealedCard(item) {
-            const card = document.getElementById('revealedTeamCard');
-            const nameEl = document.getElementById('revealedTeamName');
-            const logoEl = document.getElementById('revealedTeamLogo');
-            const groupEl = document.getElementById('revealedTeamGroup');
-            
-            const teamName = typeof item.team === 'string' ? item.team : item.team.name;
-            const teamLogo = typeof item.team === 'string' ? '' : item.team.logo;
-            
-            nameEl.textContent = teamName;
-            groupEl.textContent = item.group;
-            
-            if (teamLogo) {
-                logoEl.src = teamLogo;
-                logoEl.classList.remove('hidden');
-            } else {
-                logoEl.classList.add('hidden');
-            }
-            
-            card.classList.remove('hidden');
-            card.classList.add('revealed-card-enter');
-            
-            // Sound
-            const sound = document.getElementById('drumSound');
-            if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
-            
-            // Auto move after delay
-            setTimeout(() => {
-                moveCardToGroup(item);
-            }, 2000);
-        }
-
-        function moveCardToGroup(item) {
-            const card = document.getElementById('revealedTeamCard');
-            const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
-            const rect = targetGroup.getBoundingClientRect();
-            const cardRect = card.getBoundingClientRect();
-            
-            // Sound
-            const sound = document.getElementById('whooshSound');
-            if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
-            
-            // Calculate flight path
-            const deltaX = rect.left + rect.width/2 - (cardRect.left + cardRect.width/2);
-            const deltaY = rect.top + rect.height/2 - (cardRect.top + cardRect.height/2);
-            
-            card.style.transition = 'transform 0.8s cubic-bezier(0.2, 0, 0, 1), opacity 0.8s';
-            card.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.1)`;
-            card.style.opacity = '0';
-            
-            setTimeout(() => {
-                // Add to list
-                const div = createTeamElement(item.team, item.group);
-                
-                targetGroup.querySelector('.studio-list').appendChild(div);
-                
-                // Update State
-                drawGroupsState[item.group].push(item.team);
-                
-                // Reset Card
-                card.classList.add('hidden');
-                card.classList.remove('revealed-card-enter');
-                card.style.transform = 'translate(-50%, -50%)';
-                card.style.opacity = '1';
-                card.style.transition = '';
-                
-                // Next
-                currentDrawIndex++;
-                if (currentDrawIndex < drawQueue.length) {
-                    updatePotDisplay(drawQueue[currentDrawIndex].pot);
-                } else {
-                    document.querySelector('#drawStudioContainer #drawBowlBtn').classList.add('hidden');
-                    document.getElementById('finishDrawBtn').classList.remove('hidden');
-                    document.getElementById('currentPotDisplay').textContent = "ЖЕРЕБЬЕВКА ЗАВЕРШЕНА";
-                    celebrate();
                 }
-            }, 800);
-        }
+                
+                renderStudioPots();
+                updatePotDisplay(1);
+                switchAdminTab('draw');
+            },
+
+            async next() {
+                if (this.currentIndex >= this.queue.length || this.isAnimating) return;
+                this.isAnimating = true;
+
+                const item = this.queue[this.currentIndex];
+                const potEl = document.getElementById(`pot-${item.pot}-display`);
+                const bowlEl = document.getElementById('drawBowlBtn');
+                
+                // 1. Ball Animation
+                await this.animateBall(potEl, bowlEl);
+                
+                // 2. Spin Bowl
+                bowlEl.classList.add('spinning');
+                const sound = document.getElementById('drumSound');
+                if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
+                
+                // Remove from pot display early for effect
+                removeTeamFromPotDisplay(typeof item.team === 'string' ? item.team : item.team.name, item.pot);
+                
+                await new Promise(r => setTimeout(r, 800));
+                bowlEl.classList.remove('spinning');
+                
+                // 3. Reveal Card
+                this.showCard(item);
+            },
+
+            animateBall(fromEl, toEl) {
+                return new Promise(resolve => {
+                    const ball = document.getElementById('drawBall');
+                    const start = fromEl.getBoundingClientRect();
+                    const end = toEl.getBoundingClientRect();
+                    
+                    // Center coordinates
+                    const startX = start.left + start.width / 2;
+                    const startY = start.top + start.height / 2;
+                    const endX = end.left + end.width / 2;
+                    const endY = end.top + end.height / 2;
+                    
+                    ball.style.left = `${startX}px`;
+                    ball.style.top = `${startY}px`;
+                    ball.classList.remove('hidden');
+                    
+                    gsap.fromTo(ball, 
+                        { x: 0, y: 0, scale: 0.5, opacity: 1 },
+                        { 
+                            x: endX - startX, 
+                            y: endY - startY, 
+                            scale: 1, 
+                            duration: 0.6, 
+                            ease: "power2.in",
+                            onComplete: () => {
+                                ball.classList.add('hidden');
+                                resolve();
+                            }
+                        }
+                    );
+                });
+            },
+
+            showCard(item) {
+                const card = document.getElementById('revealedTeamCard');
+                const nameEl = document.getElementById('revealedTeamName');
+                const logoEl = document.getElementById('revealedTeamLogo');
+                const groupEl = document.getElementById('revealedTeamGroup');
+                
+                const teamName = typeof item.team === 'string' ? item.team : item.team.name;
+                const teamLogo = typeof item.team === 'string' ? '' : item.team.logo;
+                
+                nameEl.textContent = teamName;
+                groupEl.textContent = item.group;
+                
+                if (teamLogo) {
+                    logoEl.src = teamLogo;
+                    logoEl.classList.remove('hidden');
+                } else {
+                    logoEl.classList.add('hidden');
+                }
+                
+                card.classList.remove('hidden');
+                card.classList.add('revealed-card-enter');
+                
+                // Auto move after delay
+                setTimeout(() => {
+                    this.moveCardToGroup(item);
+                }, 2000);
+            },
+
+            moveCardToGroup(item) {
+                const card = document.getElementById('revealedTeamCard');
+                const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
+                const rect = targetGroup.getBoundingClientRect();
+                const cardRect = card.getBoundingClientRect();
+                
+                // Sound
+                const sound = document.getElementById('whooshSound');
+                if(sound) { sound.currentTime = 0; sound.play().catch(()=>{}); }
+                
+                // Calculate flight path
+                const deltaX = rect.left + rect.width/2 - (cardRect.left + cardRect.width/2);
+                const deltaY = rect.top + rect.height/2 - (cardRect.top + cardRect.height/2);
+                
+                card.style.transition = 'transform 0.8s cubic-bezier(0.2, 0, 0, 1), opacity 0.8s';
+                card.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.1)`;
+                card.style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Add to list
+                    const div = createTeamElement(item.team, item.group);
+                    targetGroup.querySelector('.studio-list').appendChild(div);
+                    
+                    // Update State
+                    this.groupsState[item.group].push(item.team);
+                    
+                    // Reset Card
+                    card.classList.add('hidden');
+                    card.classList.remove('revealed-card-enter');
+                    card.style.transform = 'translate(-50%, -50%)';
+                    card.style.opacity = '1';
+                    card.style.transition = '';
+                    
+                    this.isAnimating = false;
+                    
+                    // Next
+                    this.currentIndex++;
+                    if (this.currentIndex < this.queue.length) {
+                        updatePotDisplay(this.queue[this.currentIndex].pot);
+                    } else {
+                        this.finish();
+                    }
+                }, 800);
+            },
+
+            finish() {
+                 document.getElementById('drawBowlBtn').classList.add('hidden');
+                 document.getElementById('drawActions').classList.remove('hidden');
+                 document.getElementById('currentPotDisplay').textContent = "ЖЕРЕБЬЕВКА ЗАВЕРШЕНА";
+                 celebrate();
+            },
+            
+            confirm() {
+                localStorage.setItem('drawResults', JSON.stringify(this.groupsState));
+                renderDrawResults(this.groupsState);
+                downloadResults();
+                alert('Результаты опубликованы и скачиваются!');
+                closeAdminModal();
+            }
+        };
 
         function updatePotDisplay(potNum) {
             const display = document.getElementById('currentPotDisplay');
@@ -2712,11 +2851,11 @@
             const { name, group: sourceGroup } = JSON.parse(data);
             if (sourceGroup === targetGroup) return;
             
-            const sourceIndex = drawGroupsState[sourceGroup].findIndex(t => (typeof t === 'string' ? t : t.name) === name);
+            const sourceIndex = DrawManager.groupsState[sourceGroup].findIndex(t => (typeof t === 'string' ? t : t.name) === name);
             if (sourceIndex === -1) return;
             
-            const team = drawGroupsState[sourceGroup].splice(sourceIndex, 1)[0];
-            drawGroupsState[targetGroup].push(team);
+            const team = DrawManager.groupsState[sourceGroup].splice(sourceIndex, 1)[0];
+            DrawManager.groupsState[targetGroup].push(team);
             
             refreshGroupUI(sourceGroup);
             refreshGroupUI(targetGroup);
@@ -2725,7 +2864,7 @@
         function refreshGroupUI(group) {
             const container = document.querySelector(`#studio-group-${group.toLowerCase()} .studio-list`);
             container.innerHTML = '';
-            drawGroupsState[group].forEach(team => container.appendChild(createTeamElement(team, group)));
+            DrawManager.groupsState[group].forEach(team => container.appendChild(createTeamElement(team, group)));
         }
         
         function createTeamElement(team, group) {
