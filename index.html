@@ -2705,8 +2705,10 @@
                 roleLabel.textContent = "Administrator";
                 
                 // Hide restricted tabs
-                teamsTab.style.display = 'none';
-                playoffsTab.style.display = 'block';
+                if (teamsTab) teamsTab.style.display = 'none';
+                if (drawTab) drawTab.style.display = 'none';
+                if (playoffsTab) playoffsTab.style.display = 'block';
+                if (finalTab) finalTab.style.display = 'none';
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
@@ -2723,8 +2725,10 @@
                 roleLabel.textContent = "Organizer";
                 
                 // Show all tabs
-                teamsTab.style.display = 'block';
-                playoffsTab.style.display = 'block';
+                if (teamsTab) teamsTab.style.display = 'block';
+                if (drawTab) drawTab.style.display = 'block';
+                if (playoffsTab) playoffsTab.style.display = 'block';
+                if (finalTab) finalTab.style.display = 'block';
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
