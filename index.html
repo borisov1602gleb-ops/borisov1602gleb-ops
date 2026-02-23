@@ -2367,11 +2367,6 @@
                     <div id="statsCaptain" class="text-white font-semibold">---</div>
                 </div>
                 
-                <div class="mt-4 pt-4 border-t border-white/5">
-                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-3">Состав команды</h4>
-                    <div id="statsPlayersList" class="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar"></div>
-                </div>
-                
                 <div class="flex gap-3 mt-8 modal-actions">
                     <button onclick="exportTeamToPDF()" class="flex-[2] py-4 rounded-xl bg-gold text-cup-dark text-[10px] font-black uppercase tracking-widest transition-all hover:bg-gold-light flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -3342,7 +3337,6 @@
                         wins: 0,
                         losses: 0,
                         captain: '',
-                        players: Array(15).fill(''),
                         desc: ''
                     });
                 });
@@ -3679,33 +3673,44 @@
             const element = document.getElementById('teamStatsModal');
             const teamName = document.getElementById('statsTeamName').textContent;
             
-            // Скрываем кнопки перед захватом, чтобы их не было в PDF
+            // Скрываем кнопки управления, чтобы они не попали в документ
             const actionButtons = element.querySelector('.modal-actions');
-            if(actionButtons) actionButtons.style.opacity = '0';
+            if(actionButtons) actionButtons.style.visibility = 'hidden';
             
             try {
                 const canvas = await html2canvas(element, {
                     backgroundColor: '#000814',
-                    scale: 2,
+                    scale: 3, // Высокое качество для печати
                     useCORS: true,
-                    logging: false
+                    logging: false,
+                    // Магия здесь: исправляем позиционирование в клоне для корректного снимка
+                    onclone: (clonedDoc) => {
+                        const clonedEl = clonedDoc.getElementById('teamStatsModal');
+                        clonedEl.style.transform = 'none';
+                        clonedEl.style.position = 'relative';
+                        clonedEl.style.left = '0';
+                        clonedEl.style.top = '0';
+                        clonedEl.style.margin = '0';
+                        clonedEl.style.overflow = 'visible';
+                    }
                 });
                 
                 const imgData = canvas.toDataURL('image/png');
                 
                 const pdf = new jsPDF({
-                    orientation: canvas.width > canvas.height ? 'l' : 'p',
+                    orientation: element.offsetWidth > element.offsetHeight ? 'l' : 'p',
                     unit: 'px',
-                    format: [canvas.width / 2, canvas.height / 2]
+                    format: [element.offsetWidth, element.offsetHeight]
                 });
                 
-                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+                pdf.addImage(imgData, 'PNG', 0, 0, element.offsetWidth, element.offsetHeight);
                 pdf.save(`RC2026_${teamName.replace(/\s+/g, '_')}.pdf`);
                 
             } catch (err) {
                 console.error("PDF Export Error:", err);
+                alert("Произошла ошибка при генерации PDF. Попробуйте еще раз.");
             } finally {
-                if(actionButtons) actionButtons.style.opacity = '1';
+                if(actionButtons) actionButtons.style.visibility = 'visible';
             }
         }
 
@@ -3797,7 +3802,6 @@
             const winsEl = document.getElementById('statsWins');
             const lossesEl = document.getElementById('statsLosses');
             const captainEl = document.getElementById('statsCaptain');
-            const playersListEl = document.getElementById('statsPlayersList');
 
             if (isAdmin && isEditMode) {
                 descEl.innerHTML = `<textarea id="editTeamDesc" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" rows="3" placeholder="Введите описание команды...">${team.desc || ''}</textarea>`;
@@ -3817,10 +3821,6 @@
                     team.losses = parseInt(document.getElementById('editTeamLosses').value) || 0;
                     team.captain = document.getElementById('editTeamCaptain').value;
                     
-                    // Сохраняем игроков из инпутов
-                    const playerInputs = playersListEl.querySelectorAll('input');
-                    team.players = Array.from(playerInputs).map(input => input.value);
-                    
                     const groups = JSON.parse(localStorage.getItem('drawResults'));
                     groups[group] = groups[group].map(t => t.name === team.name ? team : t);
                     localStorage.setItem('drawResults', JSON.stringify(groups));
@@ -3834,20 +3834,6 @@
                 document.getElementById('editTeamWins').onchange = saveHandler;
                 document.getElementById('editTeamLosses').onchange = saveHandler;
                 document.getElementById('editTeamCaptain').onblur = saveHandler;
-
-                // Рендерим инпуты для игроков
-                playersListEl.innerHTML = '';
-                const players = team.players || Array(15).fill('');
-                players.forEach((player, idx) => {
-                    const div = document.createElement('div');
-                    div.className = 'flex items-center gap-2 bg-white/5 rounded-lg px-3 py-1';
-                    div.innerHTML = `
-                        <span class="text-[10px] text-white/20 font-bold w-4">${idx + 1}</span>
-                        <input type="text" value="${player}" class="bg-transparent w-full outline-none text-xs text-white focus:text-gold" placeholder="ФИО игрока...">
-                    `;
-                    div.querySelector('input').onblur = saveHandler;
-                    playersListEl.appendChild(div);
-                });
             } else {
                 descEl.textContent = team.desc || 'Информация о команде пока не добавлена организатором.';
                 ptsEl.textContent = team.pts;
