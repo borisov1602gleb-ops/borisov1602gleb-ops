@@ -3057,8 +3057,11 @@
                     score: 0
                 };
             }
+            localStorage.setItem('bracketData', JSON.stringify(bracketData));
             renderFinal();
             renderPlayoffSchedule();
+            renderBracket('bracketView');
+            renderBracket('bracketAdminView');
         }
 
         function renderBracket(containerId = 'bracketView') {
@@ -3104,13 +3107,20 @@
                             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                             const sourceMatch = findMatchById(data.matchId);
                             if (sourceMatch) {
-                                const temp = { ...sourceMatch[data.teamKey] };
-                                sourceMatch[data.teamKey] = { ...team };
-                                team.name = temp.name;
-                                team.logo = temp.logo;
+                                const sourceTeam = sourceMatch[data.teamKey];
+                                // Обновляем целевую команду (ручное перемещение)
+                                team.name = sourceTeam.name;
+                                team.logo = sourceTeam.logo;
+                                team.score = 0;
+                                
+                                // Сбрасываем победителя текущего матча при ручном вмешательстве
+                                match.winner = null;
+
                                 localStorage.setItem('bracketData', JSON.stringify(bracketData));
                                 renderBracket('bracketView');
                                 renderBracket('bracketAdminView');
+                                renderFinal();
+                                renderPlayoffSchedule();
                             }
                         };
                     }
@@ -3144,7 +3154,24 @@
                         input.className = 'w-8 bg-white/10 border border-white/20 rounded text-center text-xs outline-none focus:border-gold';
                         input.onchange = (e) => {
                             team.score = parseInt(e.target.value) || 0;
+                            
+                            // Автоматическое определение победителя при разном счете
+                            const s1 = match.team1.score || 0;
+                            const s2 = match.team2.score || 0;
+                            
+                            if (s1 > s2) {
+                                match.winner = 'team1';
+                                updateNextRound(match.id, match.team1);
+                            } else if (s2 > s1) {
+                                match.winner = 'team2';
+                                updateNextRound(match.id, match.team2);
+                            } else {
+                                match.winner = null;
+                            }
+
                             localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                            renderBracket('bracketView');
+                            renderBracket('bracketAdminView');
                         };
                         scoreSpan.appendChild(input);
                     } else {
