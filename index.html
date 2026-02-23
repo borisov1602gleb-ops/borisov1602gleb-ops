@@ -2322,6 +2322,11 @@
         // ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Для всех пользователей)
         // Установите true, чтобы включить тех. работы для ВСЕХ, кто зайдет на сайт
         const GLOBAL_MAINTENANCE = false; 
+        
+        // ГЛОБАЛЬНЫЙ СТАТУС ТУРНИРА
+        // Если не null, этот статус будет у всех пользователей (registration, draw, groups, playoffs, final)
+        // Например: const GLOBAL_STATUS = 'groups';
+        const GLOBAL_STATUS = null; 
 
         let motrData = JSON.parse(localStorage.getItem('motrData')) || {
             team1Logo: '',
@@ -2331,7 +2336,7 @@
         let bowlEl;
 
         // Tournament Status Logic
-        let tournamentStatus = localStorage.getItem('tournamentStatus') || 'draw';
+        let tournamentStatus = GLOBAL_STATUS || localStorage.getItem('tournamentStatus') || 'draw';
         
         // Initialize button state based on storage
         window.addEventListener('load', () => {
