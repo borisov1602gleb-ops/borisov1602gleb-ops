@@ -2310,6 +2310,50 @@
             <button onclick="closePrivacy()" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-xl font-bold transition-all">Понятно</button>
         </div>
     </div>
+
+    <!-- Team Stats Modal -->
+    <div class="modal-backdrop" id="teamStatsBackdrop" onclick="closeTeamStats()"></div>
+    <div class="modal-content glass-strong p-0 rounded-3xl border border-gold overflow-hidden max-w-2xl" id="teamStatsModal">
+        <div class="flex flex-col md:flex-row">
+            <!-- Left: Logo Section -->
+            <div class="w-full md:w-2/5 bg-gradient-to-br from-cup-blue to-cup-dark p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10">
+                <div class="w-40 h-40 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center p-4 mb-6 shadow-2xl">
+                    <img id="statsTeamLogo" src="" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" alt="">
+                </div>
+                <h3 id="statsTeamName" class="text-3xl font-black text-white text-center uppercase tracking-tighter leading-none"></h3>
+                <div id="statsTeamGroupBadge" class="mt-4 px-4 py-1 rounded-full bg-gold/20 border border-gold/30 text-gold text-[10px] font-bold tracking-widest uppercase"></div>
+            </div>
+            
+            <!-- Right: Content Section -->
+            <div class="flex-1 p-8 bg-cup-dark/40">
+                <div class="mb-8">
+                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-3">Информация</h4>
+                    <div id="statsTeamDesc" class="text-sm text-white/60 leading-relaxed italic"></div>
+                </div>
+                
+                <div>
+                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-4">Турнирные показатели</h4>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <div class="text-2xl font-black text-gold" id="statsPts">0</div>
+                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Очки</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <div class="text-2xl font-black text-white" id="statsGS">0</div>
+                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Забито</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <div class="text-2xl font-black text-white" id="statsGC">0</div>
+                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Пропущено</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="closeTeamStats()" class="mt-8 w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest transition-all">Закрыть окно</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
         // Initialize Lucide Icons
@@ -2951,16 +2995,23 @@
 
                     const nameSpan = document.createElement('span');
                     nameSpan.textContent = team.name;
+                    nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
+                    nameSpan.onclick = () => openTeamStats(team.name);
+                    teamDiv.appendChild(nameSpan);
+
                     if (isAdmin && isEditMode) {
-                        nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
-                        nameSpan.onclick = () => {
+                        const winBtn = document.createElement('button');
+                        winBtn.innerHTML = '✓';
+                        winBtn.className = `ml-2 text-[10px] px-1 rounded ${match.winner === teamKey ? 'bg-gold text-cup-dark' : 'bg-white/10 text-white/40'}`;
+                        winBtn.onclick = (e) => {
+                            e.stopPropagation();
                             match.winner = teamKey;
                             updateNextRound(match.id, team);
                             localStorage.setItem('bracketData', JSON.stringify(bracketData));
                             renderBracket();
                         };
+                        teamDiv.appendChild(winBtn);
                     }
-                    teamDiv.appendChild(nameSpan);
                     const scoreSpan = document.createElement('span');
                     scoreSpan.className = 'bracket-score';
                     if (isAdmin && isEditMode) {
@@ -3256,7 +3307,8 @@
                         logo: team.logo,
                         pts: 0,
                         gs: 0,
-                        gc: 0
+                        gc: 0,
+                        desc: ''
                     });
                 });
             }
@@ -3358,8 +3410,9 @@
                         teamInfo.appendChild(img);
                     }
                     const span = document.createElement('span');
-                    span.className = 'truncate';
+                    span.className = 'truncate cursor-pointer hover:text-gold transition-colors';
                     span.textContent = teamName;
+                    span.onclick = () => openTeamStats(teamName);
                     teamInfo.appendChild(span);
                     div.appendChild(teamInfo);
 
@@ -3645,6 +3698,69 @@
                     div.classList.remove('team-path-highlight');
                 }
             });
+        }
+
+        function findTeamData(name) {
+            if (!name || name.startsWith('Победитель')) return null;
+            const groups = JSON.parse(localStorage.getItem('drawResults'));
+            if (!groups) return null;
+            for (let key in groups) {
+                const team = groups[key].find(t => t.name === name);
+                if (team) return { team, group: key };
+            }
+            return null;
+        }
+
+        function openTeamStats(teamName) {
+            const data = findTeamData(teamName);
+            if (!data) return;
+
+            const { team, group } = data;
+            document.getElementById('statsTeamLogo').src = team.logo || 'https://via.placeholder.com/100?text=LOGO';
+            document.getElementById('statsTeamName').textContent = team.name;
+            document.getElementById('statsTeamGroupBadge').textContent = `Группа ${group}`;
+            
+            const descEl = document.getElementById('statsTeamDesc');
+            const ptsEl = document.getElementById('statsPts');
+            const gsEl = document.getElementById('statsGS');
+            const gcEl = document.getElementById('statsGC');
+
+            if (isAdmin && isEditMode) {
+                descEl.innerHTML = `<textarea id="editTeamDesc" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" rows="3" placeholder="Введите описание команды...">${team.desc || ''}</textarea>`;
+                ptsEl.innerHTML = `<input type="number" id="editTeamPts" value="${team.pts}" class="w-full bg-transparent text-center outline-none text-gold font-black">`;
+                gsEl.innerHTML = `<input type="number" id="editTeamGS" value="${team.gs}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
+                gcEl.innerHTML = `<input type="number" id="editTeamGC" value="${team.gc}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
+                
+                const saveHandler = () => {
+                    team.desc = document.getElementById('editTeamDesc').value;
+                    team.pts = parseInt(document.getElementById('editTeamPts').value) || 0;
+                    team.gs = parseInt(document.getElementById('editTeamGS').value) || 0;
+                    team.gc = parseInt(document.getElementById('editTeamGC').value) || 0;
+                    
+                    const groups = JSON.parse(localStorage.getItem('drawResults'));
+                    groups[group] = groups[group].map(t => t.name === team.name ? team : t);
+                    localStorage.setItem('drawResults', JSON.stringify(groups));
+                    renderDrawResults(groups);
+                };
+                
+                document.getElementById('editTeamDesc').onblur = saveHandler;
+                document.getElementById('editTeamPts').onchange = saveHandler;
+                document.getElementById('editTeamGS').onchange = saveHandler;
+                document.getElementById('editTeamGC').onchange = saveHandler;
+            } else {
+                descEl.textContent = team.desc || 'Информация о команде пока не добавлена организатором.';
+                ptsEl.textContent = team.pts;
+                gsEl.textContent = team.gs;
+                gcEl.textContent = team.gc;
+            }
+
+            document.getElementById('teamStatsBackdrop').classList.add('open');
+            document.getElementById('teamStatsModal').classList.add('open');
+        }
+
+        function closeTeamStats() {
+            document.getElementById('teamStatsBackdrop').classList.remove('open');
+            document.getElementById('teamStatsModal').classList.remove('open');
         }
 
         // --- ЛОГИКА РЕГИСТРАЦИИ ---
