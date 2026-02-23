@@ -2055,104 +2055,60 @@
                 <!-- Tab: Draw (The Studio) -->
                 <div id="tab-draw" class="hidden h-full flex flex-col">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-white">Студия Жеребьевки</h2>
+                        <h2 class="text-2xl font-bold text-white">Ручная Жеребьевка</h2>
                         <div class="flex gap-3">
-                            <button onclick="cancelDraw()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Отмена</button>
-                            <button onclick="DrawManager.init()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Сброс</button>
+                            <div class="flex bg-white/5 rounded-lg overflow-hidden border border-white/10">
+                                <input type="text" id="manualTeamAdd" placeholder="Добавить команду..." class="bg-transparent px-3 py-1 text-xs text-white outline-none w-40">
+                                <button onclick="DrawManager.addManualTeam()" class="bg-white/10 px-3 hover:bg-white/20 text-gold text-xs font-bold">+</button>
+                            </div>
+                            <button onclick="DrawManager.autoFill()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Авто-заполнение</button>
+                            <button onclick="DrawManager.confirm()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)]">ОПУБЛИКОВАТЬ</button>
                         </div>
                     </div>
                     
-                    <!-- Draw Studio Container -->
-                    <div id="drawStudioContainer" class="flex-grow relative bg-black/40 rounded-2xl border border-white/10 overflow-hidden flex items-center justify-center">
-                        <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
-                        
-                    <!-- Draw Studio Container (Redesigned) -->
                     <div id="drawStudioContainer" class="flex-grow relative bg-black/40 rounded-2xl border border-white/10 overflow-hidden flex flex-col">
                         <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
                         
-                        <!-- Main Stage (Pots + Bowl) -->
-                        <div class="flex-grow flex items-center justify-between px-4 md:px-12 py-4 relative z-10">
-                            <!-- Left Pots -->
-                            <div class="flex flex-col gap-6 w-48">
-                                <div id="pot-1-display" class="pot-jar-container">
-                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 1</div>
-                                    <div class="pot-lid"></div>
-                                    <div class="pot-jar" id="pot-1-balls"></div>
+                        <!-- Manual Draw Interface -->
+                        <div class="p-6 flex flex-col h-full gap-6">
+                            <!-- Source Pots -->
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="quantum-pot" id="m-pot-1" ondragover="allowDrop(event)" ondrop="dropToPot(event, 1)">
+                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 1</div>
+                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
                                 </div>
-                                <div id="pot-3-display" class="pot-jar-container">
-                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 3</div>
-                                    <div class="pot-lid"></div>
-                                    <div class="pot-jar" id="pot-3-balls"></div>
+                                <div class="quantum-pot" id="m-pot-2" ondragover="allowDrop(event)" ondrop="dropToPot(event, 2)">
+                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 2</div>
+                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
                                 </div>
-                            </div>
-
-                            <!-- Center Bowl -->
-                            <div class="flex flex-col items-center justify-center">
-                                <div id="currentPotDisplay" class="text-gold text-2xl font-black mb-6 tracking-[0.5em] opacity-0 transition-opacity drop-shadow-[0_0_10px_rgba(212,175,55,0.8)]">КОРЗИНА 1</div>
-                                
-                                <button id="drawBowlBtn" onclick="DrawManager.next()" class="draw-pot-btn mb-8 relative group">
-                                    <div class="absolute inset-0 rounded-full border-4 border-gold/30 animate-ping opacity-20"></div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#000814" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                                    <span id="bowlLabel" class="absolute -bottom-12 text-white/50 text-xs font-mono tracking-widest group-hover:text-gold transition-colors">ВЫТЯНУТЬ ШАР</span>
-                                </button>
-                                
-                                <div id="drawActions" class="hidden flex flex-col items-center gap-4 animate-fade-in">
-                                    <div class="text-white/60 text-sm font-mono tracking-widest bg-black/40 px-4 py-1 rounded-full">Проверьте состав групп</div>
-                                    <div class="flex gap-4">
-                                        <button onclick="cancelDraw()" class="bg-white/10 text-white border border-white/20 px-6 py-3 rounded-full font-bold hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all">
-                                            СБРОСИТЬ
-                                        </button>
-                                        <button onclick="DrawManager.confirm()" class="bg-gold text-cup-dark px-8 py-3 rounded-full font-bold hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-                                            УТВЕРДИТЬ
-                                        </button>
-                                    </div>
+                                <div class="quantum-pot" id="m-pot-3" ondragover="allowDrop(event)" ondrop="dropToPot(event, 3)">
+                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 3</div>
+                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
+                                </div>
+                                <div class="quantum-pot" id="m-pot-4" ondragover="allowDrop(event)" ondrop="dropToPot(event, 4)">
+                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 4</div>
+                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
                                 </div>
                             </div>
 
-                            <!-- Right Pots -->
-                            <div class="flex flex-col gap-6 w-48">
-                                <div id="pot-2-display" class="pot-jar-container">
-                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 2</div>
-                                    <div class="pot-lid"></div>
-                                    <div class="pot-jar" id="pot-2-balls"></div>
+                            <!-- Target Groups -->
+                            <div class="grid grid-cols-4 gap-4 flex-grow">
+                                <div class="quantum-group" id="m-group-a" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'A')">
+                                    <div class="quantum-group-header"><span>ГРУППА A</span></div>
+                                    <div class="quantum-group-list custom-scrollbar"></div>
                                 </div>
-                                <div id="pot-4-display" class="pot-jar-container">
-                                    <div class="text-gold font-bold text-sm mb-1 tracking-widest">КОРЗИНА 4</div>
-                                    <div class="pot-lid"></div>
-                                    <div class="pot-jar" id="pot-4-balls"></div>
+                                <div class="quantum-group" id="m-group-b" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'B')">
+                                    <div class="quantum-group-header"><span>ГРУППА B</span></div>
+                                    <div class="quantum-group-list custom-scrollbar"></div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Bottom Groups -->
-                        <div class="h-[40%] border-t border-white/10 bg-black/40 p-4 grid grid-cols-4 gap-4 z-10 overflow-y-auto">
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-a" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'A')">
-                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
-                                    <span class="text-gold font-bold">ГРУППА A</span>
-                                    <span class="text-white/20 font-black text-xl">A</span>
+                                <div class="quantum-group" id="m-group-c" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'C')">
+                                    <div class="quantum-group-header"><span>ГРУППА C</span></div>
+                                    <div class="quantum-group-list custom-scrollbar"></div>
                                 </div>
-                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
-                            </div>
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-b" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'B')">
-                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
-                                    <span class="text-gold font-bold">ГРУППА B</span>
-                                    <span class="text-white/20 font-black text-xl">B</span>
+                                <div class="quantum-group" id="m-group-d" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'D')">
+                                    <div class="quantum-group-header"><span>ГРУППА D</span></div>
+                                    <div class="quantum-group-list custom-scrollbar"></div>
                                 </div>
-                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
-                            </div>
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-c" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'C')">
-                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
-                                    <span class="text-gold font-bold">ГРУППА C</span>
-                                    <span class="text-white/20 font-black text-xl">C</span>
-                                </div>
-                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
-                            </div>
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-d" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'D')">
-                                <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
-                                    <span class="text-gold font-bold">ГРУППА D</span>
-                                    <span class="text-white/20 font-black text-xl">D</span>
-                                </div>
-                                <div class="space-y-1 studio-list text-xs flex-grow"></div>
                             </div>
                         </div>
                     </div>
@@ -2162,7 +2118,10 @@
                 <div id="tab-playoffs" class="hidden space-y-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-white">Редактор Сетки</h2>
-                        <button onclick="saveBracketData()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
+                        <div class="flex gap-3">
+                            <button onclick="autoGenerateBracket()" class="bg-blue-500/20 text-blue-400 border border-blue-500/30 py-2 px-4 rounded-lg text-sm font-bold hover:bg-blue-500/30 transition-all">Сгенерировать из групп</button>
+                            <button onclick="saveBracketData()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
+                        </div>
                     </div>
                     <div id="bracketEditor" class="space-y-4">
                         <!-- Generated by JS -->
@@ -2406,6 +2365,7 @@
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
+                checkDrawResults();
                 renderBracket();
                 renderFinal();
                 switchAdminTab('dashboard');
@@ -2424,6 +2384,7 @@
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
+                checkDrawResults();
                 renderBracket();
                 renderFinal();
                 switchAdminTab('dashboard');
@@ -2630,12 +2591,38 @@
             ['A', 'B', 'C', 'D'].forEach(key => {
                 const list = document.getElementById(`group-${key.toLowerCase()}-list`);
                 list.innerHTML = '';
-                groups[key].forEach(team => {
+                
+                if (isAdmin) {
+                    list.ondragover = (e) => e.preventDefault();
+                }
+
+                groups[key].forEach((team, index) => {
                     const teamName = typeof team === 'string' ? team : team.name;
                     const teamLogo = typeof team === 'string' ? '' : team.logo;
                     
                     const div = document.createElement('div');
                     div.className = 'py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-2 border-gold flex items-center gap-2';
+                    
+                    if (isAdmin) {
+                        div.draggable = true;
+                        div.classList.add('cursor-move', 'hover:bg-white/10', 'transition-colors');
+                        div.title = "Перетащите для изменения места в группе";
+                        div.ondragstart = (e) => {
+                            e.dataTransfer.setData('text/plain', JSON.stringify({ group: key, index: index }));
+                        };
+                        div.ondrop = (e) => {
+                            e.preventDefault();
+                            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                            if (data.group === key) {
+                                const savedGroups = JSON.parse(localStorage.getItem('drawResults'));
+                                const group = savedGroups[key];
+                                const movedItem = group.splice(data.index, 1)[0];
+                                group.splice(index, 0, movedItem);
+                                localStorage.setItem('drawResults', JSON.stringify(savedGroups));
+                                renderDrawResults(savedGroups);
+                            }
+                        };
+                    }
                     
                     if (teamLogo) {
                         const img = document.createElement('img');
