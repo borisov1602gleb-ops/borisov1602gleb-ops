@@ -1938,6 +1938,13 @@
     <div class="modal-backdrop" id="adminBackdrop" onclick="closeAdminModal()"></div>
     <div class="modal-content glass-strong" id="adminModal" style="border: 1px solid #d4af37;">
         <!-- Login View -->
+        <!--
+            The `bowlEl` variable is initialized in `window.addEventListener('load')` and expects `quantumCore` to exist.
+            However, `quantumCore` is part of the "Draw (The Studio)" tab, which is now removed.
+            This might lead to `bowlEl` being `null` or `undefined` if the admin panel is opened before the main page fully loads or if the studio elements are never rendered.
+            For now, `bowlEl` is not used in the current admin panel logic, so it won't cause immediate issues.
+            If the "Draw (The Studio)" tab is ever re-introduced, ensure `bowlEl` is correctly assigned when that tab is active.
+        -->
         <div id="adminLoginView" class="p-8">
             <div class="flex items-center justify-between mb-8">
                 <h3 class="text-2xl font-bold text-gold flex items-center gap-3">
@@ -2008,6 +2015,9 @@
                         <h4 class="text-gold font-bold mb-4 uppercase text-sm">Быстрые действия</h4>
                         <button onclick="runAutoDraw()" class="w-full bg-gold text-cup-dark py-4 rounded-lg text-sm font-black hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] uppercase tracking-widest">
                             Запустить автожеребьевку
+                        </button>
+                        <button onclick="generatePlayoffs()" class="w-full bg-blue-500/20 text-blue-400 border border-blue-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-blue-500/30 transition-all">
+                            Сгенерировать сетку плей-офф
                         </button>
                     </div>
 
@@ -2130,7 +2140,7 @@
             initAnnouncement(); // Check announcement
             initTournamentStatus(); // Check status
             renderBracket(); // Render bracket if data exists
-            bowlEl = document.getElementById('quantumCore');
+            // bowlEl = document.getElementById('quantumCore'); // Removed as quantumCore is no longer in the visible admin tabs
         });
         
         // Revealed Card Overlay (Moved to body for fixed positioning)
@@ -2337,7 +2347,6 @@
         let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
 
         function checkMaintenance() {
-            const overlay = document.getElementById('maintenanceOverlay');
             const btn = document.getElementById('maintBtn');
             
             if (isMaintenance) {
@@ -2385,7 +2394,7 @@
         }
 
         function applyTournamentStatus(status, silent = false) {
-            const sections = {
+            const sections = { // Ensure these IDs exist in your HTML
                 'draw': document.getElementById('potsContainer'),
                 'groups': document.getElementById('groupsResults'),
                 'playoffs': document.getElementById('playoffsSection'),
@@ -2410,8 +2419,88 @@
             }
         }
 
+        // Placeholder for bracket data
+        let bracketData = JSON.parse(localStorage.getItem('bracketData')) || {
+            quarterFinals: [],
+            semiFinals: [],
+            final: []
+        };
+
         function renderBracket() {
-            // Логика отрисовки сетки плей-офф
+            const bracketView = document.getElementById('bracketView');
+            if (!bracketView) return;
+            bracketView.innerHTML = ''; // Clear previous bracket
+
+            if (bracketData.quarterFinals.length === 0) {
+                bracketView.innerHTML = '<p class="text-center text-white/60 text-lg">Сетка плей-офф еще не сгенерирована.</p>';
+                return;
+            }
+
+            const rounds = [
+                { title: 'ЧЕТВЕРТЬФИНАЛЫ', matches: bracketData.quarterFinals },
+                { title: 'ПОЛУФИНАЛЫ', matches: bracketData.semiFinals },
+                { title: 'ФИНАЛ', matches: bracketData.final }
+            ];
+
+            rounds.forEach(round => {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'bracket-round';
+                roundDiv.innerHTML = `<h3 class="round-title">${round.title}</h3>`;
+
+                round.matches.forEach(match => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'bracket-match';
+                    matchDiv.innerHTML = `
+                        <div class="bracket-team">
+                            <span>${match.team1.name}</span>
+                            <span class="bracket-score">${match.team1.score !== undefined ? match.team1.score : ''}</span>
+                        </div>
+                        <div class="bracket-team">
+                            <span>${match.team2.name}</span>
+                            <span class="bracket-score">${match.team2.score !== undefined ? match.team2.score : ''}</span>
+                        </div>
+                    `;
+                    roundDiv.appendChild(matchDiv);
+                });
+                bracketView.appendChild(roundDiv);
+            });
+        }
+
+        function generatePlayoffs() {
+            const savedGroups = JSON.parse(localStorage.getItem('drawResults'));
+            if (!savedGroups || Object.keys(savedGroups).length === 0) {
+                alert('Сначала проведите жеребьевку группового этапа!');
+                return;
+            }
+
+            const qualifiedTeams = {};
+            ['A', 'B', 'C', 'D'].forEach(groupKey => {
+                // Teams are already sorted by pts and goal difference
+                qualifiedTeams[`1st ${groupKey}`] = savedGroups[groupKey][0];
+                qualifiedTeams[`2nd ${groupKey}`] = savedGroups[groupKey][1];
+            });
+
+            bracketData = {
+                quarterFinals: [
+                    { id: 'QF1', team1: qualifiedTeams['1st A'], team2: qualifiedTeams['2nd B'], winner: null },
+                    { id: 'QF2', team1: qualifiedTeams['1st C'], team2: qualifiedTeams['2nd D'], winner: null },
+                    { id: 'QF3', team1: qualifiedTeams['1st B'], team2: qualifiedTeams['2nd A'], winner: null },
+                    { id: 'QF4', team1: qualifiedTeams['1st D'], team2: qualifiedTeams['2nd C'], winner: null },
+                ],
+                semiFinals: [
+                    { id: 'SF1', team1: { name: 'Победитель QF1', logo: '' }, team2: { name: 'Победитель QF2', logo: '' }, winner: null },
+                    { id: 'SF2', team1: { name: 'Победитель QF3', logo: '' }, team2: { name: 'Победитель QF4', logo: '' }, winner: null },
+                ],
+                final: [
+                    { id: 'F1', team1: { name: 'Победитель SF1', logo: '' }, team2: { name: 'Победитель SF2', logo: '' }, winner: null },
+                ]
+            };
+
+            localStorage.setItem('bracketData', JSON.stringify(bracketData));
+            setTournamentStatus('playoffs');
+            renderBracket();
+            celebrate();
+            alert('Сетка плей-офф успешно сгенерирована!');
         }
 
         function renderFinal() {
@@ -2613,14 +2702,24 @@
                 header.innerHTML = '<div>Команда</div><div class="text-center">О</div><div class="text-center">З</div><div class="text-center">П</div>';
                 list.appendChild(header);
 
+                // Гарантируем наличие числовых полей статистики и сортируем
+                groups[key].forEach(team => {
+                    team.pts = parseInt(team.pts) || 0;
+                    team.gs = parseInt(team.gs) || 0;
+                    team.gc = parseInt(team.gc) || 0;
+                });
+
+                // Сортировка: Очки (desc), затем Разница голов (desc)
+                groups[key].sort((a, b) => {
+                    if (b.pts !== a.pts) return b.pts - a.pts;
+                    const diffA = a.gs - a.gc;
+                    const diffB = b.gs - b.gc;
+                    return diffB - diffA;
+                });
+
                 groups[key].forEach((team, index) => {
                     const teamName = team.name || team;
                     const teamLogo = team.logo || '';
-                    
-                    // Гарантируем наличие полей статистики
-                    team.pts = team.pts || 0;
-                    team.gs = team.gs || 0;
-                    team.gc = team.gc || 0;
                     
                     const div = document.createElement('div');
                     div.className = 'grid grid-cols-[1fr_35px_35px_35px] gap-2 items-center py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-4 transition-all';
@@ -2628,11 +2727,11 @@
                     // Подсветка мест: 1-2 зеленый, 3-4 красный
                     if (index < 2) {
                         div.classList.add('border-green-500', 'bg-green-500/10');
-                    } else {
+                    } else if (index >= groups[key].length - 2) {
                         div.classList.add('border-red-500', 'bg-red-500/10');
                     }
                     
-                    if (isAdmin) {
+                    if (isAdmin && isEditMode) {
                         div.draggable = true;
                         div.classList.add('cursor-move', 'hover:bg-white/10');
                         div.title = "Перетащите для изменения места в группе";
@@ -2651,6 +2750,8 @@
                                 renderDrawResults(groups);
                             }
                         };
+                    } else {
+                        div.draggable = false;
                     }
                     
                     // Инфо о команде
@@ -2680,6 +2781,7 @@
                             input.onchange = (e) => {
                                 team[stat] = parseInt(e.target.value) || 0;
                                 localStorage.setItem('drawResults', JSON.stringify(groups));
+                                renderDrawResults(groups); // Автоматическая пересортировка после изменения
                             };
                             statDiv.appendChild(input);
                         } else {
@@ -2854,6 +2956,10 @@
             if (e.key === 'tournamentStatus') {
                 applyTournamentStatus(e.newValue);
             }
+            if (e.key === 'bracketData') {
+                bracketData = JSON.parse(e.newValue);
+                renderBracket();
+            }
             if (e.key === 'bracketData' || e.key === 'finalData') {
                 renderBracket();
                 renderFinal();
@@ -2890,6 +2996,10 @@
         let isEditMode = false;
         
         function toggleEditMode() {
+            if (!isAdmin) {
+                alert("Доступ ограничен. Пожалуйста, войдите в систему (Ctrl+Shift+X).");
+                return;
+            }
             isEditMode = !isEditMode;
             const btn = document.getElementById('editModeBtn');
             const elements = document.querySelectorAll('.editable-content');
