@@ -1774,6 +1774,43 @@
             
             <!-- Groups Results (Hidden by default) -->
             <div id="groupsResults" class="hidden mt-16 max-w-7xl mx-auto reveal transition-all duration-500">
+                <!-- Match of the Round -->
+                <div id="matchOfTheRound" class="mb-16 reveal">
+                    <h3 class="text-2xl font-bold text-gold mb-8 text-center uppercase tracking-widest">Матч тура</h3>
+                    <div class="glass p-8 rounded-3xl border border-gold/30 max-w-4xl mx-auto relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                            <!-- Team 1 -->
+                            <div class="flex flex-col items-center gap-4 flex-1">
+                                <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border border-white/10 relative group">
+                                    <img id="motrTeam1Logo" src="" class="w-16 h-16 object-contain" alt="">
+                                    <input type="file" id="motrTeam1LogoInput" class="hidden" onchange="handleMotrLogo(this, 'team1')">
+                                    <button class="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-gold font-bold motr-edit-btn hidden" onclick="document.getElementById('motrTeam1LogoInput').click()">СМЕНИТЬ</button>
+                                </div>
+                                <h4 id="motrTeam1Name" class="text-xl font-black text-white uppercase editable-content" data-id="motr-team1-name">TEAM 1</h4>
+                            </div>
+                            <!-- VS & Info -->
+                            <div class="text-center">
+                                <div class="text-4xl font-black text-gold mb-4 italic">VS</div>
+                                <div class="space-y-1">
+                                    <div class="text-sm text-gold font-bold uppercase tracking-tighter editable-content" data-id="motr-round">1 ТУР</div>
+                                    <div class="text-lg font-bold text-white editable-content" data-id="motr-time">18:00</div>
+                                    <div class="text-xs text-white/40 uppercase tracking-widest editable-content" data-id="motr-stadium">СТАДИОН САТУРН</div>
+                                </div>
+                            </div>
+                            <!-- Team 2 -->
+                            <div class="flex flex-col items-center gap-4 flex-1">
+                                <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border border-white/10 relative group">
+                                    <img id="motrTeam2Logo" src="" class="w-16 h-16 object-contain" alt="">
+                                    <input type="file" id="motrTeam2LogoInput" class="hidden" onchange="handleMotrLogo(this, 'team2')">
+                                    <button class="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-gold font-bold motr-edit-btn hidden" onclick="document.getElementById('motrTeam2LogoInput').click()">СМЕНИТЬ</button>
+                                </div>
+                                <h4 id="motrTeam2Name" class="text-xl font-black text-white uppercase editable-content" data-id="motr-team2-name">TEAM 2</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-center mb-8">
                     <button onclick="downloadResults()" class="magnetic bg-gold text-cup-dark px-6 py-3 rounded-full font-bold hover:bg-gold-light transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -2285,6 +2322,11 @@
         // ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Для всех пользователей)
         // Установите true, чтобы включить тех. работы для ВСЕХ, кто зайдет на сайт
         const GLOBAL_MAINTENANCE = false; 
+
+        let motrData = JSON.parse(localStorage.getItem('motrData')) || {
+            team1Logo: '',
+            team2Logo: ''
+        };
 
         let bowlEl;
 
@@ -2821,68 +2863,62 @@
                 return;
             }
 
-            const rounds = [
-                { title: 'ЧЕТВЕРТЬФИНАЛЫ', matches: bracketData.quarterFinals },
-                { title: 'ПОЛУФИНАЛЫ', matches: bracketData.semiFinals },
-                { title: 'ФИНАЛ', matches: bracketData.final }
-            ];
+            const createMatchEl = (match) => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'bracket-match';
+                const renderTeam = (team, teamKey) => {
+                    const teamDiv = document.createElement('div');
+                    teamDiv.className = 'bracket-team';
+                    if (match.winner === teamKey) teamDiv.classList.add('winner');
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = team.name;
+                    if (isAdmin && isEditMode) {
+                        nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
+                        nameSpan.onclick = () => {
+                            match.winner = teamKey;
+                            updateNextRound(match.id, team);
+                            localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                            renderBracket();
+                        };
+                    }
+                    teamDiv.appendChild(nameSpan);
+                    const scoreSpan = document.createElement('span');
+                    scoreSpan.className = 'bracket-score';
+                    if (isAdmin && isEditMode) {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.value = team.score || 0;
+                        input.className = 'w-8 bg-white/10 border border-white/20 rounded text-center text-xs outline-none focus:border-gold';
+                        input.onchange = (e) => {
+                            team.score = parseInt(e.target.value) || 0;
+                            localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                        };
+                        scoreSpan.appendChild(input);
+                    } else {
+                        scoreSpan.textContent = team.score !== undefined ? team.score : '';
+                    }
+                    teamDiv.appendChild(scoreSpan);
+                    return teamDiv;
+                };
+                matchDiv.appendChild(renderTeam(match.team1, 'team1'));
+                matchDiv.appendChild(renderTeam(match.team2, 'team2'));
+                return matchDiv;
+            };
 
-            rounds.forEach(round => {
-                const roundDiv = document.createElement('div');
-                roundDiv.className = 'bracket-round';
-                roundDiv.innerHTML = `<h3 class="round-title">${round.title}</h3>`;
+            const addCol = (title, matches) => {
+                const col = document.createElement('div');
+                col.className = 'bracket-round';
+                col.innerHTML = `<h3 class="round-title">${title}</h3>`;
+                matches.forEach(m => col.appendChild(createMatchEl(m)));
+                bracketView.appendChild(col);
+            };
 
-                round.matches.forEach(match => {
-                    const matchDiv = document.createElement('div');
-                    matchDiv.className = 'bracket-match';
-                    
-                    const renderTeam = (team, teamKey) => {
-                        const teamDiv = document.createElement('div');
-                        teamDiv.className = 'bracket-team';
-                        if (match.winner === teamKey) teamDiv.classList.add('winner');
-
-                        const nameSpan = document.createElement('span');
-                        nameSpan.textContent = team.name;
-                        
-                        if (isAdmin && isEditMode) {
-                            nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
-                            nameSpan.title = "Нажмите, чтобы выбрать победителя";
-                            nameSpan.onclick = () => {
-                                match.winner = teamKey;
-                                updateNextRound(match.id, team);
-                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                                renderBracket();
-                            };
-                        }
-                        teamDiv.appendChild(nameSpan);
-
-                        const scoreSpan = document.createElement('span');
-                        scoreSpan.className = 'bracket-score';
-                        
-                        if (isAdmin && isEditMode) {
-                            const input = document.createElement('input');
-                            input.type = 'number';
-                            input.value = team.score !== undefined ? team.score : 0;
-                            input.className = 'w-8 bg-white/10 border border-white/20 rounded text-center text-xs outline-none focus:border-gold';
-                            input.onchange = (e) => {
-                                team.score = parseInt(e.target.value) || 0;
-                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                            };
-                            scoreSpan.appendChild(input);
-                        } else {
-                            scoreSpan.textContent = team.score !== undefined ? team.score : '';
-                        }
-                        teamDiv.appendChild(scoreSpan);
-                        
-                        return teamDiv;
-                    };
-
-                    matchDiv.appendChild(renderTeam(match.team1, 'team1'));
-                    matchDiv.appendChild(renderTeam(match.team2, 'team2'));
-                    roundDiv.appendChild(matchDiv);
-                });
-                bracketView.appendChild(roundDiv);
-            });
+            // Two-sided layout: [QF1,2] [SF1] [Final] [SF2] [QF3,4]
+            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[0], bracketData.quarterFinals[1]]);
+            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[0]]);
+            addCol('ФИНАЛ', [bracketData.final[0]]);
+            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[1]]);
+            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[2], bracketData.quarterFinals[3]]);
         }
 
         function generatePlayoffs() {
@@ -3486,6 +3522,9 @@
             if (isEditMode) {
                 btn.textContent = "Выключить режим редактирования";
                 btn.classList.add('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+
+                // Show MOTR edit buttons
+                document.querySelectorAll('.motr-edit-btn').forEach(b => b.classList.remove('hidden'));
                 
                 elements.forEach(el => {
                     el.contentEditable = "true";
@@ -3495,6 +3534,9 @@
             } else {
                 btn.textContent = "Включить режим редактирования";
                 btn.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+
+                // Hide MOTR edit buttons
+                document.querySelectorAll('.motr-edit-btn').forEach(b => b.classList.add('hidden'));
                 
                 elements.forEach(el => {
                     el.contentEditable = "false";
@@ -3608,6 +3650,11 @@
                     if (content[id]) el.innerHTML = content[id];
                 });
             }
+            // Load MOTR logos
+            const motr1 = document.getElementById('motrTeam1Logo');
+            const motr2 = document.getElementById('motrTeam2Logo');
+            if(motr1) motr1.src = motrData.team1Logo || 'https://via.placeholder.com/100?text=LOGO';
+            if(motr2) motr2.src = motrData.team2Logo || 'https://via.placeholder.com/100?text=LOGO';
         }
         
         // --- INTERACTIVE DRAW LOGIC ---
