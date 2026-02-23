@@ -139,6 +139,16 @@
             50% { transform: scale(1.1); opacity: 1; }
         }
         
+        /* Maintenance Ball Animation */
+        @keyframes roll-bounce {
+            0%, 100% { transform: translateX(-150px) rotate(0deg); }
+            50% { transform: translateX(150px) rotate(720deg); }
+        }
+        .rolling-ball {
+            display: inline-block;
+            animation: roll-bounce 3s ease-in-out infinite;
+        }
+        
         /* Navigation */
         #mainNav {
             position: fixed;
@@ -519,6 +529,10 @@
             background: #d4af37;
             color: #000814;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+        .filter-tab {
+            font-size: 12px;
+            padding: 5px 15px;
         }
         
         .modal-content.open {
@@ -1642,8 +1656,8 @@
     
     <!-- Maintenance Overlay -->
     <div id="maintenanceOverlay" class="fixed inset-0 z-[9000] bg-cup-dark flex flex-col items-center justify-center hidden transition-opacity duration-500">
-        <div class="text-gold text-6xl mb-8 animate-pulse">⚠️</div>
-        <h2 class="text-4xl md:text-6xl font-black text-gold mb-6 tracking-widest text-center px-4">ТЕХНИЧЕСКИЕ РАБОТЫ</h2>
+        <div class="text-gold text-8xl mb-12 rolling-ball">⚽</div>
+        <h2 class="text-4xl md:text-6xl font-black text-gold mb-6 tracking-widest text-center px-4 uppercase">Ведутся технические работы</h2>
         <p class="text-white/60 text-xl text-center px-4">Мы готовим обновление. Скоро вернемся.</p>
     </div>
     
@@ -1796,6 +1810,7 @@
                 <div id="groupScheduleContainer" class="mt-12 glass rounded-3xl p-8 border border-white/10">
                     <h3 class="text-2xl font-bold text-gold mb-6 text-center uppercase tracking-widest">Календарь группового этапа</h3>
                     <div class="flex justify-center gap-3 mb-8" id="groupScheduleTabs"></div>
+                    <div class="flex justify-center flex-wrap gap-2 mb-8" id="groupFilterTabs"></div>
                     <div id="groupMatchList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
@@ -2469,6 +2484,7 @@
         let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
 
         function checkMaintenance() {
+            const overlay = document.getElementById('maintenanceOverlay');
             const btn = document.getElementById('maintBtn');
             
             if (isMaintenance) {
@@ -2565,6 +2581,7 @@
 
         // --- SCHEDULE LOGIC ---
         let currentGroupRound = 1;
+        let currentGroupFilter = 'ALL';
         let currentPlayoffStage = 'QF';
 
         function generateGroupSchedule() {
@@ -2587,11 +2604,13 @@
             localStorage.setItem('groupSchedule', JSON.stringify(schedule));
         }
 
-        function renderGroupSchedule(round = currentGroupRound) {
+        function renderGroupSchedule(round = currentGroupRound, groupFilter = currentGroupFilter) {
             currentGroupRound = round;
+            currentGroupFilter = groupFilter;
             const schedule = JSON.parse(localStorage.getItem('groupSchedule'));
             const container = document.getElementById('groupMatchList');
             const tabs = document.getElementById('groupScheduleTabs');
+            const filterTabs = document.getElementById('groupFilterTabs');
             if (!container || !schedule) return;
 
             // Render Tabs
@@ -2604,9 +2623,29 @@
                 tabs.appendChild(btn);
             });
 
+            // Render Group Filters
+            filterTabs.innerHTML = '';
+            ['ALL', 'A', 'B', 'C', 'D'].forEach(g => {
+                const btn = document.createElement('button');
+                btn.className = `schedule-tab filter-tab ${g === groupFilter ? 'active' : ''}`;
+                btn.textContent = g === 'ALL' ? 'ВСЕ ГРУППЫ' : `ГРУППА ${g}`;
+                btn.onclick = () => renderGroupSchedule(round, g);
+                filterTabs.appendChild(btn);
+            });
+
             // Render Matches
             container.innerHTML = '';
-            schedule[round].forEach((m, idx) => {
+            
+            const filteredMatches = schedule[round].filter(m => 
+                groupFilter === 'ALL' || m.group === groupFilter
+            );
+
+            if (filteredMatches.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center text-white/20 py-10">Матчей не найдено</div>';
+                return;
+            }
+
+            filteredMatches.forEach((m, idx) => {
                 const card = document.createElement('div');
                 card.className = 'glass p-4 rounded-2xl flex items-center justify-between border border-white/5';
                 
