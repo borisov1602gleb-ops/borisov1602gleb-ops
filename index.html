@@ -1478,6 +1478,97 @@
                 padding: 1.5rem;
             }
         }
+        
+        /* Bracket Styles */
+        .bracket-container {
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+            overflow-x: auto;
+        }
+        .bracket-round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            margin: 0 20px;
+            width: 200px;
+        }
+        .bracket-match {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .bracket-match:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #d4af37;
+        }
+        .bracket-team {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 0.9rem;
+        }
+        .bracket-team.winner {
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .bracket-score {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0 6px;
+            border-radius: 4px;
+            min-width: 24px;
+            text-align: center;
+        }
+        .round-title {
+            text-align: center;
+            color: #d4af37;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+        
+        /* Final Banner Styles */
+        .final-banner {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            border: 2px solid #d4af37;
+            border-radius: 30px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 100px rgba(212, 175, 55, 0.2);
+        }
+        .final-team-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+            transition: transform 0.5s ease;
+        }
+        .final-team-logo:hover {
+            transform: scale(1.1);
+        }
+        .final-vs {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #d4af37;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+        .final-info {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 10px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 30px;
+            font-weight: 600;
+            color: #fff;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -1606,7 +1697,7 @@
     <!-- Official Draw Section -->
     <section id="draw" class="py-20 px-4 relative z-10">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal editable-content" data-id="draw-title">ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА</h2>
+            <h2 id="sectionTitle" class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal editable-content" data-id="draw-title">ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА</h2>
             
             <div id="potsContainer" class="pots-arc-container reveal">
                 <!-- Pot 1 -->
@@ -1632,7 +1723,7 @@
             </div>
             
             <!-- Groups Results (Hidden by default) -->
-            <div id="groupsResults" class="hidden mt-16 max-w-7xl mx-auto reveal">
+            <div id="groupsResults" class="hidden mt-16 max-w-7xl mx-auto reveal transition-all duration-500">
                 <div class="flex justify-center mb-8">
                     <button onclick="downloadResults()" class="magnetic bg-gold text-cup-dark px-6 py-3 rounded-full font-bold hover:bg-gold-light transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -1667,6 +1758,53 @@
                     <div class="text-center mt-8 text-white/40 text-sm font-mono tracking-widest">
                         RAMENSKOE CUP 2026
                         <div id="captureTimestamp" class="text-xs mt-2 opacity-60"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Playoffs Section -->
+            <div id="playoffsSection" class="hidden mt-16 max-w-7xl mx-auto reveal">
+                <div class="bracket-container" id="bracketView">
+                    <!-- Bracket will be rendered here -->
+                </div>
+            </div>
+            
+            <!-- Final Match Section -->
+            <div id="finalSection" class="hidden mt-16 max-w-5xl mx-auto reveal">
+                <div class="final-banner text-center">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                    <div class="text-gold text-sm tracking-[0.5em] uppercase mb-8">Match of the Year</div>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+                        <div class="text-center">
+                            <div class="w-32 h-32 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto relative group">
+                                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <img id="finalTeam1Logo" src="" class="final-team-logo" alt="Team 1">
+                            </div>
+                            <h3 id="finalTeam1Name" class="text-2xl font-black text-white">TEAM A</h3>
+                        </div>
+                        
+                        <div class="final-vs">VS</div>
+                        
+                        <div class="text-center">
+                            <div class="w-32 h-32 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto relative group">
+                                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <img id="finalTeam2Logo" src="" class="final-team-logo" alt="Team 2">
+                            </div>
+                            <h3 id="finalTeam2Name" class="text-2xl font-black text-white">TEAM B</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <div class="final-info">
+                            <span id="finalDate">23 ИЮНЯ</span> • <span id="finalTime">18:00</span> • <span id="finalStadium">СТАДИОН САТУРН</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <button class="bg-gold text-cup-dark px-8 py-3 rounded-full font-bold hover:bg-white transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-pulse">
+                            КУПИТЬ БИЛЕТ
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1828,6 +1966,12 @@
                     <button onclick="switchAdminTab('draw')" class="admin-tab-btn w-full" id="tab-btn-draw">
                         <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg> Жеребьевка</span>
                     </button>
+                    <button onclick="switchAdminTab('playoffs')" class="admin-tab-btn w-full" id="tab-btn-playoffs">
+                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg> Плей-офф</span>
+                    </button>
+                    <button onclick="switchAdminTab('final')" class="admin-tab-btn w-full" id="tab-btn-final">
+                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Финал</span>
+                    </button>
                 </nav>
                 <div class="p-4 border-t border-white/10">
                     <button onclick="closeAdminModal()" class="w-full py-2 text-white/60 hover:text-white text-sm flex items-center gap-2 justify-center">
@@ -1842,6 +1986,17 @@
                 <div id="tab-dashboard" class="space-y-6">
                     <h2 class="text-2xl font-bold text-white mb-6">Панель управления</h2>
                     
+                    <!-- Tournament Status -->
+                    <div class="glass p-6 rounded-xl border border-gold/30">
+                        <h4 class="text-gold font-bold mb-4 uppercase text-sm">Статус Турнира</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button onclick="setTournamentStatus('draw')" id="statusBtn-draw" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Жеребьевка</button>
+                            <button onclick="setTournamentStatus('groups')" id="statusBtn-groups" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Групповой этап</button>
+                            <button onclick="setTournamentStatus('playoffs')" id="statusBtn-playoffs" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Плей-офф</button>
+                            <button onclick="setTournamentStatus('final')" id="statusBtn-final" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Финал</button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Timer Control -->
                         <div class="glass p-6 rounded-xl">
@@ -1987,6 +2142,36 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Tab: Playoffs Editor -->
+                <div id="tab-playoffs" class="hidden space-y-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">Редактор Сетки</h2>
+                        <button onclick="saveBracketData()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
+                    </div>
+                    <div id="bracketEditor" class="space-y-4">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+                
+                <!-- Tab: Final Editor -->
+                <div id="tab-final" class="hidden space-y-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white">Настройки Финала</h2>
+                        <button onclick="saveFinalData()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
+                    </div>
+                    <div class="glass p-6 rounded-xl space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="finalTeam1Input" placeholder="Команда 1" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
+                            <input type="text" id="finalTeam2Input" placeholder="Команда 2" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
+                        </div>
+                        <div class="grid grid-cols-3 gap-4">
+                            <input type="text" id="finalDateInput" placeholder="Дата (23 ИЮНЯ)" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
+                            <input type="text" id="finalTimeInput" placeholder="Время (18:00)" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
+                            <input type="text" id="finalStadiumInput" placeholder="Стадион" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2059,6 +2244,8 @@
             checkMaintenance(); // Check maintenance mode
             loadSiteContent(); // Load edited content
             initAnnouncement(); // Check announcement
+            initTournamentStatus(); // Check status
+            renderBracket(); // Render bracket if data exists
         });
         
         // Revealed Card Overlay (Moved to body for fixed positioning)
@@ -2185,6 +2372,8 @@
             const roleLabel = document.getElementById('adminRoleLabel');
             const teamsTab = document.getElementById('tab-btn-teams');
             const drawTab = document.getElementById('tab-btn-draw');
+            const playoffsTab = document.getElementById('tab-btn-playoffs');
+            const finalTab = document.getElementById('tab-btn-final');
             
             if (login === 'admin' && pass === '123') {
                 // Simple Admin (Limited)
@@ -2196,6 +2385,8 @@
                 // Hide restricted tabs
                 teamsTab.style.display = 'none';
                 drawTab.style.display = 'none';
+                playoffsTab.style.display = 'none';
+                finalTab.style.display = 'none';
                 
                 switchAdminTab('dashboard');
             } else if (login === 'org' && pass === 'root') {
@@ -2208,6 +2399,8 @@
                 // Show all tabs
                 teamsTab.style.display = 'block';
                 drawTab.style.display = 'block';
+                playoffsTab.style.display = 'block';
+                finalTab.style.display = 'block';
                 
                 switchAdminTab('dashboard');
             } else {
@@ -2226,6 +2419,8 @@
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             
             if(tabId === 'teams') loadTeamEditor();
+            if(tabId === 'playoffs') loadBracketEditor();
+            if(tabId === 'final') loadFinalEditor();
         }
         
         function toggleCountdown() {
@@ -2594,6 +2789,13 @@
             }
             if (e.key === 'triggerConfetti') {
                 celebrate();
+            }
+            if (e.key === 'tournamentStatus') {
+                applyTournamentStatus(e.newValue);
+            }
+            if (e.key === 'bracketData' || e.key === 'finalData') {
+                renderBracket();
+                renderFinal();
             }
         });
         
