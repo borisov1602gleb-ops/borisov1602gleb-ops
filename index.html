@@ -578,6 +578,26 @@
             z-index: 30;
         }
 
+        /* Final Decorations */
+        .golden-drop {
+            position: fixed;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, #ffd700, transparent);
+            pointer-events: none;
+            z-index: 9997;
+            border-radius: 2px;
+        }
+        @keyframes epic-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px) translateY(1px); }
+            50% { transform: translateX(2px) translateY(-1px); }
+            75% { transform: translateX(-1px) translateY(-2px); }
+        }
+        .epic-shake {
+            animation: epic-shake 0.1s infinite;
+        }
+
         /* Адаптация админки для мобильных устройств */
         @media (max-width: 768px) {
             .admin-layout { flex-direction: column; }
@@ -2136,6 +2156,31 @@
                         </button>
                     </div>
 
+                    <!-- Final Decoration Settings -->
+                    <div id="finalDecorSettings" class="hidden glass p-6 rounded-xl border border-gold/50 bg-gold/5 mt-6">
+                        <h4 class="text-gold font-bold mb-4 uppercase text-sm flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Украшения Финала
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
+                                <span class="text-xs font-bold text-white/80">🎉 Фейерверки</span>
+                                <input type="checkbox" id="decorFireworks" onchange="toggleDecor('fireworks')" class="w-4 h-4 accent-gold">
+                            </label>
+                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
+                                <span class="text-xs font-bold text-white/80">✨ Золотой дождь</span>
+                                <input type="checkbox" id="decorRain" onchange="toggleDecor('rain')" class="w-4 h-4 accent-gold">
+                            </label>
+                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
+                                <span class="text-xs font-bold text-white/80">🎵 Эпичная музыка</span>
+                                <input type="checkbox" id="decorMusic" onchange="toggleDecor('music')" class="w-4 h-4 accent-gold">
+                            </label>
+                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
+                                <span class="text-xs font-bold text-white/80">🫨 Тряска экрана</span>
+                                <input type="checkbox" id="decorShake" onchange="toggleDecor('shake')" class="w-4 h-4 accent-gold">
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Registration Settings -->
                     <div class="glass p-6 rounded-xl border border-white/10">
                         <h4 class="text-gold font-bold mb-4 uppercase text-sm">Настройки регистрации</h4>
@@ -2441,6 +2486,11 @@
         // Например: const GLOBAL_STATUS = 'groups';
         const GLOBAL_STATUS = null; 
 
+        let fireworksInterval = null;
+        let rainInterval = null;
+        const finalAnthem = new Audio('https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3');
+        finalAnthem.loop = true;
+
         let motrData = JSON.parse(localStorage.getItem('motrData')) || {
             team1Logo: '',
             team2Logo: ''
@@ -2466,6 +2516,7 @@
             renderPlayoffSchedule(); // Render playoff schedule
             // bowlEl = document.getElementById('quantumCore'); // Removed as quantumCore is no longer in the visible admin tabs
 
+            initDecorations();
             // Загружаем настройки регистрации в поля админки
             const regCardInput = document.getElementById('regCardInput');
             const regContactInput = document.getElementById('regContactInput');
@@ -2730,6 +2781,9 @@
 
         function initTournamentStatus() {
             applyTournamentStatus(tournamentStatus);
+            // Show decor panel if status is final
+            const decorPanel = document.getElementById('finalDecorSettings');
+            if (decorPanel && tournamentStatus === 'final') decorPanel.classList.remove('hidden');
         }
 
         function setTournamentStatus(status) {
@@ -2746,6 +2800,13 @@
             if(activeBtn) {
                 activeBtn.classList.remove('bg-white/10', 'text-white');
                 activeBtn.classList.add('bg-gold', 'text-cup-dark');
+            }
+
+            // Toggle decoration settings visibility
+            const decorPanel = document.getElementById('finalDecorSettings');
+            if (decorPanel) {
+                if (status === 'final') decorPanel.classList.remove('hidden');
+                else decorPanel.classList.add('hidden');
             }
         }
 
@@ -2788,6 +2849,8 @@
                 const titleEl = document.getElementById('sectionTitle');
                 if(titleEl && title[status]) titleEl.textContent = title[status];
             }
+
+            refreshDecorations();
         }
 
         // Placeholder for bracket data
@@ -4191,6 +4254,73 @@
             }
         }
         
+        function initDecorations() {
+            const types = ['fireworks', 'rain', 'music', 'shake'];
+            types.forEach(type => {
+                const isEnabled = localStorage.getItem(`decor_${type}`) === 'true';
+                const input = document.getElementById(`decor${type.charAt(0).toUpperCase() + type.slice(1)}`);
+                if (input) input.checked = isEnabled;
+            });
+        }
+
+        function toggleDecor(type) {
+            const input = document.getElementById(`decor${type.charAt(0).toUpperCase() + type.slice(1)}`);
+            localStorage.setItem(`decor_${type}`, input.checked);
+            refreshDecorations();
+        }
+
+        function refreshDecorations() {
+            const types = ['fireworks', 'rain', 'music', 'shake'];
+            types.forEach(type => {
+                const isEnabled = localStorage.getItem(`decor_${type}`) === 'true';
+                applyDecor(type, isEnabled);
+            });
+        }
+
+        function applyDecor(type, active) {
+            const isFinal = tournamentStatus === 'final';
+            if (type === 'fireworks') {
+                if (active && isFinal) {
+                    if (!fireworksInterval) fireworksInterval = setInterval(celebrate, 2000);
+                } else {
+                    clearInterval(fireworksInterval);
+                    fireworksInterval = null;
+                }
+            }
+            if (type === 'rain') {
+                if (active && isFinal) {
+                    if (!rainInterval) rainInterval = setInterval(spawnGoldenDrop, 100);
+                } else {
+                    clearInterval(rainInterval);
+                    rainInterval = null;
+                }
+            }
+            if (type === 'music') {
+                if (active && isFinal) finalAnthem.play().catch(() => {});
+                else { finalAnthem.pause(); finalAnthem.currentTime = 0; }
+            }
+            if (type === 'shake') {
+                if (active && isFinal) document.body.classList.add('epic-shake');
+                else document.body.classList.remove('epic-shake');
+            }
+        }
+
+        function spawnGoldenDrop() {
+            const drop = document.createElement('div');
+            drop.className = 'golden-drop';
+            drop.style.left = Math.random() * 100 + 'vw';
+            drop.style.top = '-20px';
+            document.body.appendChild(drop);
+            gsap.to(drop, {
+                y: '110vh',
+                x: (Math.random() - 0.5) * 100,
+                rotation: Math.random() * 360,
+                duration: 2 + Math.random() * 2,
+                ease: "none",
+                onComplete: () => drop.remove()
+            });
+        }
+
         // --- STUDIO GROUP EXPANSION ---
         let activeExpandedGroup = null;
 
