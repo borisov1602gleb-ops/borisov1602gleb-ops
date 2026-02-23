@@ -1774,6 +1774,16 @@
         </div>
     </section>
     
+    <!-- Playoffs Section -->
+    <section id="playoffsSection" class="hidden py-20 px-4 bg-gradient-to-b from-cup-dark to-cup-blue/20 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal editable-content" data-id="playoffs-title">СЕТКА ПЛЕЙ-ОФФ</h2>
+            <div class="bracket-container" id="bracketView">
+                <!-- Bracket will be rendered here -->
+            </div>
+        </div>
+    </section>
+    
     <!-- Road of Glory Timeline Section -->
     <section id="road" class="py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark">
         <div class="max-w-4xl mx-auto">
@@ -1839,13 +1849,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Playoffs Section -->
-            <div id="playoffsSection" class="hidden mt-16 max-w-7xl mx-auto reveal">
-                <div class="bracket-container" id="bracketView">
-                    <!-- Bracket will be rendered here -->
                 </div>
             </div>
             
@@ -2013,11 +2016,14 @@
                     <!-- Quick Actions -->
                     <div class="glass p-6 rounded-xl border border-gold/50 bg-gold/5">
                         <h4 class="text-gold font-bold mb-4 uppercase text-sm">Быстрые действия</h4>
-                        <button onclick="runAutoDraw()" class="w-full bg-gold text-cup-dark py-4 rounded-lg text-sm font-black hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] uppercase tracking-widest">
+                        <button onclick="runAutoDraw()" class="w-full bg-gold text-cup-dark py-4 rounded-lg text-sm font-black hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] uppercase tracking-widest mb-3">
                             Запустить автожеребьевку
                         </button>
-                        <button onclick="generatePlayoffs()" class="w-full bg-blue-500/20 text-blue-400 border border-blue-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-blue-500/30 transition-all">
+                        <button onclick="generatePlayoffs()" class="w-full bg-blue-500/20 text-blue-400 border border-blue-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-blue-500/30 transition-all mb-3">
                             Сгенерировать сетку плей-офф
+                        </button>
+                        <button onclick="resetPlayoffs()" class="w-full bg-red-500/20 text-red-400 border border-red-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">
+                            Сбросить сетку плей-офф
                         </button>
                     </div>
 
@@ -2140,6 +2146,7 @@
             initAnnouncement(); // Check announcement
             initTournamentStatus(); // Check status
             renderBracket(); // Render bracket if data exists
+            renderFinal(); // Render final if data exists
             // bowlEl = document.getElementById('quantumCore'); // Removed as quantumCore is no longer in the visible admin tabs
         });
         
@@ -2394,7 +2401,7 @@
         }
 
         function applyTournamentStatus(status, silent = false) {
-            const sections = { // Ensure these IDs exist in your HTML
+            const sections = {
                 'draw': document.getElementById('potsContainer'),
                 'groups': document.getElementById('groupsResults'),
                 'playoffs': document.getElementById('playoffsSection'),
@@ -2407,15 +2414,23 @@
 
             if(sections[status]) sections[status].classList.remove('hidden');
             
+            // Скрываем секцию жеребьевки целиком, если мы в плей-офф или финале
+            const drawSection = document.getElementById('draw');
+            if (drawSection) {
+                if (status === 'draw' || status === 'groups') {
+                    drawSection.classList.remove('hidden');
+                } else {
+                    drawSection.classList.add('hidden');
+                }
+            }
+
             if(!silent) {
                 const title = {
                     'draw': 'ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА',
-                    'groups': 'ГРУППОВОЙ ЭТАП',
-                    'playoffs': 'СЕТКА ПЛЕЙ-ОФФ',
-                    'final': 'ФИНАЛ ТУРНИРА'
+                    'groups': 'ГРУППОВОЙ ЭТАП'
                 };
                 const titleEl = document.getElementById('sectionTitle');
-                if(titleEl) titleEl.textContent = title[status];
+                if(titleEl && title[status]) titleEl.textContent = title[status];
             }
         }
 
@@ -2425,6 +2440,27 @@
             semiFinals: [],
             final: []
         };
+
+        function updateNextRound(matchId, winnerTeam) {
+            const mapping = {
+                'QF1': { round: 'semiFinals', matchIdx: 0, teamKey: 'team1' },
+                'QF2': { round: 'semiFinals', matchIdx: 0, teamKey: 'team2' },
+                'QF3': { round: 'semiFinals', matchIdx: 1, teamKey: 'team1' },
+                'QF4': { round: 'semiFinals', matchIdx: 1, teamKey: 'team2' },
+                'SF1': { round: 'final', matchIdx: 0, teamKey: 'team1' },
+                'SF2': { round: 'final', matchIdx: 0, teamKey: 'team2' }
+            };
+
+            const target = mapping[matchId];
+            if (target) {
+                bracketData[target.round][target.matchIdx][target.teamKey] = {
+                    name: winnerTeam.name,
+                    logo: winnerTeam.logo,
+                    score: 0
+                };
+            }
+            renderFinal();
+        }
 
         function renderBracket() {
             const bracketView = document.getElementById('bracketView');
@@ -2450,16 +2486,50 @@
                 round.matches.forEach(match => {
                     const matchDiv = document.createElement('div');
                     matchDiv.className = 'bracket-match';
-                    matchDiv.innerHTML = `
-                        <div class="bracket-team">
-                            <span>${match.team1.name}</span>
-                            <span class="bracket-score">${match.team1.score !== undefined ? match.team1.score : ''}</span>
-                        </div>
-                        <div class="bracket-team">
-                            <span>${match.team2.name}</span>
-                            <span class="bracket-score">${match.team2.score !== undefined ? match.team2.score : ''}</span>
-                        </div>
-                    `;
+                    
+                    const renderTeam = (team, teamKey) => {
+                        const teamDiv = document.createElement('div');
+                        teamDiv.className = 'bracket-team';
+                        if (match.winner === teamKey) teamDiv.classList.add('winner');
+
+                        const nameSpan = document.createElement('span');
+                        nameSpan.textContent = team.name;
+                        
+                        if (isAdmin && isEditMode) {
+                            nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
+                            nameSpan.title = "Нажмите, чтобы выбрать победителя";
+                            nameSpan.onclick = () => {
+                                match.winner = teamKey;
+                                updateNextRound(match.id, team);
+                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                                renderBracket();
+                            };
+                        }
+                        teamDiv.appendChild(nameSpan);
+
+                        const scoreSpan = document.createElement('span');
+                        scoreSpan.className = 'bracket-score';
+                        
+                        if (isAdmin && isEditMode) {
+                            const input = document.createElement('input');
+                            input.type = 'number';
+                            input.value = team.score !== undefined ? team.score : 0;
+                            input.className = 'w-8 bg-white/10 border border-white/20 rounded text-center text-xs outline-none focus:border-gold';
+                            input.onchange = (e) => {
+                                team.score = parseInt(e.target.value) || 0;
+                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                            };
+                            scoreSpan.appendChild(input);
+                        } else {
+                            scoreSpan.textContent = team.score !== undefined ? team.score : '';
+                        }
+                        teamDiv.appendChild(scoreSpan);
+                        
+                        return teamDiv;
+                    };
+
+                    matchDiv.appendChild(renderTeam(match.team1, 'team1'));
+                    matchDiv.appendChild(renderTeam(match.team2, 'team2'));
                     roundDiv.appendChild(matchDiv);
                 });
                 bracketView.appendChild(roundDiv);
@@ -2476,8 +2546,8 @@
             const qualifiedTeams = {};
             ['A', 'B', 'C', 'D'].forEach(groupKey => {
                 // Teams are already sorted by pts and goal difference
-                qualifiedTeams[`1st ${groupKey}`] = savedGroups[groupKey][0];
-                qualifiedTeams[`2nd ${groupKey}`] = savedGroups[groupKey][1];
+                qualifiedTeams[`1st ${groupKey}`] = { name: savedGroups[groupKey][0].name, logo: savedGroups[groupKey][0].logo, score: 0 };
+                qualifiedTeams[`2nd ${groupKey}`] = { name: savedGroups[groupKey][1].name, logo: savedGroups[groupKey][1].logo, score: 0 };
             });
 
             bracketData = {
@@ -2488,23 +2558,47 @@
                     { id: 'QF4', team1: qualifiedTeams['1st D'], team2: qualifiedTeams['2nd C'], winner: null },
                 ],
                 semiFinals: [
-                    { id: 'SF1', team1: { name: 'Победитель QF1', logo: '' }, team2: { name: 'Победитель QF2', logo: '' }, winner: null },
-                    { id: 'SF2', team1: { name: 'Победитель QF3', logo: '' }, team2: { name: 'Победитель QF4', logo: '' }, winner: null },
+                    { id: 'SF1', team1: { name: 'Победитель QF1', logo: '', score: 0 }, team2: { name: 'Победитель QF2', logo: '', score: 0 }, winner: null },
+                    { id: 'SF2', team1: { name: 'Победитель QF3', logo: '', score: 0 }, team2: { name: 'Победитель QF4', logo: '', score: 0 }, winner: null },
                 ],
                 final: [
-                    { id: 'F1', team1: { name: 'Победитель SF1', logo: '' }, team2: { name: 'Победитель SF2', logo: '' }, winner: null },
+                    { id: 'F1', team1: { name: 'Победитель SF1', logo: '', score: 0 }, team2: { name: 'Победитель SF2', logo: '', score: 0 }, winner: null },
                 ]
             };
 
             localStorage.setItem('bracketData', JSON.stringify(bracketData));
             setTournamentStatus('playoffs');
             renderBracket();
+            renderFinal();
             celebrate();
             alert('Сетка плей-офф успешно сгенерирована!');
         }
 
+        function resetPlayoffs() {
+            if (confirm('Вы уверены, что хотите сбросить сетку плей-офф? Все результаты матчей будут удалены.')) {
+                bracketData = {
+                    quarterFinals: [],
+                    semiFinals: [],
+                    final: []
+                };
+                localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                renderBracket();
+                renderFinal();
+                alert('Сетка плей-офф сброшена.');
+            }
+        }
+
         function renderFinal() {
-            // Логика отрисовки финала
+            const finalMatch = bracketData.final[0];
+            const team1Name = document.getElementById('finalTeam1Name');
+            const team1Logo = document.getElementById('finalTeam1Logo');
+            const team2Name = document.getElementById('finalTeam2Name');
+            const team2Logo = document.getElementById('finalTeam2Logo');
+
+            if (team1Name) team1Name.textContent = (finalMatch && finalMatch.team1.name) ? finalMatch.team1.name : 'TEAM A';
+            if (team1Logo) team1Logo.src = (finalMatch && finalMatch.team1.logo) ? finalMatch.team1.logo : '';
+            if (team2Name) team2Name.textContent = (finalMatch && finalMatch.team2.name) ? finalMatch.team2.name : 'TEAM B';
+            if (team2Logo) team2Logo.src = (finalMatch && finalMatch.team2.logo) ? finalMatch.team2.logo : '';
         }
 
         function resetAllCards() {
@@ -3026,6 +3120,9 @@
             // Перерисовываем группы, чтобы показать/скрыть инпуты статистики
             const saved = localStorage.getItem('drawResults');
             if (saved) renderDrawResults(JSON.parse(saved));
+            
+            // Перерисовываем сетку плей-офф
+            renderBracket();
         }
         
         function saveSiteContent() {
