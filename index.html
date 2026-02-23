@@ -1819,115 +1819,64 @@
         </div>
     </section>
     
-    <!-- Road of Glory Timeline Section -->
-    <section id="road" class="py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal editable-content" data-id="road-title">ДОРОГА СЛАВЫ</h2>
-            <p class="text-center text-white/60 mb-16 reveal editable-content" data-id="road-desc">История турнира от первого матча до сегодняшнего дня</p>
+    <!-- Final Section -->
+    <section id="finalSection" class="hidden py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal">ФИНАЛ</h2>
             
-            <div class="road-timeline">
-                <!-- Timeline Node 1 -->
-                <div class="timeline-node mb-12 md:mb-20">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="w-full md:w-1/2 md:text-right">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2019</div>
-                                <h3 class="text-xl font-bold mb-2">Основание турнира</h3>
-                                <p class="text-white/70 text-sm">Первый Раменский Кубок собрал 8 команд и стал началом большой футбольной истории.</p>
-                            </div>
+            <!-- Lineups Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                <!-- Team 1 -->
+                <div class="glass p-8 rounded-3xl border border-gold/30">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                            <img id="finalTeam1Logo" src="" class="w-12 h-12 object-contain" alt="">
                         </div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
-                        <div class="w-full md:w-1/2"></div>
+                        <h3 id="finalTeam1Name" class="text-3xl font-black text-white">TEAM A</h3>
                     </div>
-                </div>
-                
-                <!-- Timeline Node 2 -->
-                <div class="timeline-node mb-12 md:mb-20">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="w-full md:w-1/2"></div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
-                        <div class="w-full md:w-1/2 md:text-left">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2021</div>
-                                <h3 class="text-xl font-bold mb-2">Расширение формата</h3>
-                                <p class="text-white/70 text-sm">Рост до 16 команд и введение плей-офф стадии с четвертьфиналами.</p>
-                            </div>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4">Стартовый состав (8)</h4>
+                            <div id="finalTeam1Starters" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                        </div>
+                        <div>
+                            <h4 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-4">Запасные</h4>
+                            <div id="finalTeam1Subs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Timeline Node 3 -->
-                <div class="timeline-node mb-12 md:mb-20">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="w-full md:w-1/2 md:text-right">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2023</div>
-                                <h3 class="text-xl font-bold mb-2">Новый стадион</h3>
-                                <p class="text-white/70 text-sm">Открытие стадиона Жуковский с современным покрытием и освещением.</p>
-                            </div>
+                <!-- Team 2 -->
+                <div class="glass p-8 rounded-3xl border border-gold/30">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                            <img id="finalTeam2Logo" src="" class="w-12 h-12 object-contain" alt="">
                         </div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
-                        <div class="w-full md:w-1/2"></div>
+                        <h3 id="finalTeam2Name" class="text-3xl font-black text-white">TEAM B</h3>
                     </div>
-                </div>
-                
-                <!-- Timeline Node 4 -->
-                <div class="timeline-node">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="w-full md:w-1/2"></div>
-                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
-                        <div class="w-full md:w-1/2 md:text-left">
-                            <div class="glass rounded-2xl p-6 inline-block">
-                                <div class="text-gold text-sm font-bold mb-2">2026</div>
-                                <h3 class="text-xl font-bold mb-2">Рекордный призовой фонд</h3>
-                                <p class="text-white/70 text-sm">1 000 000₽ — самый большой призовой фонд в истории любительского футбола региона.</p>
-                            </div>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4">Стартовый состав (8)</h4>
+                            <div id="finalTeam2Starters" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                        </div>
+                        <div>
+                            <h4 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-4">Запасные</h4>
+                            <div id="finalTeam2Subs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Final Match Section -->
-            <div id="finalSection" class="hidden mt-16 max-w-5xl mx-auto reveal">
-                <div class="final-banner text-center">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
-                    <div class="text-gold text-sm tracking-[0.5em] uppercase mb-8">Match of the Year</div>
-                    
-                    <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-                        <div class="text-center">
-                            <div class="w-32 h-32 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto relative group">
-                                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <img id="finalTeam1Logo" src="" class="final-team-logo" alt="Team 1">
-                            </div>
-                            <h3 id="finalTeam1Name" class="text-2xl font-black text-white">TEAM A</h3>
-                        </div>
-                        
-                        <div class="final-vs">VS</div>
-                        
-                        <div class="text-center">
-                            <div class="w-32 h-32 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto relative group">
-                                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                <img id="finalTeam2Logo" src="" class="final-team-logo" alt="Team 2">
-                            </div>
-                            <h3 id="finalTeam2Name" class="text-2xl font-black text-white">TEAM B</h3>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-12">
-                        <div class="final-info">
-                            <div class="flex flex-col items-center">
-                                <div class="flex gap-4 mb-2 text-gold font-mono text-xl" id="finalCountdown">
-                                    <!-- Countdown timer -->
-                                </div>
-                                <span class="text-sm opacity-80"><span id="finalDate">23 ИЮНЯ</span> • <span id="finalTime">18:00</span> • <span id="finalStadium">СТАДИОН САТУРН</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-8">
-                        <button class="bg-gold text-cup-dark px-8 py-3 rounded-full font-bold hover:bg-white transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-pulse">
-                            КУПИТЬ БИЛЕТ
-                        </button>
+
+            <!-- Time and Place -->
+            <div class="text-center">
+                <div class="final-info inline-block">
+                    <div class="flex flex-col items-center">
+                        <div class="flex gap-4 mb-2 text-gold font-mono text-3xl" id="finalCountdown"></div>
+                        <span class="text-xl opacity-90">
+                            <span id="finalDate" class="editable-content" data-id="final-date">23 ИЮНЯ</span> • 
+                            <span id="finalTime" class="editable-content" data-id="final-time">18:00</span> • 
+                            <span id="finalStadium" class="editable-content" data-id="final-stadium">СТАДИОН САТУРН</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -1949,7 +1898,6 @@
                     <div class="flex flex-col gap-2">
                         <a href="#hero" class="text-white/60 hover:text-gold text-sm">Начало</a>
                         <a href="#draw" class="text-white/60 hover:text-gold text-sm">Жеребьевка</a>
-                        <a href="#road" class="text-white/60 hover:text-gold text-sm">История</a>
                     </div>
                 </div>
                 <div class="text-center md:text-right">
@@ -2311,6 +2259,12 @@
             if(regContactInput) regContactInput.value = localStorage.getItem('regContact') || '';
         });
         
+        // Lineups data
+        let finalLineups = JSON.parse(localStorage.getItem('finalLineups')) || {
+            team1: { starters: Array(8).fill(''), subs: Array(4).fill('') },
+            team2: { starters: Array(8).fill(''), subs: Array(4).fill('') }
+        };
+
         // Revealed Card Overlay (Moved to body for fixed positioning)
         const revealedCardHTML = `
             <div id="revealedTeamCard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[280px] glass-strong border-2 border-gold rounded-3xl flex flex-col items-center justify-center z-[9999] hidden shadow-[0_0_100px_rgba(212,175,55,0.5)]">
@@ -2904,6 +2858,38 @@
             if (team1Logo) team1Logo.src = (finalMatch && finalMatch.team1.logo) ? finalMatch.team1.logo : '';
             if (team2Name) team2Name.textContent = (finalMatch && finalMatch.team2.name) ? finalMatch.team2.name : 'TEAM B';
             if (team2Logo) team2Logo.src = (finalMatch && finalMatch.team2.logo) ? finalMatch.team2.logo : '';
+
+            // Render Lineups
+            renderLineupList('finalTeam1Starters', finalLineups.team1.starters, 'team1', 'starters');
+            renderLineupList('finalTeam1Subs', finalLineups.team1.subs, 'team1', 'subs');
+            renderLineupList('finalTeam2Starters', finalLineups.team2.starters, 'team2', 'starters');
+            renderLineupList('finalTeam2Subs', finalLineups.team2.subs, 'team2', 'subs');
+        }
+
+        function renderLineupList(containerId, list, teamKey, type) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            list.forEach((player, idx) => {
+                const div = document.createElement('div');
+                div.className = 'bg-white/5 border border-white/10 rounded-xl px-4 py-2 flex items-center gap-3';
+                
+                if (isAdmin && isEditMode) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = player;
+                    input.placeholder = 'Игрок...';
+                    input.className = 'bg-transparent w-full outline-none text-sm text-white focus:text-gold transition-colors';
+                    input.onchange = (e) => {
+                        finalLineups[teamKey][type][idx] = e.target.value;
+                        localStorage.setItem('finalLineups', JSON.stringify(finalLineups));
+                    };
+                    div.appendChild(input);
+                } else {
+                    div.innerHTML = `<span class="text-white/20 text-[10px] font-bold">${idx + 1}</span> <span class="text-sm font-medium">${player || '---'}</span>`;
+                }
+                container.appendChild(div);
+            });
         }
 
         function resetAllCards() {
