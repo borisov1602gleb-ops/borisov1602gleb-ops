@@ -2568,7 +2568,14 @@
                 potTeams.sort(() => Math.random() - 0.5);
                 
                 groupKeys.forEach((key, index) => {
-                    groups[key].push(potTeams[index]);
+                    const team = potTeams[index];
+                    groups[key].push({
+                        name: team.name,
+                        logo: team.logo,
+                        pts: 0,
+                        gs: 0,
+                        gc: 0
+                    });
                 });
             }
             
@@ -2594,52 +2601,92 @@
         }
         
         function renderDrawResults(groups) {
+            if (!groups) return;
             ['A', 'B', 'C', 'D'].forEach(key => {
                 const list = document.getElementById(`group-${key.toLowerCase()}-list`);
+                if (!list) return;
                 list.innerHTML = '';
                 
-                if (isAdmin) {
-                    list.ondragover = (e) => e.preventDefault();
-                }
+                // Заголовок статистики
+                const header = document.createElement('div');
+                header.className = 'grid grid-cols-[1fr_35px_35px_35px] gap-2 px-3 py-1 text-[10px] text-white/40 font-bold uppercase tracking-wider';
+                header.innerHTML = '<div>Команда</div><div class="text-center">О</div><div class="text-center">З</div><div class="text-center">П</div>';
+                list.appendChild(header);
 
                 groups[key].forEach((team, index) => {
-                    const teamName = typeof team === 'string' ? team : team.name;
-                    const teamLogo = typeof team === 'string' ? '' : team.logo;
+                    const teamName = team.name || team;
+                    const teamLogo = team.logo || '';
+                    
+                    // Гарантируем наличие полей статистики
+                    team.pts = team.pts || 0;
+                    team.gs = team.gs || 0;
+                    team.gc = team.gc || 0;
                     
                     const div = document.createElement('div');
-                    div.className = 'py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-2 border-gold flex items-center gap-2';
+                    div.className = 'grid grid-cols-[1fr_35px_35px_35px] gap-2 items-center py-2 px-3 rounded-lg bg-white/5 text-white/90 text-sm font-medium border-l-4 transition-all';
+                    
+                    // Подсветка мест: 1-2 зеленый, 3-4 красный
+                    if (index < 2) {
+                        div.classList.add('border-green-500', 'bg-green-500/10');
+                    } else {
+                        div.classList.add('border-red-500', 'bg-red-500/10');
+                    }
                     
                     if (isAdmin) {
                         div.draggable = true;
-                        div.classList.add('cursor-move', 'hover:bg-white/10', 'transition-colors');
+                        div.classList.add('cursor-move', 'hover:bg-white/10');
                         div.title = "Перетащите для изменения места в группе";
                         div.ondragstart = (e) => {
                             e.dataTransfer.setData('text/plain', JSON.stringify({ group: key, index: index }));
                         };
+                        div.ondragover = (e) => e.preventDefault();
                         div.ondrop = (e) => {
                             e.preventDefault();
                             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                             if (data.group === key) {
-                                const savedGroups = JSON.parse(localStorage.getItem('drawResults'));
-                                const group = savedGroups[key];
+                                const group = groups[key];
                                 const movedItem = group.splice(data.index, 1)[0];
                                 group.splice(index, 0, movedItem);
-                                localStorage.setItem('drawResults', JSON.stringify(savedGroups));
-                                renderDrawResults(savedGroups);
+                                localStorage.setItem('drawResults', JSON.stringify(groups));
+                                renderDrawResults(groups);
                             }
                         };
                     }
                     
+                    // Инфо о команде
+                    const teamInfo = document.createElement('div');
+                    teamInfo.className = 'flex items-center gap-2 overflow-hidden';
                     if (teamLogo) {
                         const img = document.createElement('img');
                         img.src = teamLogo;
-                        img.className = 'w-6 h-6 object-contain';
-                        div.appendChild(img);
+                        img.className = 'w-6 h-6 object-contain shrink-0';
+                        teamInfo.appendChild(img);
                     }
-                    
                     const span = document.createElement('span');
+                    span.className = 'truncate';
                     span.textContent = teamName;
-                    div.appendChild(span);
+                    teamInfo.appendChild(span);
+                    div.appendChild(teamInfo);
+
+                    // Поля статистики (Очки, Забито, Пропущено)
+                    ['pts', 'gs', 'gc'].forEach(stat => {
+                        const statDiv = document.createElement('div');
+                        statDiv.className = 'text-center font-bold';
+                        if (isEditMode && isAdmin) {
+                            const input = document.createElement('input');
+                            input.type = 'number';
+                            input.value = team[stat];
+                            input.className = 'w-full bg-white/10 border border-white/20 rounded text-center text-xs py-1 focus:border-gold outline-none';
+                            input.onchange = (e) => {
+                                team[stat] = parseInt(e.target.value) || 0;
+                                localStorage.setItem('drawResults', JSON.stringify(groups));
+                            };
+                            statDiv.appendChild(input);
+                        } else {
+                            statDiv.textContent = team[stat];
+                        }
+                        div.appendChild(statDiv);
+                    });
                     
                     list.appendChild(div);
                 });
@@ -2865,6 +2912,10 @@
                     el.classList.remove('editing-active');
                 });
             }
+            
+            // Перерисовываем группы, чтобы показать/скрыть инпуты статистики
+            const saved = localStorage.getItem('drawResults');
+            if (saved) renderDrawResults(JSON.parse(saved));
         }
         
         function saveSiteContent() {
