@@ -539,6 +539,20 @@
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
             transform: translateY(-5px);
         }
+
+        /* Адаптация админки для мобильных устройств */
+        @media (max-width: 768px) {
+            .admin-layout { flex-direction: column; }
+            .admin-sidebar { 
+                width: 100%; 
+                height: auto; 
+                border-right: none; 
+                border-bottom: 1px solid rgba(255,255,255,0.1); 
+            }
+            .admin-sidebar nav { display: flex; overflow-x: auto; }
+            .admin-tab-btn { border-left: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+            .admin-tab-btn.active { border-bottom-color: #d4af37; }
+        }
         
         .modal-content.open {
             transform: translate(-50%, -50%) scale(1);
@@ -1960,7 +1974,7 @@
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div class="text-center md:text-left">
-                    <h3 class="text-3xl font-black text-gold mb-3">РАМЕНСКИЙ КУБОК</h3>
+                    <h3 class="text-3xl font-black text-gold mb-3 select-none" onclick="handleSecretTap()">РАМЕНСКИЙ КУБОК</h3>
                     <p class="text-white/60 text-sm mb-4">Любительский футбольный турнир с 2019 года.</p>
                     <a href="javascript:void(0)" onclick="openPrivacy()" class="text-gold/60 hover:text-gold text-xs underline transition-colors block mb-2">Политика конфиденциальности</a>
                     <p class="text-gold/60 text-xs">© 2026 Все права защищены</p>
@@ -2468,6 +2482,23 @@
                 openAdminModal();
             }
         });
+
+        // Секретный вход для мобильных устройств (5 быстрых тапов по заголовку в футере)
+        let tapCount = 0;
+        let lastTap = 0;
+        function handleSecretTap() {
+            const now = Date.now();
+            if (now - lastTap < 500) {
+                tapCount++;
+            } else {
+                tapCount = 1;
+            }
+            lastTap = now;
+            if (tapCount === 5) {
+                tapCount = 0;
+                openAdminModal();
+            }
+        }
 
         function openAdminModal() {
             document.getElementById('adminBackdrop').classList.add('open');
