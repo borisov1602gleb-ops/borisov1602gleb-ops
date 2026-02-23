@@ -2667,25 +2667,10 @@
             document.getElementById('adminModal').classList.remove('open');
         }
 
-        async function checkAdmin() {
-            if (Date.now() < lockoutTime) {
-                const remaining = Math.ceil((lockoutTime - Date.now()) / 1000 / 60);
-                alert(`Система заблокирована. Попробуйте через ${remaining} мин.`);
-                return;
-            }
-
+        function checkAdmin() {
             const login = document.getElementById('adminLogin').value;
             const pass = document.getElementById('adminPass').value;
             
-            const loginHash = await hashString(login);
-            const passHash = await hashString(pass);
-
-            // Хеши для admin/123 и org/root
-            const ADMIN_LOGIN_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
-            const ADMIN_PASS_HASH = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3';
-            const ORG_LOGIN_HASH = '5030708af5813f2042dc485f74e73ac660846f7331401829b62802826566d0eb';
-            const ORG_PASS_HASH = '4813494d137e1631bba301d5acab6e7bb7aa74ce1185d456565ef51d737677b2';
-
             const modalContent = document.getElementById('adminModal');
             const loginView = document.getElementById('adminLoginView');
             const dashboardView = document.getElementById('adminDashboardView');
@@ -2695,7 +2680,7 @@
             const playoffsTab = document.getElementById('tab-btn-playoffs');
             const finalTab = document.getElementById('tab-btn-final');
             
-            if (loginHash === ADMIN_LOGIN_HASH && passHash === ADMIN_PASS_HASH) {
+            if (login === 'admin' && pass === '123') {
                 // Simple Admin (Limited)
                 modalContent.classList.add('admin-fullscreen');
                 loginView.classList.add('hidden');
@@ -2713,7 +2698,7 @@
                 renderBracket('bracketAdminView');
                 renderFinal();
                 switchAdminTab('dashboard');
-            } else if (loginHash === ORG_LOGIN_HASH && passHash === ORG_PASS_HASH) {
+            } else if (login === 'org' && pass === 'root') {
                 // Organizer (Full Access)
                 modalContent.classList.add('admin-fullscreen');
                 loginView.classList.add('hidden');
@@ -2732,13 +2717,7 @@
                 renderFinal();
                 switchAdminTab('dashboard');
             } else {
-                loginAttempts++;
-                if (loginAttempts >= 3) {
-                    lockoutTime = Date.now() + 300000; // 5 минут
-                    alert('Слишком много попыток. Вход заблокирован на 5 минут.');
-                } else {
-                    alert(`Неверный логин или пароль. Осталось попыток: ${3 - loginAttempts}`);
-                }
+                alert('Неверный логин или пароль');
             }
         }
         
@@ -3078,11 +3057,8 @@
                     score: 0
                 };
             }
-            localStorage.setItem('bracketData', JSON.stringify(bracketData));
             renderFinal();
             renderPlayoffSchedule();
-            renderBracket('bracketView');
-            renderBracket('bracketAdminView');
         }
 
         function renderBracket(containerId = 'bracketView') {
@@ -3128,27 +3104,13 @@
                             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                             const sourceMatch = findMatchById(data.matchId);
                             if (sourceMatch) {
-                                const sourceTeam = sourceMatch[data.teamKey];
-                                if (team.name.startsWith('Победитель')) {
-                                    team.name = sourceTeam.name;
-                                    team.logo = sourceTeam.logo;
-                                    team.score = 0;
-                                } else {
-                                    const temp = { name: team.name, logo: team.logo, score: team.score };
-                                    team.name = sourceTeam.name;
-                                    team.logo = sourceTeam.logo;
-                                    team.score = sourceTeam.score;
-                                    sourceMatch[data.teamKey].name = temp.name;
-                                    sourceMatch[data.teamKey].logo = temp.logo;
-                                    sourceMatch[data.teamKey].score = temp.score;
-                                    sourceMatch.winner = null;
-                                }
-                                match.winner = null;
+                                const temp = { ...sourceMatch[data.teamKey] };
+                                sourceMatch[data.teamKey] = { ...team };
+                                team.name = temp.name;
+                                team.logo = temp.logo;
                                 localStorage.setItem('bracketData', JSON.stringify(bracketData));
                                 renderBracket('bracketView');
                                 renderBracket('bracketAdminView');
-                                renderFinal();
-                                renderPlayoffSchedule();
                             }
                         };
                     }
@@ -3183,10 +3145,6 @@
                         input.onchange = (e) => {
                             team.score = parseInt(e.target.value) || 0;
                             localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                            renderBracket('bracketView');
-                            renderBracket('bracketAdminView');
-                            renderFinal();
-                            renderPlayoffSchedule();
                         };
                         scoreSpan.appendChild(input);
                     } else {
@@ -3866,8 +3824,7 @@
             renderPlayoffSchedule();
             
             // Перерисовываем сетку плей-офф
-            renderBracket('bracketView');
-            renderBracket('bracketAdminView');
+            renderBracket();
         }
 
         function highlightTeamPath(teamName, active) {
@@ -4041,7 +3998,7 @@
             const content = {};
             document.querySelectorAll('.editable-content').forEach(el => {
                 const id = el.dataset.id;
-                if (id) content[id] = el.textContent;
+                if (id) content[id] = el.innerHTML;
             });
             localStorage.setItem('siteContent', JSON.stringify(content));
         }
@@ -4051,7 +4008,7 @@
             if (content) {
                 document.querySelectorAll('.editable-content').forEach(el => {
                     const id = el.dataset.id;
-                    if (content[id]) el.textContent = content[id];
+                    if (content[id]) el.innerHTML = content[id];
                 });
             }
             // Load MOTR logos
