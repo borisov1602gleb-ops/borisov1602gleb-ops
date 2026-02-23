@@ -684,6 +684,7 @@
             perspective: 1000px;
             height: 450px;
             transition: transform 0.3s ease;
+            transform: translateZ(0);
         }
         
         .flip-card-inner {
@@ -717,6 +718,15 @@
         
         .flip-card:hover {
             z-index: 10;
+        }
+        
+        /* Scrollbar for pot teams */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 2px;
         }
         
         /* Draw Studio Styles */
@@ -869,10 +879,12 @@
         }
         
         .studio-group-card.expanded {
-            position: fixed !important;
+            position: absolute !important;
             top: 50% !important;
             left: 50% !important;
-            transform: translate(-50%, -50%) scale(1.5) !important;
+            transform: translate(-50%, -50%) !important;
+            width: 90% !important;
+            height: 90% !important;
             z-index: 100 !important;
             background: rgba(0, 26, 61, 0.95);
             border-color: #d4af37;
@@ -881,7 +893,7 @@
         }
         
         .studio-group-card.expanded:hover {
-            transform: translate(-50%, -50%) scale(1.5) !important;
+            transform: translate(-50%, -50%) !important;
         }
 
         #studioOverlay {
@@ -1507,9 +1519,9 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 1</h3>
-                            <div class="space-y-3 w-full relative z-10" id="pot-1-teams"></div>
+                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-1-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1527,9 +1539,9 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 2</h3>
-                            <div class="space-y-3 w-full relative z-10" id="pot-2-teams"></div>
+                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-2-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1547,9 +1559,9 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 3</h3>
-                            <div class="space-y-3 w-full relative z-10" id="pot-3-teams"></div>
+                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-3-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1567,9 +1579,9 @@
                             <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
                         </div>
                         <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow">
+                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
                             <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 4</h3>
-                            <div class="space-y-3 w-full relative z-10" id="pot-4-teams"></div>
+                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-4-teams"></div>
                         </div>
                     </div>
                 </div>
@@ -1900,28 +1912,28 @@
 
                         <!-- Bottom Groups -->
                         <div class="h-[40%] border-t border-white/10 bg-black/40 p-4 grid grid-cols-4 gap-4 z-10 overflow-y-auto">
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-a" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'A')">
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-a" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'A')">
                                 <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
                                     <span class="text-gold font-bold">ГРУППА A</span>
                                     <span class="text-white/20 font-black text-xl">A</span>
                                 </div>
                                 <div class="space-y-1 studio-list text-xs flex-grow"></div>
                             </div>
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-b" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'B')">
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-b" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'B')">
                                 <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
                                     <span class="text-gold font-bold">ГРУППА B</span>
                                     <span class="text-white/20 font-black text-xl">B</span>
                                 </div>
                                 <div class="space-y-1 studio-list text-xs flex-grow"></div>
                             </div>
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-c" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'C')">
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-c" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'C')">
                                 <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
                                     <span class="text-gold font-bold">ГРУППА C</span>
                                     <span class="text-white/20 font-black text-xl">C</span>
                                 </div>
                                 <div class="space-y-1 studio-list text-xs flex-grow"></div>
                             </div>
-                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-d" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondrop="dropTeam(event, 'D')">
+                            <div class="studio-group-card glass rounded-xl p-3 border border-gold/20 transition-all duration-300 hover:border-gold/60 flex flex-col" id="studio-group-d" onclick="expandGroup(this)" ondragover="allowDrop(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)" ondrop="dropTeam(event, 'D')">
                                 <div class="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
                                     <span class="text-gold font-bold">ГРУППА D</span>
                                     <span class="text-white/20 font-black text-xl">D</span>
@@ -2672,7 +2684,7 @@
                     potTeams.forEach((team, idx) => {
                         this.queue.push({
                             team: team,
-                            group: groupKeys[idx],
+                            group: groupKeys[idx % 4],
                             pot: i
                         });
                     });
@@ -2690,6 +2702,12 @@
                 const item = this.queue[this.currentIndex];
                 const potEl = document.getElementById(`pot-${item.pot}-display`);
                 const bowlEl = document.getElementById('drawBowlBtn');
+                
+                if (!potEl || !bowlEl) {
+                    this.isAnimating = false;
+                    console.error("Draw elements missing");
+                    return;
+                }
                 
                 // 1. Ball Animation
                 await this.animateBall(potEl, bowlEl);
@@ -2773,6 +2791,12 @@
             moveCardToGroup(item) {
                 const card = document.getElementById('revealedTeamCard');
                 const targetGroup = document.getElementById(`studio-group-${item.group.toLowerCase()}`);
+                
+                if (!targetGroup) {
+                    this.isAnimating = false;
+                    return;
+                }
+
                 const rect = targetGroup.getBoundingClientRect();
                 const cardRect = card.getBoundingClientRect();
                 
@@ -2908,6 +2932,17 @@
         function allowDrop(ev) {
             ev.preventDefault();
         }
+        
+        function handleDragEnter(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('bg-cup-gold/20', 'border-cup-gold');
+        }
+
+        function handleDragLeave(ev) {
+            ev.preventDefault();
+            if (ev.currentTarget.contains(ev.relatedTarget)) return;
+            ev.currentTarget.classList.remove('bg-cup-gold/20', 'border-cup-gold');
+        }
 
         function dragTeam(ev, teamName, currentGroup) {
             ev.dataTransfer.setData("text/plain", JSON.stringify({ name: teamName, group: currentGroup }));
@@ -2925,6 +2960,7 @@
             
             const { name, group: sourceGroup } = JSON.parse(data);
             if (sourceGroup === targetGroup) return;
+            ev.currentTarget.classList.remove('bg-cup-gold/20', 'border-cup-gold');
             
             const sourceIndex = DrawManager.groupsState[sourceGroup].findIndex(t => (typeof t === 'string' ? t : t.name) === name);
             if (sourceIndex === -1) return;
