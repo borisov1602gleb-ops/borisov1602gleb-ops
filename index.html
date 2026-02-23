@@ -139,16 +139,6 @@
             50% { transform: scale(1.1); opacity: 1; }
         }
         
-        /* Maintenance Ball Animation */
-        @keyframes roll-bounce {
-            0%, 100% { transform: translateX(-25vw) rotate(0deg); }
-            50% { transform: translateX(25vw) rotate(720deg); }
-        }
-        .rolling-ball {
-            display: inline-block;
-            animation: roll-bounce 3s ease-in-out infinite;
-        }
-        
         /* Navigation */
         #mainNav {
             position: fixed;
@@ -529,91 +519,6 @@
             background: #d4af37;
             color: #000814;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-        }
-        .filter-tab {
-            font-size: 12px;
-            padding: 5px 15px;
-        }
-        .group-highlight {
-            border-color: #ffd700 !important;
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
-            transform: translateY(-5px);
-        }
-        
-        .bracket-team.winner-highlight {
-            background: rgba(34, 197, 94, 0.2) !important;
-            border-left: 4px solid #22c55e !important;
-            padding-left: 8px !important;
-            color: #fff !important;
-        }
-        .bracket-team.loser-highlight {
-            background: rgba(239, 68, 68, 0.2) !important;
-            border-left: 4px solid #ef4444 !important;
-            padding-left: 8px !important;
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
-        
-        /* Playoff Bracket Enhancements */
-        .final-match-highlight {
-            transform: scale(1.25);
-            border: 2px solid #ffd700 !important;
-            background: rgba(212, 175, 55, 0.2) !important;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.5) !important;
-            margin: 40px 0 !important;
-            z-index: 20;
-        }
-        
-        .bracket-round {
-            position: relative;
-        }
-        
-        /* Соединительные линии */
-        .bracket-match::after, .bracket-match::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 20px;
-            height: 2px;
-            background: rgba(212, 175, 55, 0.3);
-            display: none;
-        }
-        
-        .left-side .bracket-match::after { display: block; right: -20px; }
-        .right-side .bracket-match::before { display: block; left: -20px; }
-        .center-side .bracket-match::after { display: block; right: -20px; }
-        .center-side .bracket-match::before { display: block; left: -20px; }
-
-        .team-path-highlight {
-            background: rgba(212, 175, 55, 0.4) !important;
-            border-color: #ffd700 !important;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-            transform: scale(1.05);
-            z-index: 30;
-        }
-
-        /* Final Decorations */
-        .golden-drop {
-            position: fixed;
-            width: 2px;
-            height: 20px;
-            background: linear-gradient(to bottom, #ffd700, transparent);
-            pointer-events: none;
-            z-index: 9997;
-            border-radius: 2px;
-        }
-
-        /* Адаптация админки для мобильных устройств */
-        @media (max-width: 768px) {
-            .admin-layout { flex-direction: column; }
-            .admin-sidebar { 
-                width: 100%; 
-                height: auto; 
-                border-right: none; 
-                border-bottom: 1px solid rgba(255,255,255,0.1); 
-            }
-            .admin-sidebar nav { display: flex; overflow-x: auto; }
-            .admin-tab-btn { border-left: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
-            .admin-tab-btn.active { border-bottom-color: #d4af37; }
         }
         
         .modal-content.open {
@@ -1737,8 +1642,8 @@
     
     <!-- Maintenance Overlay -->
     <div id="maintenanceOverlay" class="fixed inset-0 z-[9000] bg-cup-dark flex flex-col items-center justify-center hidden transition-opacity duration-500">
-        <div class="text-gold text-8xl mb-12 rolling-ball">⚽</div>
-        <h2 class="text-4xl md:text-6xl font-black text-gold mb-6 tracking-widest text-center px-4 uppercase select-none" onclick="handleSecretTap()">Ведутся технические работы</h2>
+        <div class="text-gold text-6xl mb-8 animate-pulse">⚠️</div>
+        <h2 class="text-4xl md:text-6xl font-black text-gold mb-6 tracking-widest text-center px-4">ТЕХНИЧЕСКИЕ РАБОТЫ</h2>
         <p class="text-white/60 text-xl text-center px-4">Мы готовим обновление. Скоро вернемся.</p>
     </div>
     
@@ -1755,7 +1660,7 @@
         <!-- Background Video -->
         <div class="absolute inset-0 z-0">
             <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-30">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-football-player-performing-tricks-with-the-ball-4657-large.mp4" type="video/mp4">
+                <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27cf341d76764a86423d5462ae517c0a3883693&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
             </video>
             <div class="absolute inset-0 bg-gradient-to-b from-cup-dark/50 via-cup-dark/70 to-cup-dark"></div>
         </div>
@@ -1850,43 +1755,6 @@
             
             <!-- Groups Results (Hidden by default) -->
             <div id="groupsResults" class="hidden mt-16 max-w-7xl mx-auto reveal transition-all duration-500">
-                <!-- Match of the Round -->
-                <div id="matchOfTheRound" class="mb-16 reveal">
-                    <h3 class="text-2xl font-bold text-gold mb-8 text-center uppercase tracking-widest">Матч тура</h3>
-                    <div class="glass p-8 rounded-3xl border border-gold/30 max-w-4xl mx-auto relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
-                        <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                            <!-- Team 1 -->
-                            <div class="flex flex-col items-center gap-4 flex-1">
-                                <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border border-white/10 relative group">
-                                    <img id="motrTeam1Logo" src="" class="w-16 h-16 object-contain" alt="">
-                                    <input type="file" id="motrTeam1LogoInput" class="hidden" onchange="handleMotrLogo(this, 'team1')">
-                                    <button class="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-gold font-bold motr-edit-btn hidden" onclick="document.getElementById('motrTeam1LogoInput').click()">СМЕНИТЬ</button>
-                                </div>
-                                <h4 id="motrTeam1Name" class="text-xl font-black text-white uppercase editable-content" data-id="motr-team1-name">TEAM 1</h4>
-                            </div>
-                            <!-- VS & Info -->
-                            <div class="text-center">
-                                <div class="text-4xl font-black text-gold mb-4 italic">VS</div>
-                                <div class="space-y-1">
-                                    <div class="text-sm text-gold font-bold uppercase tracking-tighter editable-content" data-id="motr-round">1 ТУР</div>
-                                    <div class="text-lg font-bold text-white editable-content" data-id="motr-time">18:00</div>
-                                    <div class="text-xs text-white/40 uppercase tracking-widest editable-content" data-id="motr-stadium">СТАДИОН САТУРН</div>
-                                </div>
-                            </div>
-                            <!-- Team 2 -->
-                            <div class="flex flex-col items-center gap-4 flex-1">
-                                <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border border-white/10 relative group">
-                                    <img id="motrTeam2Logo" src="" class="w-16 h-16 object-contain" alt="">
-                                    <input type="file" id="motrTeam2LogoInput" class="hidden" onchange="handleMotrLogo(this, 'team2')">
-                                    <button class="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-gold font-bold motr-edit-btn hidden" onclick="document.getElementById('motrTeam2LogoInput').click()">СМЕНИТЬ</button>
-                                </div>
-                                <h4 id="motrTeam2Name" class="text-xl font-black text-white uppercase editable-content" data-id="motr-team2-name">TEAM 2</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="flex justify-center mb-8">
                     <button onclick="downloadResults()" class="magnetic bg-gold text-cup-dark px-6 py-3 rounded-full font-bold hover:bg-gold-light transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -1898,22 +1766,22 @@
                     <h3 class="text-3xl md:text-5xl font-black text-center mb-12 text-gold">ИТОГИ ЖЕРЕБЬЕВКИ</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Group A -->
-                    <div id="group-a-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА A</h4>
                         <div id="group-a-list" class="space-y-3"></div>
                     </div>
                     <!-- Group B -->
-                    <div id="group-b-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА B</h4>
                         <div id="group-b-list" class="space-y-3"></div>
                     </div>
                     <!-- Group C -->
-                    <div id="group-c-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА C</h4>
                         <div id="group-c-list" class="space-y-3"></div>
                     </div>
                     <!-- Group D -->
-                    <div id="group-d-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
+                    <div class="glass rounded-3xl p-6 border border-gold/30">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА D</h4>
                         <div id="group-d-list" class="space-y-3"></div>
                     </div>
@@ -1928,7 +1796,6 @@
                 <div id="groupScheduleContainer" class="mt-12 glass rounded-3xl p-8 border border-white/10">
                     <h3 class="text-2xl font-bold text-gold mb-6 text-center uppercase tracking-widest">Календарь группового этапа</h3>
                     <div class="flex justify-center gap-3 mb-8" id="groupScheduleTabs"></div>
-                    <div class="flex justify-center flex-wrap gap-2 mb-8" id="groupFilterTabs"></div>
                     <div id="groupMatchList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
@@ -1952,79 +1819,115 @@
         </div>
     </section>
     
-    <!-- Final Section -->
-    <section id="finalSection" class="hidden py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal">ФИНАЛ</h2>
+    <!-- Road of Glory Timeline Section -->
+    <section id="road" class="py-20 px-4 bg-gradient-to-b from-cup-blue/20 to-cup-dark">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-black text-center mb-4 gradient-text reveal editable-content" data-id="road-title">ДОРОГА СЛАВЫ</h2>
+            <p class="text-center text-white/60 mb-16 reveal editable-content" data-id="road-desc">История турнира от первого матча до сегодняшнего дня</p>
             
-            <!-- Huge Logos and Lightning -->
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-20 mb-12">
-                <div class="relative group">
-                    <div class="absolute inset-0 bg-gold/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <img id="finalTeam1Logo" src="" class="w-48 h-48 md:w-80 md:h-64 object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]" alt="">
+            <div class="road-timeline">
+                <!-- Timeline Node 1 -->
+                <div class="timeline-node mb-12 md:mb-20">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2 md:text-right">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2019</div>
+                                <h3 class="text-xl font-bold mb-2">Основание турнира</h3>
+                                <p class="text-white/70 text-sm">Первый Раменский Кубок собрал 8 команд и стал началом большой футбольной истории.</p>
+                            </div>
+                        </div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2"></div>
+                    </div>
                 </div>
                 
-                <!-- Lightning Bolt -->
-                <div class="relative h-32 w-12 md:h-64 md:w-24 flex items-center justify-center">
-                    <svg viewBox="0 0 100 200" class="h-full w-full text-gold drop-shadow-[0_0_25px_rgba(212,175,55,0.9)] animate-pulse">
-                        <path d="M60 0 L10 110 L50 110 L30 200 L90 80 L50 80 L70 0 Z" fill="currentColor" />
-                    </svg>
-                </div>
-
-                <div class="relative group">
-                    <div class="absolute inset-0 bg-gold/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <img id="finalTeam2Logo" src="" class="w-48 h-48 md:w-80 md:h-64 object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]" alt="">
-                </div>
-            </div>
-
-            <!-- Team Names -->
-            <div class="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto mb-16 px-4 gap-4">
-                <h3 id="finalTeam1Name" class="text-4xl md:text-6xl font-black text-white text-center md:text-left flex-1 uppercase tracking-tighter">TEAM A</h3>
-                <div class="hidden md:block w-32"></div> <!-- Spacer for lightning -->
-                <h3 id="finalTeam2Name" class="text-4xl md:text-6xl font-black text-white text-center md:text-right flex-1 uppercase tracking-tighter">TEAM B</h3>
-            </div>
-
-            <!-- Lineups Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-                <!-- Team 1 -->
-                <div class="glass p-8 rounded-3xl border border-gold/30">
-                    <div class="space-y-6">
-                        <div>
-                            <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4">Стартовый состав (8)</h4>
-                            <div id="finalTeam1Starters" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-                        </div>
-                        <div>
-                            <h4 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-4">Запасные</h4>
-                            <div id="finalTeam1Subs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                <!-- Timeline Node 2 -->
+                <div class="timeline-node mb-12 md:mb-20">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2"></div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2 md:text-left">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2021</div>
+                                <h3 class="text-xl font-bold mb-2">Расширение формата</h3>
+                                <p class="text-white/70 text-sm">Рост до 16 команд и введение плей-офф стадии с четвертьфиналами.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Team 2 -->
-                <div class="glass p-8 rounded-3xl border border-gold/30">
-                    <div class="space-y-6">
-                        <div>
-                            <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4 md:text-right">Стартовый состав (8)</h4>
-                            <div id="finalTeam2Starters" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                <!-- Timeline Node 3 -->
+                <div class="timeline-node mb-12 md:mb-20">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2 md:text-right">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2023</div>
+                                <h3 class="text-xl font-bold mb-2">Новый стадион</h3>
+                                <p class="text-white/70 text-sm">Открытие стадиона Жуковский с современным покрытием и освещением.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-4 md:text-right">Запасные</h4>
-                            <div id="finalTeam2Subs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2"></div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Node 4 -->
+                <div class="timeline-node">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2"></div>
+                        <div class="w-4 h-4 rounded-full bg-gold relative z-10"></div>
+                        <div class="w-full md:w-1/2 md:text-left">
+                            <div class="glass rounded-2xl p-6 inline-block">
+                                <div class="text-gold text-sm font-bold mb-2">2026</div>
+                                <h3 class="text-xl font-bold mb-2">Рекордный призовой фонд</h3>
+                                <p class="text-white/70 text-sm">1 000 000₽ — самый большой призовой фонд в истории любительского футбола региона.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Time and Place -->
-            <div class="text-center">
-                <div class="final-info inline-block">
-                    <div class="flex flex-col items-center">
-                        <div class="flex gap-4 mb-2 text-gold font-mono text-3xl" id="finalCountdown"></div>
-                        <span class="text-xl opacity-90">
-                            <span id="finalDate" class="editable-content" data-id="final-date">23 ИЮНЯ</span> • 
-                            <span id="finalTime" class="editable-content" data-id="final-time">18:00</span> • 
-                            <span id="finalStadium" class="editable-content" data-id="final-stadium">СТАДИОН САТУРН</span>
-                        </span>
+            
+            <!-- Final Match Section -->
+            <div id="finalSection" class="hidden mt-16 max-w-5xl mx-auto reveal">
+                <div class="final-banner text-center">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+                    <div class="text-gold text-sm tracking-[0.5em] uppercase mb-8">Match of the Year</div>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+                        <div class="text-center">
+                            <div class="w-32 h-32 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto relative group">
+                                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <img id="finalTeam1Logo" src="" class="final-team-logo" alt="Team 1">
+                            </div>
+                            <h3 id="finalTeam1Name" class="text-2xl font-black text-white">TEAM A</h3>
+                        </div>
+                        
+                        <div class="final-vs">VS</div>
+                        
+                        <div class="text-center">
+                            <div class="w-32 h-32 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-4 mx-auto relative group">
+                                <div class="absolute inset-0 bg-gold/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <img id="finalTeam2Logo" src="" class="final-team-logo" alt="Team 2">
+                            </div>
+                            <h3 id="finalTeam2Name" class="text-2xl font-black text-white">TEAM B</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12">
+                        <div class="final-info">
+                            <div class="flex flex-col items-center">
+                                <div class="flex gap-4 mb-2 text-gold font-mono text-xl" id="finalCountdown">
+                                    <!-- Countdown timer -->
+                                </div>
+                                <span class="text-sm opacity-80"><span id="finalDate">23 ИЮНЯ</span> • <span id="finalTime">18:00</span> • <span id="finalStadium">СТАДИОН САТУРН</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <button class="bg-gold text-cup-dark px-8 py-3 rounded-full font-bold hover:bg-white transition-all shadow-[0_0_30px_rgba(212,175,55,0.4)] animate-pulse">
+                            КУПИТЬ БИЛЕТ
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2036,9 +1939,8 @@
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
                 <div class="text-center md:text-left">
-                    <h3 class="text-3xl font-black text-gold mb-3 select-none" onclick="handleSecretTap()">РАМЕНСКИЙ КУБОК</h3>
+                    <h3 class="text-3xl font-black text-gold mb-3">РАМЕНСКИЙ КУБОК</h3>
                     <p class="text-white/60 text-sm mb-4">Любительский футбольный турнир с 2019 года.</p>
-                    <a href="javascript:void(0)" onclick="openPrivacy()" class="text-gold/60 hover:text-gold text-xs underline transition-colors block mb-2">Политика конфиденциальности</a>
                     <p class="text-gold/60 text-xs">© 2026 Все права защищены</p>
                 </div>
                 <div class="text-center">
@@ -2046,6 +1948,7 @@
                     <div class="flex flex-col gap-2">
                         <a href="#hero" class="text-white/60 hover:text-gold text-sm">Начало</a>
                         <a href="#draw" class="text-white/60 hover:text-gold text-sm">Жеребьевка</a>
+                        <a href="#road" class="text-white/60 hover:text-gold text-sm">История</a>
                     </div>
                 </div>
                 <div class="text-center md:text-right">
@@ -2120,9 +2023,6 @@
                     <button onclick="switchAdminTab('teams')" class="admin-tab-btn w-full" id="tab-btn-teams">
                         <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Команды</span>
                     </button>
-                    <button onclick="switchAdminTab('playoffs')" class="admin-tab-btn w-full" id="tab-btn-playoffs">
-                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg> Плей-офф</span>
-                    </button>
                 </nav>
                 <div class="p-4 border-t border-white/10">
                     <button onclick="closeAdminModal()" class="w-full py-2 text-white/60 hover:text-white text-sm flex items-center gap-2 justify-center">
@@ -2161,23 +2061,6 @@
                         <button onclick="resetPlayoffs()" class="w-full bg-red-500/20 text-red-400 border border-red-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">
                             Сбросить сетку плей-офф
                         </button>
-                    </div>
-
-                    <!-- Final Decoration Settings -->
-                    <div id="finalDecorSettings" class="hidden glass p-6 rounded-xl border border-gold/50 bg-gold/5 mt-6">
-                        <h4 class="text-gold font-bold mb-4 uppercase text-sm flex items-center gap-2">
-                            <i data-lucide="sparkles" class="w-4 h-4"></i> Украшения Финала
-                        </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
-                                <span class="text-xs font-bold text-white/80">🎉 Фейерверки</span>
-                                <input type="checkbox" id="decorFireworks" onchange="toggleDecor('fireworks')" class="w-4 h-4 accent-gold">
-                            </label>
-                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
-                                <span class="text-xs font-bold text-white/80">✨ Золотой дождь</span>
-                                <input type="checkbox" id="decorRain" onchange="toggleDecor('rain')" class="w-4 h-4 accent-gold">
-                            </label>
-                        </div>
                     </div>
 
                     <!-- Registration Settings -->
@@ -2229,14 +2112,6 @@
                     <div id="teamInputs" class="space-y-6"></div>
                 </div>
                 
-                <!-- Tab: Playoffs -->
-                <div id="tab-playoffs" class="hidden space-y-6">
-                    <h2 class="text-2xl font-bold text-white mb-6">Редактор сетки</h2>
-                    <div id="bracketAdminView" class="bracket-container scale-90 origin-top-left">
-                        <!-- Сетка будет отрисована здесь -->
-                    </div>
-                </div>
-                
             </div>
         </div>
     </div>
@@ -2260,30 +2135,6 @@
                         <option value="15">15 игроков</option>
                     </select>
                 </div>
-
-                <div>
-                    <label class="text-xs text-white/40 uppercase mb-2 block">Логотип команды</label>
-                    <div class="flex items-center gap-4">
-                        <label class="flex-grow cursor-pointer bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white/60 flex items-center gap-3 hover:border-gold transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                            <span id="regLogoName">Выбрать файл...</span>
-                            <input type="file" id="regLogo" accept="image/*" class="hidden" onchange="handleRegLogo(this)">
-                        </label>
-                        <div id="regLogoPreview" class="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden hidden">
-                            <img src="" class="w-full h-full object-contain">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Consent Checkbox -->
-                <div class="space-y-2">
-                    <label class="flex items-start gap-3 cursor-pointer group">
-                        <input type="checkbox" id="regConsent" class="mt-1 w-4 h-4 rounded border-white/10 bg-white/5 text-gold focus:ring-gold">
-                        <span class="text-xs text-white/60 group-hover:text-white/80 transition-colors">Нажимая кнопку, я даю согласие на обработку моих персональных данных в соответствии с <a href="javascript:void(0)" onclick="openPrivacy()" class="text-gold underline">Политикой конфиденциальности</a></span>
-                    </label>
-                    <p id="regError" class="hidden text-red-500 text-[10px] font-bold uppercase tracking-wider">Пожалуйста, подтвердите согласие</p>
-                </div>
-
                 <button onclick="nextRegStep(2)" class="w-full bg-gold text-cup-dark font-bold py-4 rounded-xl hover:bg-gold-light transition-all">Далее</button>
             </div>
         </div>
@@ -2325,104 +2176,6 @@
             <p class="text-xl text-white/80">Удачи в турнире!</p>
             <button onclick="closeRegistration()" class="mt-8 text-white/40 hover:text-white transition-colors">Закрыть</button>
         </div>
-    </div>
-
-    <!-- Privacy Policy Modal -->
-    <div class="modal-backdrop" id="privacyBackdrop" onclick="closePrivacy()"></div>
-    <div class="modal-content glass-strong p-10 rounded-3xl border border-white/10 max-w-4xl" id="privacyModal">
-        <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-black text-gold uppercase tracking-tighter">Политика конфиденциальности</h2>
-            <button onclick="closePrivacy()" class="text-white/40 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-        <div class="space-y-8 text-white/70 text-sm leading-relaxed overflow-y-auto max-h-[60vh] pr-4 custom-scrollbar">
-            <section>
-                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">1. Общие положения</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Сбор и обработка персональных данных осуществляется в соответствии с действующим законодательством. Настоящая политика определяет порядок обработки персональных данных участников турнира "Раменский Кубок".</p>
-            </section>
-            <section>
-                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">2. Какие данные собираем</h3>
-                <p>Мы собираем следующие данные: название команды, ФИО капитана, контактная информация (номер телефона, логин в мессенджерах), количество игроков в заявке. Эти данные необходимы для организации игрового процесса и связи с представителями команд.</p>
-            </section>
-            <section>
-                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">3. Цели обработки</h3>
-                <p>Персональные данные обрабатываются исключительно в целях: регистрации команд на турнир, формирования турнирной сетки и расписания, информирования участников об изменениях в регламенте и результатах матчей.</p>
-            </section>
-            <section>
-                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">4. Защита данных</h3>
-                <p>Мы принимаем необходимые организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, уничтожения, изменения, блокирования, копирования, распространения, а также от иных неправомерных действий третьих лиц.</p>
-            </section>
-            <section>
-                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">5. Срок хранения</h3>
-                <p>Данные хранятся в течение периода проведения турнира и 12 месяцев после его завершения для возможности формирования архива результатов и приглашения команд на следующие сезоны.</p>
-            </section>
-        </div>
-        <div class="mt-10 text-center">
-            <button onclick="closePrivacy()" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-xl font-bold transition-all">Понятно</button>
-        </div>
-    </div>
-
-    <!-- Team Stats Modal -->
-    <div class="modal-backdrop" id="teamStatsBackdrop" onclick="closeTeamStats()"></div>
-    <div class="modal-content glass-strong p-0 rounded-3xl border border-gold overflow-hidden max-w-2xl" id="teamStatsModal">
-        <div class="flex flex-col md:flex-row">
-            <!-- Left: Logo Section -->
-            <div class="w-full md:w-2/5 bg-gradient-to-br from-cup-blue to-cup-dark p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10">
-                <div class="w-40 h-40 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center p-4 mb-6 shadow-2xl">
-                    <img id="statsTeamLogo" src="" class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" alt="">
-                </div>
-                <h3 id="statsTeamName" class="text-3xl font-black text-white text-center uppercase tracking-tighter leading-none"></h3>
-                <div id="statsTeamGroupBadge" class="mt-4 px-4 py-1 rounded-full bg-gold/20 border border-gold/30 text-gold text-[10px] font-bold tracking-widest uppercase"></div>
-            </div>
-            
-            <!-- Right: Content Section -->
-            <div class="flex-1 p-8 bg-cup-dark/40">
-                <div class="mb-8">
-                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-3">Информация</h4>
-                    <div id="statsTeamDesc" class="text-sm text-white/60 leading-relaxed italic"></div>
-                </div>
-                
-                <div>
-                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-4">Турнирные показатели</h4>
-                    <div class="grid grid-cols-3 gap-3 mb-3">
-                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
-                            <div class="text-xl font-black text-green-500" id="statsWins">0</div>
-                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Победы</div>
-                        </div>
-                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
-                            <div class="text-xl font-black text-red-500" id="statsLosses">0</div>
-                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Поражения</div>
-                        </div>
-                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
-                            <div class="text-xl font-black text-gold" id="statsPts">0</div>
-                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Очки</div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
-                            <div class="text-xl font-black text-white" id="statsGS">0</div>
-                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Забито</div>
-                        </div>
-                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
-                            <div class="text-xl font-black text-white" id="statsGC">0</div>
-                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Пропущено</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 pt-6 border-t border-white/5">
-                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-2">Капитан команды</h4>
-                    <div id="statsCaptain" class="text-white font-semibold">---</div>
-                </div>
-                
-                <button onclick="closeTeamStats()" class="mt-8 w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest transition-all">
-                    Закрыть окно
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- JavaScript -->
     <script>
         // Initialize Lucide Icons
@@ -2483,28 +2236,10 @@
         // Countdown Timer
         let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
         let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
-
-        // ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Для всех пользователей)
-        // Установите true, чтобы включить тех. работы для ВСЕХ, кто зайдет на сайт
-        const GLOBAL_MAINTENANCE = false; 
-        
-        // ГЛОБАЛЬНЫЙ СТАТУС ТУРНИРА
-        // Если не null, этот статус будет у всех пользователей (registration, draw, groups, playoffs, final)
-        // Например: const GLOBAL_STATUS = 'groups';
-        const GLOBAL_STATUS = null; 
-
-        let fireworksInterval = null;
-        let rainInterval = null;
-
-        let motrData = JSON.parse(localStorage.getItem('motrData')) || {
-            team1Logo: '',
-            team2Logo: ''
-        };
-
         let bowlEl;
 
         // Tournament Status Logic
-        let tournamentStatus = GLOBAL_STATUS || localStorage.getItem('tournamentStatus') || 'draw';
+        let tournamentStatus = localStorage.getItem('tournamentStatus') || 'draw';
         
         // Initialize button state based on storage
         window.addEventListener('load', () => {
@@ -2515,27 +2250,13 @@
             loadSiteContent(); // Load edited content
             initAnnouncement(); // Check announcement
             initTournamentStatus(); // Check status
-            renderBracket('bracketView'); // Render bracket if data exists
-            renderBracket('bracketAdminView');
+            renderBracket(); // Render bracket if data exists
             renderFinal(); // Render final if data exists
             renderGroupSchedule(); // Render group schedule
             renderPlayoffSchedule(); // Render playoff schedule
             // bowlEl = document.getElementById('quantumCore'); // Removed as quantumCore is no longer in the visible admin tabs
-
-            initDecorations();
-            // Загружаем настройки регистрации в поля админки
-            const regCardInput = document.getElementById('regCardInput');
-            const regContactInput = document.getElementById('regContactInput');
-            if(regCardInput) regCardInput.value = localStorage.getItem('regCard') || '';
-            if(regContactInput) regContactInput.value = localStorage.getItem('regContact') || '';
         });
         
-        // Lineups data
-        let finalLineups = JSON.parse(localStorage.getItem('finalLineups')) || {
-            team1: { starters: Array(8).fill(''), subs: Array(4).fill('') },
-            team2: { starters: Array(8).fill(''), subs: Array(4).fill('') }
-        };
-
         // Revealed Card Overlay (Moved to body for fixed positioning)
         const revealedCardHTML = `
             <div id="revealedTeamCard" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[280px] glass-strong border-2 border-gold rounded-3xl flex flex-col items-center justify-center z-[9999] hidden shadow-[0_0_100px_rgba(212,175,55,0.5)]">
@@ -2639,23 +2360,6 @@
             }
         });
 
-        // Секретный вход для мобильных устройств (5 быстрых тапов по заголовку в футере)
-        let tapCount = 0;
-        let lastTap = 0;
-        function handleSecretTap() {
-            const now = Date.now();
-            if (now - lastTap < 500) {
-                tapCount++;
-            } else {
-                tapCount = 1;
-            }
-            lastTap = now;
-            if (tapCount === 5) {
-                tapCount = 0;
-                openAdminModal();
-            }
-        }
-
         function openAdminModal() {
             document.getElementById('adminBackdrop').classList.add('open');
             document.getElementById('adminModal').classList.add('open');
@@ -2705,13 +2409,11 @@
                 
                 // Show all tabs
                 teamsTab.style.display = 'block';
-                playoffsTab.style.display = 'block';
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
                 checkDrawResults();
-                renderBracket('bracketView');
-                renderBracket('bracketAdminView');
+                renderBracket();
                 renderFinal();
                 switchAdminTab('dashboard');
             } else {
@@ -2756,14 +2458,11 @@
         }
         
         // Maintenance Mode
-        let isMaintenance = GLOBAL_MAINTENANCE || localStorage.getItem('maintenanceMode') === 'true';
+        let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
 
         function checkMaintenance() {
-            const overlay = document.getElementById('maintenanceOverlay');
             const btn = document.getElementById('maintBtn');
             
-            if (!overlay) return;
-
             if (isMaintenance) {
                 overlay.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -2789,9 +2488,6 @@
 
         function initTournamentStatus() {
             applyTournamentStatus(tournamentStatus);
-            // Show decor panel if status is final
-            const decorPanel = document.getElementById('finalDecorSettings');
-            if (decorPanel && tournamentStatus === 'final') decorPanel.classList.remove('hidden');
         }
 
         function setTournamentStatus(status) {
@@ -2809,13 +2505,6 @@
                 activeBtn.classList.remove('bg-white/10', 'text-white');
                 activeBtn.classList.add('bg-gold', 'text-cup-dark');
             }
-
-            // Toggle decoration settings visibility
-            const decorPanel = document.getElementById('finalDecorSettings');
-            if (decorPanel) {
-                if (status === 'final') decorPanel.classList.remove('hidden');
-                else decorPanel.classList.add('hidden');
-            }
         }
 
         function applyTournamentStatus(status, silent = false) {
@@ -2832,13 +2521,6 @@
 
             if(sections[status]) sections[status].classList.remove('hidden');
             
-            // Управление видимостью кнопки регистрации в Hero-секции
-            const regBtn = document.getElementById('regBtnContainer');
-            if (regBtn) {
-                if (status === 'registration') regBtn.classList.remove('hidden');
-                else regBtn.classList.add('hidden');
-            }
-
             // Скрываем секцию жеребьевки целиком, если мы в плей-офф или финале
             const drawSection = document.getElementById('draw');
             if (drawSection) {
@@ -2857,8 +2539,6 @@
                 const titleEl = document.getElementById('sectionTitle');
                 if(titleEl && title[status]) titleEl.textContent = title[status];
             }
-
-            refreshDecorations();
         }
 
         // Placeholder for bracket data
@@ -2870,7 +2550,6 @@
 
         // --- SCHEDULE LOGIC ---
         let currentGroupRound = 1;
-        let currentGroupFilter = 'ALL';
         let currentPlayoffStage = 'QF';
 
         function generateGroupSchedule() {
@@ -2893,13 +2572,11 @@
             localStorage.setItem('groupSchedule', JSON.stringify(schedule));
         }
 
-        function renderGroupSchedule(round = currentGroupRound, groupFilter = currentGroupFilter) {
+        function renderGroupSchedule(round = currentGroupRound) {
             currentGroupRound = round;
-            currentGroupFilter = groupFilter;
             const schedule = JSON.parse(localStorage.getItem('groupSchedule'));
             const container = document.getElementById('groupMatchList');
             const tabs = document.getElementById('groupScheduleTabs');
-            const filterTabs = document.getElementById('groupFilterTabs');
             if (!container || !schedule) return;
 
             // Render Tabs
@@ -2912,41 +2589,9 @@
                 tabs.appendChild(btn);
             });
 
-            // Render Group Filters
-            filterTabs.innerHTML = '';
-            ['ALL', 'A', 'B', 'C', 'D'].forEach(g => {
-                const btn = document.createElement('button');
-                btn.className = `schedule-tab filter-tab ${g === groupFilter ? 'active' : ''}`;
-                btn.textContent = g === 'ALL' ? 'ВСЕ ГРУППЫ' : `ГРУППА ${g}`;
-                btn.onclick = () => renderGroupSchedule(round, g);
-                filterTabs.appendChild(btn);
-            });
-
-            // Подсветка соответствующей таблицы группы
-            ['A', 'B', 'C', 'D'].forEach(g => {
-                const groupCont = document.getElementById(`group-${g.toLowerCase()}-container`);
-                if (groupCont) {
-                    if (g === groupFilter) {
-                        groupCont.classList.add('group-highlight');
-                    } else {
-                        groupCont.classList.remove('group-highlight');
-                    }
-                }
-            });
-
             // Render Matches
             container.innerHTML = '';
-            
-            const filteredMatches = schedule[round].filter(m => 
-                groupFilter === 'ALL' || m.group === groupFilter
-            );
-
-            if (filteredMatches.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center text-white/20 py-10">Матчей не найдено</div>';
-                return;
-            }
-
-            filteredMatches.forEach((m, idx) => {
+            schedule[round].forEach((m, idx) => {
                 const card = document.createElement('div');
                 card.className = 'glass p-4 rounded-2xl flex items-center justify-between border border-white/5';
                 
@@ -3059,125 +2704,78 @@
             renderPlayoffSchedule();
         }
 
-        function renderBracket(containerId = 'bracketView') {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = ''; // Clear previous bracket
+        function renderBracket() {
+            const bracketView = document.getElementById('bracketView');
+            if (!bracketView) return;
+            bracketView.innerHTML = ''; // Clear previous bracket
 
             if (bracketData.quarterFinals.length === 0) {
-                container.innerHTML = '<p class="text-center text-white/60 text-lg">Сетка плей-офф еще не сгенерирована.</p>';
+                bracketView.innerHTML = '<p class="text-center text-white/60 text-lg">Сетка плей-офф еще не сгенерирована.</p>';
                 return;
             }
 
-            const createMatchEl = (match, isFinal = false) => {
-                const matchDiv = document.createElement('div');
-                matchDiv.className = 'bracket-match' + (isFinal ? ' final-match-highlight' : '');
-                const renderTeam = (team, teamKey) => {
-                    const teamDiv = document.createElement('div');
-                    teamDiv.className = 'bracket-team';
-                    teamDiv.dataset.teamName = team.name;
-                    
-                    if (match.winner) {
-                        if (match.winner === teamKey) {
-                            teamDiv.classList.add('winner-highlight');
-                        } else {
-                            teamDiv.classList.add('loser-highlight');
-                        }
-                    }
-
-                    teamDiv.onmouseenter = () => highlightTeamPath(team.name, true);
-                    teamDiv.onmouseleave = () => highlightTeamPath(team.name, false);
-
-                    // Перетаскивание команд в сетке (только для админов в режиме редактирования)
-                    if (isAdmin && isEditMode) {
-                        teamDiv.draggable = true;
-                        teamDiv.classList.add('cursor-move');
-                        teamDiv.ondragstart = (e) => {
-                            e.dataTransfer.setData('text/plain', JSON.stringify({ matchId: match.id, teamKey: teamKey }));
-                        };
-                        teamDiv.ondragover = (e) => e.preventDefault();
-                        teamDiv.ondrop = (e) => {
-                            e.preventDefault();
-                            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-                            const sourceMatch = findMatchById(data.matchId);
-                            if (sourceMatch) {
-                                const temp = { ...sourceMatch[data.teamKey] };
-                                sourceMatch[data.teamKey] = { ...team };
-                                team.name = temp.name;
-                                team.logo = temp.logo;
-                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                                renderBracket('bracketView');
-                                renderBracket('bracketAdminView');
-                            }
-                        };
-                    }
-
-                    const nameSpan = document.createElement('span');
-                    nameSpan.textContent = team.name;
-                    nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
-                    nameSpan.onclick = () => openTeamStats(team.name);
-                    teamDiv.appendChild(nameSpan);
-
-                    if (isAdmin && isEditMode) {
-                        const winBtn = document.createElement('button');
-                        winBtn.innerHTML = '✓';
-                        winBtn.className = `ml-2 text-[10px] px-1 rounded ${match.winner === teamKey ? 'bg-gold text-cup-dark' : 'bg-white/10 text-white/40'}`;
-                        winBtn.onclick = (e) => {
-                            e.stopPropagation();
-                            match.winner = teamKey;
-                            updateNextRound(match.id, team);
-                            localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                            renderBracket('bracketView');
-                            renderBracket('bracketAdminView');
-                        };
-                        teamDiv.appendChild(winBtn);
-                    }
-                    const scoreSpan = document.createElement('span');
-                    scoreSpan.className = 'bracket-score';
-                    if (isAdmin && isEditMode) {
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.value = team.score || 0;
-                        input.className = 'w-8 bg-white/10 border border-white/20 rounded text-center text-xs outline-none focus:border-gold';
-                        input.onchange = (e) => {
-                            team.score = parseInt(e.target.value) || 0;
-                            localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                        };
-                        scoreSpan.appendChild(input);
-                    } else {
-                        scoreSpan.textContent = team.score !== undefined ? team.score : '';
-                    }
-                    teamDiv.appendChild(scoreSpan);
-                    return teamDiv;
-                };
-                matchDiv.appendChild(renderTeam(match.team1, 'team1'));
-                matchDiv.appendChild(renderTeam(match.team2, 'team2'));
-                return matchDiv;
-            };
-
-            const addCol = (title, matches, sideClass = '', isFinalCol = false) => {
-                const col = document.createElement('div');
-                col.className = `bracket-round ${sideClass}`;
-                col.innerHTML = `<h3 class="round-title">${title}</h3>`;
-                matches.forEach(m => col.appendChild(createMatchEl(m, isFinalCol)));
-                container.appendChild(col);
-            };
-
-            // Two-sided layout: [QF1,2] [SF1] [Final] [SF2] [QF3,4]
-            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[0], bracketData.quarterFinals[1]], 'left-side');
-            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[0]], 'left-side');
-            addCol('ФИНАЛ', [bracketData.final[0]], 'center-side', true);
-            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[1]], 'right-side');
-            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[2], bracketData.quarterFinals[3]], 'right-side');
-        }
-
-        function findMatchById(id) {
-            const allMatches = [
-                ...bracketData.quarterFinals,
-                ...bracketData.semiFinals,
-                ...bracketData.final
+            const rounds = [
+                { title: 'ЧЕТВЕРТЬФИНАЛЫ', matches: bracketData.quarterFinals },
+                { title: 'ПОЛУФИНАЛЫ', matches: bracketData.semiFinals },
+                { title: 'ФИНАЛ', matches: bracketData.final }
             ];
-            return allMatches.find(m => m.id === id);
+
+            rounds.forEach(round => {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'bracket-round';
+                roundDiv.innerHTML = `<h3 class="round-title">${round.title}</h3>`;
+
+                round.matches.forEach(match => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'bracket-match';
+                    
+                    const renderTeam = (team, teamKey) => {
+                        const teamDiv = document.createElement('div');
+                        teamDiv.className = 'bracket-team';
+                        if (match.winner === teamKey) teamDiv.classList.add('winner');
+
+                        const nameSpan = document.createElement('span');
+                        nameSpan.textContent = team.name;
+                        
+                        if (isAdmin && isEditMode) {
+                            nameSpan.classList.add('cursor-pointer', 'hover:text-gold');
+                            nameSpan.title = "Нажмите, чтобы выбрать победителя";
+                            nameSpan.onclick = () => {
+                                match.winner = teamKey;
+                                updateNextRound(match.id, team);
+                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                                renderBracket();
+                            };
+                        }
+                        teamDiv.appendChild(nameSpan);
+
+                        const scoreSpan = document.createElement('span');
+                        scoreSpan.className = 'bracket-score';
+                        
+                        if (isAdmin && isEditMode) {
+                            const input = document.createElement('input');
+                            input.type = 'number';
+                            input.value = team.score !== undefined ? team.score : 0;
+                            input.className = 'w-8 bg-white/10 border border-white/20 rounded text-center text-xs outline-none focus:border-gold';
+                            input.onchange = (e) => {
+                                team.score = parseInt(e.target.value) || 0;
+                                localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                            };
+                            scoreSpan.appendChild(input);
+                        } else {
+                            scoreSpan.textContent = team.score !== undefined ? team.score : '';
+                        }
+                        teamDiv.appendChild(scoreSpan);
+                        
+                        return teamDiv;
+                    };
+
+                    matchDiv.appendChild(renderTeam(match.team1, 'team1'));
+                    matchDiv.appendChild(renderTeam(match.team2, 'team2'));
+                    roundDiv.appendChild(matchDiv);
+                });
+                bracketView.appendChild(roundDiv);
+            });
         }
 
         function generatePlayoffs() {
@@ -3212,8 +2810,7 @@
 
             localStorage.setItem('bracketData', JSON.stringify(bracketData));
             setTournamentStatus('playoffs');
-            renderBracket('bracketView');
-            renderBracket('bracketAdminView');
+            renderBracket();
             renderFinal();
             renderPlayoffSchedule();
             celebrate();
@@ -3228,8 +2825,7 @@
                     final: []
                 };
                 localStorage.setItem('bracketData', JSON.stringify(bracketData));
-                renderBracket('bracketView');
-                renderBracket('bracketAdminView');
+                renderBracket();
                 renderFinal();
                 renderPlayoffSchedule();
                 alert('Сетка плей-офф сброшена.');
@@ -3247,38 +2843,6 @@
             if (team1Logo) team1Logo.src = (finalMatch && finalMatch.team1.logo) ? finalMatch.team1.logo : '';
             if (team2Name) team2Name.textContent = (finalMatch && finalMatch.team2.name) ? finalMatch.team2.name : 'TEAM B';
             if (team2Logo) team2Logo.src = (finalMatch && finalMatch.team2.logo) ? finalMatch.team2.logo : '';
-
-            // Render Lineups
-            renderLineupList('finalTeam1Starters', finalLineups.team1.starters, 'team1', 'starters');
-            renderLineupList('finalTeam1Subs', finalLineups.team1.subs, 'team1', 'subs');
-            renderLineupList('finalTeam2Starters', finalLineups.team2.starters, 'team2', 'starters');
-            renderLineupList('finalTeam2Subs', finalLineups.team2.subs, 'team2', 'subs');
-        }
-
-        function renderLineupList(containerId, list, teamKey, type) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = '';
-            list.forEach((player, idx) => {
-                const div = document.createElement('div');
-                div.className = 'bg-white/5 border border-white/10 rounded-xl px-4 py-2 flex items-center gap-3';
-                
-                if (isAdmin && isEditMode) {
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.value = player;
-                    input.placeholder = 'Игрок...';
-                    input.className = 'bg-transparent w-full outline-none text-sm text-white focus:text-gold transition-colors';
-                    input.onchange = (e) => {
-                        finalLineups[teamKey][type][idx] = e.target.value;
-                        localStorage.setItem('finalLineups', JSON.stringify(finalLineups));
-                    };
-                    div.appendChild(input);
-                } else {
-                    div.innerHTML = `<span class="text-white/20 text-[10px] font-bold">${idx + 1}</span> <span class="text-sm font-medium">${player || '---'}</span>`;
-                }
-                container.appendChild(div);
-            });
         }
 
         function resetAllCards() {
@@ -3438,11 +3002,7 @@
                         logo: team.logo,
                         pts: 0,
                         gs: 0,
-                        gc: 0,
-                        wins: 0,
-                        losses: 0,
-                        captain: '',
-                        desc: ''
+                        gc: 0
                     });
                 });
             }
@@ -3544,9 +3104,8 @@
                         teamInfo.appendChild(img);
                     }
                     const span = document.createElement('span');
-                    span.className = 'truncate cursor-pointer hover:text-gold transition-colors';
+                    span.className = 'truncate';
                     span.textContent = teamName;
-                    span.onclick = () => openTeamStats(teamName);
                     teamInfo.appendChild(span);
                     div.appendChild(teamInfo);
 
@@ -3739,12 +3298,10 @@
             }
             if (e.key === 'bracketData') {
                 bracketData = JSON.parse(e.newValue);
-                renderBracket('bracketView');
-                renderBracket('bracketAdminView');
+                renderBracket();
             }
             if (e.key === 'bracketData' || e.key === 'finalData') {
-                renderBracket('bracketView');
-                renderBracket('bracketAdminView');
+                renderBracket();
                 renderFinal();
             }
         });
@@ -3790,9 +3347,6 @@
             if (isEditMode) {
                 btn.textContent = "Выключить режим редактирования";
                 btn.classList.add('bg-green-500/20', 'text-green-400', 'border-green-500/30');
-
-                // Show MOTR edit buttons
-                document.querySelectorAll('.motr-edit-btn').forEach(b => b.classList.remove('hidden'));
                 
                 elements.forEach(el => {
                     el.contentEditable = "true";
@@ -3802,9 +3356,6 @@
             } else {
                 btn.textContent = "Включить режим редактирования";
                 btn.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30');
-
-                // Hide MOTR edit buttons
-                document.querySelectorAll('.motr-edit-btn').forEach(b => b.classList.add('hidden'));
                 
                 elements.forEach(el => {
                     el.contentEditable = "false";
@@ -3821,174 +3372,8 @@
             renderPlayoffSchedule();
             
             // Перерисовываем сетку плей-офф
-            renderBracket();
-        }
-
-        function highlightTeamPath(teamName, active) {
-            if (!teamName || teamName.startsWith('Победитель')) return;
-            const allTeamDivs = document.querySelectorAll(`.bracket-team[data-team-name="${teamName}"]`);
-            allTeamDivs.forEach(div => {
-                if (active) {
-                    div.classList.add('team-path-highlight');
-                } else {
-                    div.classList.remove('team-path-highlight');
-                }
-            });
-        }
-
-        function findTeamData(name) {
-            if (!name || name.startsWith('Победитель')) return null;
-            const groups = JSON.parse(localStorage.getItem('drawResults'));
-            if (!groups) return null;
-            for (let key in groups) {
-                const team = groups[key].find(t => t.name === name);
-                if (team) return { team, group: key };
-            }
-            return null;
-        }
-
-        function openTeamStats(teamName) {
-            const data = findTeamData(teamName);
-            if (!data) return;
-
-            const { team, group } = data;
-            document.getElementById('statsTeamLogo').src = team.logo || 'https://via.placeholder.com/100?text=LOGO';
-            document.getElementById('statsTeamName').textContent = team.name;
-            document.getElementById('statsTeamGroupBadge').textContent = `Группа ${group}`;
-            
-            const descEl = document.getElementById('statsTeamDesc');
-            const ptsEl = document.getElementById('statsPts');
-            const gsEl = document.getElementById('statsGS');
-            const gcEl = document.getElementById('statsGC');
-            const winsEl = document.getElementById('statsWins');
-            const lossesEl = document.getElementById('statsLosses');
-            const captainEl = document.getElementById('statsCaptain');
-
-            if (isAdmin && isEditMode) {
-                descEl.innerHTML = `<textarea id="editTeamDesc" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" rows="3" placeholder="Введите описание команды...">${team.desc || ''}</textarea>`;
-                ptsEl.innerHTML = `<input type="number" id="editTeamPts" value="${team.pts}" class="w-full bg-transparent text-center outline-none text-gold font-black">`;
-                gsEl.innerHTML = `<input type="number" id="editTeamGS" value="${team.gs}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
-                gcEl.innerHTML = `<input type="number" id="editTeamGC" value="${team.gc}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
-                winsEl.innerHTML = `<input type="number" id="editTeamWins" value="${team.wins || 0}" class="w-full bg-transparent text-center outline-none text-green-500 font-black">`;
-                lossesEl.innerHTML = `<input type="number" id="editTeamLosses" value="${team.losses || 0}" class="w-full bg-transparent text-center outline-none text-red-500 font-black">`;
-                captainEl.innerHTML = `<input type="text" id="editTeamCaptain" value="${team.captain || ''}" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" placeholder="ФИО Капитана...">`;
-                
-                const saveHandler = () => {
-                    team.desc = document.getElementById('editTeamDesc').value;
-                    team.pts = parseInt(document.getElementById('editTeamPts').value) || 0;
-                    team.gs = parseInt(document.getElementById('editTeamGS').value) || 0;
-                    team.gc = parseInt(document.getElementById('editTeamGC').value) || 0;
-                    team.wins = parseInt(document.getElementById('editTeamWins').value) || 0;
-                    team.losses = parseInt(document.getElementById('editTeamLosses').value) || 0;
-                    team.captain = document.getElementById('editTeamCaptain').value;
-                    
-                    const groups = JSON.parse(localStorage.getItem('drawResults'));
-                    groups[group] = groups[group].map(t => t.name === team.name ? team : t);
-                    localStorage.setItem('drawResults', JSON.stringify(groups));
-                    renderDrawResults(groups);
-                };
-                
-                document.getElementById('editTeamDesc').onblur = saveHandler;
-                document.getElementById('editTeamPts').onchange = saveHandler;
-                document.getElementById('editTeamGS').onchange = saveHandler;
-                document.getElementById('editTeamGC').onchange = saveHandler;
-                document.getElementById('editTeamWins').onchange = saveHandler;
-                document.getElementById('editTeamLosses').onchange = saveHandler;
-                document.getElementById('editTeamCaptain').onblur = saveHandler;
-            } else {
-                descEl.textContent = team.desc || 'Информация о команде пока не добавлена организатором.';
-                ptsEl.textContent = team.pts;
-                gsEl.textContent = team.gs;
-                gcEl.textContent = team.gc;
-                winsEl.textContent = team.wins || 0;
-                lossesEl.textContent = team.losses || 0;
-                captainEl.textContent = team.captain || '---';
-            }
-
-            document.getElementById('teamStatsBackdrop').classList.add('open');
-            document.getElementById('teamStatsModal').classList.add('open');
-        }
-
-        function closeTeamStats() {
-            document.getElementById('teamStatsBackdrop').classList.remove('open');
-            document.getElementById('teamStatsModal').classList.remove('open');
-        }
-
-        // --- ЛОГИКА РЕГИСТРАЦИИ ---
-        function openRegistration() {
-            document.getElementById('regBackdrop').classList.add('open');
-            document.getElementById('regModal').classList.add('open');
-            nextRegStep(1); // Всегда начинаем с первого шага
-            
-            // Загружаем актуальные реквизиты из памяти
-            document.getElementById('displayRegCard').textContent = localStorage.getItem('regCard') || '0000 0000 0000 0000';
-            document.getElementById('displayRegContact').textContent = localStorage.getItem('regContact') || '@organizer_contact';
-        }
-
-        function closeRegistration() {
-            document.getElementById('regBackdrop').classList.remove('open');
-            document.getElementById('regModal').classList.remove('open');
-        }
-
-        function nextRegStep(step) {
-            // Валидация первого шага (чекбокс)
-            if (step === 2) {
-                const consent = document.getElementById('regConsent');
-                const error = document.getElementById('regError');
-                if (!consent.checked) {
-                    error.classList.remove('hidden');
-                    consent.classList.add('border-red-500');
-                    return;
-                } else {
-                    error.classList.add('hidden');
-                    consent.classList.remove('border-red-500');
-                }
-            }
-
-            // Скрываем все шаги
-            [1, 2, 3, 4].forEach(s => {
-                const el = document.getElementById(`regStep${s}`);
-                if(el) el.classList.add('hidden');
-            });
-            // Показываем нужный
-            const target = document.getElementById(`regStep${step}`);
-            if(target) target.classList.remove('hidden');
-        }
-
-        function openPrivacy() {
-            document.getElementById('privacyBackdrop').classList.add('open');
-            document.getElementById('privacyModal').classList.add('open');
-        }
-
-        function closePrivacy() {
-            document.getElementById('privacyBackdrop').classList.remove('open');
-            document.getElementById('privacyModal').classList.remove('open');
-        }
-
-        function selectPayMethod(method) {
-            const transferInfo = document.getElementById('payInfoTransfer');
-            const cashInfo = document.getElementById('payInfoCash');
-            const btnTransfer = document.getElementById('payBtnTransfer');
-            const btnCash = document.getElementById('payBtnCash');
-
-            if (method === 'transfer') {
-                transferInfo.classList.remove('hidden');
-                cashInfo.classList.add('hidden');
-                btnTransfer.classList.add('bg-gold', 'text-cup-dark');
-                btnCash.classList.remove('bg-gold', 'text-cup-dark');
-            } else {
-                transferInfo.classList.add('hidden');
-                cashInfo.classList.remove('hidden');
-                btnCash.classList.add('bg-gold', 'text-cup-dark');
-                btnTransfer.classList.remove('bg-gold', 'text-cup-dark');
-            }
-        }
-
-        function saveRegSettings() {
-            const card = document.getElementById('regCardInput').value;
-            const contact = document.getElementById('regContactInput').value;
-            localStorage.setItem('regCard', card);
-            localStorage.setItem('regContact', contact);
+            renderBracket('bracketView');
+            renderBracket('bracketAdminView');
         }
         
         function saveSiteContent() {
@@ -4008,11 +3393,6 @@
                     if (content[id]) el.innerHTML = content[id];
                 });
             }
-            // Load MOTR logos
-            const motr1 = document.getElementById('motrTeam1Logo');
-            const motr2 = document.getElementById('motrTeam2Logo');
-            if(motr1) motr1.src = motrData.team1Logo || 'https://via.placeholder.com/100?text=LOGO';
-            if(motr2) motr2.src = motrData.team2Logo || 'https://via.placeholder.com/100?text=LOGO';
         }
         
         // --- INTERACTIVE DRAW LOGIC ---
@@ -4307,65 +3687,6 @@
             }
         }
         
-        function initDecorations() {
-            const types = ['fireworks', 'rain'];
-            types.forEach(type => {
-                const isEnabled = localStorage.getItem(`decor_${type}`) === 'true';
-                const input = document.getElementById(`decor${type.charAt(0).toUpperCase() + type.slice(1)}`);
-                if (input) input.checked = isEnabled;
-            });
-        }
-
-        function toggleDecor(type) {
-            const input = document.getElementById(`decor${type.charAt(0).toUpperCase() + type.slice(1)}`);
-            localStorage.setItem(`decor_${type}`, input.checked);
-            refreshDecorations();
-        }
-
-        function refreshDecorations() {
-            const types = ['fireworks', 'rain'];
-            types.forEach(type => {
-                const isEnabled = localStorage.getItem(`decor_${type}`) === 'true';
-                applyDecor(type, isEnabled);
-            });
-        }
-
-        function applyDecor(type, active) {
-            const isFinal = tournamentStatus === 'final';
-            if (type === 'fireworks') {
-                if (active && isFinal) {
-                    if (!fireworksInterval) fireworksInterval = setInterval(celebrate, 2000);
-                } else {
-                    clearInterval(fireworksInterval);
-                    fireworksInterval = null;
-                }
-            }
-            if (type === 'rain') {
-                if (active && isFinal) {
-                    if (!rainInterval) rainInterval = setInterval(spawnGoldenDrop, 100);
-                } else {
-                    clearInterval(rainInterval);
-                    rainInterval = null;
-                }
-            }
-        }
-
-        function spawnGoldenDrop() {
-            const drop = document.createElement('div');
-            drop.className = 'golden-drop';
-            drop.style.left = Math.random() * 100 + 'vw';
-            drop.style.top = '-20px';
-            document.body.appendChild(drop);
-            gsap.to(drop, {
-                y: '110vh',
-                x: (Math.random() - 0.5) * 100,
-                rotation: Math.random() * 360,
-                duration: 2 + Math.random() * 2,
-                ease: "none",
-                onComplete: () => drop.remove()
-            });
-        }
-
         // --- STUDIO GROUP EXPANSION ---
         let activeExpandedGroup = null;
 
