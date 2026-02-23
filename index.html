@@ -540,6 +540,19 @@
             transform: translateY(-5px);
         }
         
+        .bracket-team.winner-highlight {
+            background: rgba(34, 197, 94, 0.2) !important;
+            border-left: 4px solid #22c55e !important;
+            padding-left: 8px !important;
+            color: #fff !important;
+        }
+        .bracket-team.loser-highlight {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border-left: 4px solid #ef4444 !important;
+            padding-left: 8px !important;
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+        
         /* Playoff Bracket Enhancements */
         .final-match-highlight {
             transform: scale(1.25);
@@ -3068,7 +3081,14 @@
                     const teamDiv = document.createElement('div');
                     teamDiv.className = 'bracket-team';
                     teamDiv.dataset.teamName = team.name;
-                    if (match.winner === teamKey) teamDiv.classList.add('winner');
+                    
+                    if (match.winner) {
+                        if (match.winner === teamKey) {
+                            teamDiv.classList.add('winner-highlight');
+                        } else {
+                            teamDiv.classList.add('loser-highlight');
+                        }
+                    }
 
                     teamDiv.onmouseenter = () => highlightTeamPath(team.name, true);
                     teamDiv.onmouseleave = () => highlightTeamPath(team.name, false);
