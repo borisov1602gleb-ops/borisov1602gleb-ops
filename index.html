@@ -2333,20 +2333,40 @@
                 
                 <div>
                     <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-4">Турнирные показатели</h4>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
-                            <div class="text-2xl font-black text-gold" id="statsPts">0</div>
+                    <div class="grid grid-cols-3 gap-3 mb-3">
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
+                            <div class="text-xl font-black text-green-500" id="statsWins">0</div>
+                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Победы</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
+                            <div class="text-xl font-black text-red-500" id="statsLosses">0</div>
+                            <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Поражения</div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
+                            <div class="text-xl font-black text-gold" id="statsPts">0</div>
                             <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Очки</div>
                         </div>
-                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
-                            <div class="text-2xl font-black text-white" id="statsGS">0</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
+                            <div class="text-xl font-black text-white" id="statsGS">0</div>
                             <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Забито</div>
                         </div>
-                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
-                            <div class="text-2xl font-black text-white" id="statsGC">0</div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-2xl text-center">
+                            <div class="text-xl font-black text-white" id="statsGC">0</div>
                             <div class="text-[8px] text-white/30 uppercase font-bold mt-1">Пропущено</div>
                         </div>
                     </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-white/5">
+                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-2">Капитан команды</h4>
+                    <div id="statsCaptain" class="text-white font-semibold">---</div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-white/5">
+                    <h4 class="text-[10px] font-bold text-gold uppercase tracking-[0.2em] mb-3">Состав команды</h4>
+                    <div id="statsPlayersList" class="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar"></div>
                 </div>
                 
                 <button onclick="closeTeamStats()" class="mt-8 w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest transition-all">Закрыть окно</button>
@@ -3308,6 +3328,10 @@
                         pts: 0,
                         gs: 0,
                         gc: 0,
+                        wins: 0,
+                        losses: 0,
+                        captain: '',
+                        players: Array(15).fill(''),
                         desc: ''
                     });
                 });
@@ -3724,18 +3748,32 @@
             const ptsEl = document.getElementById('statsPts');
             const gsEl = document.getElementById('statsGS');
             const gcEl = document.getElementById('statsGC');
+            const winsEl = document.getElementById('statsWins');
+            const lossesEl = document.getElementById('statsLosses');
+            const captainEl = document.getElementById('statsCaptain');
+            const playersListEl = document.getElementById('statsPlayersList');
 
             if (isAdmin && isEditMode) {
                 descEl.innerHTML = `<textarea id="editTeamDesc" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" rows="3" placeholder="Введите описание команды...">${team.desc || ''}</textarea>`;
                 ptsEl.innerHTML = `<input type="number" id="editTeamPts" value="${team.pts}" class="w-full bg-transparent text-center outline-none text-gold font-black">`;
                 gsEl.innerHTML = `<input type="number" id="editTeamGS" value="${team.gs}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
                 gcEl.innerHTML = `<input type="number" id="editTeamGC" value="${team.gc}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
+                winsEl.innerHTML = `<input type="number" id="editTeamWins" value="${team.wins || 0}" class="w-full bg-transparent text-center outline-none text-green-500 font-black">`;
+                lossesEl.innerHTML = `<input type="number" id="editTeamLosses" value="${team.losses || 0}" class="w-full bg-transparent text-center outline-none text-red-500 font-black">`;
+                captainEl.innerHTML = `<input type="text" id="editTeamCaptain" value="${team.captain || ''}" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" placeholder="ФИО Капитана">`;
                 
                 const saveHandler = () => {
                     team.desc = document.getElementById('editTeamDesc').value;
                     team.pts = parseInt(document.getElementById('editTeamPts').value) || 0;
                     team.gs = parseInt(document.getElementById('editTeamGS').value) || 0;
                     team.gc = parseInt(document.getElementById('editTeamGC').value) || 0;
+                    team.wins = parseInt(document.getElementById('editTeamWins').value) || 0;
+                    team.losses = parseInt(document.getElementById('editTeamLosses').value) || 0;
+                    team.captain = document.getElementById('editTeamCaptain').value;
+                    
+                    // Сохраняем игроков из инпутов
+                    const playerInputs = playersListEl.querySelectorAll('input');
+                    team.players = Array.from(playerInputs).map(input => input.value);
                     
                     const groups = JSON.parse(localStorage.getItem('drawResults'));
                     groups[group] = groups[group].map(t => t.name === team.name ? team : t);
@@ -3747,11 +3785,31 @@
                 document.getElementById('editTeamPts').onchange = saveHandler;
                 document.getElementById('editTeamGS').onchange = saveHandler;
                 document.getElementById('editTeamGC').onchange = saveHandler;
+                document.getElementById('editTeamWins').onchange = saveHandler;
+                document.getElementById('editTeamLosses').onchange = saveHandler;
+                document.getElementById('editTeamCaptain').onblur = saveHandler;
+
+                // Рендерим инпуты для игроков
+                playersListEl.innerHTML = '';
+                const players = team.players || Array(15).fill('');
+                players.forEach((player, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center gap-2 bg-white/5 rounded-lg px-3 py-1';
+                    div.innerHTML = `
+                        <span class="text-[10px] text-white/20 font-bold w-4">${idx + 1}</span>
+                        <input type="text" value="${player}" class="bg-transparent w-full outline-none text-xs text-white focus:text-gold" placeholder="Имя игрока...">
+                    `;
+                    div.querySelector('input').onchange = saveHandler;
+                    playersListEl.appendChild(div);
+                });
             } else {
                 descEl.textContent = team.desc || 'Информация о команде пока не добавлена организатором.';
                 ptsEl.textContent = team.pts;
                 gsEl.textContent = team.gs;
                 gcEl.textContent = team.gc;
+                winsEl.textContent = team.wins || 0;
+                lossesEl.textContent = team.losses || 0;
+                captainEl.textContent = team.captain || '---';
             }
 
             document.getElementById('teamStatsBackdrop').classList.add('open');
