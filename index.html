@@ -534,6 +534,11 @@
             font-size: 12px;
             padding: 5px 15px;
         }
+        .group-highlight {
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+            transform: translateY(-5px);
+        }
         
         .modal-content.open {
             transform: translate(-50%, -50%) scale(1);
@@ -1780,22 +1785,22 @@
                     <h3 class="text-3xl md:text-5xl font-black text-center mb-12 text-gold">ИТОГИ ЖЕРЕБЬЕВКИ</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <!-- Group A -->
-                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                    <div id="group-a-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА A</h4>
                         <div id="group-a-list" class="space-y-3"></div>
                     </div>
                     <!-- Group B -->
-                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                    <div id="group-b-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА B</h4>
                         <div id="group-b-list" class="space-y-3"></div>
                     </div>
                     <!-- Group C -->
-                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                    <div id="group-c-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА C</h4>
                         <div id="group-c-list" class="space-y-3"></div>
                     </div>
                     <!-- Group D -->
-                    <div class="glass rounded-3xl p-6 border border-gold/30">
+                    <div id="group-d-container" class="glass rounded-3xl p-6 border border-gold/30 transition-all duration-500">
                         <h4 class="text-2xl font-bold text-white mb-4 text-center border-b border-white/10 pb-4">ГРУППА D</h4>
                         <div id="group-d-list" class="space-y-3"></div>
                     </div>
@@ -2631,6 +2636,18 @@
                 btn.textContent = g === 'ALL' ? 'ВСЕ ГРУППЫ' : `ГРУППА ${g}`;
                 btn.onclick = () => renderGroupSchedule(round, g);
                 filterTabs.appendChild(btn);
+            });
+
+            // Подсветка соответствующей таблицы группы
+            ['A', 'B', 'C', 'D'].forEach(g => {
+                const groupCont = document.getElementById(`group-${g.toLowerCase()}-container`);
+                if (groupCont) {
+                    if (g === groupFilter) {
+                        groupCont.classList.add('group-highlight');
+                    } else {
+                        groupCont.classList.remove('group-highlight');
+                    }
+                }
             });
 
             // Render Matches
