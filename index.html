@@ -141,8 +141,8 @@
         
         /* Maintenance Ball Animation */
         @keyframes roll-bounce {
-            0%, 100% { transform: translateX(-150px) rotate(0deg); }
-            50% { transform: translateX(150px) rotate(720deg); }
+            0%, 100% { transform: translateX(-25vw) rotate(0deg); }
+            50% { transform: translateX(25vw) rotate(720deg); }
         }
         .rolling-ball {
             display: inline-block;
@@ -2281,6 +2281,11 @@
         // Countdown Timer
         let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
         let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+
+        // ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Для всех пользователей)
+        // Установите true, чтобы включить тех. работы для ВСЕХ, кто зайдет на сайт
+        const GLOBAL_MAINTENANCE = false; 
+
         let bowlEl;
 
         // Tournament Status Logic
@@ -2515,12 +2520,14 @@
         }
         
         // Maintenance Mode
-        let isMaintenance = localStorage.getItem('maintenanceMode') === 'true';
+        let isMaintenance = GLOBAL_MAINTENANCE || localStorage.getItem('maintenanceMode') === 'true';
 
         function checkMaintenance() {
             const overlay = document.getElementById('maintenanceOverlay');
             const btn = document.getElementById('maintBtn');
             
+            if (!overlay) return;
+
             if (isMaintenance) {
                 overlay.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
