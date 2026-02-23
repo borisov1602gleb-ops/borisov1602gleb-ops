@@ -2255,6 +2255,12 @@
             renderGroupSchedule(); // Render group schedule
             renderPlayoffSchedule(); // Render playoff schedule
             // bowlEl = document.getElementById('quantumCore'); // Removed as quantumCore is no longer in the visible admin tabs
+
+            // Загружаем настройки регистрации в поля админки
+            const regCardInput = document.getElementById('regCardInput');
+            const regContactInput = document.getElementById('regContactInput');
+            if(regCardInput) regCardInput.value = localStorage.getItem('regCard') || '';
+            if(regContactInput) regContactInput.value = localStorage.getItem('regContact') || '';
         });
         
         // Revealed Card Overlay (Moved to body for fixed positioning)
@@ -2521,6 +2527,13 @@
 
             if(sections[status]) sections[status].classList.remove('hidden');
             
+            // Управление видимостью кнопки регистрации в Hero-секции
+            const regBtn = document.getElementById('regBtnContainer');
+            if (regBtn) {
+                if (status === 'registration') regBtn.classList.remove('hidden');
+                else regBtn.classList.add('hidden');
+            }
+
             // Скрываем секцию жеребьевки целиком, если мы в плей-офф или финале
             const drawSection = document.getElementById('draw');
             if (drawSection) {
@@ -3373,6 +3386,59 @@
             
             // Перерисовываем сетку плей-офф
             renderBracket();
+        }
+
+        // --- ЛОГИКА РЕГИСТРАЦИИ ---
+        function openRegistration() {
+            document.getElementById('regBackdrop').classList.add('open');
+            document.getElementById('regModal').classList.add('open');
+            nextRegStep(1); // Всегда начинаем с первого шага
+            
+            // Загружаем актуальные реквизиты из памяти
+            document.getElementById('displayRegCard').textContent = localStorage.getItem('regCard') || '0000 0000 0000 0000';
+            document.getElementById('displayRegContact').textContent = localStorage.getItem('regContact') || '@organizer_contact';
+        }
+
+        function closeRegistration() {
+            document.getElementById('regBackdrop').classList.remove('open');
+            document.getElementById('regModal').classList.remove('open');
+        }
+
+        function nextRegStep(step) {
+            // Скрываем все шаги
+            [1, 2, 3, 4].forEach(s => {
+                const el = document.getElementById(`regStep${s}`);
+                if(el) el.classList.add('hidden');
+            });
+            // Показываем нужный
+            const target = document.getElementById(`regStep${step}`);
+            if(target) target.classList.remove('hidden');
+        }
+
+        function selectPayMethod(method) {
+            const transferInfo = document.getElementById('payInfoTransfer');
+            const cashInfo = document.getElementById('payInfoCash');
+            const btnTransfer = document.getElementById('payBtnTransfer');
+            const btnCash = document.getElementById('payBtnCash');
+
+            if (method === 'transfer') {
+                transferInfo.classList.remove('hidden');
+                cashInfo.classList.add('hidden');
+                btnTransfer.classList.add('bg-gold', 'text-cup-dark');
+                btnCash.classList.remove('bg-gold', 'text-cup-dark');
+            } else {
+                transferInfo.classList.add('hidden');
+                cashInfo.classList.remove('hidden');
+                btnCash.classList.add('bg-gold', 'text-cup-dark');
+                btnTransfer.classList.remove('bg-gold', 'text-cup-dark');
+            }
+        }
+
+        function saveRegSettings() {
+            const card = document.getElementById('regCardInput').value;
+            const contact = document.getElementById('regContactInput').value;
+            localStorage.setItem('regCard', card);
+            localStorage.setItem('regContact', contact);
         }
         
         function saveSiteContent() {
