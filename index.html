@@ -1941,6 +1941,7 @@
                 <div class="text-center md:text-left">
                     <h3 class="text-3xl font-black text-gold mb-3">РАМЕНСКИЙ КУБОК</h3>
                     <p class="text-white/60 text-sm mb-4">Любительский футбольный турнир с 2019 года.</p>
+                    <a href="javascript:void(0)" onclick="openPrivacy()" class="text-gold/60 hover:text-gold text-xs underline transition-colors block mb-2">Политика конфиденциальности</a>
                     <p class="text-gold/60 text-xs">© 2026 Все права защищены</p>
                 </div>
                 <div class="text-center">
@@ -2135,6 +2136,16 @@
                         <option value="15">15 игроков</option>
                     </select>
                 </div>
+                
+                <!-- Consent Checkbox -->
+                <div class="space-y-2">
+                    <label class="flex items-start gap-3 cursor-pointer group">
+                        <input type="checkbox" id="regConsent" class="mt-1 w-4 h-4 rounded border-white/10 bg-white/5 text-gold focus:ring-gold">
+                        <span class="text-xs text-white/60 group-hover:text-white/80 transition-colors">Нажимая кнопку, я даю согласие на обработку моих персональных данных в соответствии с <a href="javascript:void(0)" onclick="openPrivacy()" class="text-gold underline">Политикой конфиденциальности</a></span>
+                    </label>
+                    <p id="regError" class="hidden text-red-500 text-[10px] font-bold uppercase tracking-wider">Пожалуйста, подтвердите согласие</p>
+                </div>
+
                 <button onclick="nextRegStep(2)" class="w-full bg-gold text-cup-dark font-bold py-4 rounded-xl hover:bg-gold-light transition-all">Далее</button>
             </div>
         </div>
@@ -2176,6 +2187,43 @@
             <p class="text-xl text-white/80">Удачи в турнире!</p>
             <button onclick="closeRegistration()" class="mt-8 text-white/40 hover:text-white transition-colors">Закрыть</button>
         </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal-backdrop" id="privacyBackdrop" onclick="closePrivacy()"></div>
+    <div class="modal-content glass-strong p-10 rounded-3xl border border-white/10 max-w-4xl" id="privacyModal">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-black text-gold uppercase tracking-tighter">Политика конфиденциальности</h2>
+            <button onclick="closePrivacy()" class="text-white/40 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="space-y-8 text-white/70 text-sm leading-relaxed overflow-y-auto max-h-[60vh] pr-4 custom-scrollbar">
+            <section>
+                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">1. Общие положения</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Сбор и обработка персональных данных осуществляется в соответствии с действующим законодательством. Настоящая политика определяет порядок обработки персональных данных участников турнира "Раменский Кубок".</p>
+            </section>
+            <section>
+                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">2. Какие данные собираем</h3>
+                <p>Мы собираем следующие данные: название команды, ФИО капитана, контактная информация (номер телефона, логин в мессенджерах), количество игроков в заявке. Эти данные необходимы для организации игрового процесса и связи с представителями команд.</p>
+            </section>
+            <section>
+                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">3. Цели обработки</h3>
+                <p>Персональные данные обрабатываются исключительно в целях: регистрации команд на турнир, формирования турнирной сетки и расписания, информирования участников об изменениях в регламенте и результатах матчей.</p>
+            </section>
+            <section>
+                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">4. Защита данных</h3>
+                <p>Мы принимаем необходимые организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа, уничтожения, изменения, блокирования, копирования, распространения, а также от иных неправомерных действий третьих лиц.</p>
+            </section>
+            <section>
+                <h3 class="text-white font-bold mb-3 uppercase text-xs tracking-widest">5. Срок хранения</h3>
+                <p>Данные хранятся в течение периода проведения турнира и 12 месяцев после его завершения для возможности формирования архива результатов и приглашения команд на следующие сезоны.</p>
+            </section>
+        </div>
+        <div class="mt-10 text-center">
+            <button onclick="closePrivacy()" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-xl font-bold transition-all">Понятно</button>
+        </div>
+    </div>
     <!-- JavaScript -->
     <script>
         // Initialize Lucide Icons
@@ -3405,6 +3453,20 @@
         }
 
         function nextRegStep(step) {
+            // Валидация первого шага (чекбокс)
+            if (step === 2) {
+                const consent = document.getElementById('regConsent');
+                const error = document.getElementById('regError');
+                if (!consent.checked) {
+                    error.classList.remove('hidden');
+                    consent.classList.add('border-red-500');
+                    return;
+                } else {
+                    error.classList.add('hidden');
+                    consent.classList.remove('border-red-500');
+                }
+            }
+
             // Скрываем все шаги
             [1, 2, 3, 4].forEach(s => {
                 const el = document.getElementById(`regStep${s}`);
@@ -3413,6 +3475,16 @@
             // Показываем нужный
             const target = document.getElementById(`regStep${step}`);
             if(target) target.classList.remove('hidden');
+        }
+
+        function openPrivacy() {
+            document.getElementById('privacyBackdrop').classList.add('open');
+            document.getElementById('privacyModal').classList.add('open');
+        }
+
+        function closePrivacy() {
+            document.getElementById('privacyBackdrop').classList.remove('open');
+            document.getElementById('privacyModal').classList.remove('open');
         }
 
         function selectPayMethod(method) {
