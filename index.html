@@ -3078,8 +3078,11 @@
                     score: 0
                 };
             }
+            localStorage.setItem('bracketData', JSON.stringify(bracketData));
             renderFinal();
             renderPlayoffSchedule();
+            renderBracket('bracketView');
+            renderBracket('bracketAdminView');
         }
 
         function renderBracket(containerId = 'bracketView') {
@@ -3125,13 +3128,27 @@
                             const data = JSON.parse(e.dataTransfer.getData('text/plain'));
                             const sourceMatch = findMatchById(data.matchId);
                             if (sourceMatch) {
-                                const temp = { ...sourceMatch[data.teamKey] };
-                                sourceMatch[data.teamKey] = { ...team };
-                                team.name = temp.name;
-                                team.logo = temp.logo;
+                                const sourceTeam = sourceMatch[data.teamKey];
+                                if (team.name.startsWith('Победитель')) {
+                                    team.name = sourceTeam.name;
+                                    team.logo = sourceTeam.logo;
+                                    team.score = 0;
+                                } else {
+                                    const temp = { name: team.name, logo: team.logo, score: team.score };
+                                    team.name = sourceTeam.name;
+                                    team.logo = sourceTeam.logo;
+                                    team.score = sourceTeam.score;
+                                    sourceMatch[data.teamKey].name = temp.name;
+                                    sourceMatch[data.teamKey].logo = temp.logo;
+                                    sourceMatch[data.teamKey].score = temp.score;
+                                    sourceMatch.winner = null;
+                                }
+                                match.winner = null;
                                 localStorage.setItem('bracketData', JSON.stringify(bracketData));
                                 renderBracket('bracketView');
                                 renderBracket('bracketAdminView');
+                                renderFinal();
+                                renderPlayoffSchedule();
                             }
                         };
                     }
@@ -3166,6 +3183,10 @@
                         input.onchange = (e) => {
                             team.score = parseInt(e.target.value) || 0;
                             localStorage.setItem('bracketData', JSON.stringify(bracketData));
+                            renderBracket('bracketView');
+                            renderBracket('bracketAdminView');
+                            renderFinal();
+                            renderPlayoffSchedule();
                         };
                         scoreSpan.appendChild(input);
                     } else {
@@ -3845,7 +3866,8 @@
             renderPlayoffSchedule();
             
             // Перерисовываем сетку плей-офф
-            renderBracket();
+            renderBracket('bracketView');
+            renderBracket('bracketAdminView');
         }
 
         function highlightTeamPath(teamName, active) {
