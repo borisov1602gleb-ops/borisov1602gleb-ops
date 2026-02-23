@@ -1844,16 +1844,37 @@
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal">ФИНАЛ</h2>
             
+            <!-- Huge Logos and Lightning -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-20 mb-12">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gold/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <img id="finalTeam1Logo" src="" class="w-48 h-48 md:w-80 md:h-64 object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]" alt="">
+                </div>
+                
+                <!-- Lightning Bolt -->
+                <div class="relative h-32 w-12 md:h-64 md:w-24 flex items-center justify-center">
+                    <svg viewBox="0 0 100 200" class="h-full w-full text-gold drop-shadow-[0_0_25px_rgba(212,175,55,0.9)] animate-pulse">
+                        <path d="M60 0 L10 110 L50 110 L30 200 L90 80 L50 80 L70 0 Z" fill="currentColor" />
+                    </svg>
+                </div>
+
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-gold/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <img id="finalTeam2Logo" src="" class="w-48 h-48 md:w-80 md:h-64 object-contain relative z-10 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]" alt="">
+                </div>
+            </div>
+
+            <!-- Team Names -->
+            <div class="flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto mb-16 px-4 gap-4">
+                <h3 id="finalTeam1Name" class="text-4xl md:text-6xl font-black text-white text-center md:text-left flex-1 uppercase tracking-tighter">TEAM A</h3>
+                <div class="hidden md:block w-32"></div> <!-- Spacer for lightning -->
+                <h3 id="finalTeam2Name" class="text-4xl md:text-6xl font-black text-white text-center md:text-right flex-1 uppercase tracking-tighter">TEAM B</h3>
+            </div>
+
             <!-- Lineups Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
                 <!-- Team 1 -->
                 <div class="glass p-8 rounded-3xl border border-gold/30">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                            <img id="finalTeam1Logo" src="" class="w-12 h-12 object-contain" alt="">
-                        </div>
-                        <h3 id="finalTeam1Name" class="text-3xl font-black text-white">TEAM A</h3>
-                    </div>
                     <div class="space-y-6">
                         <div>
                             <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4">Стартовый состав (8)</h4>
@@ -1868,19 +1889,13 @@
                 
                 <!-- Team 2 -->
                 <div class="glass p-8 rounded-3xl border border-gold/30">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
-                            <img id="finalTeam2Logo" src="" class="w-12 h-12 object-contain" alt="">
-                        </div>
-                        <h3 id="finalTeam2Name" class="text-3xl font-black text-white">TEAM B</h3>
-                    </div>
                     <div class="space-y-6">
                         <div>
-                            <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4">Стартовый состав (8)</h4>
+                            <h4 class="text-gold font-bold text-xs uppercase tracking-widest mb-4 md:text-right">Стартовый состав (8)</h4>
                             <div id="finalTeam2Starters" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                         </div>
                         <div>
-                            <h4 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-4">Запасные</h4>
+                            <h4 class="text-white/40 font-bold text-xs uppercase tracking-widest mb-4 md:text-right">Запасные</h4>
                             <div id="finalTeam2Subs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                         </div>
                     </div>
