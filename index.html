@@ -19,6 +19,9 @@
     <!-- html2canvas -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -2369,7 +2372,15 @@
                     <div id="statsPlayersList" class="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto pr-2 custom-scrollbar"></div>
                 </div>
                 
-                <button onclick="closeTeamStats()" class="mt-8 w-full py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white text-xs font-bold uppercase tracking-widest transition-all">Закрыть окно</button>
+                <div class="flex gap-3 mt-8 modal-actions">
+                    <button onclick="exportTeamToPDF()" class="flex-[2] py-4 rounded-xl bg-gold text-cup-dark text-[10px] font-black uppercase tracking-widest transition-all hover:bg-gold-light flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Экспорт состава
+                    </button>
+                    <button onclick="closeTeamStats()" class="flex-1 py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-widest transition-all">
+                        Закрыть
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -3663,6 +3674,41 @@
             });
         }
         
+        async function exportTeamToPDF() {
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('teamStatsModal');
+            const teamName = document.getElementById('statsTeamName').textContent;
+            
+            // Скрываем кнопки перед захватом, чтобы их не было в PDF
+            const actionButtons = element.querySelector('.modal-actions');
+            if(actionButtons) actionButtons.style.opacity = '0';
+            
+            try {
+                const canvas = await html2canvas(element, {
+                    backgroundColor: '#000814',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                
+                const pdf = new jsPDF({
+                    orientation: canvas.width > canvas.height ? 'l' : 'p',
+                    unit: 'px',
+                    format: [canvas.width / 2, canvas.height / 2]
+                });
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+                pdf.save(`RC2026_${teamName.replace(/\s+/g, '_')}.pdf`);
+                
+            } catch (err) {
+                console.error("PDF Export Error:", err);
+            } finally {
+                if(actionButtons) actionButtons.style.opacity = '1';
+            }
+        }
+
         // --- SITE EDITING ---
         let isEditMode = false;
         
@@ -3760,7 +3806,7 @@
                 gcEl.innerHTML = `<input type="number" id="editTeamGC" value="${team.gc}" class="w-full bg-transparent text-center outline-none text-white font-black">`;
                 winsEl.innerHTML = `<input type="number" id="editTeamWins" value="${team.wins || 0}" class="w-full bg-transparent text-center outline-none text-green-500 font-black">`;
                 lossesEl.innerHTML = `<input type="number" id="editTeamLosses" value="${team.losses || 0}" class="w-full bg-transparent text-center outline-none text-red-500 font-black">`;
-                captainEl.innerHTML = `<input type="text" id="editTeamCaptain" value="${team.captain || ''}" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" placeholder="ФИО Капитана">`;
+                captainEl.innerHTML = `<input type="text" id="editTeamCaptain" value="${team.captain || ''}" class="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-white outline-none focus:border-gold" placeholder="ФИО Капитана...">`;
                 
                 const saveHandler = () => {
                     team.desc = document.getElementById('editTeamDesc').value;
@@ -3797,9 +3843,9 @@
                     div.className = 'flex items-center gap-2 bg-white/5 rounded-lg px-3 py-1';
                     div.innerHTML = `
                         <span class="text-[10px] text-white/20 font-bold w-4">${idx + 1}</span>
-                        <input type="text" value="${player}" class="bg-transparent w-full outline-none text-xs text-white focus:text-gold" placeholder="Имя игрока...">
+                        <input type="text" value="${player}" class="bg-transparent w-full outline-none text-xs text-white focus:text-gold" placeholder="ФИО игрока...">
                     `;
-                    div.querySelector('input').onchange = saveHandler;
+                    div.querySelector('input').onblur = saveHandler;
                     playersListEl.appendChild(div);
                 });
             } else {
