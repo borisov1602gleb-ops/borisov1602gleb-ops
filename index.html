@@ -1711,6 +1711,12 @@
                 </div>
             </div>
             
+            <!-- Registration Button -->
+            <div id="regBtnContainer" class="hidden mt-8 reveal">
+                <button onclick="openRegistration()" class="golden-shine bg-gold text-cup-dark px-12 py-4 rounded-full font-black text-xl hover:scale-105 transition-all shadow-[0_0_30px_rgba(212,175,55,0.5)] uppercase tracking-widest">
+                    Регистрация на турнир
+                </button>
+            </div>
         </div>
         
         <!-- Scroll Indicator -->
@@ -2035,6 +2041,7 @@
                     <div class="glass p-6 rounded-xl border border-gold/30">
                         <h4 class="text-gold font-bold mb-4 uppercase text-sm">Статус Турнира</h4>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <button onclick="setTournamentStatus('registration')" id="statusBtn-registration" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Регистрация</button>
                             <button onclick="setTournamentStatus('draw')" id="statusBtn-draw" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Жеребьевка</button>
                             <button onclick="setTournamentStatus('groups')" id="statusBtn-groups" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Групповой этап</button>
                             <button onclick="setTournamentStatus('playoffs')" id="statusBtn-playoffs" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Плей-офф</button>
@@ -2054,6 +2061,15 @@
                         <button onclick="resetPlayoffs()" class="w-full bg-red-500/20 text-red-400 border border-red-500/30 py-3 rounded-lg text-sm font-semibold hover:bg-red-500/30 transition-all">
                             Сбросить сетку плей-офф
                         </button>
+                    </div>
+
+                    <!-- Registration Settings -->
+                    <div class="glass p-6 rounded-xl border border-white/10">
+                        <h4 class="text-gold font-bold mb-4 uppercase text-sm">Настройки регистрации</h4>
+                        <div class="space-y-3">
+                            <input type="text" id="regCardInput" placeholder="Номер карты для перевода" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:border-gold outline-none" onchange="saveRegSettings()">
+                            <input type="text" id="regContactInput" placeholder="Контакт для оплаты наличными" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white focus:border-gold outline-none" onchange="saveRegSettings()">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -2100,6 +2116,66 @@
         </div>
     </div>
     
+    <!-- Registration Modal -->
+    <div class="modal-backdrop" id="regBackdrop" onclick="closeRegistration()"></div>
+    <div class="modal-content glass-strong p-8 rounded-3xl border border-gold" id="regModal">
+        <div id="regStep1">
+            <h3 class="text-2xl font-black text-gold mb-6 uppercase">Данные команды</h3>
+            <div class="space-y-4">
+                <input type="text" id="regTeamName" placeholder="Название команды" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none">
+                <input type="text" id="regCapName" placeholder="ФИО Капитана" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none">
+                <input type="text" id="regContact" placeholder="Контактная информация (TG/Телефон)" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none">
+                <div>
+                    <label class="text-xs text-white/40 uppercase mb-2 block">Количество игроков в заявке</label>
+                    <select id="regPlayers" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-gold outline-none">
+                        <option value="11">11 игроков</option>
+                        <option value="12">12 игроков</option>
+                        <option value="13">13 игроков</option>
+                        <option value="14">14 игроков</option>
+                        <option value="15">15 игроков</option>
+                    </select>
+                </div>
+                <button onclick="nextRegStep(2)" class="w-full bg-gold text-cup-dark font-bold py-4 rounded-xl hover:bg-gold-light transition-all">Далее</button>
+            </div>
+        </div>
+
+        <div id="regStep2" class="hidden">
+            <h3 class="text-2xl font-black text-gold mb-6 uppercase">Оплата участия</h3>
+            <div class="space-y-6">
+                <div class="flex gap-4">
+                    <button onclick="selectPayMethod('transfer')" id="payBtnTransfer" class="flex-1 py-3 rounded-xl border border-white/10 bg-white/5 text-sm font-bold transition-all">Переводом</button>
+                    <button onclick="selectPayMethod('cash')" id="payBtnCash" class="flex-1 py-3 rounded-xl border border-white/10 bg-white/5 text-sm font-bold transition-all">Наличными</button>
+                </div>
+                <div id="payInfoTransfer" class="hidden glass p-4 rounded-xl border border-gold/30 text-center">
+                    <p class="text-xs text-white/60 mb-2 uppercase">Карта для перевода</p>
+                    <p id="displayRegCard" class="text-xl font-mono font-bold text-gold">0000 0000 0000 0000</p>
+                </div>
+                <div id="payInfoCash" class="hidden glass p-4 rounded-xl border border-gold/30 text-center">
+                    <p class="text-xs text-white/60 mb-2 uppercase">Связаться для оплаты</p>
+                    <p id="displayRegContact" class="text-lg font-bold text-white">@organizer_contact</p>
+                </div>
+                <button onclick="nextRegStep(3)" class="w-full bg-gold text-cup-dark font-bold py-4 rounded-xl hover:bg-gold-light transition-all">Я оплатил</button>
+            </div>
+        </div>
+
+        <div id="regStep3" class="hidden">
+            <h3 class="text-2xl font-black text-gold mb-6 uppercase">Правила турнира</h3>
+            <div class="space-y-4 text-sm text-white/80 mb-8">
+                <div class="flex gap-3"><span class="text-gold font-bold">1.</span> Соблюдение регламента и времени начала матчей.</div>
+                <div class="flex gap-3"><span class="text-gold font-bold">2.</span> Уважительное отношение к судьям и соперникам.</div>
+                <div class="flex gap-3"><span class="text-gold font-bold">3.</span> Наличие единой игровой формы у команды.</div>
+                <div class="flex gap-3"><span class="text-gold font-bold">4.</span> Запрет на участие профессиональных игроков.</div>
+                <div class="flex gap-3"><span class="text-gold font-bold">5.</span> Ответственность за свое здоровье несут сами игроки.</div>
+            </div>
+            <button onclick="nextRegStep(4)" class="w-full bg-gold text-cup-dark font-bold py-4 rounded-xl hover:bg-gold-light transition-all">Принимаю правила</button>
+        </div>
+
+        <div id="regStep4" class="hidden text-center py-8">
+            <div class="text-6xl mb-6">🏆</div>
+            <h3 class="text-3xl font-black text-gold mb-4 uppercase">Поздравляю!</h3>
+            <p class="text-xl text-white/80">Удачи в турнире!</p>
+            <button onclick="closeRegistration()" class="mt-8 text-white/40 hover:text-white transition-colors">Закрыть</button>
+        </div>
     <!-- JavaScript -->
     <script>
         // Initialize Lucide Icons
