@@ -1569,6 +1569,16 @@
             font-weight: 600;
             color: #fff;
         }
+        
+        /* Editable Fields */
+        .admin-editable:hover {
+            cursor: pointer;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 0 4px;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -2235,6 +2245,7 @@
         
         // Countdown Timer
         let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
+        let isAdmin = false;
         
         // Initialize button state based on storage
         window.addEventListener('load', () => {
@@ -2388,6 +2399,9 @@
                 playoffsTab.style.display = 'none';
                 finalTab.style.display = 'none';
                 
+                isAdmin = true;
+                renderBracket();
+                renderFinal();
                 switchAdminTab('dashboard');
             } else if (login === 'org' && pass === 'root') {
                 // Organizer (Full Access)
@@ -2402,6 +2416,9 @@
                 playoffsTab.style.display = 'block';
                 finalTab.style.display = 'block';
                 
+                isAdmin = true;
+                renderBracket();
+                renderFinal();
                 switchAdminTab('dashboard');
             } else {
                 alert('Неверный логин или пароль');
