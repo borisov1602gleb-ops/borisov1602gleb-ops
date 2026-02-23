@@ -2483,6 +2483,8 @@
         // Countdown Timer
         let isTimerPaused = localStorage.getItem('timerPaused') === 'true';
         let isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+        let loginAttempts = 0;
+        let lockoutTime = 0;
 
         // ГЛОБАЛЬНЫЕ НАСТРОЙКИ (Для всех пользователей)
         // Установите true, чтобы включить тех. работы для ВСЕХ, кто зайдет на сайт
@@ -4041,7 +4043,7 @@
             const content = {};
             document.querySelectorAll('.editable-content').forEach(el => {
                 const id = el.dataset.id;
-                if (id) content[id] = el.textContent;
+                if (id) content[id] = el.innerHTML;
             });
             localStorage.setItem('siteContent', JSON.stringify(content));
         }
@@ -4051,7 +4053,7 @@
             if (content) {
                 document.querySelectorAll('.editable-content').forEach(el => {
                     const id = el.dataset.id;
-                    if (content[id]) el.textContent = content[id];
+                    if (content[id]) el.innerHTML = content[id];
                 });
             }
             // Load MOTR logos
