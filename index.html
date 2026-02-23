@@ -539,6 +539,44 @@
             box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
             transform: translateY(-5px);
         }
+        
+        /* Playoff Bracket Enhancements */
+        .final-match-highlight {
+            transform: scale(1.25);
+            border: 2px solid #ffd700 !important;
+            background: rgba(212, 175, 55, 0.2) !important;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.5) !important;
+            margin: 40px 0 !important;
+            z-index: 20;
+        }
+        
+        .bracket-round {
+            position: relative;
+        }
+        
+        /* Соединительные линии */
+        .bracket-match::after, .bracket-match::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 2px;
+            background: rgba(212, 175, 55, 0.3);
+            display: none;
+        }
+        
+        .left-side .bracket-match::after { display: block; right: -20px; }
+        .right-side .bracket-match::before { display: block; left: -20px; }
+        .center-side .bracket-match::after { display: block; right: -20px; }
+        .center-side .bracket-match::before { display: block; left: -20px; }
+
+        .team-path-highlight {
+            background: rgba(212, 175, 55, 0.4) !important;
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+            transform: scale(1.05);
+            z-index: 30;
+        }
 
         /* Адаптация админки для мобильных устройств */
         @media (max-width: 768px) {
@@ -2899,13 +2937,18 @@
                 return;
             }
 
-            const createMatchEl = (match) => {
+            const createMatchEl = (match, isFinal = false) => {
                 const matchDiv = document.createElement('div');
-                matchDiv.className = 'bracket-match';
+                matchDiv.className = 'bracket-match' + (isFinal ? ' final-match-highlight' : '');
                 const renderTeam = (team, teamKey) => {
                     const teamDiv = document.createElement('div');
                     teamDiv.className = 'bracket-team';
+                    teamDiv.dataset.teamName = team.name;
                     if (match.winner === teamKey) teamDiv.classList.add('winner');
+
+                    teamDiv.onmouseenter = () => highlightTeamPath(team.name, true);
+                    teamDiv.onmouseleave = () => highlightTeamPath(team.name, false);
+
                     const nameSpan = document.createElement('span');
                     nameSpan.textContent = team.name;
                     if (isAdmin && isEditMode) {
@@ -2941,20 +2984,20 @@
                 return matchDiv;
             };
 
-            const addCol = (title, matches) => {
+            const addCol = (title, matches, sideClass = '', isFinalCol = false) => {
                 const col = document.createElement('div');
-                col.className = 'bracket-round';
+                col.className = `bracket-round ${sideClass}`;
                 col.innerHTML = `<h3 class="round-title">${title}</h3>`;
-                matches.forEach(m => col.appendChild(createMatchEl(m)));
+                matches.forEach(m => col.appendChild(createMatchEl(m, isFinalCol)));
                 bracketView.appendChild(col);
             };
 
             // Two-sided layout: [QF1,2] [SF1] [Final] [SF2] [QF3,4]
-            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[0], bracketData.quarterFinals[1]]);
-            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[0]]);
-            addCol('ФИНАЛ', [bracketData.final[0]]);
-            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[1]]);
-            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[2], bracketData.quarterFinals[3]]);
+            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[0], bracketData.quarterFinals[1]], 'left-side');
+            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[0]], 'left-side');
+            addCol('ФИНАЛ', [bracketData.final[0]], 'center-side', true);
+            addCol('1/2 ФИНАЛА', [bracketData.semiFinals[1]], 'right-side');
+            addCol('1/4 ФИНАЛА', [bracketData.quarterFinals[2], bracketData.quarterFinals[3]], 'right-side');
         }
 
         function generatePlayoffs() {
@@ -3590,6 +3633,18 @@
             
             // Перерисовываем сетку плей-офф
             renderBracket();
+        }
+
+        function highlightTeamPath(teamName, active) {
+            if (!teamName || teamName.startsWith('Победитель')) return;
+            const allTeamDivs = document.querySelectorAll(`.bracket-team[data-team-name="${teamName}"]`);
+            allTeamDivs.forEach(div => {
+                if (active) {
+                    div.classList.add('team-path-highlight');
+                } else {
+                    div.classList.remove('team-path-highlight');
+                }
+            });
         }
 
         // --- ЛОГИКА РЕГИСТРАЦИИ ---
