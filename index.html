@@ -2689,11 +2689,13 @@
                 
                 // Hide restricted tabs
                 teamsTab.style.display = 'none';
+                playoffsTab.style.display = 'block';
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
                 checkDrawResults();
-                renderBracket();
+                renderBracket('bracketView');
+                renderBracket('bracketAdminView');
                 renderFinal();
                 switchAdminTab('dashboard');
             } else if (login === 'org' && pass === 'root') {
@@ -3092,6 +3094,7 @@
                     if (isAdmin && isEditMode) {
                         teamDiv.draggable = true;
                         teamDiv.classList.add('cursor-move');
+                        teamDiv.title = "Перетащите, чтобы сменить команду в сетке";
                         teamDiv.ondragstart = (e) => {
                             e.dataTransfer.setData('text/plain', JSON.stringify({ matchId: match.id, teamKey: teamKey }));
                         };
@@ -3121,7 +3124,7 @@
                     if (isAdmin && isEditMode) {
                         const winBtn = document.createElement('button');
                         winBtn.innerHTML = '✓';
-                        winBtn.className = `ml-2 text-[10px] px-1 rounded ${match.winner === teamKey ? 'bg-gold text-cup-dark' : 'bg-white/10 text-white/40'}`;
+                        winBtn.className = `ml-2 text-[10px] px-1 rounded transition-colors ${match.winner === teamKey ? 'bg-green-500 text-white' : 'bg-white/10 text-white/40 hover:bg-white/20'}`;
                         winBtn.onclick = (e) => {
                             e.stopPropagation();
                             match.winner = teamKey;
