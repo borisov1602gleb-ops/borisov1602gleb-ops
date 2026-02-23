@@ -1645,7 +1645,7 @@
         <!-- Background Video -->
         <div class="absolute inset-0 z-0">
             <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-30">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-soccer-player-kicking-ball-in-stadium-4658-large.mp4" type="video/mp4">
+                <source src="https://player.vimeo.com/external/434045526.sd.mp4?s=c27cf341d76764a86423d5462ae517c0a3883693&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
             </video>
             <div class="absolute inset-0 bg-gradient-to-b from-cup-dark/50 via-cup-dark/70 to-cup-dark"></div>
         </div>
@@ -1978,15 +1978,6 @@
                     <button onclick="switchAdminTab('teams')" class="admin-tab-btn w-full" id="tab-btn-teams">
                         <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Команды</span>
                     </button>
-                    <button onclick="switchAdminTab('draw')" class="admin-tab-btn w-full" id="tab-btn-draw">
-                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg> Жеребьевка</span>
-                    </button>
-                    <button onclick="switchAdminTab('playoffs')" class="admin-tab-btn w-full" id="tab-btn-playoffs">
-                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg> Плей-офф</span>
-                    </button>
-                    <button onclick="switchAdminTab('final')" class="admin-tab-btn w-full" id="tab-btn-final">
-                        <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Финал</span>
-                    </button>
                 </nav>
                 <div class="p-4 border-t border-white/10">
                     <button onclick="closeAdminModal()" class="w-full py-2 text-white/60 hover:text-white text-sm flex items-center gap-2 justify-center">
@@ -2010,6 +2001,14 @@
                             <button onclick="setTournamentStatus('playoffs')" id="statusBtn-playoffs" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Плей-офф</button>
                             <button onclick="setTournamentStatus('final')" id="statusBtn-final" class="status-btn bg-white/10 text-white border border-white/20 py-3 rounded-lg text-xs font-bold hover:bg-white/20 transition-all">Финал</button>
                         </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="glass p-6 rounded-xl border border-gold/50 bg-gold/5">
+                        <h4 class="text-gold font-bold mb-4 uppercase text-sm">Быстрые действия</h4>
+                        <button onclick="runAutoDraw()" class="w-full bg-gold text-cup-dark py-4 rounded-lg text-sm font-black hover:bg-gold-light transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] uppercase tracking-widest">
+                            Запустить автожеребьевку
+                        </button>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -2052,100 +2051,6 @@
                     <div id="teamInputs" class="space-y-6"></div>
                 </div>
                 
-                <!-- Tab: Draw (The Studio) -->
-                <div id="tab-draw" class="hidden h-full flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-white">Ручная Жеребьевка</h2>
-                        <div class="flex gap-3">
-                            <div class="flex bg-white/5 rounded-lg overflow-hidden border border-white/10">
-                                <input type="text" id="manualTeamAdd" placeholder="Добавить команду..." class="bg-transparent px-3 py-1 text-xs text-white outline-none w-40">
-                                <button onclick="DrawManager.addManualTeam()" class="bg-white/10 px-3 hover:bg-white/20 text-gold text-xs font-bold">+</button>
-                            </div>
-                            <button onclick="DrawManager.autoFill()" class="bg-white/10 text-white border border-white/20 py-2 px-4 rounded-lg text-sm font-semibold hover:bg-white/20 transition-all">Авто-заполнение</button>
-                            <button onclick="DrawManager.confirm()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)]">ОПУБЛИКОВАТЬ</button>
-                        </div>
-                    </div>
-                    
-                    <div id="drawStudioContainer" class="flex-grow relative bg-black/40 rounded-2xl border border-white/10 overflow-hidden flex flex-col">
-                        <div id="studioOverlay" onclick="closeExpandedGroup()"></div>
-                        
-                        <!-- Manual Draw Interface -->
-                        <div class="p-6 flex flex-col h-full gap-6">
-                            <!-- Source Pots -->
-                            <div class="grid grid-cols-4 gap-4">
-                                <div class="quantum-pot" id="m-pot-1" ondragover="allowDrop(event)" ondrop="dropToPot(event, 1)">
-                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 1</div>
-                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
-                                </div>
-                                <div class="quantum-pot" id="m-pot-2" ondragover="allowDrop(event)" ondrop="dropToPot(event, 2)">
-                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 2</div>
-                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
-                                </div>
-                                <div class="quantum-pot" id="m-pot-3" ondragover="allowDrop(event)" ondrop="dropToPot(event, 3)">
-                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 3</div>
-                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
-                                </div>
-                                <div class="quantum-pot" id="m-pot-4" ondragover="allowDrop(event)" ondrop="dropToPot(event, 4)">
-                                    <div class="text-xs text-gold font-bold mb-2 tracking-widest">КОРЗИНА 4</div>
-                                    <div class="pot-content space-y-1 overflow-y-auto custom-scrollbar h-24"></div>
-                                </div>
-                            </div>
-
-                            <!-- Target Groups -->
-                            <div class="grid grid-cols-4 gap-4 flex-grow">
-                                <div class="quantum-group" id="m-group-a" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'A')">
-                                    <div class="quantum-group-header"><span>ГРУППА A</span></div>
-                                    <div class="quantum-group-list custom-scrollbar"></div>
-                                </div>
-                                <div class="quantum-group" id="m-group-b" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'B')">
-                                    <div class="quantum-group-header"><span>ГРУППА B</span></div>
-                                    <div class="quantum-group-list custom-scrollbar"></div>
-                                </div>
-                                <div class="quantum-group" id="m-group-c" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'C')">
-                                    <div class="quantum-group-header"><span>ГРУППА C</span></div>
-                                    <div class="quantum-group-list custom-scrollbar"></div>
-                                </div>
-                                <div class="quantum-group" id="m-group-d" ondragover="allowDrop(event)" ondrop="dropToGroup(event, 'D')">
-                                    <div class="quantum-group-header"><span>ГРУППА D</span></div>
-                                    <div class="quantum-group-list custom-scrollbar"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tab: Playoffs Editor -->
-                <div id="tab-playoffs" class="hidden space-y-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-white">Редактор Сетки</h2>
-                        <div class="flex gap-3">
-                            <button onclick="autoGenerateBracket()" class="bg-blue-500/20 text-blue-400 border border-blue-500/30 py-2 px-4 rounded-lg text-sm font-bold hover:bg-blue-500/30 transition-all">Сгенерировать из групп</button>
-                            <button onclick="saveBracketData()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
-                        </div>
-                    </div>
-                    <div id="bracketEditor" class="space-y-4">
-                        <!-- Generated by JS -->
-                    </div>
-                </div>
-                
-                <!-- Tab: Final Editor -->
-                <div id="tab-final" class="hidden space-y-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-white">Настройки Финала</h2>
-                        <button onclick="saveFinalData()" class="bg-gold text-cup-dark border border-gold py-2 px-6 rounded-lg text-sm font-bold hover:bg-gold-light transition-all">Сохранить</button>
-                    </div>
-                    <div class="glass p-6 rounded-xl space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="finalTeam1Input" placeholder="Команда 1" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
-                            <input type="text" id="finalTeam2Input" placeholder="Команда 2" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
-                        </div>
-                        <div class="grid grid-cols-3 gap-4">
-                            <input type="text" id="finalDateInput" placeholder="Дата (23 ИЮНЯ)" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
-                            <input type="text" id="finalTimeInput" placeholder="Время (18:00)" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
-                            <input type="text" id="finalStadiumInput" placeholder="Стадион" class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white w-full">
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -2364,9 +2269,6 @@
                 
                 // Hide restricted tabs
                 teamsTab.style.display = 'none';
-                drawTab.style.display = 'none';
-                playoffsTab.style.display = 'none';
-                finalTab.style.display = 'none';
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
@@ -2383,9 +2285,6 @@
                 
                 // Show all tabs
                 teamsTab.style.display = 'block';
-                drawTab.style.display = 'block';
-                playoffsTab.style.display = 'block';
-                finalTab.style.display = 'block';
                 
                 isAdmin = true;
                 sessionStorage.setItem('isAdmin', 'true');
@@ -2650,6 +2549,13 @@
                     break;
                 }
             }
+        }
+
+        function runAutoDraw() {
+            conductDraw();
+            setTournamentStatus('groups');
+            celebrate();
+            alert('Жеребьевка проведена! Результаты опубликованы на сайте.');
         }
 
         function conductDraw() {
