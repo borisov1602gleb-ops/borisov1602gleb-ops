@@ -601,15 +601,6 @@
             z-index: 9997;
             border-radius: 2px;
         }
-        @keyframes epic-shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px) translateY(1px); }
-            50% { transform: translateX(2px) translateY(-1px); }
-            75% { transform: translateX(-1px) translateY(-2px); }
-        }
-        .epic-shake {
-            animation: epic-shake 0.1s infinite;
-        }
 
         /* Адаптация админки для мобильных устройств */
         @media (max-width: 768px) {
@@ -2183,14 +2174,6 @@
                                 <span class="text-xs font-bold text-white/80">✨ Золотой дождь</span>
                                 <input type="checkbox" id="decorRain" onchange="toggleDecor('rain')" class="w-4 h-4 accent-gold">
                             </label>
-                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
-                                <span class="text-xs font-bold text-white/80">🎵 Эпичная музыка</span>
-                                <input type="checkbox" id="decorMusic" onchange="toggleDecor('music')" class="w-4 h-4 accent-gold">
-                            </label>
-                            <label class="flex items-center justify-between bg-white/5 p-3 rounded-lg cursor-pointer hover:bg-white/10 transition-all border border-white/5">
-                                <span class="text-xs font-bold text-white/80">🫨 Тряска экрана</span>
-                                <input type="checkbox" id="decorShake" onchange="toggleDecor('shake')" class="w-4 h-4 accent-gold">
-                            </label>
                         </div>
                     </div>
 
@@ -2501,8 +2484,6 @@
 
         let fireworksInterval = null;
         let rainInterval = null;
-        const finalAnthem = new Audio('https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3');
-        finalAnthem.loop = true;
 
         let motrData = JSON.parse(localStorage.getItem('motrData')) || {
             team1Logo: '',
@@ -4275,7 +4256,7 @@
         }
         
         function initDecorations() {
-            const types = ['fireworks', 'rain', 'music', 'shake'];
+            const types = ['fireworks', 'rain'];
             types.forEach(type => {
                 const isEnabled = localStorage.getItem(`decor_${type}`) === 'true';
                 const input = document.getElementById(`decor${type.charAt(0).toUpperCase() + type.slice(1)}`);
@@ -4290,7 +4271,7 @@
         }
 
         function refreshDecorations() {
-            const types = ['fireworks', 'rain', 'music', 'shake'];
+            const types = ['fireworks', 'rain'];
             types.forEach(type => {
                 const isEnabled = localStorage.getItem(`decor_${type}`) === 'true';
                 applyDecor(type, isEnabled);
@@ -4314,14 +4295,6 @@
                     clearInterval(rainInterval);
                     rainInterval = null;
                 }
-            }
-            if (type === 'music') {
-                if (active && isFinal) finalAnthem.play().catch(() => {});
-                else { finalAnthem.pause(); finalAnthem.currentTime = 0; }
-            }
-            if (type === 'shake') {
-                if (active && isFinal) document.body.classList.add('epic-shake');
-                else document.body.classList.remove('epic-shake');
             }
         }
 
