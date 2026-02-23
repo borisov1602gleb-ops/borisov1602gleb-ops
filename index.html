@@ -678,46 +678,80 @@
             box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
         }
         
-        /* Flip Card Styles */
-        .flip-card {
-            background-color: transparent;
-            perspective: 1000px;
-            height: 450px;
-            transition: transform 0.3s ease;
-            transform: translateZ(0);
+        /* New Arc Pots Styles */
+        .pots-arc-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding-top: 40px;
+            min-height: 400px;
+            flex-wrap: wrap;
         }
-        
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-        
-        .flip-card.flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-        
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
+
+        .pot-column {
+            width: 260px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            transition: transform 0.3s ease;
         }
-        
-        .flip-card-back {
-            transform: rotateY(180deg);
+
+        /* Arc Effect */
+        @media (min-width: 1024px) {
+            .pot-column:nth-child(1) { transform: translateY(60px) rotate(-3deg); }
+            .pot-column:nth-child(2) { transform: translateY(0px) rotate(-1deg); }
+            .pot-column:nth-child(3) { transform: translateY(0px) rotate(1deg); }
+            .pot-column:nth-child(4) { transform: translateY(60px) rotate(3deg); }
         }
-        
-        .flip-card:hover {
-            z-index: 10;
+
+        .pot-header-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #d4af37;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .team-paper-strip {
+            background: #f3f4f6;
+            color: #1f2937;
+            width: 100%;
+            padding: 14px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transform: rotate(-1deg);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 95%, 95% 100%, 0% 100%);
+        }
+
+        .team-paper-strip::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: #d4af37;
+        }
+
+        .team-paper-strip:nth-child(even) { transform: rotate(1deg); }
+        .team-paper-strip:hover { transform: scale(1.05) rotate(0deg); z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+
+        .team-paper-strip img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
         }
         
         /* Scrollbar for pot teams */
@@ -1574,85 +1608,26 @@
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl md:text-6xl font-black text-center mb-16 gradient-text reveal editable-content" data-id="draw-title">ОФИЦИАЛЬНАЯ ЖЕРЕБЬЕВКА</h2>
             
-            <div id="potsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+            <div id="potsContainer" class="pots-arc-container reveal">
                 <!-- Pot 1 -->
-                <div class="flip-card group cursor-pointer" onclick="flipCard(this)">
-                    <div class="flip-card-inner">
-                        <!-- Front -->
-                        <div class="flip-card-front glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 relative overflow-hidden gold-box-glow">
-                            <div class="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="w-24 h-24 rounded-full bg-gold/20 flex items-center justify-center mb-6 border border-gold/30 group-hover:scale-110 transition-transform duration-500">
-                                <span class="text-4xl">🏆</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-gold tracking-wider mb-2">КОРЗИНА 1</h3>
-                            <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
-                        </div>
-                        <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
-                            <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 1</h3>
-                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-1-teams"></div>
-                        </div>
-                    </div>
+                <div class="pot-column">
+                    <div class="pot-header-title">КОРЗИНА 1</div>
+                    <div id="pot-1-teams" class="w-full"></div>
                 </div>
-                
                 <!-- Pot 2 -->
-                <div class="flip-card group cursor-pointer" onclick="flipCard(this)">
-                    <div class="flip-card-inner">
-                        <!-- Front -->
-                        <div class="flip-card-front glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 relative overflow-hidden gold-box-glow">
-                            <div class="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="w-24 h-24 rounded-full bg-gold/20 flex items-center justify-center mb-6 border border-gold/30 group-hover:scale-110 transition-transform duration-500">
-                                <span class="text-4xl">⚔️</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-gold tracking-wider mb-2">КОРЗИНА 2</h3>
-                            <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
-                        </div>
-                        <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
-                            <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 2</h3>
-                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-2-teams"></div>
-                        </div>
-                    </div>
+                <div class="pot-column">
+                    <div class="pot-header-title">КОРЗИНА 2</div>
+                    <div id="pot-2-teams" class="w-full"></div>
                 </div>
-                
                 <!-- Pot 3 -->
-                <div class="flip-card group cursor-pointer" onclick="flipCard(this)">
-                    <div class="flip-card-inner">
-                        <!-- Front -->
-                        <div class="flip-card-front glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 relative overflow-hidden gold-box-glow">
-                            <div class="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="w-24 h-24 rounded-full bg-gold/20 flex items-center justify-center mb-6 border border-gold/30 group-hover:scale-110 transition-transform duration-500">
-                                <span class="text-4xl">🛡️</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-gold tracking-wider mb-2">КОРЗИНА 3</h3>
-                            <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
-                        </div>
-                        <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
-                            <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 3</h3>
-                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-3-teams"></div>
-                        </div>
-                    </div>
+                <div class="pot-column">
+                    <div class="pot-header-title">КОРЗИНА 3</div>
+                    <div id="pot-3-teams" class="w-full"></div>
                 </div>
-                
                 <!-- Pot 4 -->
-                <div class="flip-card group cursor-pointer" onclick="flipCard(this)">
-                    <div class="flip-card-inner">
-                        <!-- Front -->
-                        <div class="flip-card-front glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 relative overflow-hidden gold-box-glow">
-                            <div class="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            <div class="w-24 h-24 rounded-full bg-gold/20 flex items-center justify-center mb-6 border border-gold/30 group-hover:scale-110 transition-transform duration-500">
-                                <span class="text-4xl">⚡</span>
-                            </div>
-                            <h3 class="text-3xl font-black text-gold tracking-wider mb-2">КОРЗИНА 4</h3>
-                            <p class="text-white/50 text-sm animate-pulse">Нажмите, чтобы открыть</p>
-                        </div>
-                        <!-- Back -->
-                        <div class="flip-card-back glass-strong rounded-3xl p-8 border border-gold/50 shadow-[0_0_30px_rgba(212,175,55,0.1)] group-hover:shadow-[0_0_80px_rgba(212,175,55,0.6)] group-hover:border-gold transition-all duration-500 gold-box-glow overflow-hidden">
-                            <h3 class="text-xl font-bold text-gold mb-6">КОРЗИНА 4</h3>
-                            <div class="space-y-3 w-full relative z-10 overflow-y-auto custom-scrollbar flex-grow min-h-0" id="pot-4-teams"></div>
-                        </div>
-                    </div>
+                <div class="pot-column">
+                    <div class="pot-header-title">КОРЗИНА 4</div>
+                    <div id="pot-4-teams" class="w-full"></div>
                 </div>
             </div>
             
@@ -2180,16 +2155,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // Flip Card with Sound
-        function flipCard(card) {
-            card.classList.toggle('flipped');
-            const sound = document.getElementById('flipSound');
-            if (sound) {
-                sound.currentTime = 0;
-                sound.play().catch(e => console.log('Audio play failed', e));
-            }
-        }
-        
         // Admin System
         document.addEventListener('keydown', (e) => {
             // Shortcut: Ctrl + Shift + X
@@ -2261,23 +2226,6 @@
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             
             if(tabId === 'teams') loadTeamEditor();
-        }
-        
-        // Admin Actions
-        function resetAllCards() {
-            document.querySelectorAll('.flip-card').forEach(card => {
-                card.classList.remove('flipped');
-            });
-        }
-        
-        function openAllCards() {
-            document.querySelectorAll('.flip-card').forEach((card, index) => {
-                setTimeout(() => {
-                    if (!card.classList.contains('flipped')) {
-                        flipCard(card);
-                    }
-                }, index * 200);
-            });
         }
         
         function toggleCountdown() {
@@ -2406,7 +2354,7 @@
                 container.innerHTML = '';
                 pots[i].forEach(team => {
                     const div = document.createElement('div');
-                    div.className = 'py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-lg font-medium hover:bg-gold/20 hover:border-gold/50 transition-colors flex items-center gap-3';
+                    div.className = 'team-paper-strip';
                     
                     if (team.logo) {
                         const img = document.createElement('img');
