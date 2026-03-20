@@ -6,6 +6,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Иконки Phosphor / Lucide -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Предзагрузка шрифтов для ускорения -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Шрифты: Playfair Display для заголовков, Outfit для текста -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
     
@@ -115,8 +118,7 @@
             overflow: hidden;
         }
         .product-img {
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)
         .product-card:hover .product-img {
             transform: scale(1.15) rotate(3deg);
         }
@@ -351,15 +353,25 @@
         </div>
     </section>
 
-    <!-- Banner Section -->
-    <section class="py-32 relative bg-[url('https://images.unsplash.com/photo-1541592102781-a6cc0b5f1345?q=80&w=2000&auto=format&fit=crop')] bg-fixed bg-cover bg-center">
-        <div class="absolute inset-0 bg-sultan-dark/80"></div>
-        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center reveal">
-            <i class="ph-fill ph-quotes text-4xl text-sultan-gold mb-6"></i>
-            <h2 class="text-3xl md:text-5xl font-serif text-white leading-snug mb-8">
-                «Сладость, объединяющая сердца и поколения, приготовленная с любовью и уважением к традициям.»
+    <!-- Video Banner Section -->
+    <section class="py-40 relative overflow-hidden flex items-center justify-center">
+        <!-- Видео на фоне -->
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <!-- Используем красивое демо-видео работы пекаря. Вы можете заменить ссылку на свое видео (mp4) -->
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-baker-kneading-dough-in-a-bakery-4335-large.mp4" type="video/mp4">
+        </video>
+        <!-- Градиент для плавного перехода в темный фон сайта -->
+        <div class="absolute inset-0 bg-gradient-to-b from-sultan-dark via-sultan-dark/60 to-sultan-dark z-10"></div>
+        
+        <div class="relative z-20 max-w-4xl mx-auto px-6 text-center reveal">
+            <div class="w-20 h-20 mx-auto border border-sultan-gold/50 rounded-full flex items-center justify-center mb-8 relative cursor-pointer group">
+                <div class="absolute inset-0 rounded-full bg-sultan-gold/20 animate-ping"></div>
+                <i class="ph-fill ph-play text-3xl text-sultan-gold ml-2 group-hover:scale-110 transition-transform"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-serif text-white leading-snug mb-8">
+                Магия начинается там, где тончайшее тесто встречается с густым янтарным сиропом
             </h2>
-            <p class="text-sultan-gold tracking-[0.2em] uppercase text-sm font-bold">— Главный Уста SULTAN</p>
+            <p class="text-sultan-gold tracking-[0.3em] uppercase text-sm font-bold">— Искусство создания</p>
         </div>
     </section>
 
@@ -431,9 +443,19 @@
                 const delay = index * 0.1;
                 const html = `
                     <div class="product-card glass rounded-2xl overflow-hidden reveal" style="transition-delay: ${delay}s">
-                        <div class="product-img-wrapper h-64 relative">
-                            <div class="absolute inset-0 bg-gradient-to-t from-sultan-dark via-transparent to-transparent z-10"></div>
-                            <img src="${product.img}" alt="${product.name}" class="product-img w-full h-full object-cover">
+                        <div class="product-img-wrapper h-64 relative bg-sultan-card/50 flex items-center justify-center">
+                             д 
+                            </div>
+
+                            <!-- Градиент затемнения -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-sultan-dark via-transparent to-transparent z-10 pointer-events-none"></div>
+                            
+                            <!-- Сама картинка с ленивой загрузкой и fade-in эффектом -->
+                            <img src="${product.img}" alt="${product.name}" 
+                                 loading="lazy"
+                                 onload="this.classList.remove('opacity-0'); this.parentElement.querySelector('.placeholder-icon').classList.add('hidden');"
+                                 class="product-img w-full h-full object-cover relative z-0 opacity-0">
+                                 
                             <span class="absolute top-4 right-4 z-20 bg-sultan-dark/80 backdrop-blur-md text-sultan-gold text-xs font-bold px-3 py-1 rounded-full uppercase border border-sultan-gold/30">
                                 ${product.price} ₽
                             </span>
@@ -622,11 +644,10 @@
                         }
                     });
                 }, 100);
-            }, 1500); // Artificial delay for premium feel
+            }, 400); // Сокращенная задержка: пускаем пользователя быстрее
 
             renderProducts();
-        });
-
+      });
     </script>
 
 </body>
