@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SULTAN | Premium Baklava Boutique</title>
+    <title>ART OF BAKLAVA | Premium Baklava Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Иконки Phosphor / Lucide -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -17,8 +17,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'sultan-dark': '#0a0908',
-                        'sultan-card': '#161412',
+                    'sultan-dark': '#0B132B',
+                    'sultan-card': '#1C2541',
                         'sultan-gold': '#d4af37',
                         'sultan-gold-light': '#f3e5ab',
                         'sultan-pistachio': '#93c572',
@@ -29,7 +29,7 @@
                         'outfit': ['"Outfit"', 'sans-serif'],
                     },
                     backgroundImage: {
-                        'hero-pattern': "linear-gradient(to bottom, rgba(10, 9, 8, 0.4), rgba(10, 9, 8, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')",
+                    'hero-pattern': "linear-gradient(to bottom, rgba(11, 19, 43, 0.6), rgba(11, 19, 43, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')",
                         'pattern-texture': "url('data:image/svg+xml,%3Csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"%23d4af37\" fill-opacity=\"0.05\" fill-rule=\"evenodd\"%3E%3Ccircle cx=\"3\" cy=\"3\" r=\"3\"/%3E%3Ccircle cx=\"13\" cy=\"13\" r=\"3\"/%3E%3C/g%3E%3C/svg%3E')"
                     }
                 }
@@ -40,7 +40,7 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #0a0908;
+            background-color: #0B132B;
             color: #e8e6e3;
             overflow-x: hidden;
         }
@@ -57,20 +57,20 @@
 
         /* Glassmorphism */
         .glass {
-            background: rgba(22, 20, 18, 0.6);
+            background: rgba(28, 37, 65, 0.6);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(212, 175, 55, 0.1);
         }
 
         .glass-nav {
-            background: rgba(10, 9, 8, 0.85);
+            background: rgba(11, 19, 43, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .glass-nav.scrolled {
-            background: rgba(10, 9, 8, 0.95);
+            background: rgba(11, 19, 43, 0.95);
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
         }
@@ -105,12 +105,6 @@
             transform: translateY(-2px);
         }
 
-        .overlay {
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease;
-        }
-        .overlay.open { opacity: 1; pointer-events: auto; }
-
         /* Анимации появления при скролле */
         .reveal {
             opacity: 0;
@@ -127,7 +121,7 @@
         /* Прелоадер */
         #preloader {
             position: fixed; inset: 0; z-index: 9999;
-            background: #0a0908;
+            background: #0B132B;
             display: flex; justify-content: center; align-items: center;
             transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
             clip-path: circle(150% at 50% 50%);
@@ -144,17 +138,6 @@
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* Тосты уведомлений */
-        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 10px; }
-        .toast {
-            background: rgba(22, 20, 18, 0.95); border-left: 4px solid #d4af37;
-            color: white; padding: 16px 24px; border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideInRight 0.3s forwards, fadeOut 0.3s forwards 2.7s;
-        }
-        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
 
         /* Custom select styling for filters */
         .filter-btn.active {
@@ -173,16 +156,6 @@
             background-color: #d4af37; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-50%);
         }
         .nav-link:hover::after { width: 100%; }
-
-        /* Анимация элементов корзины */
-        .cart-item-anim {
-            opacity: 0;
-            animation: slideUpIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes slideUpIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
 <body class="bg-pattern-texture selection:bg-sultan-gold selection:text-sultan-dark">
@@ -195,24 +168,15 @@
     <div id="preloader">
         <div class="flex flex-col items-center gap-4">
             <div class="loader-ring"></div>
-            <div class="font-serif text-sultan-gold tracking-[0.3em] uppercase text-sm">SULTAN</div>
+            <div class="font-serif text-sultan-gold uppercase text-sm tracking-widest">ART OF BAKLAVA</div>
         </div>
     </div>
-
-    <!-- Toast Container -->
-    <div id="toast-container"></div>
-
-    <!-- Overlay for Modal & Cart -->
-    <div id="overlay" class="overlay fixed inset-0 bg-black/80 z-40 backdrop-blur-sm" onclick="closeAll()"></div>
 
     <!-- Header -->
     <header class="fixed w-full top-0 z-30 glass-nav transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3 hover:opacity-80 transition">
-                <!-- Укажите точное название вашего файла с логотипом в src="..." -->
-                <img src="logo.png" alt="SULTAN Logo" class="h-10 md:h-12 w-auto object-contain">
-                <!-- Раскомментируйте строку ниже, если хотите, чтобы рядом с картинкой остался текст -->
-                <!-- <span class="font-serif text-2xl md:text-3xl font-bold text-white tracking-widest">SULTAN</span> -->
+                <img src="logo.png" alt="ART OF BAKLAVA Logo" class="h-10 md:h-12 w-auto object-contain">
             </a>
             
             <nav class="hidden md:flex space-x-10 text-sm font-medium tracking-wide">
@@ -221,75 +185,37 @@
                 <a href="#quality" class="nav-link">Ингредиенты</a>
             </nav>
 
-            <div class="flex items-center gap-6">
-                <button class="text-white hover:text-sultan-gold transition">
-                    <i class="ph ph-magnifying-glass text-2xl"></i>
-                </button>
-                <button class="text-white hover:text-sultan-gold transition relative" onclick="toggleCart()">
-                    <i class="ph ph-shopping-bag text-2xl"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-2 bg-sultan-gold text-sultan-dark text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
-                </button>
+            <!-- Contact info instead of cart -->
+            <div class="hidden md:flex items-center gap-6 text-white text-sm font-medium">
+                <a href="tel:+74951234567" class="hover:text-sultan-gold transition flex items-center gap-2">
+                    <i class="ph-fill ph-phone text-xl text-sultan-gold"></i>
+                    +7 (495) 123-45-67
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Cart Drawer -->
-    <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-[#0a0908]/95 backdrop-blur-2xl z-50 flex flex-col border-l border-white/10 translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
-        <div class="p-6 border-b border-white/10 flex justify-between items-center">
-            <h2 class="font-serif text-2xl text-sultan-gold flex items-center gap-2">
-                <i class="ph-fill ph-shopping-bag"></i> Ваш Заказ
-            </h2>
-            <div class="flex items-center gap-4">
-                <button onclick="clearCart()" class="text-[11px] uppercase tracking-widest text-white/40 hover:text-red-400 transition hidden font-bold" id="clear-cart-btn">Очистить</button>
-                <button onclick="toggleCart()" class="text-white/50 hover:text-white transition bg-white/5 w-8 h-8 rounded-full flex items-center justify-center border border-white/10">
-                    <i class="ph ph-x text-lg"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div id="cart-items" class="flex-grow overflow-y-auto p-6 flex flex-col gap-6">
-            <!-- Cart items will be rendered here by JS -->
-            <div class="h-full flex flex-col items-center justify-center text-white/30 text-center gap-4">
-                <i class="ph-thin ph-shopping-bag text-6xl"></i>
-                <p class="font-serif text-xl">Корзина пуста</p>
-            </div>
-        </div>
-
-        <div class="p-6 border-t border-white/10 bg-sultan-dark/50">
-            <div class="flex justify-between items-center mb-6 font-serif">
-                <span class="text-lg text-white/70">Итого:</span>
-                <span class="text-2xl text-sultan-gold font-bold" id="cart-total">0 ₽</span>
-            </div>
-            <button class="btn-gold w-full py-4 rounded-lg font-bold tracking-widest uppercase text-sm" onclick="checkout()">
-                Оформить заказ
-            </button>
-        </div>
-    </aside>
-
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-hero-pattern">
-        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center text-white mt-10">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sultan-gold tracking-[0.3em] uppercase text-[10px] md:text-xs font-bold mb-8 reveal backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-sultan-gold animate-pulse"></span> Королевский вкус Стамбула
+    <section id="about" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-hero-pattern">
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 uppercase text-[10px] md:text-xs font-bold mb-8 reveal backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-sultan-gold"></span> Королевский вкус Стамбула
             </div>
             <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-8 leading-tight reveal tracking-tight" style="transition-delay: 0.1s;">
                 Искусство<br><span class="gold-text-gradient italic">Восточных Сладостей</span>
             </h1>
-            <p class="text-base md:text-xl text-white/70 mb-12 max-w-2xl mx-auto font-light reveal" style="transition-delay: 0.2s;">
+            <p class="text-base md:text-xl text-white/80 max-w-2xl mx-auto mb-10 reveal" style="transition-delay: 0.2s;">
                 40 тончайших слоев теста, премиальная антепская фисташка и золотой сироп, созданные по рецептам дворца Топкапы.
             </p>
             <div class="flex flex-col md:flex-row gap-6 justify-center items-center reveal" style="transition-delay: 0.3s;">
                 <a href="#menu" class="btn-gold py-4 px-10 rounded-full font-bold tracking-widest uppercase text-sm">
                     Смотреть Коллекцию
                 </a>
-                <a href="#about" class="py-4 px-10 rounded-full border border-white/20 hover:border-sultan-gold hover:text-sultan-gold transition tracking-widest uppercase text-sm">
-                    История Бренда
-                </a>
             </div>
         </div>
         
         <!-- Scroll indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-white/30">
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-white/50">
             <i class="ph ph-arrow-down text-2xl"></i>
         </div>
     </section>
@@ -300,18 +226,18 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                 <div class="reveal">
                     <i class="ph-thin ph-leaf text-5xl text-sultan-pistachio mb-6"></i>
-                    <h3 class="font-serif text-2xl text-white mb-4">Антепская Фисташка</h3>
-                    <p class="text-white/50 font-light text-sm leading-relaxed">Мы используем только зеленую фисташку раннего урожая из региона Газиантеп, обладающую самым насыщенным вкусом.</p>
+                    <h3 class="font-serif text-2xl text-white">Лучшие ингредиенты</h3>
+                    <p class="text-white/70 mt-4 leading-relaxed">Мы используем только зеленую фисташку раннего урожая из региона Газиантеп, обладающую самым насыщенным вкусом.</p>
                 </div>
                 <div class="reveal" style="transition-delay: 0.1s;">
-                    <i class="ph-thin ph-fire text-5xl text-sultan-gold mb-6"></i>
-                    <h3 class="font-serif text-2xl text-white mb-4">Дровяная Печь</h3>
-                    <p class="text-white/50 font-light text-sm leading-relaxed">Выпекаем в традиционных каменных печах для равномерного хруста и сохранения аромата топленого масла.</p>
+                    <i class="ph-thin ph-fire text-5xl text-sultan-gold"></i>
+                    <h3 class="font-serif text-2xl text-white">Каменные печи</h3>
+                    <p class="text-white/70 mt-4 leading-relaxed">Выпекается в 5 традиционных каменных печах для равномерного хруста и сохранения аромата топленого масла.</p>
                 </div>
                 <div class="reveal" style="transition-delay: 0.2s;">
-                    <i class="ph-thin ph-crown text-5xl text-sultan-gold mb-6"></i>
-                    <h3 class="font-serif text-2xl text-white mb-4">Ручная Раскатка</h3>
-                    <p class="text-white/50 font-light text-sm leading-relaxed">Мастера-баклавачи с 20-летним опытом раскатывают тесто до толщины папиросной бумаги, сквозь которое можно читать.</p>
+                    <i class="ph-thin ph-crown text-5xl text-sultan-gold"></i>
+                    <h3 class="font-serif text-2xl text-white">Мастерство</h3>
+                    <p class="text-white/70 mt-4 leading-relaxed">Мастера с 20-летним опытом раскатывают тесто до толщины папиросной бумаги, сквозь которое можно читать.</p>
                 </div>
             </div>
         </div>
@@ -368,8 +294,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2">
                     <a href="#" class="flex items-center gap-3 mb-6 hover:opacity-80 transition w-fit">
-                        <!-- Укажите точное название вашего файла с логотипом в src="..." -->
-                        <img src="logo.png" alt="SULTAN Logo" class="h-14 md:h-16 w-auto object-contain">
+                        <img src="logo.png" alt="ART OF BAKLAVA Logo" class="h-14 md:h-16 w-auto object-contain">
+                        <span class="font-serif text-2xl font-bold text-white tracking-widest">ART OF BAKLAVA</span>
                     </a>
                     <p class="text-white/50 text-sm leading-relaxed max-w-md">
                         Премиальная турецкая пахлава ручной работы. Доставка свежайших сладостей прямо из печи к вашему столу по всей России.
@@ -389,12 +315,12 @@
                     <ul class="space-y-4 text-sm text-white/50">
                         <li class="flex items-center gap-3"><i class="ph-fill ph-map-pin text-sultan-gold"></i> Москва, Кутузовский пр-т, 2/1</li>
                         <li class="flex items-center gap-3"><i class="ph-fill ph-phone text-sultan-gold"></i> +7 (495) 123-45-67</li>
-                        <li class="flex items-center gap-3"><i class="ph-fill ph-envelope text-sultan-gold"></i> info@sultanbaklava.ru</li>
+                        <li class="flex items-center gap-3"><i class="ph-fill ph-envelope text-sultan-gold"></i> info@artofbaklava.ru</li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/30">
-                <p>&copy; 2026 SULTAN Boutique. Все права защищены.</p>
+                <p>&copy; 2026 ART OF BAKLAVA. Все права защищены.</p>
                 <div class="flex gap-4 mt-4 md:mt-0">
                     <a href="#" class="hover:text-sultan-gold transition text-lg"><i class="ph-fill ph-instagram-logo"></i></a>
                     <a href="#" class="hover:text-sultan-gold transition text-lg"><i class="ph-fill ph-telegram-logo"></i></a>
@@ -415,10 +341,6 @@
             { id: 6, name: "Королевское Ассорти", desc: "Микс всех лучших видов нашей баклавы (1 кг).", price: 3500, category: "special", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" } // reusing image for demo
         ];
 
-        let cart = [];
-
-        // --- Core Functions ---
-        
         // Render Products
         function renderProducts(filter = 'all') {
             const grid = document.getElementById('products-grid');
@@ -427,34 +349,24 @@
             const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
             
             filtered.forEach((product, index) => {
-                const delay = index * 0.1;
                 const html = `
-                    <div class="group bg-white/[0.02] border border-white/[0.05] rounded-3xl overflow-hidden reveal hover:bg-white/[0.04] hover:border-sultan-gold/30 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(212,175,55,0.15)]" style="transition-delay: ${delay}s">
-                        <div class="h-72 relative bg-[#110f0d] flex items-center justify-center overflow-hidden">
-                            
-                            <div class="absolute inset-0 flex flex-col items-center justify-center text-sultan-gold/30 animate-pulse placeholder-icon z-0">
+                    <div class="group bg-sultan-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-sultan-gold/30 hover:shadow-[0_10px_40px_rgba(212,175,55,0.1)] reveal">
+                        <div class="h-72 relative bg-[#1C2541] flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center text-white/5 animate-pulse placeholder-icon z-0">
                                 <i class="ph-thin ph-cookie text-6xl mb-2"></i>
                             </div>
-
-                            <div class="absolute inset-0 bg-gradient-to-t from-sultan-dark via-transparent to-transparent z-10 pointer-events-none"></div>
-                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-sultan-card to-transparent z-10 pointer-events-none"></div>
                             <img src="${product.img}" alt="${product.name}" 
                                  loading="lazy"
                                  onload="this.classList.remove('opacity-0', 'scale-125'); this.parentElement.querySelector('.placeholder-icon').classList.add('hidden');"
                                  class="w-full h-full object-cover relative z-0 opacity-0 scale-125 transition-all duration-1000 group-hover:scale-110 group-hover:rotate-1">
-                                 
-                            <span class="absolute top-4 right-4 z-20 bg-sultan-dark/80 backdrop-blur-md text-sultan-gold text-xs font-bold px-3 py-1 rounded-full uppercase border border-sultan-gold/30">
+                            <span class="absolute top-4 right-4 z-20 bg-sultan-dark/80 backdrop-blur-md text-sultan-gold px-4 py-2 rounded-full text-xs font-bold border border-sultan-gold/20 shadow-sm">
                                 ${product.price} ₽
                             </span>
                         </div>
-                        <div class="p-8 relative z-20 -mt-8 bg-gradient-to-t from-[#0a0908] to-transparent pt-12">
-                            <h3 class="font-serif text-2xl text-white mb-2 group-hover:text-sultan-gold transition-colors">${product.name}</h3>
-                            <p class="text-white/50 text-sm mb-6 min-h-[40px] leading-relaxed">${product.desc}</p>
-                            <div class="flex items-center gap-4">
-                                <button onclick="addToCart(${product.id})" class="flex-grow btn-gold py-4 rounded-xl font-bold uppercase tracking-wider text-xs flex justify-center items-center gap-2">
-                                    <i class="ph-bold ph-shopping-cart-simple text-lg"></i> В корзину
-                                </button>
-                            </div>
+                        <div class="p-8 relative z-20 -mt-8 pt-12">
+                            <h3 class="font-serif text-2xl text-white mb-3 group-hover:text-sultan-gold transition-colors">${product.name}</h3>
+                            <p class="text-white/60 text-sm mb-0 min-h-[40px] leading-relaxed">${product.desc}</p>
                         </div>
                     </div>
                 `;
@@ -473,136 +385,6 @@
                 renderProducts(e.target.dataset.filter);
             });
         });
-
-        // Cart Logic
-        function toggleCart() {
-            document.getElementById('cart-drawer').classList.toggle('translate-x-full');
-            document.getElementById('cart-drawer').classList.toggle('translate-x-0');
-            document.getElementById('overlay').classList.toggle('open');
-            renderCart();
-        }
-
-        function closeAll() {
-            document.getElementById('cart-drawer').classList.add('translate-x-full');
-            document.getElementById('cart-drawer').classList.remove('translate-x-0');
-            document.getElementById('overlay').classList.remove('open');
-        }
-
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            const existing = cart.find(item => item.id === id);
-            
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                cart.push({ ...product, qty: 1 });
-            }
-            
-            updateCartBadge();
-            showToast(`Добавлено: ${product.name}`);
-        }
-
-        function updateCartBadge() {
-            const badge = document.getElementById('cart-badge');
-            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-            
-            if (totalQty > 0) {
-                badge.textContent = totalQty;
-                badge.classList.remove('hidden');
-                // simple bounce animation
-                badge.classList.add('animate-bounce');
-                setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function renderCart() {
-            const container = document.getElementById('cart-items');
-            const totalEl = document.getElementById('cart-total');
-            const clearBtn = document.getElementById('clear-cart-btn');
-            
-            if (cart.length === 0) {
-                clearBtn.classList.add('hidden');
-                container.innerHTML = `
-                    <div class="h-full flex flex-col items-center justify-center text-white/30 text-center gap-4">
-                        <i class="ph-thin ph-shopping-bag text-6xl"></i>
-                        <p class="font-serif text-xl">Корзина пуста</p>
-                    </div>`;
-                totalEl.textContent = '0 ₽';
-                return;
-            }
-            
-            container.innerHTML = '';
-            clearBtn.classList.remove('hidden');
-            let total = 0;
-            
-            cart.forEach((item, index) => {
-                total += item.price * item.qty;
-                const delay = index * 0.08;
-                const html = `
-                    <div class="flex gap-4 bg-white/5 p-4 rounded-xl border border-white/10 relative cart-item-anim" style="animation-delay: ${delay}s">
-                        <img src="${item.img}" class="w-20 h-20 object-cover rounded-lg">
-                        <div class="flex-grow flex flex-col justify-between">
-                            <div>
-                                <h4 class="font-serif text-white">${item.name}</h4>
-                                <p class="text-sultan-gold font-bold text-sm">${item.price} ₽</p>
-                            </div>
-                            <div class="flex items-center gap-3 mt-2 bg-sultan-dark/50 w-fit rounded-lg px-2 py-1 border border-white/5">
-                                <button onclick="changeQty(${index}, -1)" class="text-white/50 hover:text-white px-2">-</button>
-                                <span class="text-sm font-bold w-4 text-center">${item.qty}</span>
-                                <button onclick="changeQty(${index}, 1)" class="text-white/50 hover:text-white px-2">+</button>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="absolute top-4 right-4 text-white/30 hover:text-red-500 transition">
-                            <i class="ph-fill ph-trash"></i>
-                        </button>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', html);
-            });
-            
-            totalEl.textContent = `${total.toLocaleString()} ₽`;
-        }
-
-        function changeQty(index, delta) {
-            cart[index].qty += delta;
-            if (cart[index].qty <= 0) {
-                cart.splice(index, 1);
-            }
-            updateCartBadge();
-            renderCart();
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartBadge();
-            renderCart();
-        }
-
-        function clearCart() {
-            cart = [];
-            updateCartBadge();
-            renderCart();
-        }
-
-        function checkout() {
-            if (cart.length === 0) return showToast("Сначала добавьте товары в корзину");
-            showToast("Переход к оплате... (Демо)");
-        }
-
-        // Toast Notification System
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast flex items-center gap-3 font-medium text-sm';
-            toast.innerHTML = `<i class="ph-fill ph-check-circle text-sultan-pistachio text-xl"></i> ${message}`;
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
 
         // Scroll Animations (Intersection Observer)
         function observeElements() {
