@@ -414,9 +414,10 @@
                                 <i class="ph-thin ph-cookie text-6xl mb-2"></i>
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-sultan-card to-transparent z-10 pointer-events-none"></div>
-                            <img src="${product.img}" alt="${product.name}" 
                                  loading="lazy"
                                  onload="this.classList.remove('opacity-0', 'scale-125'); this.parentElement.querySelector('.placeholder-icon').classList.add('hidden');"
+                                 onerror="this.classList.remove('opacity-0', 'scale-125'); this.alt='Изображение не найдено';"
+                                 <img src="${encodeURI(product.img)}" alt="${product.name}" 
                                  class="w-full h-full object-cover relative z-0 opacity-0 scale-125 transition-all duration-1000 group-hover:scale-110 group-hover:rotate-1">
                             <span class="absolute top-4 right-4 z-20 bg-sultan-dark/80 backdrop-blur-md text-sultan-gold px-4 py-2 rounded-full text-xs font-bold border border-sultan-gold/20 shadow-sm">
                                 ${product.price} ₽
@@ -444,7 +445,7 @@
             document.getElementById('modal-title').textContent = product.name;
             document.getElementById('modal-desc').textContent = product.desc;
             document.getElementById('modal-price').textContent = product.price + ' ₽';
-            document.getElementById('modal-img').src = product.img;
+            document.getElementById('modal-img').src = encodeURI(product.img);
             document.getElementById('product-modal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
