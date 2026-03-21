@@ -27,19 +27,22 @@
             theme: {
                 extend: {
                     colors: {
-                    'sultan-dark': '#0B132B',
-                    'sultan-card': '#1C2541',
-                        'sultan-gold': '#d4af37',
-                        'sultan-gold-light': '#f3e5ab',
-                        'sultan-pistachio': '#93c572',
-                        'sultan-text': '#e8e6e3',
+                        /* Палитра Древних Текстур */
+                        white: '#F4F1EA', /* Слоновая кость и Мел вместо резкого белого */
+                        black: '#07080A', /* Глубокая тень вместо плоского черного */
+                        'sultan-dark': '#0A0C10', /* Поглощающий темный кофейно-синий бархат */
+                        'sultan-card': '#12151A',
+                        'sultan-gold': '#B59A6D', /* Состаренное золото, патина, латунь */
+                        'sultan-gold-light': '#D4C3A3',
+                        'sultan-pistachio': '#829375', /* Приглушенный природный фисташковый */
+                        'sultan-text': '#F4F1EA',
                     },
                     fontFamily: {
                         'playfair': ['"Playfair Display"', 'serif'],
                         'outfit': ['"Outfit"', 'sans-serif'],
                     },
                     backgroundImage: {
-                    'hero-pattern': "linear-gradient(to bottom, rgba(11, 19, 43, 0.3), rgba(11, 19, 43, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')"
+                        'hero-pattern': "linear-gradient(to bottom, rgba(10, 12, 16, 0.4), rgba(10, 12, 16, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')"
                     }
                 }
             }
@@ -49,7 +52,7 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #0B132B;
+            background-color: #0A0C10;
             color: #e8e6e3;
             overflow-x: hidden;
             touch-action: manipulation; /* Убирает 300ms задержку клика на мобильных */
@@ -61,13 +64,14 @@
 
         h1, h2, h3, h4, h5, h6, .font-serif {
             font-family: 'Playfair Display', serif;
+            letter-spacing: 0.03em; /* Заголовки-Скульптуры дышат */
         }
 
         /* Стили скроллбара */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0908; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
+        ::-webkit-scrollbar-track { background: #07080A; }
+        ::-webkit-scrollbar-thumb { background: #1a1e24; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #B59A6D; }
 
         /* Glassmorphism */
         .glass {
@@ -78,50 +82,50 @@
         }
 
         .glass-nav {
-            background: rgba(11, 19, 43, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(10, 12, 16, 0.85);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(181, 154, 109, 0.05); /* Легкий кивок, тоньше волоска */
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .glass-nav.scrolled {
-            background: rgba(11, 19, 43, 0.95);
+            background: rgba(10, 12, 16, 0.95);
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
         }
 
         /* Анимации текста и кнопок */
         .gold-text-gradient {
-            background: linear-gradient(to right, #d4af37, #f3e5ab, #d4af37);
+            background: linear-gradient(to right, #B59A6D, #D4C3A3, #B59A6D);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            background-size: 200% auto;
-            animation: shine 5s linear infinite;
+            background-size: 300% auto;
+            animation: shine 8s linear infinite; /* Очень медленный, благородный перелив */
         }
         @keyframes shine { to { background-position: 200% center; } }
 
         .btn-gold {
-            background: rgba(212, 175, 55, 0.1);
-            color: #d4af37;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(181, 154, 109, 0.03); /* Микро-взаимодействие */
+            color: #B59A6D;
+            border: 1px solid rgba(181, 154, 109, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
             z-index: 1;
         }
         .btn-gold:hover {
-            background: #d4af37;
-            color: #0a0908;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
-            transform: translateY(-3px) scale(1.02);
+            background: rgba(181, 154, 109, 0.1);
+            color: #D4C3A3;
+            box-shadow: 0 0 40px rgba(181, 154, 109, 0.15); /* Мягкое свечение */
+            transform: translateY(-2px); /* Плавное движение без резких скачков */
         }
 
         /* Анимации появления при скролле */
         .reveal {
             opacity: 0;
             transform: translateY(50px) scale(0.95);
-            transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 1.5s ease-out, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); /* Цифровая тишина */
             will-change: opacity, transform; /* Подсказка браузеру для ускорения */
         }
         .reveal.active {
@@ -132,7 +136,7 @@
         /* Прелоадер */
         #preloader {
             position: fixed; inset: 0; z-index: 9999;
-            background: #0B132B;
+            background: #0A0C10;
             display: flex; justify-content: center; align-items: center;
             transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
             clip-path: circle(150% at 50% 50%);
@@ -143,19 +147,19 @@
         }
         .loader-ring {
             width: 60px; height: 60px;
-            border: 3px solid rgba(212, 175, 55, 0.2);
-            border-top-color: #d4af37;
+            border: 2px solid rgba(181, 154, 109, 0.1); /* Тонкие линии */
+            border-top-color: #B59A6D;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 2s linear infinite; /* Медленное вращение */
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Custom select styling for filters */
         .filter-btn.active {
-            background: rgba(212, 175, 55, 0.1) !important; 
-            color: #d4af37 !important; 
-            border-color: rgba(212, 175, 55, 0.4) !important;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+            background: rgba(181, 154, 109, 0.05) !important; 
+            color: #B59A6D !important; 
+            border-color: rgba(181, 154, 109, 0.3) !important;
+            box-shadow: 0 0 30px rgba(181, 154, 109, 0.1);
         }
 
         /* Scroll Down Line Animation */
@@ -173,18 +177,18 @@
         .nav-link:hover { color: white; }
         .nav-link::after {
             content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 50%;
-            background-color: #d4af37; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-50%);
+            background-color: #B59A6D; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-50%);
         }
         .nav-link:hover::after { width: 100%; }
 
         /* Модальное окно */
         #product-modal {
             opacity: 0; pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.8s ease;
         }
         #product-modal.open { opacity: 1; pointer-events: auto; }
         #product-modal .modal-content {
-            transform: scale(0.95) translateY(20px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.98) translateY(10px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); /* Мягкое появление окна */
         }
         #product-modal.open .modal-content { transform: scale(1) translateY(0); }
     </style>
@@ -206,7 +210,7 @@
     <!-- Header -->
     <header class="fixed w-full top-0 z-30 glass-nav transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="flex items-center gap-3 hover:opacity-80 transition">
+            <a href="#" class="flex items-center gap-3 hover:opacity-70 transition-opacity duration-1000">
                 <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" fetchpriority="high" class="h-16 md:h-20 w-auto object-contain rounded-xl border border-sultan-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-transform hover:scale-105">
             </a>
             
@@ -218,21 +222,21 @@
 
             <!-- Contact info instead of cart -->
             <div class="hidden md:flex items-center gap-6 text-white text-sm font-medium">
-                <a href="tel:+79917038407" class="hover:text-sultan-gold transition flex items-center gap-2">
+                <a href="tel:+79917038407" class="hover:text-sultan-gold transition-colors duration-700 flex items-center gap-2">
                     <i class="ph-fill ph-phone text-xl text-sultan-gold"></i>
                     +7 (991) 703-84-07
                 </a>
             </div>
 
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-white hover:text-sultan-gold text-3xl transition" aria-label="Открыть меню">
+            <button id="mobile-menu-btn" class="md:hidden text-white hover:text-sultan-gold text-3xl transition-colors duration-700" aria-label="Открыть меню">
                 <i class="ph-thin ph-list"></i>
             </button>
         </div>
     </header>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-2xl z-50 translate-x-full transition-transform duration-500 md:hidden flex flex-col items-center justify-center gap-8">
+    <div id="mobile-menu" class="fixed inset-0 bg-[#0A0C10]/98 backdrop-blur-2xl z-50 translate-x-full transition-transform duration-1000 ease-in-out md:hidden flex flex-col items-center justify-center gap-8">
         <button id="close-menu-btn" class="absolute top-6 right-6 text-white text-3xl hover:text-sultan-gold transition" aria-label="Закрыть меню">
             <i class="ph-thin ph-x"></i>
         </button>
@@ -245,23 +249,23 @@
     </div>
 
     <!-- Hero Section -->
-    <section id="about" class="relative min-h-[100dvh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-hero-pattern">
+    <section id="about" class="relative min-h-[100dvh] flex items-center justify-center pt-40 pb-32 overflow-hidden bg-hero-pattern">
         <div class="relative z-10 max-w-6xl mx-auto px-6 text-center text-white pb-16">
             <div class="flex justify-center mb-8 reveal">
-                <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" fetchpriority="high" class="w-40 md:w-56 lg:w-72 h-auto object-contain rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-700">
+                <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" fetchpriority="high" class="w-40 md:w-56 lg:w-72 h-auto object-contain rounded-3xl border border-white/5 shadow-[0_30px_80px_rgba(0,0,0,0.8)] transition-transform duration-[2s] hover:scale-[1.02]">
             </div>
-            <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-sultan-gold/30 bg-black/30 uppercase text-[10px] md:text-xs font-bold mb-8 reveal backdrop-blur-xl shadow-[0_0_20px_rgba(212,175,55,0.15)]">
-                <span class="w-2 h-2 rounded-full bg-sultan-gold animate-pulse"></span> Королевский вкус Стамбула
+            <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-sultan-gold/20 bg-black/40 uppercase text-[10px] md:text-xs tracking-[0.2em] mb-12 reveal backdrop-blur-xl">
+                <span class="w-1.5 h-1.5 rounded-full bg-sultan-gold/70 animate-pulse"></span> Королевский вкус Стамбула
             </div>
-            <h1 class="text-6xl md:text-8xl lg:text-[8rem] font-serif font-medium mb-8 leading-[0.95] reveal tracking-tighter" style="transition-delay: 0.1s;">
-                Искусство<br><span class="gold-text-gradient italic font-light">Восточных Сладостей</span>
+            <h1 class="text-6xl md:text-8xl lg:text-[8rem] font-serif font-normal mb-10 leading-[0.95] reveal tracking-wide drop-shadow-2xl" style="transition-delay: 0.2s;">
+                Искусство<br><span class="gold-text-gradient italic font-light tracking-wider">Восточных Сладостей</span>
             </h1>
-            <p class="text-lg md:text-xl lg:text-2xl text-white/50 font-light max-w-3xl mx-auto mb-14 reveal tracking-wide leading-relaxed" style="transition-delay: 0.2s;">
+            <p class="text-lg md:text-xl lg:text-2xl text-white/60 font-light max-w-3xl mx-auto mb-16 reveal tracking-wide leading-relaxed" style="transition-delay: 0.4s;">
                 40 тончайших слоев теста, премиальная антепская фисташка и золотой сироп, созданные по рецептам дворца Топкапы.
             </p>
-            <div class="flex flex-col md:flex-row gap-6 justify-center items-center reveal" style="transition-delay: 0.3s;">
-                <a href="#menu" class="group relative inline-flex items-center justify-center px-10 py-5 font-medium tracking-[0.2em] text-white uppercase rounded-full overflow-hidden backdrop-blur-2xl border border-sultan-gold/40 hover:border-sultan-gold transition-all duration-500 hover:scale-105 shadow-[0_0_30px_rgba(212,175,55,0.1)] hover:shadow-[0_0_40px_rgba(212,175,55,0.3)]">
-                    <span class="absolute inset-0 bg-sultan-gold/10 group-hover:bg-sultan-gold/20 transition-colors duration-500"></span>
+            <div class="flex flex-col md:flex-row gap-6 justify-center items-center reveal" style="transition-delay: 0.6s;">
+                <a href="#menu" class="group relative inline-flex items-center justify-center px-10 py-5 font-light tracking-[0.3em] text-white uppercase rounded-full overflow-hidden backdrop-blur-2xl border border-sultan-gold/20 hover:border-sultan-gold/50 transition-all duration-1000 hover:scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                    <span class="absolute inset-0 bg-sultan-gold/5 group-hover:bg-sultan-gold/10 transition-colors duration-1000"></span>
                     <span class="relative z-10 flex items-center gap-3 text-xs md:text-sm">Смотреть Коллекцию <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i></span>
                 </a>
             </div>
@@ -269,7 +273,7 @@
         
         <!-- Scroll indicator -->
         <div class="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50 hover:opacity-100 transition-opacity cursor-pointer z-20 group">
-            <span class="text-[9px] tracking-[0.3em] uppercase font-bold text-sultan-gold-light group-hover:text-sultan-gold transition-colors">Исследовать</span>
+            <span class="text-[9px] tracking-[0.4em] uppercase font-light text-white/50 group-hover:text-sultan-gold transition-colors duration-1000">Исследовать</span>
             <div class="w-[1px] h-12 bg-white/10 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1/2 bg-sultan-gold animate-[scroll-down_2s_ease-in-out_infinite]"></div>
             </div>
@@ -277,22 +281,22 @@
     </section>
 
     <!-- Features Section -->
-    <section id="quality" class="py-24 bg-sultan-dark border-t border-white/5 relative">
+    <section id="quality" class="py-32 bg-sultan-dark border-t border-white/5 relative">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-center">
-                <div class="reveal bg-white/[0.02] backdrop-blur-2xl border border-white/5 border-t-white/10 p-10 lg:p-12 rounded-[2.5rem] hover:bg-white/[0.04] hover:border-sultan-gold/30 transition-all duration-700 hover:-translate-y-2 shadow-2xl shadow-black/20">
-                    <i class="ph-thin ph-leaf text-5xl text-sultan-pistachio mb-6"></i>
-                    <h3 class="font-serif text-2xl text-white tracking-wide mb-4">Лучшие ингредиенты</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 text-center">
+                <div class="reveal bg-white/[0.01] backdrop-blur-3xl border border-white/5 border-t-white/10 p-12 lg:p-16 rounded-[2.5rem] hover:bg-white/[0.02] hover:border-sultan-gold/10 transition-all duration-[1.5s] hover:-translate-y-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <i class="ph-thin ph-leaf text-5xl text-sultan-pistachio/80 mb-8"></i>
+                    <h3 class="font-serif text-2xl text-white tracking-widest mb-6">Лучшие ингредиенты</h3>
                     <p class="text-white/50 mt-4 leading-relaxed font-light">Мы используем только зеленую фисташку раннего урожая из региона Газиантеп, обладающую самым насыщенным вкусом.</p>
                 </div>
-                <div class="reveal bg-white/[0.02] backdrop-blur-2xl border border-white/5 border-t-white/10 p-10 lg:p-12 rounded-[2.5rem] hover:bg-white/[0.04] hover:border-sultan-gold/30 transition-all duration-700 hover:-translate-y-2 shadow-2xl shadow-black/20" style="transition-delay: 0.1s;">
-                    <i class="ph-thin ph-fire text-5xl text-sultan-gold"></i>
-                    <h3 class="font-serif text-2xl text-white tracking-wide mb-4">Каменные печи</h3>
+                <div class="reveal bg-white/[0.01] backdrop-blur-3xl border border-white/5 border-t-white/10 p-12 lg:p-16 rounded-[2.5rem] hover:bg-white/[0.02] hover:border-sultan-gold/10 transition-all duration-[1.5s] hover:-translate-y-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" style="transition-delay: 0.2s;">
+                    <i class="ph-thin ph-fire text-5xl text-sultan-gold/80 mb-8"></i>
+                    <h3 class="font-serif text-2xl text-white tracking-widest mb-6">Каменные печи</h3>
                     <p class="text-white/50 mt-4 leading-relaxed font-light">Выпекается в 5 традиционных каменных печах для равномерного хруста и сохранения аромата топленого масла.</p>
                 </div>
-                <div class="reveal bg-white/[0.02] backdrop-blur-2xl border border-white/5 border-t-white/10 p-10 lg:p-12 rounded-[2.5rem] hover:bg-white/[0.04] hover:border-sultan-gold/30 transition-all duration-700 hover:-translate-y-2 shadow-2xl shadow-black/20" style="transition-delay: 0.2s;">
-                    <i class="ph-thin ph-crown text-5xl text-sultan-gold"></i>
-                    <h3 class="font-serif text-2xl text-white tracking-wide mb-4">Мастерство</h3>
+                <div class="reveal bg-white/[0.01] backdrop-blur-3xl border border-white/5 border-t-white/10 p-12 lg:p-16 rounded-[2.5rem] hover:bg-white/[0.02] hover:border-sultan-gold/10 transition-all duration-[1.5s] hover:-translate-y-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" style="transition-delay: 0.4s;">
+                    <i class="ph-thin ph-crown text-5xl text-sultan-gold/80 mb-8"></i>
+                    <h3 class="font-serif text-2xl text-white tracking-widest mb-6">Мастерство</h3>
                     <p class="text-white/50 mt-4 leading-relaxed font-light">Мастера с 20-летним опытом раскатывают тесто до толщины папиросной бумаги, сквозь которое можно читать.</p>
                 </div>
             </div>
@@ -300,18 +304,18 @@
     </section>
 
     <!-- Main Menu Section -->
-    <section id="menu" class="py-32 relative">
+    <section id="menu" class="py-40 relative">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl md:text-5xl font-serif text-white mb-4">Наша Коллекция</h2>
-                <div class="w-24 h-1 bg-sultan-gold mx-auto mb-8"></div>
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-4xl md:text-6xl font-serif text-white mb-6 tracking-wide">Наша Коллекция</h2>
+                <div class="w-16 h-px bg-sultan-gold/30 mx-auto mb-10"></div>
                 
                 <!-- Filters -->
                 <div class="flex overflow-x-auto justify-start md:justify-center gap-3 md:gap-4 mt-12 pb-4 hide-scrollbar snap-x px-4" id="filters">
-                    <button class="filter-btn shrink-0 snap-start active bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="all">Все</button>
-                    <button class="filter-btn shrink-0 snap-start bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="pistachio">Фисташка</button>
-                    <button class="filter-btn shrink-0 snap-start bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="walnut">Грецкий орех</button>
-                    <button class="filter-btn shrink-0 snap-start bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="special">Специальные</button>
+                    <button class="filter-btn shrink-0 snap-start active bg-transparent border border-white/10 px-6 md:px-8 py-3 rounded-full text-xs font-light tracking-[0.2em] uppercase transition-all duration-1000 hover:border-white/30 text-white/70 backdrop-blur-md" data-filter="all">Все</button>
+                    <button class="filter-btn shrink-0 snap-start bg-transparent border border-white/10 px-6 md:px-8 py-3 rounded-full text-xs font-light tracking-[0.2em] uppercase transition-all duration-1000 hover:border-white/30 text-white/70 backdrop-blur-md" data-filter="pistachio">Фисташка</button>
+                    <button class="filter-btn shrink-0 snap-start bg-transparent border border-white/10 px-6 md:px-8 py-3 rounded-full text-xs font-light tracking-[0.2em] uppercase transition-all duration-1000 hover:border-white/30 text-white/70 backdrop-blur-md" data-filter="walnut">Грецкий орех</button>
+                    <button class="filter-btn shrink-0 snap-start bg-transparent border border-white/10 px-6 md:px-8 py-3 rounded-full text-xs font-light tracking-[0.2em] uppercase transition-all duration-1000 hover:border-white/30 text-white/70 backdrop-blur-md" data-filter="special">Специальные</button>
                 </div>
             </div>
 
@@ -323,7 +327,7 @@
     </section>
 
     <!-- Video Banner Section -->
-    <section class="py-40 relative overflow-hidden flex items-center justify-center">
+    <section class="py-48 relative overflow-hidden flex items-center justify-center">
         <!-- Видео на фоне -->
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
             <!-- Используем красивое демо-видео работы пекаря. Вы можете заменить ссылку на свое видео (mp4) -->
@@ -333,42 +337,42 @@
         <div class="absolute inset-0 bg-gradient-to-b from-sultan-dark via-sultan-dark/60 to-sultan-dark z-10"></div>
         
         <div class="relative z-20 max-w-4xl mx-auto px-6 text-center reveal">
-            <div class="w-20 h-20 mx-auto border border-sultan-gold/50 rounded-full flex items-center justify-center mb-8 relative cursor-pointer group">
+            <div class="w-24 h-24 mx-auto border border-white/20 rounded-full flex items-center justify-center mb-12 relative cursor-pointer group hover:border-sultan-gold/40 transition-colors duration-1000">
                 <div class="absolute inset-0 rounded-full bg-sultan-gold/20 animate-ping"></div>
-                <i class="ph-fill ph-play text-3xl text-sultan-gold ml-2 group-hover:scale-110 transition-transform"></i>
+                <i class="ph-fill ph-play text-3xl text-white/80 group-hover:text-sultan-gold ml-2 transition-colors duration-1000"></i>
             </div>
-            <h2 class="text-4xl md:text-5xl font-serif text-white leading-snug mb-8">
+            <h2 class="text-4xl md:text-5xl font-serif text-white leading-snug mb-10 tracking-wide font-normal">
                 Магия начинается там, где тончайшее тесто встречается с густым янтарным сиропом
             </h2>
-            <p class="text-sultan-gold tracking-[0.3em] uppercase text-sm font-bold">— Искусство создания</p>
+            <p class="text-sultan-gold/70 tracking-[0.4em] uppercase text-xs font-light">— Искусство создания</p>
         </div>
     </section>
 
     <!-- Moodboard Gallery Section -->
-    <section class="py-32 relative bg-sultan-dark overflow-hidden border-t border-white/5">
+    <section class="py-40 relative bg-sultan-dark overflow-hidden border-t border-white/5">
         <!-- Decorative subtle glow -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-sultan-gold/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-4xl md:text-5xl font-serif text-white mb-6">Эстетика Вкуса</h2>
-                <p class="text-white/50 font-light text-lg md:text-xl tracking-wide max-w-2xl mx-auto">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-4xl md:text-5xl font-serif text-white mb-8 tracking-widest">Эстетика Вкуса</h2>
+                <p class="text-white/40 font-light text-lg md:text-xl tracking-wide max-w-2xl mx-auto leading-relaxed">
                     Больше, чем просто десерт. Ритуал, который объединяет столетия истории, безупречное мастерство и истинное наслаждение.
                 </p>
             </div>
 
             <!-- Asymmetrical Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[200px] md:auto-rows-[300px] reveal" style="transition-delay: 0.2s;">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8 auto-rows-[250px] md:auto-rows-[350px] reveal" style="transition-delay: 0.4s;">
                 <!-- Large Image (Spans 2 columns and 2 rows) -->
-                <div class="col-span-2 row-span-2 rounded-[2rem] overflow-hidden border border-white/10 relative group bg-white/5 backdrop-blur-sm shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-                    <img src="Визуал один.jpg" alt="Атмосфера 1" loading="lazy" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"></div>
+                <div class="col-span-2 row-span-2 rounded-[2.5rem] overflow-hidden border border-white/5 relative group bg-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+                    <img src="Визуал один.jpg" alt="Атмосфера 1" loading="lazy" class="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-[1.03]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-sultan-dark via-transparent to-sultan-dark/30 opacity-80 transition-opacity duration-[2s] group-hover:opacity-50 pointer-events-none"></div>
                 </div>
                 
                 <!-- Small Image 1 -->
-                <div class="col-span-1 row-span-1 rounded-[2rem] overflow-hidden border border-white/10 relative group bg-white/5 backdrop-blur-sm">
-                    <img src="Визуал два.jpg" alt="Атмосфера 2" loading="lazy" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105">
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-700"></div>
+                <div class="col-span-1 row-span-1 rounded-[2.5rem] overflow-hidden border border-white/5 relative group bg-white/5">
+                    <img src="Визуал два.jpg" alt="Атмосфера 2" loading="lazy" class="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-[1.04]">
+                    <div class="absolute inset-0 bg-sultan-dark/40 group-hover:bg-sultan-dark/10 transition-colors duration-[2s]"></div>
                 </div>
                 
                 <!-- Small Image 2 -->
@@ -397,12 +401,12 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2">
-                    <a href="#" class="flex items-center gap-3 mb-6 hover:opacity-80 transition w-fit">
-                        <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" class="h-20 md:h-24 w-auto object-contain rounded-2xl border border-sultan-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.2)] transition-transform hover:scale-105">
+                    <a href="#" class="flex items-center gap-4 mb-8 hover:opacity-70 transition-opacity duration-1000 w-fit">
+                        <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" class="h-20 md:h-24 w-auto object-contain rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                         <span class="font-serif text-2xl font-bold text-white tracking-widest">ART OF BAKLAVA</span>
                     </a>
                     <p class="text-white/50 text-sm leading-relaxed max-w-md">
-                        Премиальная турецкая пахлава ручной работы. Доставка свежайших сладостей прямо из печи к вашему столу по всей России.
+                        Премиальная турецкая пахлава ручной работы. Доставка свежайших сладостей прямо из печи к вашему столу.
                     </p>
                 </div>
                 <div>
@@ -439,10 +443,10 @@
                 </div>
             </div>
             <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/30">
-                <p>&copy; 2026 ART OF BAKLAVA. Все права защищены.</p>
+                <p class="tracking-wider">&copy; 2026 ART OF BAKLAVA. Все права защищены.</p>
                 <div class="flex gap-4 mt-4 md:mt-0">
-                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Наш Instagram" class="hover:text-sultan-gold transition text-lg"><i class="ph-fill ph-instagram-logo"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Наш Telegram" class="hover:text-sultan-gold transition text-lg"><i class="ph-fill ph-telegram-logo"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Наш Instagram" class="hover:text-white transition-colors duration-700 text-lg"><i class="ph-fill ph-instagram-logo"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Наш Telegram" class="hover:text-white transition-colors duration-700 text-lg"><i class="ph-fill ph-telegram-logo"></i></a>
                 </div>
             </div>
         </div>
@@ -450,22 +454,22 @@
 
     <!-- Modal for Product Details -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onclick="closeModal()">
-        <div class="modal-content relative bg-[#0B132B]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-lg max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)] hide-scrollbar" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-5 right-5 text-white hover:text-sultan-gold hover:bg-white/10 transition-all z-30 bg-black/50 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center border border-white/20 shadow-xl">
+        <div class="modal-content relative bg-[#0A0C10]/95 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] w-full max-w-lg max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-[0_30px_80px_rgba(0,0,0,0.9)] hide-scrollbar" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-white/50 hover:text-white hover:bg-white/5 transition-all duration-700 z-30 bg-black/40 backdrop-blur-md rounded-full w-12 h-12 flex items-center justify-center border border-white/10 shadow-2xl">
                 <i class="ph-bold ph-x text-xl"></i>
             </button>
             <div class="h-80 relative bg-transparent overflow-hidden">
-                <img id="modal-img" src="" class="w-full h-full object-cover opacity-90" alt="">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0B132B] via-[#0B132B]/40 to-transparent"></div>
+                <img id="modal-img" src="" class="w-full h-full object-cover opacity-80" alt="">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0C10] via-transparent to-[#0A0C10]/30"></div>
             </div>
             <div class="p-8 relative z-20 -mt-16">
-                <h3 id="modal-title" class="font-serif text-3xl lg:text-4xl text-white mb-4 leading-tight drop-shadow-lg">Название</h3>
-                <div class="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-sultan-gold/10 border border-sultan-gold/30 text-sultan-gold text-sm font-bold uppercase tracking-widest mb-8 backdrop-blur-md shadow-lg" id="modal-price"></div>
+                <h3 id="modal-title" class="font-serif text-3xl lg:text-4xl text-white mb-6 leading-tight drop-shadow-lg tracking-wide">Название</h3>
+                <div class="inline-flex items-center justify-center px-5 py-2 rounded-full bg-white/5 border border-white/10 text-sultan-gold/80 text-sm font-light uppercase tracking-[0.2em] mb-10 backdrop-blur-md shadow-lg" id="modal-price"></div>
                 
-                <h4 class="text-white font-medium mb-3 flex items-center gap-2">
-                    <i class="ph-fill ph-info text-sultan-gold"></i> Описание и состав
+                <h4 class="text-white/60 font-light mb-4 flex items-center gap-3 tracking-widest uppercase text-xs">
+                    <i class="ph-thin ph-info text-lg"></i> Описание и состав
                 </h4>
-                <p id="modal-desc" class="text-white/70 text-sm leading-relaxed mb-4"></p>
+                <p id="modal-desc" class="text-white/40 text-sm font-light leading-loose mb-6"></p>
             </div>
         </div>
     </div>
@@ -498,30 +502,30 @@
             
             filtered.forEach((product, index) => {
                 const html = `
-                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-white/[0.02] backdrop-blur-2xl rounded-[2.5rem] border border-white/5 border-t-white/10 overflow-hidden transition-all duration-700 hover:-translate-y-3 hover:border-sultan-gold/40 hover:shadow-[0_20px_50px_rgba(212,175,55,0.15)] hover:bg-white/[0.04] reveal">
+                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-white/[0.01] backdrop-blur-3xl rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-[1.5s] ease-out hover:-translate-y-1 hover:border-white/10 hover:shadow-[0_30px_60px_rgba(0,0,0,0.6)] hover:bg-white/[0.02] reveal">
                         <div class="h-72 lg:h-80 relative bg-transparent flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 flex flex-col items-center justify-center text-white/5 animate-pulse placeholder-icon z-0">
                                 <i class="ph-thin ph-cookie text-6xl mb-2"></i>
                             </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0B132B]/90 via-transparent to-transparent z-10 pointer-events-none opacity-90 transition-opacity duration-700 group-hover:opacity-70"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#0A0C10] via-transparent to-[#0A0C10]/40 z-10 pointer-events-none opacity-90 transition-opacity duration-[1.5s] group-hover:opacity-60"></div>
                             <img src="${encodeURI(product.img)}" alt="${product.name}" 
                                  loading="lazy"
                                  onload="this.classList.remove('opacity-0', 'scale-125'); this.parentElement.querySelector('.placeholder-icon').classList.add('hidden');"
                                  onerror="this.classList.remove('opacity-0', 'scale-125'); this.src='https://placehold.co/400x300/1C2541/d4af37?text=Нет+фото'; this.alt='Изображение не найдено';"
-                                 class="w-full h-full object-cover relative z-0 opacity-0 scale-125 transition-transform duration-[2s] ease-out group-hover:scale-110">
-                            <span class="absolute top-6 right-6 z-20 bg-[#0B132B]/60 backdrop-blur-xl text-sultan-gold-light px-5 py-2.5 rounded-full text-xs font-bold border border-white/10 shadow-2xl tracking-widest">
+                                 class="w-full h-full object-cover relative z-0 opacity-0 scale-110 transition-transform duration-[2s] ease-out group-hover:scale-[1.03]">
+                            <span class="absolute top-6 right-6 z-20 bg-[#0A0C10]/40 backdrop-blur-xl text-sultan-gold/80 px-5 py-2.5 rounded-full text-[10px] font-light border border-white/10 shadow-2xl tracking-[0.2em]">
                                 ${product.price} ₽
                             </span>
                         </div>
                         <div class="p-8 lg:p-10 relative z-20">
-                            <h3 class="font-serif text-2xl text-white group-hover:text-sultan-gold transition-colors duration-500 line-clamp-2 leading-snug">${product.name}</h3>
+                            <h3 class="font-serif text-2xl text-white group-hover:text-white/80 transition-colors duration-1000 line-clamp-2 leading-snug tracking-wide">${product.name}</h3>
                             
-                            <div class="flex items-center justify-between mt-6">
-                                <p class="text-white/40 text-sm font-light uppercase tracking-widest flex items-center gap-2 group-hover:text-sultan-gold transition-colors duration-500">
+                            <div class="flex items-center justify-between mt-8">
+                                <p class="text-white/30 text-[10px] font-light uppercase tracking-[0.3em] flex items-center gap-2 group-hover:text-sultan-gold/80 transition-colors duration-1000">
                                     Детали
                                 </p>
-                                <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-sultan-gold group-hover:border-sultan-gold transition-all duration-500 shadow-lg group-hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                                    <i class="ph-bold ph-arrow-right text-white group-hover:text-sultan-dark transition-colors text-lg"></i>
+                                <div class="w-12 h-12 rounded-full bg-transparent flex items-center justify-center border border-white/10 group-hover:bg-white/5 group-hover:border-white/20 transition-all duration-1000">
+                                    <i class="ph-thin ph-arrow-right text-white/50 group-hover:text-white transition-colors text-xl"></i>
                                 </div>
                             </div>
                         </div>
