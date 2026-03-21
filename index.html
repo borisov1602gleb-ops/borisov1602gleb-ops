@@ -121,13 +121,12 @@
         .reveal {
             opacity: 0;
             transform: translateY(50px) scale(0.95);
-            filter: blur(10px);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform; /* Подсказка браузеру для ускорения */
         }
         .reveal.active {
             opacity: 1;
             transform: translateY(0) scale(1);
-            filter: blur(0);
         }
 
         /* Прелоадер */
@@ -193,8 +192,8 @@
 <body class="selection:bg-sultan-gold selection:text-sultan-dark">
 
     <!-- Ambient Background Glows -->
-    <div class="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sultan-gold/15 blur-[150px] rounded-full pointer-events-none z-0 animate-[pulse_8s_ease-in-out_infinite]"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/20 blur-[150px] rounded-full pointer-events-none z-0 animate-[pulse_10s_ease-in-out_infinite_reverse]"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sultan-gold/15 blur-[150px] rounded-full pointer-events-none z-0 animate-[pulse_8s_ease-in-out_infinite] transform-gpu will-change-transform"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/20 blur-[150px] rounded-full pointer-events-none z-0 animate-[pulse_10s_ease-in-out_infinite_reverse] transform-gpu will-change-transform"></div>
 
     <!-- Preloader -->
     <div id="preloader">
