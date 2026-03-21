@@ -156,6 +156,17 @@
             background-color: #d4af37; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-50%);
         }
         .nav-link:hover::after { width: 100%; }
+
+        /* Модальное окно */
+        #product-modal {
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #product-modal.open { opacity: 1; pointer-events: auto; }
+        #product-modal .modal-content {
+            transform: scale(0.95) translateY(20px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #product-modal.open .modal-content { transform: scale(1) translateY(0); }
     </style>
 </head>
 <body class="bg-pattern-texture selection:bg-sultan-gold selection:text-sultan-dark">
@@ -329,16 +340,45 @@
         </div>
     </footer>
 
+    <!-- Modal for Product Details -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onclick="closeModal()">
+        <div class="modal-content relative bg-sultan-card border border-sultan-gold/20 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-white hover:text-sultan-gold transition z-30 bg-sultan-dark/50 backdrop-blur-md rounded-full w-8 h-8 flex items-center justify-center border border-white/10">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+            <div class="h-64 relative bg-[#1C2541]">
+                <img id="modal-img" src="" class="w-full h-full object-cover opacity-90" alt="">
+                <div class="absolute inset-0 bg-gradient-to-t from-sultan-card to-transparent"></div>
+            </div>
+            <div class="p-8 relative z-20 -mt-10">
+                <h3 id="modal-title" class="font-serif text-3xl text-white mb-2 leading-tight">Название</h3>
+                <div class="inline-block px-3 py-1 rounded-full bg-sultan-gold/10 border border-sultan-gold/20 text-sultan-gold text-xs font-bold uppercase tracking-wider mb-6" id="modal-price"></div>
+                
+                <h4 class="text-white font-medium mb-3 flex items-center gap-2">
+                    <i class="ph-fill ph-info text-sultan-gold"></i> Описание и состав
+                </h4>
+                <p id="modal-desc" class="text-white/70 text-sm leading-relaxed mb-4"></p>
+            </div>
+        </div>
+    </div>
+
     <!-- Logic JavaScript -->
     <script>
         // --- Data ---
         const products = [
-            { id: 1, name: "Классическая Фисташковая", desc: "Классическая нарезка, много фисташки и хруст.", price: 1800, category: "pistachio", img: "https://images.unsplash.com/photo-1599598425947-330026294713?q=80&w=800&auto=format&fit=crop" },
-            { id: 2, name: "Хавуч Дилими", desc: "Нарезка в форме моркови с огромным количеством крупных фисташек.", price: 2100, category: "pistachio", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" },
-            { id: 3, name: "С Грецким Орехом", desc: "Домашний вкус с фермерским грецким орехом.", price: 1500, category: "walnut", img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=800&auto=format&fit=crop" },
-            { id: 4, name: "Шобиет", desc: "Треугольная форма, сливочный каймак внутри.", price: 2400, category: "special", img: "https://images.unsplash.com/photo-1601306353916-d352bc6dd3a2?q=80&w=800&auto=format&fit=crop" },
-            { id: 5, name: "Бюльбюль Ювасы", desc: "Гнездо соловья. Круглая форма с цельными фисташками в центре.", price: 2600, category: "special", img: "https://images.unsplash.com/photo-1599598425947-330026294713?q=80&w=800&auto=format&fit=crop" }, // reusing image for demo
-            { id: 6, name: "Королевское Ассорти", desc: "Микс всех лучших видов нашей баклавы (1 кг).", price: 3500, category: "special", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" } // reusing image for demo
+            { id: 1, name: "Классическая Баклава с фисташкой", desc: "Состав: Мука пшеничная, фисташка, топленое масло, молоко, сахар, яйцо, соль пищевая.", price: 1800, category: "pistachio", img: "https://images.unsplash.com/photo-1599598425947-330026294713?q=80&w=800&auto=format&fit=crop" },
+            { id: 2, name: "Холодная Баклава с Фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 1900, category: "pistachio", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" },
+            { id: 3, name: "Хавуч с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2100, category: "pistachio", img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=800&auto=format&fit=crop" },
+            { id: 4, name: "Холодный Хавуч с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2200, category: "pistachio", img: "https://images.unsplash.com/photo-1601306353916-d352bc6dd3a2?q=80&w=800&auto=format&fit=crop" },
+            { id: 5, name: "Холодный Хавуч с грецким орехом", desc: "Состав: Описание будет добавлено позже.", price: 1900, category: "walnut", img: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=800&auto=format&fit=crop" },
+            { id: 6, name: "Фыстык Сарма ПРЕМИУМ", desc: "Состав: Описание будет добавлено позже.", price: 3000, category: "special", img: "https://images.unsplash.com/photo-1599598425947-330026294713?q=80&w=800&auto=format&fit=crop" },
+            { id: 7, name: "Бурма с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2300, category: "pistachio", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" },
+            { id: 8, name: "Мидии с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2400, category: "pistachio", img: "https://images.unsplash.com/photo-1601306353916-d352bc6dd3a2?q=80&w=800&auto=format&fit=crop" },
+            { id: 9, name: "Зеленые мидии с фисташкой ПРЕМИУМ", desc: "Состав: Описание будет добавлено позже.", price: 3200, category: "special", img: "https://images.unsplash.com/photo-1599598425947-330026294713?q=80&w=800&auto=format&fit=crop" },
+            { id: 10, name: "Холодные Мидии с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2500, category: "pistachio", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" },
+            { id: 11, name: "Шобиет с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2400, category: "pistachio", img: "https://images.unsplash.com/photo-1601306353916-d352bc6dd3a2?q=80&w=800&auto=format&fit=crop" },
+            { id: 12, name: "Премиум Бюль-Бюль Ювасы(гнездо соловья) с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2800, category: "special", img: "https://images.unsplash.com/photo-1599598425947-330026294713?q=80&w=800&auto=format&fit=crop" },
+            { id: 13, name: "Шоколадная Баклава с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2600, category: "special", img: "https://images.unsplash.com/photo-1616421447040-5e82110ea092?q=80&w=800&auto=format&fit=crop" }
         ];
 
         // Render Products
@@ -350,7 +390,7 @@
             
             filtered.forEach((product, index) => {
                 const html = `
-                    <div class="group bg-sultan-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-sultan-gold/30 hover:shadow-[0_10px_40px_rgba(212,175,55,0.1)] reveal">
+                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-sultan-card rounded-2xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-sultan-gold/30 hover:shadow-[0_10px_40px_rgba(212,175,55,0.1)] reveal">
                         <div class="h-72 relative bg-[#1C2541] flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 flex flex-col items-center justify-center text-white/5 animate-pulse placeholder-icon z-0">
                                 <i class="ph-thin ph-cookie text-6xl mb-2"></i>
@@ -366,7 +406,9 @@
                         </div>
                         <div class="p-8 relative z-20 -mt-8 pt-12">
                             <h3 class="font-serif text-2xl text-white mb-3 group-hover:text-sultan-gold transition-colors">${product.name}</h3>
-                            <p class="text-white/60 text-sm mb-0 min-h-[40px] leading-relaxed">${product.desc}</p>
+                            <p class="text-sultan-gold text-sm font-medium flex items-center gap-2 group-hover:translate-x-2 transition-transform">
+                                Состав и детали <i class="ph-bold ph-arrow-right"></i>
+                            </p>
                         </div>
                     </div>
                 `;
@@ -375,6 +417,22 @@
             
             // Re-trigger scroll animations for new elements
             observeElements();
+        }
+
+        // Modal Logic
+        function openModal(id) {
+            const product = products.find(p => p.id === id);
+            if(!product) return;
+            document.getElementById('modal-title').textContent = product.name;
+            document.getElementById('modal-desc').textContent = product.desc;
+            document.getElementById('modal-price').textContent = product.price + ' ₽';
+            document.getElementById('modal-img').src = product.img;
+            document.getElementById('product-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            document.getElementById('product-modal').classList.remove('open');
+            document.body.style.overflow = '';
         }
 
         // Filter Logic
