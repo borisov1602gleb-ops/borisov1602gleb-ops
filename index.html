@@ -19,8 +19,8 @@
     <!-- Предзагрузка шрифтов для ускорения -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Шрифты: Playfair Display для заголовков, Outfit для текста -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <!-- Шрифты: Cormorant Garamond для заголовков, Manrope для текста -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -35,8 +35,8 @@
                         'sultan-text': '#e8e6e3',
                     },
                     fontFamily: {
-                        'playfair': ['"Playfair Display"', 'serif'],
-                        'outfit': ['"Outfit"', 'sans-serif'],
+                        'serif': ['"Cormorant Garamond"', 'serif'],
+                        'sans': ['"Manrope"', 'sans-serif'],
                     },
                     backgroundImage: {
                         'hero-pattern': "linear-gradient(to bottom, rgba(11, 19, 43, 0.4), rgba(11, 19, 43, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')"
@@ -48,7 +48,7 @@
 
     <style>
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Manrope', sans-serif;
             background-color: #0B132B;
             color: #e8e6e3;
             overflow-x: hidden;
@@ -60,7 +60,7 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         h1, h2, h3, h4, h5, h6, .font-serif {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             letter-spacing: 0.03em; /* Заголовки-Скульптуры дышат */
         }
 
