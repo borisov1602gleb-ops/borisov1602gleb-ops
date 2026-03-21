@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#0B132B">
+    <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
     
     <!-- Политики безопасности (Защита от XSS-атак и сниффинга) -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; media-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-downgrade">
+    <!-- Дополнительная защита ПК и Mobile: запрет доступа к API устройства (камера, микрофон, локация, USB) -->
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
 
     <title>ART OF BAKLAVA | Premium Baklava Boutique</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -48,7 +52,12 @@
             background-color: #0B132B;
             color: #e8e6e3;
             overflow-x: hidden;
+            touch-action: manipulation; /* Убирает 300ms задержку клика на мобильных */
         }
+
+        /* Скрытие скроллбара для мобильных каруселей */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         h1, h2, h3, h4, h5, h6, .font-serif {
             font-family: 'Playfair Display', serif;
@@ -191,7 +200,7 @@
     <header class="fixed w-full top-0 z-30 glass-nav transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3 hover:opacity-80 transition">
-                <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" fetchpriority="high" class="h-12 md:h-16 w-auto object-contain rounded-xl border border-sultan-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-transform hover:scale-105">
+                <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" fetchpriority="high" class="h-16 md:h-20 w-auto object-contain rounded-xl border border-sultan-gold/50 shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-transform hover:scale-105">
             </a>
             
             <nav class="hidden md:flex space-x-10 text-sm font-medium tracking-wide">
@@ -207,14 +216,32 @@
                     +7 (991) 703-84-07
                 </a>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-white hover:text-sultan-gold text-3xl transition" aria-label="Открыть меню">
+                <i class="ph-thin ph-list"></i>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#0B132B]/98 backdrop-blur-2xl z-50 translate-x-full transition-transform duration-500 md:hidden flex flex-col items-center justify-center gap-8">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-white text-3xl hover:text-sultan-gold transition" aria-label="Закрыть меню">
+            <i class="ph-thin ph-x"></i>
+        </button>
+        <a href="#about" class="text-3xl font-serif text-white hover:text-sultan-gold transition mobile-link">О нас</a>
+        <a href="#menu" class="text-3xl font-serif text-white hover:text-sultan-gold transition mobile-link">Коллекция</a>
+        <a href="#quality" class="text-3xl font-serif text-white hover:text-sultan-gold transition mobile-link">Ингредиенты</a>
+        <a href="tel:+79917038407" class="text-xl text-sultan-gold mt-10 flex items-center gap-3 border border-sultan-gold/30 px-6 py-3 rounded-full">
+            <i class="ph-fill ph-phone"></i> +7 (991) 703-84-07
+        </a>
+    </div>
 
     <!-- Hero Section -->
     <section id="about" class="relative min-h-[100dvh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-hero-pattern">
         <div class="relative z-10 max-w-6xl mx-auto px-6 text-center text-white pb-16">
             <div class="flex justify-center mb-8 reveal">
-                <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" fetchpriority="high" class="w-32 md:w-48 lg:w-56 h-auto object-contain rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-700">
+                <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" fetchpriority="high" class="w-40 md:w-56 lg:w-72 h-auto object-contain rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-700">
             </div>
             <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-sultan-gold/30 bg-black/30 uppercase text-[10px] md:text-xs font-bold mb-8 reveal backdrop-blur-xl shadow-[0_0_20px_rgba(212,175,55,0.15)]">
                 <span class="w-2 h-2 rounded-full bg-sultan-gold animate-pulse"></span> Королевский вкус Стамбула
@@ -271,11 +298,11 @@
                 <div class="w-24 h-1 bg-sultan-gold mx-auto mb-8"></div>
                 
                 <!-- Filters -->
-                <div class="flex flex-wrap justify-center gap-4 mt-12" id="filters">
-                    <button class="filter-btn active bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="all">Все</button>
-                    <button class="filter-btn bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="pistachio">Фисташка</button>
-                    <button class="filter-btn bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="walnut">Грецкий орех</button>
-                    <button class="filter-btn bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="special">Специальные</button>
+                <div class="flex overflow-x-auto justify-start md:justify-center gap-3 md:gap-4 mt-12 pb-4 hide-scrollbar snap-x px-4" id="filters">
+                    <button class="filter-btn shrink-0 snap-start active bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="all">Все</button>
+                    <button class="filter-btn shrink-0 snap-start bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="pistachio">Фисташка</button>
+                    <button class="filter-btn shrink-0 snap-start bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="walnut">Грецкий орех</button>
+                    <button class="filter-btn shrink-0 snap-start bg-white/5 border border-white/5 px-6 md:px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="special">Специальные</button>
                 </div>
             </div>
 
@@ -362,7 +389,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2">
                     <a href="#" class="flex items-center gap-3 mb-6 hover:opacity-80 transition w-fit">
-                        <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" class="h-14 md:h-16 w-auto object-contain rounded-2xl border border-sultan-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.2)] transition-transform hover:scale-105">
+                        <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA Logo" class="h-20 md:h-24 w-auto object-contain rounded-2xl border border-sultan-gold/50 shadow-[0_0_20px_rgba(212,175,55,0.2)] transition-transform hover:scale-105">
                         <span class="font-serif text-2xl font-bold text-white tracking-widest">ART OF BAKLAVA</span>
                     </a>
                     <p class="text-white/50 text-sm leading-relaxed max-w-md">
@@ -414,9 +441,9 @@
 
     <!-- Modal for Product Details -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onclick="closeModal()">
-        <div class="modal-content relative bg-[#0B132B]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-lg overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-white hover:text-sultan-gold transition z-30 bg-sultan-dark/50 backdrop-blur-md rounded-full w-8 h-8 flex items-center justify-center border border-white/10">
-                <i class="ph ph-x text-lg"></i>
+        <div class="modal-content relative bg-[#0B132B]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-lg max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)] hide-scrollbar" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-white hover:text-sultan-gold hover:bg-sultan-dark/80 transition-all z-30 bg-sultan-dark/50 backdrop-blur-md rounded-full w-10 h-10 flex items-center justify-center border border-white/20 shadow-lg">
+                <i class="ph-bold ph-x text-xl"></i>
             </button>
             <div class="h-64 relative bg-[#1C2541]">
                 <img id="modal-img" src="" class="w-full h-full object-cover opacity-90" alt="">
@@ -462,7 +489,7 @@
             
             filtered.forEach((product, index) => {
                 const html = `
-                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl rounded-[2rem] border border-white/10 overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:border-sultan-gold/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] reveal">
+                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl rounded-[2rem] border border-white/10 overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:border-sultan-gold hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] reveal">
                         <div class="h-72 relative bg-transparent flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 flex flex-col items-center justify-center text-white/5 animate-pulse placeholder-icon z-0">
                                 <i class="ph-thin ph-cookie text-6xl mb-2"></i>
@@ -539,6 +566,21 @@
                 nav.classList.remove('shadow-lg', 'shadow-black/50', 'scrolled');
             }
         });
+
+        // Mobile Menu Logic
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.style.overflow = mobileMenu.classList.contains('translate-x-full') ? 'hidden' : '';
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
 
         // Init
         window.addEventListener('load', () => {
