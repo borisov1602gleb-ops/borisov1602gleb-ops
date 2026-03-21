@@ -27,22 +27,19 @@
             theme: {
                 extend: {
                     colors: {
-                        /* Палитра Древних Текстур */
-                        white: '#F4F1EA', /* Слоновая кость и Мел вместо резкого белого */
-                        black: '#07080A', /* Глубокая тень вместо плоского черного */
-                        'sultan-dark': '#0A0C10', /* Поглощающий темный кофейно-синий бархат */
-                        'sultan-card': '#12151A',
-                        'sultan-gold': '#B59A6D', /* Состаренное золото, патина, латунь */
-                        'sultan-gold-light': '#D4C3A3',
-                        'sultan-pistachio': '#829375', /* Приглушенный природный фисташковый */
-                        'sultan-text': '#F4F1EA',
+                        'sultan-dark': '#0B132B',
+                        'sultan-card': '#1C2541',
+                        'sultan-gold': '#d4af37',
+                        'sultan-gold-light': '#f3e5ab',
+                        'sultan-pistachio': '#93c572',
+                        'sultan-text': '#e8e6e3',
                     },
                     fontFamily: {
                         'playfair': ['"Playfair Display"', 'serif'],
                         'outfit': ['"Outfit"', 'sans-serif'],
                     },
                     backgroundImage: {
-                        'hero-pattern': "linear-gradient(to bottom, rgba(10, 12, 16, 0.4), rgba(10, 12, 16, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')"
+                        'hero-pattern': "linear-gradient(to bottom, rgba(11, 19, 43, 0.4), rgba(11, 19, 43, 1)), url('https://images.unsplash.com/photo-1596644265431-2947116900f0?q=80&w=2000&auto=format&fit=crop')"
                     }
                 }
             }
@@ -52,7 +49,7 @@
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #0A0C10;
+            background-color: #0B132B;
             color: #e8e6e3;
             overflow-x: hidden;
             touch-action: manipulation; /* Убирает 300ms задержку клика на мобильных */
@@ -69,9 +66,9 @@
 
         /* Стили скроллбара */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #07080A; }
-        ::-webkit-scrollbar-thumb { background: #1a1e24; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #B59A6D; }
+        ::-webkit-scrollbar-track { background: #0a0908; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
 
         /* Glassmorphism */
         .glass {
@@ -82,20 +79,20 @@
         }
 
         .glass-nav {
-            background: rgba(10, 12, 16, 0.85);
+            background: rgba(11, 19, 43, 0.85);
             backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(181, 154, 109, 0.05); /* Легкий кивок, тоньше волоска */
+            border-bottom: 1px solid rgba(212, 175, 55, 0.05); /* Легкий кивок, тоньше волоска */
             transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .glass-nav.scrolled {
-            background: rgba(10, 12, 16, 0.95);
+            background: rgba(11, 19, 43, 0.95);
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;
         }
 
         /* Анимации текста и кнопок */
         .gold-text-gradient {
-            background: linear-gradient(to right, #B59A6D, #D4C3A3, #B59A6D);
+            background: linear-gradient(to right, #d4af37, #f3e5ab, #d4af37);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -105,9 +102,9 @@
         @keyframes shine { to { background-position: 200% center; } }
 
         .btn-gold {
-            background: rgba(181, 154, 109, 0.03); /* Микро-взаимодействие */
-            color: #B59A6D;
-            border: 1px solid rgba(181, 154, 109, 0.2);
+            background: rgba(212, 175, 55, 0.03); /* Микро-взаимодействие */
+            color: #d4af37;
+            border: 1px solid rgba(212, 175, 55, 0.2);
             backdrop-filter: blur(12px);
             transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
@@ -115,9 +112,9 @@
             z-index: 1;
         }
         .btn-gold:hover {
-            background: rgba(181, 154, 109, 0.1);
-            color: #D4C3A3;
-            box-shadow: 0 0 40px rgba(181, 154, 109, 0.15); /* Мягкое свечение */
+            background: rgba(212, 175, 55, 0.1);
+            color: #f3e5ab;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.15); /* Мягкое свечение */
             transform: translateY(-2px); /* Плавное движение без резких скачков */
         }
 
@@ -136,7 +133,7 @@
         /* Прелоадер */
         #preloader {
             position: fixed; inset: 0; z-index: 9999;
-            background: #0A0C10;
+            background: #0B132B;
             display: flex; justify-content: center; align-items: center;
             transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.175, 1);
             clip-path: circle(150% at 50% 50%);
@@ -147,8 +144,8 @@
         }
         .loader-ring {
             width: 60px; height: 60px;
-            border: 2px solid rgba(181, 154, 109, 0.1); /* Тонкие линии */
-            border-top-color: #B59A6D;
+            border: 2px solid rgba(212, 175, 55, 0.1); /* Тонкие линии */
+            border-top-color: #d4af37;
             border-radius: 50%;
             animation: spin 2s linear infinite; /* Медленное вращение */
         }
@@ -156,10 +153,10 @@
 
         /* Custom select styling for filters */
         .filter-btn.active {
-            background: rgba(181, 154, 109, 0.05) !important; 
-            color: #B59A6D !important; 
-            border-color: rgba(181, 154, 109, 0.3) !important;
-            box-shadow: 0 0 30px rgba(181, 154, 109, 0.1);
+            background: rgba(212, 175, 55, 0.05) !important; 
+            color: #d4af37 !important; 
+            border-color: rgba(212, 175, 55, 0.3) !important;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
         }
 
         /* Scroll Down Line Animation */
@@ -177,7 +174,7 @@
         .nav-link:hover { color: white; }
         .nav-link::after {
             content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 50%;
-            background-color: #B59A6D; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-50%);
+            background-color: #d4af37; transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(-50%);
         }
         .nav-link:hover::after { width: 100%; }
 
