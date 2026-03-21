@@ -491,7 +491,7 @@
     <script>
         // --- Data ---
         const products = [
-            { id: 1, name: "Классическая Баклава с фисташкой", desc: "Состав: Мука пшеничная, фисташка, топленое масло, молоко, сахар, яйцо, соль пищевая.", price: 1800, category: "pistachio", img: "Классическая Баклава с фисташкой.jpg" },
+            { id: 1, name: "Классическая Баклава с фисташкой", desc: "Состав: Мука пшеничная, фисташка, топленое масло, молоко, сахар, яйцо, соль пищевая.", price: 1800, category: "pistachio", img: "Классическая Баклава с фисташкой.jpg", badge: "Хит продаж" },
             { id: 2, name: "Холодная Баклава с Фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 1900, category: "pistachio", img: "Холодная Баклава с Фисташкой.jpg" },
             { id: 3, name: "Хавуч с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2100, category: "pistachio", img: "Хавуч с фисташкой.jpg" },
             { id: 4, name: "Холодный Хавуч с фисташкой", desc: "Состав: Описание будет добавлено позже.", price: 2200, category: "pistachio", img: "Холодный Хавуч с фисташкой.jpg" },
@@ -530,6 +530,7 @@
                                      class="w-full h-full object-cover relative z-0 opacity-0 scale-110 transition-transform duration-[2s] ease-out group-hover:scale-[1.03]">
                             </div>
 
+                            ${product.badge ? `<span class="absolute top-6 left-6 z-20 bg-gradient-to-r from-sultan-gold to-sultan-gold-light text-sultan-dark px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] shadow-[0_5px_15px_rgba(212,175,55,0.4)] flex items-center gap-1"><i class="ph-fill ph-star text-[10px]"></i> ${product.badge}</span>` : ''}
                             <span class="absolute top-6 right-6 z-20 bg-[#0B132B]/60 backdrop-blur-xl text-sultan-gold/80 px-5 py-2.5 rounded-full text-[10px] font-light border border-white/10 shadow-2xl tracking-[0.2em]">
                                 ${product.price} ₽
                             </span>
