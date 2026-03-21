@@ -205,29 +205,30 @@
     </header>
 
     <!-- Hero Section -->
-    <section id="about" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-hero-pattern">
-        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
+    <section id="about" class="relative min-h-[100dvh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-hero-pattern">
+        <div class="relative z-10 max-w-6xl mx-auto px-6 text-center text-white pb-16">
             <div class="flex justify-center mb-8 reveal">
                 <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" class="w-32 md:w-48 lg:w-56 h-auto object-contain rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 duration-700">
             </div>
             <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-sultan-gold/30 bg-black/30 uppercase text-[10px] md:text-xs font-bold mb-8 reveal backdrop-blur-xl shadow-[0_0_20px_rgba(212,175,55,0.15)]">
                 <span class="w-2 h-2 rounded-full bg-sultan-gold animate-pulse"></span> Королевский вкус Стамбула
             </div>
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-8 leading-tight reveal tracking-tight" style="transition-delay: 0.1s;">
-                Искусство<br><span class="gold-text-gradient italic">Восточных Сладостей</span>
+            <h1 class="text-6xl md:text-8xl lg:text-[7rem] font-serif font-medium mb-6 leading-[1.05] reveal tracking-tighter" style="transition-delay: 0.1s;">
+                Искусство<br><span class="gold-text-gradient italic font-light">Восточных Сладостей</span>
             </h1>
-            <p class="text-base md:text-xl text-white/80 max-w-2xl mx-auto mb-10 reveal" style="transition-delay: 0.2s;">
+            <p class="text-lg md:text-2xl text-white/60 font-light max-w-3xl mx-auto mb-12 reveal tracking-wide leading-relaxed" style="transition-delay: 0.2s;">
                 40 тончайших слоев теста, премиальная антепская фисташка и золотой сироп, созданные по рецептам дворца Топкапы.
             </p>
             <div class="flex flex-col md:flex-row gap-6 justify-center items-center reveal" style="transition-delay: 0.3s;">
-                <a href="#menu" class="btn-gold py-4 px-10 rounded-full font-bold tracking-widest uppercase text-sm">
-                    Смотреть Коллекцию
+                <a href="#menu" class="group relative inline-flex items-center justify-center px-10 py-5 font-medium tracking-[0.2em] text-white uppercase rounded-full overflow-hidden backdrop-blur-2xl border border-sultan-gold/40 hover:border-sultan-gold transition-all duration-500 hover:scale-105 shadow-[0_0_30px_rgba(212,175,55,0.1)] hover:shadow-[0_0_40px_rgba(212,175,55,0.3)]">
+                    <span class="absolute inset-0 bg-sultan-gold/10 group-hover:bg-sultan-gold/20 transition-colors duration-500"></span>
+                    <span class="relative z-10 flex items-center gap-3 text-xs md:text-sm">Смотреть Коллекцию <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i></span>
                 </a>
             </div>
         </div>
         
         <!-- Scroll indicator -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 opacity-50">
+        <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-2 opacity-40 hover:opacity-100 transition-opacity cursor-pointer z-20">
             <span class="text-[10px] tracking-[0.2em] uppercase">Вниз</span>
             <i class="ph-thin ph-arrow-down text-xl"></i>
         </div>
@@ -237,20 +238,20 @@
     <section id="quality" class="py-24 bg-sultan-dark border-t border-white/5 relative">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <div class="reveal bg-white/5 backdrop-blur-lg border border-white/5 p-10 rounded-[2rem] hover:bg-white/10 transition-colors duration-500">
+                <div class="reveal bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl border border-white/10 p-10 rounded-[2rem] hover:border-sultan-gold/30 transition-all duration-700 hover:-translate-y-2">
                     <i class="ph-thin ph-leaf text-5xl text-sultan-pistachio mb-6"></i>
-                    <h3 class="font-serif text-2xl text-white">Лучшие ингредиенты</h3>
-                    <p class="text-white/70 mt-4 leading-relaxed">Мы используем только зеленую фисташку раннего урожая из региона Газиантеп, обладающую самым насыщенным вкусом.</p>
+                    <h3 class="font-serif text-2xl text-white tracking-wide">Лучшие ингредиенты</h3>
+                    <p class="text-white/50 mt-4 leading-relaxed font-light">Мы используем только зеленую фисташку раннего урожая из региона Газиантеп, обладающую самым насыщенным вкусом.</p>
                 </div>
-                <div class="reveal bg-white/5 backdrop-blur-lg border border-white/5 p-10 rounded-[2rem] hover:bg-white/10 transition-colors duration-500" style="transition-delay: 0.1s;">
+                <div class="reveal bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl border border-white/10 p-10 rounded-[2rem] hover:border-sultan-gold/30 transition-all duration-700 hover:-translate-y-2" style="transition-delay: 0.1s;">
                     <i class="ph-thin ph-fire text-5xl text-sultan-gold"></i>
-                    <h3 class="font-serif text-2xl text-white">Каменные печи</h3>
-                    <p class="text-white/70 mt-4 leading-relaxed">Выпекается в 5 традиционных каменных печах для равномерного хруста и сохранения аромата топленого масла.</p>
+                    <h3 class="font-serif text-2xl text-white tracking-wide">Каменные печи</h3>
+                    <p class="text-white/50 mt-4 leading-relaxed font-light">Выпекается в 5 традиционных каменных печах для равномерного хруста и сохранения аромата топленого масла.</p>
                 </div>
-                <div class="reveal bg-white/5 backdrop-blur-lg border border-white/5 p-10 rounded-[2rem] hover:bg-white/10 transition-colors duration-500" style="transition-delay: 0.2s;">
+                <div class="reveal bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl border border-white/10 p-10 rounded-[2rem] hover:border-sultan-gold/30 transition-all duration-700 hover:-translate-y-2" style="transition-delay: 0.2s;">
                     <i class="ph-thin ph-crown text-5xl text-sultan-gold"></i>
-                    <h3 class="font-serif text-2xl text-white">Мастерство</h3>
-                    <p class="text-white/70 mt-4 leading-relaxed">Мастера с 20-летним опытом раскатывают тесто до толщины папиросной бумаги, сквозь которое можно читать.</p>
+                    <h3 class="font-serif text-2xl text-white tracking-wide">Мастерство</h3>
+                    <p class="text-white/50 mt-4 leading-relaxed font-light">Мастера с 20-летним опытом раскатывают тесто до толщины папиросной бумаги, сквозь которое можно читать.</p>
                 </div>
             </div>
         </div>
@@ -265,10 +266,10 @@
                 
                 <!-- Filters -->
                 <div class="flex flex-wrap justify-center gap-4 mt-12" id="filters">
-                    <button class="filter-btn active bg-white/5 border border-transparent px-8 py-3 rounded-full text-sm tracking-wider uppercase transition-all hover:bg-white/10 text-white/80 backdrop-blur-md" data-filter="all">Все</button>
-                    <button class="filter-btn bg-white/5 border border-transparent px-8 py-3 rounded-full text-sm tracking-wider uppercase transition-all hover:bg-white/10 text-white/80 backdrop-blur-md" data-filter="pistachio">Фисташка</button>
-                    <button class="filter-btn bg-white/5 border border-transparent px-8 py-3 rounded-full text-sm tracking-wider uppercase transition-all hover:bg-white/10 text-white/80 backdrop-blur-md" data-filter="walnut">Грецкий орех</button>
-                    <button class="filter-btn bg-white/5 border border-transparent px-8 py-3 rounded-full text-sm tracking-wider uppercase transition-all hover:bg-white/10 text-white/80 backdrop-blur-md" data-filter="special">Специальные</button>
+                    <button class="filter-btn active bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="all">Все</button>
+                    <button class="filter-btn bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="pistachio">Фисташка</button>
+                    <button class="filter-btn bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="walnut">Грецкий орех</button>
+                    <button class="filter-btn bg-white/5 border border-white/5 px-8 py-3 rounded-full text-xs font-medium tracking-[0.15em] uppercase transition-all hover:bg-white/10 hover:border-white/20 text-white/80 backdrop-blur-md shadow-lg" data-filter="special">Специальные</button>
                 </div>
             </div>
 
@@ -407,7 +408,7 @@
             
             filtered.forEach((product, index) => {
                 const html = `
-                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:border-sultan-gold/50 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] reveal">
+                    <div onclick="openModal(${product.id})" class="group cursor-pointer bg-gradient-to-b from-white/5 to-transparent backdrop-blur-xl rounded-[2rem] border border-white/10 overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:border-sultan-gold/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)] reveal">
                         <div class="h-72 relative bg-transparent flex items-center justify-center overflow-hidden">
                             <div class="absolute inset-0 flex flex-col items-center justify-center text-white/5 animate-pulse placeholder-icon z-0">
                                 <i class="ph-thin ph-cookie text-6xl mb-2"></i>
