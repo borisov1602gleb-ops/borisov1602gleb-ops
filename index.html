@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -47,11 +48,15 @@
     </script>
 
     <style>
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Manrope', sans-serif;
             background-color: #0B132B;
             color: #e8e6e3;
-            overflow-x: hidden;
             touch-action: manipulation; /* Убирает 300ms задержку клика на мобильных */
         }
 
@@ -192,7 +197,7 @@
         /* Текстура кинематографичного шума */
         .noise-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 9998; /* Поверх всего, кроме прелоадера */
             opacity: 0.04; /* Очень легкая прозрачность */
