@@ -199,23 +199,12 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* --- Идея 1: Кастомный курсор --- */
-        @media (pointer: fine) {
-            body, a, button, .cursor-pointer { cursor: none !important; }
+        /* --- Идея 1: Золотой курсор (CSS) --- */
+        body {
+            cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.5 2.5L18.5 13L11.5 13.5L8 21.5L5 20L8.5 12L2 10L4.5 2.5Z' fill='%23d4af37' stroke='%230B132B' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 4 2, auto;
         }
-        #cursor-dot {
-            position: fixed; width: 6px; height: 6px; background: #d4af37; border-radius: 50%;
-            pointer-events: none; z-index: 100000; transform: translate(-50%, -50%);
-            transition: opacity 0.2s, transform 0.2s;
-        }
-        #cursor-ring {
-            position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 50%;
-            pointer-events: none; z-index: 99999; transform: translate(-50%, -50%);
-            transition: width 0.3s ease-out, height 0.3s ease-out, background-color 0.3s ease-out, border-color 0.3s ease-out;
-        }
-        body.cursor-hover #cursor-dot { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-        body.cursor-hover #cursor-ring {
-            width: 55px; height: 55px; background-color: rgba(212, 175, 55, 0.08); border-color: rgba(212, 175, 55, 0.8); backdrop-filter: blur(2px);
+        a, button, .cursor-pointer, .group {
+            cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 1C9.4 1 9 1.4 9 2V9C9 9 7.8 8.2 6.5 8.2C5.2 8.2 4 9 4 10C4 11 6 15 7.5 18C9 21 11 22 13.5 22H15C18 22 20 19 20 16V9C20 8 19 7 18 7C17 7 16 8 16 8V6C16 5 15 4 14 4C13 4 12 5 12 5V3C12 2 11 1 10 1Z' fill='%23d4af37' stroke='%230B132B' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 9 1, pointer;
         }
 
         /* --- Идея 5: Бегущие блики (Light Sweep) --- */
@@ -240,10 +229,6 @@
 
     <!-- Noise Overlay -->
     <div class="noise-overlay"></div>
-
-    <!-- Custom Cursor Elements (Скрыты на телефонах) -->
-    <div id="cursor-dot" class="hidden lg:block"></div>
-    <div id="cursor-ring" class="hidden lg:block"></div>
 
     <!-- --- Идея 4: Восточные водяные знаки (Arabesque) --- -->
     <div class="fixed -top-[20%] -left-[10%] w-[50vw] h-[50vw] min-w-[500px] min-h-[500px] opacity-[0.015] pointer-events-none z-0 animate-[spin_120s_linear_infinite]">
@@ -772,44 +757,6 @@
           resize();
           init();
           animate();
-      }
-
-      // --- Custom Cursor Logic (Только для ПК) ---
-      if (window.matchMedia("(pointer: fine)").matches) {
-          const cursorDot = document.getElementById('cursor-dot');
-          const cursorRing = document.getElementById('cursor-ring');
-          let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-          let ringX = mouseX, ringY = mouseY;
-
-          window.addEventListener('mousemove', (e) => {
-              mouseX = e.clientX;
-              mouseY = e.clientY;
-              cursorDot.style.left = mouseX + 'px';
-              cursorDot.style.top = mouseY + 'px';
-          });
-
-          function renderCursor() {
-              ringX += (mouseX - ringX) * 0.15; // Скорость задержки кольца
-              ringY += (mouseY - ringY) * 0.15;
-              cursorRing.style.left = ringX + 'px';
-              cursorRing.style.top = ringY + 'px';
-              requestAnimationFrame(renderCursor);
-          }
-          requestAnimationFrame(renderCursor);
-
-          // Навешиваем эффекты при наведении на интерактивные элементы
-          const observer = new MutationObserver(() => {
-              document.querySelectorAll('a, button, .cursor-pointer, .group').forEach(el => {
-                  if (!el.dataset.cursorAttached) {
-                      el.dataset.cursorAttached = 'true';
-                      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-                      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-                  }
-              });
-          });
-          // Следим за изменениями в DOM (важно для карточек товаров, которые рисуются через JS)
-          observer.observe(document.body, { childList: true, subtree: true });
-          window.dispatchEvent(new Event('mousemove')); // Принудительный старт
       }
     </script>
 
