@@ -198,12 +198,67 @@
             opacity: 0.04; /* Очень легкая прозрачность */
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
+
+        /* --- Идея 1: Кастомный курсор --- */
+        @media (pointer: fine) {
+            body, a, button, .cursor-pointer { cursor: none !important; }
+        }
+        #cursor-dot {
+            position: fixed; width: 6px; height: 6px; background: #d4af37; border-radius: 50%;
+            pointer-events: none; z-index: 100000; transform: translate(-50%, -50%);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        #cursor-ring {
+            position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 50%;
+            pointer-events: none; z-index: 99999; transform: translate(-50%, -50%);
+            transition: width 0.3s ease-out, height 0.3s ease-out, background-color 0.3s ease-out, border-color 0.3s ease-out;
+        }
+        body.cursor-hover #cursor-dot { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        body.cursor-hover #cursor-ring {
+            width: 55px; height: 55px; background-color: rgba(212, 175, 55, 0.08); border-color: rgba(212, 175, 55, 0.8); backdrop-filter: blur(2px);
+        }
+
+        /* --- Идея 5: Бегущие блики (Light Sweep) --- */
+        @keyframes sweep {
+            0% { transform: translateX(-100%); }
+            50%, 100% { transform: translateX(200%); }
+        }
+        .sweep-divider-top::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.8), transparent);
+            animation: sweep 8s cubic-bezier(0.4, 0, 0.2, 1) infinite; z-index: 10;
+        }
+        .sweep-divider-line { position: relative; overflow: hidden; }
+        .sweep-divider-line::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 1), transparent);
+            animation: sweep 5s infinite;
+        }
     </style>
 </head>
 <body class="selection:bg-sultan-gold selection:text-sultan-dark">
 
     <!-- Noise Overlay -->
     <div class="noise-overlay"></div>
+
+    <!-- Custom Cursor Elements (Скрыты на телефонах) -->
+    <div id="cursor-dot" class="hidden lg:block"></div>
+    <div id="cursor-ring" class="hidden lg:block"></div>
+
+    <!-- --- Идея 4: Восточные водяные знаки (Arabesque) --- -->
+    <div class="fixed -top-[20%] -left-[10%] w-[50vw] h-[50vw] min-w-[500px] min-h-[500px] opacity-[0.015] pointer-events-none z-0 animate-[spin_120s_linear_infinite]">
+        <svg viewBox="0 0 100 100" fill="none" stroke="#d4af37" stroke-width="0.3">
+            <circle cx="50" cy="50" r="48"/><path d="M50 2 L50 98 M2 50 L98 50 M16 16 L84 84 M16 84 L84 16"/>
+            <circle cx="50" cy="50" r="30"/><path d="M50 20 L60 40 L80 50 L60 60 L50 80 L40 60 L20 50 L40 40 Z"/>
+            <circle cx="50" cy="50" r="15"/>
+        </svg>
+    </div>
+    <div class="fixed -bottom-[20%] -right-[10%] w-[60vw] h-[60vw] min-w-[600px] min-h-[600px] opacity-[0.015] pointer-events-none z-0 animate-[spin_180s_linear_infinite_reverse]">
+        <svg viewBox="0 0 100 100" fill="none" stroke="#d4af37" stroke-width="0.3">
+            <circle cx="50" cy="50" r="45"/><circle cx="50" cy="50" r="25"/>
+            <path d="M50 5 L58 35 L88 22 L72 48 L95 65 L65 70 L60 98 L45 72 L15 88 L28 60 L5 45 L35 38 Z"/>
+        </svg>
+    </div>
 
     <!-- Ambient Background Glows -->
     <div class="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sultan-gold/15 blur-[150px] rounded-full pointer-events-none z-0 animate-[pulse_8s_ease-in-out_infinite] transform-gpu will-change-transform"></div>
@@ -294,7 +349,7 @@
     </section>
 
     <!-- Features Section -->
-    <section id="quality" class="py-32 bg-sultan-dark border-t border-white/5 relative">
+    <section id="quality" class="py-32 bg-sultan-dark border-t border-white/5 relative sweep-divider-top">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 text-center">
                 <div class="reveal bg-white/[0.01] backdrop-blur-3xl border border-white/5 border-t-white/10 p-12 lg:p-16 rounded-[2.5rem] hover:bg-white/[0.02] hover:border-sultan-gold/10 transition-all duration-[1.5s] hover:-translate-y-1 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
@@ -321,7 +376,7 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-24 reveal">
                 <h2 class="text-4xl md:text-6xl font-serif text-white mb-6 tracking-wide">Наша Коллекция</h2>
-                <div class="w-16 h-px bg-sultan-gold/30 mx-auto mb-10"></div>
+                <div class="w-16 h-px bg-sultan-gold/30 mx-auto mb-10 sweep-divider-line"></div>
                 
                 <!-- Filters -->
                 <div class="flex overflow-x-auto justify-start md:justify-center gap-3 md:gap-4 mt-12 pb-4 hide-scrollbar snap-x px-4" id="filters">
@@ -362,7 +417,7 @@
     </section>
 
     <!-- Moodboard Gallery Section -->
-    <section class="py-40 relative bg-sultan-dark overflow-hidden border-t border-white/5">
+    <section class="py-40 relative bg-sultan-dark overflow-hidden border-t border-white/5 sweep-divider-top">
         <!-- Decorative subtle glow -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-sultan-gold/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
 
@@ -410,7 +465,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-sultan-dark border-t border-white/10 pt-20 pb-10">
+    <footer class="bg-sultan-dark border-t border-white/10 pt-20 pb-10 relative sweep-divider-top">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2">
@@ -717,6 +772,44 @@
           resize();
           init();
           animate();
+      }
+
+      // --- Custom Cursor Logic (Только для ПК) ---
+      if (window.matchMedia("(pointer: fine)").matches) {
+          const cursorDot = document.getElementById('cursor-dot');
+          const cursorRing = document.getElementById('cursor-ring');
+          let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+          let ringX = mouseX, ringY = mouseY;
+
+          window.addEventListener('mousemove', (e) => {
+              mouseX = e.clientX;
+              mouseY = e.clientY;
+              cursorDot.style.left = mouseX + 'px';
+              cursorDot.style.top = mouseY + 'px';
+          });
+
+          function renderCursor() {
+              ringX += (mouseX - ringX) * 0.15; // Скорость задержки кольца
+              ringY += (mouseY - ringY) * 0.15;
+              cursorRing.style.left = ringX + 'px';
+              cursorRing.style.top = ringY + 'px';
+              requestAnimationFrame(renderCursor);
+          }
+          requestAnimationFrame(renderCursor);
+
+          // Навешиваем эффекты при наведении на интерактивные элементы
+          const observer = new MutationObserver(() => {
+              document.querySelectorAll('a, button, .cursor-pointer, .group').forEach(el => {
+                  if (!el.dataset.cursorAttached) {
+                      el.dataset.cursorAttached = 'true';
+                      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+                  }
+              });
+          });
+          // Следим за изменениями в DOM (важно для карточек товаров, которые рисуются через JS)
+          observer.observe(document.body, { childList: true, subtree: true });
+          window.dispatchEvent(new Event('mousemove')); // Принудительный старт
       }
     </script>
 
