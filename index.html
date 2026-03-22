@@ -253,9 +253,9 @@
 
     <!-- --- Идея 4: Расфокусные макро-силуэты (Parallax Blobs) --- -->
     <!-- Фисташка (зеленая) -->
-    <div id="macro-1" class="fixed top-[20%] left-[5%] w-[30vw] min-w-[300px] h-[40vw] min-h-[400px] bg-sultan-pistachio/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] blur-[100px] pointer-events-none z-0 will-change-transform"></div>
+    <div id="macro-1" class="fixed top-[20%] left-[3%] w-[12vw] min-w-[120px] h-[16vw] min-h-[160px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] blur-[10px] opacity-60 pointer-events-none z-0 will-change-transform" style="background: radial-gradient(circle at 30% 30%, #a3d977 0%, #76a354 40%, #3d5e26 100%);"></div>
     <!-- Цилиндрическая упаковка с лентой -->
-    <div id="macro-2" class="fixed top-[50%] right-[8%] w-[22vw] min-w-[220px] h-[38vw] min-h-[380px] rounded-[6rem] blur-[60px] pointer-events-none z-0 will-change-transform" style="background: linear-gradient(to bottom, rgba(212,175,55,0.15) 45%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.25) 55%, rgba(212,175,55,0.15) 55%);"></div>
+    <div id="macro-2" class="fixed top-[45%] right-[5%] w-[16vw] min-w-[160px] h-[30vw] min-h-[300px] rounded-[4rem] blur-[12px] opacity-70 pointer-events-none z-0 will-change-transform shadow-2xl" style="background: linear-gradient(to bottom, transparent 44%, rgba(255,255,255,0.9) 44%, rgba(255,255,255,0.9) 56%, transparent 56%), linear-gradient(to right, #6b5015 0%, #d4af37 20%, #fff2c8 50%, #d4af37 80%, #6b5015 100%);"></div>
 
     <!-- Ambient Background Glows -->
     <div class="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sultan-gold/15 blur-[150px] rounded-full pointer-events-none z-0 animate-[pulse_8s_ease-in-out_infinite] transform-gpu will-change-transform"></div>
@@ -705,8 +705,8 @@
             const macro1 = document.getElementById('macro-1');
             const macro2 = document.getElementById('macro-2');
             if (macro1 && macro2 && scrollHeight > 0) {
-                macro1.style.transform = `translateY(${scrollProgress * -5}px) rotate(${scrollProgress * 0.8}deg)`;
-                macro2.style.transform = `translateY(${scrollProgress * -8}px) rotate(${scrollProgress * -0.3}deg)`;
+                macro1.style.transform = `translateY(${scrollProgress * -5}px) rotate(${20 + scrollProgress * 0.8}deg)`;
+                macro2.style.transform = `translateY(${scrollProgress * -7}px) rotate(${-15 + scrollProgress * -0.3}deg)`;
             }
         });
 
