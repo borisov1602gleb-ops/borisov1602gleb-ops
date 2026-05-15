@@ -49,6 +49,9 @@
             background: #080e1f;
             color: #e8e6e3;
             cursor: none;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
         ::selection { background: rgba(212,175,55,.25); color: #f3e5ab; }
 
@@ -62,8 +65,10 @@
         /* ─── Typography ─── */
         h1,h2,h3,h4,h5,h6,.font-serif {
             font-family: 'Cormorant Garamond', serif;
-            letter-spacing: .02em;
+            letter-spacing: .03em;
+            font-weight: 400;
         }
+        h1 { font-weight: 500; }
 
         /* ─── Custom Cursor ─── */
         #cur-dot {
@@ -317,6 +322,78 @@
             white-space: nowrap; color: white;
             opacity: .011; user-select: none;
         }
+
+        /* ─── Floating CTA ─── */
+        #float-order {
+            position: fixed; bottom: 28px; right: 28px; z-index: 45;
+            display: flex; align-items: center; gap: 10px;
+            padding: 14px 22px; border-radius: 100px;
+            background: linear-gradient(135deg, #a07c1a, #d4af37 50%, #f3e5ab);
+            color: #080e1f; font-size: .72rem; font-weight: 700;
+            letter-spacing: .18em; text-transform: uppercase;
+            box-shadow: 0 8px 32px rgba(212,175,55,.45), 0 2px 8px rgba(0,0,0,.3);
+            opacity: 0; transform: translateY(20px) scale(.9);
+            transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1), box-shadow .4s;
+            pointer-events: none;
+        }
+        #float-order.show {
+            opacity: 1; transform: translateY(0) scale(1); pointer-events: auto;
+        }
+        #float-order:hover {
+            box-shadow: 0 12px 48px rgba(212,175,55,.65), 0 4px 16px rgba(0,0,0,.35);
+            transform: translateY(-2px) scale(1.02);
+        }
+        @keyframes fcta-pulse {
+            0%,100% { box-shadow: 0 8px 32px rgba(212,175,55,.45), 0 0 0 0 rgba(212,175,55,.4); }
+            50%      { box-shadow: 0 8px 32px rgba(212,175,55,.45), 0 0 0 10px rgba(212,175,55,0); }
+        }
+        #float-order.show { animation: fcta-pulse 3s ease-in-out infinite; }
+        #float-order:hover { animation: none; }
+
+        /* ─── Process Steps ─── */
+        .step-line {
+            position: absolute; top: 28px; left: calc(50% + 28px);
+            width: calc(100% - 56px); height: 1px;
+            background: linear-gradient(90deg, rgba(212,175,55,.35), rgba(212,175,55,.05));
+        }
+        .step-num {
+            width: 56px; height: 56px;
+            border: 1px solid rgba(212,175,55,.22);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem; color: #d4af37;
+            background: rgba(212,175,55,.04);
+            flex-shrink: 0; position: relative; z-index: 1;
+            transition: all .6s cubic-bezier(.16,1,.3,1);
+        }
+        .step-card:hover .step-num {
+            background: rgba(212,175,55,.1);
+            border-color: rgba(212,175,55,.5);
+            box-shadow: 0 0 24px rgba(212,175,55,.2);
+            transform: scale(1.08);
+        }
+        .step-card {
+            transition: transform .6s cubic-bezier(.16,1,.3,1);
+        }
+        .step-card:hover { transform: translateY(-6px); }
+
+        /* ─── Horizontal Scroll Mobile ─── */
+        .hscroll {
+            display: flex; gap: 18px;
+            overflow-x: auto; scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 12px;
+            scrollbar-width: none;
+        }
+        .hscroll::-webkit-scrollbar { display: none; }
+        .hscroll > * { scroll-snap-align: start; flex-shrink: 0; }
+
+        /* ─── Parallax Logo ─── */
+        #hero-logo-wrap { will-change: transform; }
+
+        /* ─── Magnetic ─── */
+        .mag { transition: transform .3s cubic-bezier(.16,1,.3,1); display: inline-flex; }
     </style>
 </head>
 
@@ -347,6 +424,12 @@
 
 <!-- Golden Dust Canvas -->
 <canvas id="gold-dust" class="fixed inset-0 pointer-events-none z-[1] opacity-55"></canvas>
+
+<!-- Floating Order CTA -->
+<a href="tel:+79917038407" id="float-order">
+    <i class="ph-fill ph-phone text-base"></i>
+    Заказать
+</a>
 
 <!-- Preloader -->
 <div id="preloader">
@@ -401,7 +484,7 @@
 
     <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <!-- Logo glow -->
-        <div class="flex justify-center mb-10 rev">
+        <div class="flex justify-center mb-10 rev" id="hero-logo-wrap">
             <div class="relative">
                 <div class="absolute -inset-5 rounded-3xl bg-[#d4af37]/10 blur-2xl animate-pulse"></div>
                 <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" fetchpriority="high"
@@ -417,20 +500,20 @@
         </div>
 
         <!-- Title -->
-        <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif font-light leading-[.95] tracking-wide mb-3 rev" style="transition-delay:.2s">
+        <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif leading-[.95] tracking-wide mb-3 rev" style="transition-delay:.2s">
             Искусство
         </h1>
-        <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif font-light leading-[.95] italic mb-10 rev" style="transition-delay:.35s">
+        <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif leading-[.95] italic mb-10 rev" style="transition-delay:.35s">
             <span class="gold-grad">Восточных Сладостей</span>
         </h1>
 
-        <p class="text-base md:text-xl text-white/45 font-light max-w-2xl mx-auto mb-12 leading-relaxed tracking-wide rev" style="transition-delay:.5s">
+        <p class="text-base md:text-xl text-white/60 max-w-2xl mx-auto mb-12 leading-relaxed tracking-wide rev" style="transition-delay:.5s">
             40 тончайших слоёв теста, антепская фисташка и янтарный сироп — созданные по рецептам дворца Топкапы
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center rev" style="transition-delay:.62s">
             <a href="#menu"
-               class="group inline-flex items-center gap-3 px-10 py-5 rounded-full border border-[#d4af37]/28 text-white/75 hover:text-white text-xs md:text-sm tracking-[.28em] uppercase overflow-hidden transition-all duration-700 hover:border-[#d4af37]/65 hover:bg-[#d4af37]/[0.06] hover:shadow-[0_0_40px_rgba(212,175,55,.14)]">
+               class="mag group inline-flex items-center gap-3 px-10 py-5 rounded-full border border-[#d4af37]/28 text-white/75 hover:text-white text-xs md:text-sm tracking-[.28em] uppercase overflow-hidden transition-all duration-700 hover:border-[#d4af37]/65 hover:bg-[#d4af37]/[0.06] hover:shadow-[0_0_40px_rgba(212,175,55,.14)]">
                 Смотреть коллекцию
                 <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
             </a>
@@ -504,6 +587,76 @@
                 </div>
                 <div class="text-[9px] tracking-[.22em] uppercase text-white/28 font-light mt-1">Каменных печей</div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PROCESS ═══ -->
+<section class="py-24 md:py-36 sdiv border-t border-white/[.04] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 md:mb-20 rev">
+            <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Путь к совершенству ✦</div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-wide">
+                Как рождается<br><span class="text-white/35 italic">наша пахлава</span>
+            </h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
+
+            <div class="step-card flex flex-col items-center text-center gap-5 rev">
+                <div class="relative w-full flex justify-center">
+                    <div class="step-num">01</div>
+                    <div class="step-line hidden md:block"></div>
+                </div>
+                <div>
+                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
+                        <i class="ph-thin ph-leaf text-xl text-[#93c572]/70"></i>
+                    </div>
+                    <h4 class="font-serif text-lg text-white mb-2">Отбор</h4>
+                    <p class="text-white/42 text-xs leading-relaxed">Антепская фисташка первого сбора — только лучшие зёрна</p>
+                </div>
+            </div>
+
+            <div class="step-card flex flex-col items-center text-center gap-5 rev" style="transition-delay:.1s">
+                <div class="relative w-full flex justify-center">
+                    <div class="step-num">02</div>
+                    <div class="step-line hidden md:block"></div>
+                </div>
+                <div>
+                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
+                        <i class="ph-thin ph-stack text-xl text-[#d4af37]/70"></i>
+                    </div>
+                    <h4 class="font-serif text-lg text-white mb-2">Раскатка</h4>
+                    <p class="text-white/42 text-xs leading-relaxed">40 слоёв теста толщиной с папиросную бумагу — вручную</p>
+                </div>
+            </div>
+
+            <div class="step-card flex flex-col items-center text-center gap-5 rev" style="transition-delay:.2s">
+                <div class="relative w-full flex justify-center">
+                    <div class="step-num">03</div>
+                    <div class="step-line hidden md:block"></div>
+                </div>
+                <div>
+                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
+                        <i class="ph-thin ph-fire text-xl text-[#d4af37]/70"></i>
+                    </div>
+                    <h4 class="font-serif text-lg text-white mb-2">Выпечка</h4>
+                    <p class="text-white/42 text-xs leading-relaxed">Каменная печь при точной температуре — золотистый хруст</p>
+                </div>
+            </div>
+
+            <div class="step-card flex flex-col items-center text-center gap-5 rev" style="transition-delay:.3s">
+                <div class="relative w-full flex justify-center">
+                    <div class="step-num">04</div>
+                </div>
+                <div>
+                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
+                        <i class="ph-thin ph-drop text-xl text-[#d4af37]/70"></i>
+                    </div>
+                    <h4 class="font-serif text-lg text-white mb-2">Сироп</h4>
+                    <p class="text-white/42 text-xs leading-relaxed">Янтарный сироп из натурального мёда — пропитка в момент подачи</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -977,6 +1130,46 @@ function initDust() {
 }
 
 // ─── Init ───
+// ─── Floating CTA ───
+function initFloatCTA() {
+    const btn = document.getElementById('float-order');
+    let shown = false;
+    window.addEventListener('scroll', () => {
+        if (scrollY > innerHeight * .6 && !shown) {
+            btn.classList.add('show'); shown = true;
+        } else if (scrollY < innerHeight * .3 && shown) {
+            btn.classList.remove('show'); shown = false;
+        }
+    }, { passive: true });
+}
+
+// ─── Hero Parallax ───
+function initParallax() {
+    const wrap = document.getElementById('hero-logo-wrap');
+    if (!wrap) return;
+    window.addEventListener('scroll', () => {
+        const y = scrollY * .18;
+        wrap.style.transform = `translateY(${y}px)`;
+    }, { passive: true });
+}
+
+// ─── Magnetic Buttons ───
+function initMagnetic() {
+    document.querySelectorAll('.mag').forEach(el => {
+        el.addEventListener('mousemove', e => {
+            const r = el.getBoundingClientRect();
+            const cx = r.left + r.width / 2;
+            const cy = r.top + r.height / 2;
+            const dx = (e.clientX - cx) * .22;
+            const dy = (e.clientY - cy) * .22;
+            el.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+        });
+    });
+}
+
 window.addEventListener('load', () => {
     setTimeout(() => {
         document.getElementById('preloader').classList.add('gone');
@@ -991,6 +1184,9 @@ window.addEventListener('load', () => {
     initCounters();
     observe();
     initDust();
+    initFloatCTA();
+    initParallax();
+    initMagnetic();
 });
 </script>
 </body>
