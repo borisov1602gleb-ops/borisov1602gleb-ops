@@ -387,7 +387,10 @@
             scrollbar-width: none;
         }
         .hscroll::-webkit-scrollbar { display: none; }
-        .hscroll > * { scroll-snap-align: start; flex-shrink: 0; }
+        .hscroll > * { scroll-snap-align: start; }
+        @media (min-width: 768px) {
+            .hscroll > * { height: 500px !important; }
+        }
 
         /* ─── Parallax Logo ─── */
         #hero-logo-wrap { will-change: transform; }
@@ -594,70 +597,115 @@
 <!-- ═══ PROCESS ═══ -->
 <section class="py-24 md:py-36 sdiv border-t border-white/[.04] overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16 md:mb-20 rev">
+
+        <div class="text-center mb-14 md:mb-18 rev">
             <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Путь к совершенству ✦</div>
             <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-wide">
                 Как рождается<br><span class="text-white/35 italic">наша пахлава</span>
             </h2>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
 
-            <div class="step-card flex flex-col items-center text-center gap-5 rev">
-                <div class="relative w-full flex justify-center">
-                    <div class="step-num">01</div>
-                    <div class="step-line hidden md:block"></div>
-                </div>
-                <div>
-                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
-                        <i class="ph-thin ph-leaf text-xl text-[#93c572]/70"></i>
+        <!-- Desktop: 4-column bento / Mobile: horizontal snap -->
+        <div class="hscroll md:grid md:grid-cols-4 md:gap-4 lg:gap-5">
+
+            <!-- Step 1 -->
+            <div class="relative rounded-[2rem] overflow-hidden group cursor-default rev flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto"
+                 style="height:480px; md:height:auto;">
+                <img src="https://images.unsplash.com/photo-1562907550-096d3bf9b25c?w=600&q=80"
+                     alt="Отбор фисташки"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110"
+                     loading="lazy">
+                <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(8,14,31,1) 0%, rgba(8,14,31,.55) 45%, rgba(8,14,31,.15) 100%);"></div>
+                <div class="absolute inset-0 p-7 flex flex-col justify-between">
+                    <div class="font-serif text-[6rem] leading-none text-white/[.07] select-none">01</div>
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#93c572]/10 border border-[#93c572]/20 mb-4">
+                            <i class="ph-fill ph-leaf text-[#93c572] text-sm"></i>
+                            <span class="text-[#93c572]/80 text-[9px] tracking-[.22em] uppercase">Ингредиент</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-2 tracking-wide">Отбор</h4>
+                        <p class="text-white/55 text-sm leading-relaxed">Антепская фисташка первого сбора — только зёрна без изъяна</p>
                     </div>
-                    <h4 class="font-serif text-lg text-white mb-2">Отбор</h4>
-                    <p class="text-white/42 text-xs leading-relaxed">Антепская фисташка первого сбора — только лучшие зёрна</p>
                 </div>
+                <div class="absolute inset-0 border border-white/[.06] rounded-[2rem] group-hover:border-[#d4af37]/18 transition-colors duration-700 pointer-events-none"></div>
             </div>
 
-            <div class="step-card flex flex-col items-center text-center gap-5 rev" style="transition-delay:.1s">
-                <div class="relative w-full flex justify-center">
-                    <div class="step-num">02</div>
-                    <div class="step-line hidden md:block"></div>
-                </div>
-                <div>
-                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
-                        <i class="ph-thin ph-stack text-xl text-[#d4af37]/70"></i>
+            <!-- Step 2 -->
+            <div class="relative rounded-[2rem] overflow-hidden group cursor-default rev flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto"
+                 style="height:480px;" style="transition-delay:.1s">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80"
+                     alt="Раскатка теста"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110"
+                     loading="lazy">
+                <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(8,14,31,1) 0%, rgba(8,14,31,.55) 45%, rgba(8,14,31,.15) 100%);"></div>
+                <div class="absolute inset-0 p-7 flex flex-col justify-between">
+                    <div class="font-serif text-[6rem] leading-none text-white/[.07] select-none">02</div>
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/20 mb-4">
+                            <i class="ph-fill ph-hands text-[#d4af37] text-sm"></i>
+                            <span class="text-[#d4af37]/80 text-[9px] tracking-[.22em] uppercase">Ручная работа</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-2 tracking-wide">Раскатка</h4>
+                        <p class="text-white/55 text-sm leading-relaxed">40 слоёв теста — каждый тоньше папиросной бумаги</p>
                     </div>
-                    <h4 class="font-serif text-lg text-white mb-2">Раскатка</h4>
-                    <p class="text-white/42 text-xs leading-relaxed">40 слоёв теста толщиной с папиросную бумагу — вручную</p>
                 </div>
+                <div class="absolute inset-0 border border-white/[.06] rounded-[2rem] group-hover:border-[#d4af37]/18 transition-colors duration-700 pointer-events-none"></div>
             </div>
 
-            <div class="step-card flex flex-col items-center text-center gap-5 rev" style="transition-delay:.2s">
-                <div class="relative w-full flex justify-center">
-                    <div class="step-num">03</div>
-                    <div class="step-line hidden md:block"></div>
-                </div>
-                <div>
-                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
-                        <i class="ph-thin ph-fire text-xl text-[#d4af37]/70"></i>
+            <!-- Step 3 -->
+            <div class="relative rounded-[2rem] overflow-hidden group cursor-default rev flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto"
+                 style="height:480px;" style="transition-delay:.2s">
+                <img src="https://images.unsplash.com/photo-1603046891726-36bfd957e0bf?w=600&q=80"
+                     alt="Выпечка"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110"
+                     loading="lazy">
+                <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(8,14,31,1) 0%, rgba(8,14,31,.55) 45%, rgba(8,14,31,.15) 100%);"></div>
+                <div class="absolute inset-0 p-7 flex flex-col justify-between">
+                    <div class="font-serif text-[6rem] leading-none text-white/[.07] select-none">03</div>
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 mb-4">
+                            <i class="ph-fill ph-fire text-orange-400 text-sm"></i>
+                            <span class="text-orange-300/80 text-[9px] tracking-[.22em] uppercase">Каменная печь</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-2 tracking-wide">Выпечка</h4>
+                        <p class="text-white/55 text-sm leading-relaxed">Идеальная температура — золотистый хруст снаружи, нежность внутри</p>
                     </div>
-                    <h4 class="font-serif text-lg text-white mb-2">Выпечка</h4>
-                    <p class="text-white/42 text-xs leading-relaxed">Каменная печь при точной температуре — золотистый хруст</p>
                 </div>
+                <div class="absolute inset-0 border border-white/[.06] rounded-[2rem] group-hover:border-[#d4af37]/18 transition-colors duration-700 pointer-events-none"></div>
             </div>
 
-            <div class="step-card flex flex-col items-center text-center gap-5 rev" style="transition-delay:.3s">
-                <div class="relative w-full flex justify-center">
-                    <div class="step-num">04</div>
-                </div>
-                <div>
-                    <div class="w-10 h-10 mx-auto mb-4 rounded-xl bg-[#d4af37]/[.06] border border-[#d4af37]/12 flex items-center justify-center">
-                        <i class="ph-thin ph-drop text-xl text-[#d4af37]/70"></i>
+            <!-- Step 4 -->
+            <div class="relative rounded-[2rem] overflow-hidden group cursor-default rev flex-shrink-0 w-[72vw] sm:w-[55vw] md:w-auto"
+                 style="height:480px;" style="transition-delay:.3s">
+                <img src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&q=80"
+                     alt="Янтарный сироп"
+                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110"
+                     loading="lazy">
+                <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(8,14,31,1) 0%, rgba(8,14,31,.55) 45%, rgba(8,14,31,.15) 100%);"></div>
+                <div class="absolute inset-0 p-7 flex flex-col justify-between">
+                    <div class="font-serif text-[6rem] leading-none text-white/[.07] select-none">04</div>
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 mb-4">
+                            <i class="ph-fill ph-drop text-amber-400 text-sm"></i>
+                            <span class="text-amber-300/80 text-[9px] tracking-[.22em] uppercase">Финальный штрих</span>
+                        </div>
+                        <h4 class="font-serif text-2xl text-white mb-2 tracking-wide">Сироп</h4>
+                        <p class="text-white/55 text-sm leading-relaxed">Янтарный мёдовый сироп — пропитка прямо перед подачей</p>
                     </div>
-                    <h4 class="font-serif text-lg text-white mb-2">Сироп</h4>
-                    <p class="text-white/42 text-xs leading-relaxed">Янтарный сироп из натурального мёда — пропитка в момент подачи</p>
                 </div>
+                <div class="absolute inset-0 border border-white/[.06] rounded-[2rem] group-hover:border-[#d4af37]/18 transition-colors duration-700 pointer-events-none"></div>
             </div>
 
         </div>
+
+        <!-- Mobile scroll hint -->
+        <div class="flex justify-center gap-1.5 mt-6 md:hidden">
+            <div class="w-6 h-1 rounded-full bg-[#d4af37]/50"></div>
+            <div class="w-2 h-1 rounded-full bg-white/15"></div>
+            <div class="w-2 h-1 rounded-full bg-white/15"></div>
+            <div class="w-2 h-1 rounded-full bg-white/15"></div>
+        </div>
+
     </div>
 </section>
 
