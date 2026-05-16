@@ -431,6 +431,68 @@
 
         /* ─── Magnetic ─── */
         .mag { transition: transform .3s cubic-bezier(.16,1,.3,1); display: inline-flex; }
+
+        /* ─── Ornamental Divider ─── */
+        .ornament { display: flex; align-items: center; justify-content: center; gap: .8rem; }
+        .ornament .ol { height: 1px; width: clamp(40px, 11vw, 110px); }
+        .ornament .ol.l { background: linear-gradient(90deg, transparent, rgba(212,175,55,.5)); }
+        .ornament .ol.r { background: linear-gradient(90deg, rgba(212,175,55,.5), transparent); }
+        .ornament .od { width: 5px; height: 5px; background: rgba(212,175,55,.65); transform: rotate(45deg); }
+        .ornament .oc {
+            width: 11px; height: 11px; border: 1px solid #d4af37;
+            transform: rotate(45deg);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ornament .oc::after {
+            content: ''; width: 3px; height: 3px; background: #d4af37;
+            box-shadow: 0 0 12px rgba(212,175,55,.9);
+            animation: twinkle 2.6s ease-in-out infinite;
+        }
+        @keyframes twinkle { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+        /* ─── Geometric Pattern (Ottoman star) ─── */
+        .geo::after {
+            content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cg fill='none' stroke='%23d4af37' stroke-width='1'%3E%3Crect x='30' y='30' width='36' height='36'/%3E%3Cpath d='M48 21 L75 48 L48 75 L21 48 Z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 96px 96px;
+            opacity: .045;
+            -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000, transparent);
+                    mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000, transparent);
+        }
+        .geo > * { position: relative; z-index: 1; }
+
+        /* ─── Corner Frame on Feature Cards ─── */
+        .feat-card::after {
+            content: ''; position: absolute; inset: 14px; pointer-events: none; z-index: 2;
+            opacity: 0; transition: opacity .7s, inset .7s cubic-bezier(.16,1,.3,1);
+            background:
+                linear-gradient(#d4af37,#d4af37) 0 0/16px 1px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 0 0/1px 16px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 100% 0/16px 1px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 100% 0/1px 16px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 0 100%/16px 1px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 0 100%/1px 16px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 100% 100%/16px 1px no-repeat,
+                linear-gradient(#d4af37,#d4af37) 100% 100%/1px 16px no-repeat;
+        }
+        .feat-card:hover::after { opacity: .55; inset: 10px; }
+
+        /* ─── Gold Text Glow ─── */
+        .gold-grad { filter: drop-shadow(0 6px 34px rgba(212,175,55,.28)); }
+
+        /* ─── Rotating Dashed Ring ─── */
+        .dash-ring {
+            position: absolute; inset: -14px; border-radius: 50%;
+            border: 1px dashed rgba(212,175,55,.35);
+            animation: spin 18s linear infinite;
+        }
+
+        /* ─── Section Index ─── */
+        .sidx {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: .8rem; letter-spacing: .3em;
+            color: rgba(212,175,55,.55);
+        }
     </style>
 </head>
 
@@ -531,6 +593,11 @@
         <div class="flex justify-center mb-10 rev" id="hero-logo-wrap">
             <div class="relative">
                 <div class="absolute -inset-5 rounded-3xl bg-[#d4af37]/10 blur-2xl animate-pulse"></div>
+                <!-- Декоративные уголки -->
+                <span class="absolute -top-3 -left-3 w-6 h-6 border-t border-l border-[#d4af37]/45"></span>
+                <span class="absolute -top-3 -right-3 w-6 h-6 border-t border-r border-[#d4af37]/45"></span>
+                <span class="absolute -bottom-3 -left-3 w-6 h-6 border-b border-l border-[#d4af37]/45"></span>
+                <span class="absolute -bottom-3 -right-3 w-6 h-6 border-b border-r border-[#d4af37]/45"></span>
                 <img src="photo_2026-03-21_12-27-37.jpg" alt="ART OF BAKLAVA" fetchpriority="high"
                      class="relative w-32 md:w-44 lg:w-56 h-auto object-contain rounded-2xl border border-[#d4af37]/28 shadow-[0_20px_60px_rgba(212,175,55,.22)]">
             </div>
@@ -647,6 +714,13 @@
             <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-wide">
                 Как рождается<br><span class="text-white/35 italic">наша пахлава</span>
             </h2>
+            <div class="ornament mt-8">
+                <div class="ol l"></div>
+                <div class="od"></div>
+                <div class="oc"></div>
+                <div class="od"></div>
+                <div class="ol r"></div>
+            </div>
         </div>
 
         <!-- Desktop: 4-column bento / Mobile: horizontal snap -->
@@ -754,13 +828,20 @@
 </section>
 
 <!-- ═══ QUALITY ═══ -->
-<section id="quality" class="py-24 md:py-36 sdiv border-t border-white/[.04]">
+<section id="quality" class="py-24 md:py-36 sdiv geo border-t border-white/[.04]">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16 md:mb-22 rev">
             <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Наши принципы ✦</div>
             <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-wide">
                 Что делает нас<br><span class="text-white/35 italic font-light">особенными</span>
             </h2>
+            <div class="ornament mt-8">
+                <div class="ol l"></div>
+                <div class="od"></div>
+                <div class="oc"></div>
+                <div class="od"></div>
+                <div class="ol r"></div>
+            </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
             <div class="feat-card rounded-[2rem] p-10 md:p-14 text-center rev">
@@ -792,7 +873,7 @@
 </section>
 
 <!-- ═══ PACKAGING ═══ -->
-<section class="py-24 md:py-36 sdiv border-t border-white/[.04] overflow-hidden">
+<section class="py-24 md:py-36 sdiv geo border-t border-white/[.04] overflow-hidden">
     <div class="max-w-7xl mx-auto px-6">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <div class="rev-l order-2 lg:order-1">
@@ -850,10 +931,16 @@
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16 md:mb-24 rev">
             <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Наша коллекция ✦</div>
-            <h2 class="font-serif text-3xl md:text-[3.5rem] lg:text-6xl text-white tracking-wide mb-5">
+            <h2 class="font-serif text-3xl md:text-[3.5rem] lg:text-6xl text-white tracking-wide mb-6">
                 13 Шедевров<br><span class="text-white/32 italic font-light">пахлавного искусства</span>
             </h2>
-            <div class="gline w-24 mx-auto"></div>
+            <div class="ornament">
+                <div class="ol l"></div>
+                <div class="od"></div>
+                <div class="oc"></div>
+                <div class="od"></div>
+                <div class="ol r"></div>
+            </div>
 
             <div class="flex overflow-x-auto justify-start md:justify-center gap-3 mt-10 pb-2 hide-scrollbar" id="filters">
                 <button class="fbtn active shrink-0 px-7 py-3 rounded-full border border-white/8 text-[10px] tracking-[.22em] uppercase text-white/55 hover:border-white/18 backdrop-blur-md" data-f="all">Все</button>
@@ -875,6 +962,7 @@
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center rev">
         <div class="w-20 h-20 mx-auto border border-white/18 rounded-full flex items-center justify-center mb-12 relative hover:border-[#d4af37]/42 transition-colors duration-700 group"
              style="animation: gpulse 3s ease-in-out infinite;">
+            <div class="dash-ring"></div>
             <div class="absolute inset-0 rounded-full bg-[#d4af37]/10 animate-ping"></div>
             <i class="ph-fill ph-play text-2xl text-white/65 ml-1 group-hover:text-[#d4af37] transition-colors duration-700"></i>
         </div>
@@ -883,7 +971,13 @@
             <span class="italic text-white/55">тончайшее тесто</span> встречается<br>
             с густым янтарным сиропом
         </h2>
-        <p class="text-[#d4af37]/45 tracking-[.48em] uppercase text-[10px]">— Искусство создания —</p>
+        <div class="ornament">
+            <div class="ol l"></div>
+            <div class="od"></div>
+            <span class="text-[#d4af37]/55 tracking-[.42em] uppercase text-[10px] px-1">Искусство создания</span>
+            <div class="od"></div>
+            <div class="ol r"></div>
+        </div>
     </div>
 </section>
 
@@ -893,9 +987,16 @@
         <div class="text-center mb-16 md:mb-22 rev">
             <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Атмосфера ✦</div>
             <h2 class="font-serif text-3xl md:text-5xl text-white tracking-wide mb-4">Эстетика вкуса</h2>
-            <p class="text-white/28 font-light text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+            <p class="text-white/28 font-light text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-8">
                 Больше, чем десерт — ритуал, объединяющий столетия истории и безупречное мастерство.
             </p>
+            <div class="ornament">
+                <div class="ol l"></div>
+                <div class="od"></div>
+                <div class="oc"></div>
+                <div class="od"></div>
+                <div class="ol r"></div>
+            </div>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[140px] sm:auto-rows-[175px] md:auto-rows-[215px] lg:auto-rows-[290px] rev">
             <div class="gal-item col-span-2 row-span-2 rounded-[2rem] border border-white/[.04] shadow-[0_20px_50px_rgba(0,0,0,.55)]">
@@ -923,8 +1024,15 @@
 </section>
 
 <!-- ═══ FOOTER ═══ -->
-<footer class="border-t border-white/[.06] pt-16 pb-10 md:pt-24 md:pb-12 sdiv">
+<footer class="border-t border-white/[.06] pt-16 pb-10 md:pt-24 md:pb-12 sdiv geo">
     <div class="max-w-7xl mx-auto px-6">
+        <div class="ornament mb-14 md:mb-18">
+            <div class="ol l"></div>
+            <div class="od"></div>
+            <i class="ph-thin ph-cookie text-[#d4af37]/60 text-xl"></i>
+            <div class="od"></div>
+            <div class="ol r"></div>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12 mb-14">
             <div class="md:col-span-2">
                 <a href="#" class="flex items-center gap-4 mb-7 w-fit group">
