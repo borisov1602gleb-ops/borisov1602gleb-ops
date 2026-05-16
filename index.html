@@ -208,17 +208,32 @@
 
         /* ─── Stat Card ─── */
         .stat-card {
-            background: rgba(212,175,55,.02);
-            border: 1px solid rgba(212,175,55,.1);
-            border-top-color: rgba(212,175,55,.3);
+            position: relative;
+            background: rgba(212,175,55,.025);
+            border: 1px solid rgba(212,175,55,.12);
             backdrop-filter: blur(20px);
+            overflow: hidden;
             transition: all .8s cubic-bezier(.16,1,.3,1);
         }
+        .stat-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,.7), transparent);
+            animation: sweep-l 6s ease-in-out infinite;
+        }
+        .stat-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(212,175,55,.07) 0%, transparent 65%);
+            opacity: 0; transition: opacity .8s;
+        }
+        .stat-card:hover::after { opacity: 1; }
         .stat-card:hover {
             background: rgba(212,175,55,.05);
-            border-color: rgba(212,175,55,.3);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(212,175,55,.1);
+            border-color: rgba(212,175,55,.28);
+            transform: translateY(-6px);
+            box-shadow: 0 24px 56px rgba(212,175,55,.12), 0 0 0 1px rgba(212,175,55,.08);
         }
 
         /* ─── Feature Card ─── */
@@ -237,9 +252,9 @@
         }
         .feat-card:hover::before { opacity: 1; }
         .feat-card:hover {
-            border-color: rgba(212,175,55,.22);
-            transform: translateY(-7px);
-            box-shadow: 0 30px 60px rgba(0,0,0,.4), 0 0 0 1px rgba(212,175,55,.1);
+            border-color: rgba(212,175,55,.25);
+            transform: translateY(-8px);
+            box-shadow: 0 32px 64px rgba(0,0,0,.45), 0 0 0 1px rgba(212,175,55,.12);
         }
 
         /* ─── Product Card ─── */
@@ -247,8 +262,19 @@
             background: rgba(15,23,41,.5);
             border: 1px solid rgba(255,255,255,.05);
             backdrop-filter: blur(20px);
+            position: relative; overflow: hidden;
             transition: border-color .7s, box-shadow .7s;
         }
+        .prod-card::after {
+            content: '';
+            position: absolute; top: 0; left: -60%;
+            width: 40%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+            transform: skewX(-12deg);
+            transition: left .9s cubic-bezier(.16,1,.3,1);
+            pointer-events: none;
+        }
+        .prod-card:hover::after { left: 130%; }
         .prod-card:hover {
             border-color: rgba(212,175,55,.3);
             box-shadow: 0 28px 56px rgba(212,175,55,.12);
@@ -271,18 +297,26 @@
         }
 
         /* ─── Gallery ─── */
-        .gal-item { position: relative; overflow: hidden; }
+        .gal-item { position: relative; overflow: hidden; border-radius: inherit; }
         .gal-item img {
-            transition: transform 3s cubic-bezier(.16,1,.3,1), filter 1s;
-            filter: grayscale(30%) brightness(.8);
+            transition: transform 3.5s cubic-bezier(.16,1,.3,1), filter 1.2s, brightness 1.2s;
+            filter: brightness(.72) saturate(.9);
         }
-        .gal-item:hover img { transform: scale(1.06); filter: grayscale(0%) brightness(1.05); }
+        .gal-item:hover img { transform: scale(1.07); filter: brightness(1) saturate(1.1); }
         .gal-ov {
             position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(8,14,31,.9) 0%, rgba(8,14,31,.2) 60%, rgba(8,14,31,.5) 100%);
-            transition: opacity 1s;
+            background: linear-gradient(to top, rgba(8,14,31,.92) 0%, rgba(8,14,31,.15) 55%, transparent 100%);
+            transition: opacity .8s;
         }
-        .gal-item:hover .gal-ov { opacity: .35; }
+        .gal-item:hover .gal-ov { opacity: .2; }
+        .gal-item::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(212,175,55,.08) 0%, transparent 70%);
+            opacity: 0; transition: opacity .8s;
+            pointer-events: none;
+        }
+        .gal-item:hover::after { opacity: 1; }
 
         /* ─── Filter Btn ─── */
         .fbtn { transition: all .5s ease; }
@@ -483,7 +517,14 @@
 
 <!-- ═══ HERO ═══ -->
 <section id="about" class="relative min-h-[100dvh] flex items-center justify-center overflow-hidden pt-24 pb-20">
-    <div class="absolute inset-0 z-0" style="background: radial-gradient(ellipse at 28% 60%, rgba(212,175,55,.11) 0%, transparent 58%), radial-gradient(ellipse at 78% 22%, rgba(28,58,120,.18) 0%, transparent 58%), #080e1f;"></div>
+    <div class="absolute inset-0 z-0" style="background: radial-gradient(ellipse at 28% 60%, rgba(212,175,55,.13) 0%, transparent 58%), radial-gradient(ellipse at 78% 22%, rgba(28,58,120,.2) 0%, transparent 58%), #080e1f;"></div>
+    <!-- Декоративный большой текст -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
+        <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(6rem,20vw,18rem);color:rgba(212,175,55,.028);letter-spacing:.18em;white-space:nowrap;line-height:1;">BAKLAVA</span>
+    </div>
+    <!-- Декоративные линии -->
+    <div class="absolute left-8 top-1/2 -translate-y-1/2 h-48 w-px pointer-events-none z-0" style="background:linear-gradient(to bottom,transparent,rgba(212,175,55,.12),transparent);"></div>
+    <div class="absolute right-8 top-1/2 -translate-y-1/2 h-48 w-px pointer-events-none z-0" style="background:linear-gradient(to bottom,transparent,rgba(212,175,55,.12),transparent);"></div>
 
     <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <!-- Logo glow -->
@@ -537,27 +578,30 @@
 </section>
 
 <!-- ═══ MARQUEE ═══ -->
-<div class="py-[18px] border-y border-white/[.04] overflow-hidden bg-[#d4af37]/[.015]">
+<div class="py-4 border-y border-[#d4af37]/[.08] overflow-hidden relative" style="background:linear-gradient(90deg,rgba(8,14,31,1),rgba(212,175,55,.04) 50%,rgba(8,14,31,1));">
+    <!-- fade edges -->
+    <div class="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none" style="background:linear-gradient(to right,#080e1f,transparent);"></div>
+    <div class="absolute right-0 top-0 h-full w-20 z-10 pointer-events-none" style="background:linear-gradient(to left,#080e1f,transparent);"></div>
     <div class="mqtrack">
-        <div class="flex items-center gap-14 pr-14 shrink-0 text-[#d4af37]/35 text-[10px] tracking-[.38em] uppercase font-light">
-            <span>Антепская фисташка</span><span class="text-[#d4af37]/15">✦</span>
-            <span>40 слоёв теста</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Рецепты Топкапы</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Каменные печи</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Ручная работа</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Доставка по Москве</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Премиум упаковка</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Метро Лубянка</span><span class="text-[#d4af37]/15">✦</span>
+        <div class="flex items-center gap-12 pr-12 shrink-0">
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Антепская фисташка</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">40 слоёв теста</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Рецепты Топкапы</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Каменные печи</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Ручная работа</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Доставка по Москве</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Премиум упаковка</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Метро Лубянка</span><span class="text-[#d4af37]/25 text-base">✦</span>
         </div>
-        <div class="flex items-center gap-14 pr-14 shrink-0 text-[#d4af37]/35 text-[10px] tracking-[.38em] uppercase font-light" aria-hidden="true">
-            <span>Антепская фисташка</span><span class="text-[#d4af37]/15">✦</span>
-            <span>40 слоёв теста</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Рецепты Топкапы</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Каменные печи</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Ручная работа</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Доставка по Москве</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Премиум упаковка</span><span class="text-[#d4af37]/15">✦</span>
-            <span>Метро Лубянка</span><span class="text-[#d4af37]/15">✦</span>
+        <div class="flex items-center gap-12 pr-12 shrink-0" aria-hidden="true">
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Антепская фисташка</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">40 слоёв теста</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Рецепты Топкапы</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Каменные печи</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Ручная работа</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Доставка по Москве</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Премиум упаковка</span><span class="text-[#d4af37]/25 text-base">✦</span>
+            <span class="text-[#d4af37]/50 text-[11px] tracking-[.32em] uppercase">Метро Лубянка</span><span class="text-[#d4af37]/25 text-base">✦</span>
         </div>
     </div>
 </div>
@@ -1178,6 +1222,47 @@ function initDust() {
 }
 
 // ─── Init ───
+// ─── Cursor Trail ───
+function initCursorTrail() {
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:99990;';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    let W, H, mouse = {x:0,y:0}, trail = [];
+
+    function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    document.addEventListener('mousemove', e => {
+        mouse.x = e.clientX; mouse.y = e.clientY;
+        for (let i = 0; i < 2; i++) {
+            trail.push({
+                x: mouse.x + (Math.random()-.5)*6,
+                y: mouse.y + (Math.random()-.5)*6,
+                r: Math.random()*1.5 + .4,
+                a: Math.random()*.5 + .3,
+                vx: (Math.random()-.5)*.6,
+                vy: -(Math.random()*.8 + .2),
+                life: 1
+            });
+        }
+    });
+
+    (function loop() {
+        ctx.clearRect(0,0,W,H);
+        trail = trail.filter(p => p.life > 0);
+        trail.forEach(p => {
+            p.x += p.vx; p.y += p.vy; p.life -= .04; p.a *= .95;
+            ctx.globalAlpha = Math.max(0, p.a * p.life);
+            ctx.shadowBlur = 6; ctx.shadowColor = '#d4af37';
+            ctx.fillStyle = '#d4af37';
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+        });
+        requestAnimationFrame(loop);
+    })();
+}
+
 // ─── Floating CTA ───
 function initFloatCTA() {
     const btn = document.getElementById('float-order');
@@ -1235,6 +1320,7 @@ window.addEventListener('load', () => {
     initFloatCTA();
     initParallax();
     initMagnetic();
+    initCursorTrail();
 });
 </script>
 </body>
