@@ -199,11 +199,11 @@
         }
         @keyframes shine { to { background-position: 300% center; } }
 
-        /* ─── Reveal Animations ─── */
-        .rev   { opacity:0; transform: translateY(55px);  transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1); }
-        .rev-l { opacity:0; transform: translateX(-55px); transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1); }
-        .rev-r { opacity:0; transform: translateX(55px);  transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1); }
-        .rev.on, .rev-l.on, .rev-r.on { opacity:1; transform: translate(0); }
+        /* ─── Reveal Animations (с blur-in — эффект наведения фокуса) ─── */
+        .rev   { opacity:0; transform: translateY(55px);  filter: blur(8px); transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1), filter 1s ease; }
+        .rev-l { opacity:0; transform: translateX(-55px); filter: blur(8px); transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1), filter 1s ease; }
+        .rev-r { opacity:0; transform: translateX(55px);  filter: blur(8px); transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1), filter 1s ease; }
+        .rev.on, .rev-l.on, .rev-r.on { opacity:1; transform: translate(0); filter: blur(0); }
 
         /* ─── Section Divider Sweep ─── */
         .sdiv { position: relative; overflow: hidden; }
@@ -405,6 +405,20 @@
         #float-order.show { animation: fcta-pulse 3s ease-in-out infinite; }
         #float-order:hover { animation: none; }
 
+        /* ─── Кнопка «наверх» ─── */
+        #to-top {
+            position: fixed; bottom: 28px; left: 28px; z-index: 45;
+            width: 46px; height: 46px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(8,14,31,.72); backdrop-filter: blur(16px);
+            border: 1px solid rgba(212,175,55,.25); color: #d4af37; font-size: 1.1rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,.35);
+            opacity: 0; transform: translateY(16px) scale(.9); pointer-events: none;
+            transition: opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1), border-color .4s, background .4s;
+        }
+        #to-top.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        #to-top:hover { border-color: rgba(212,175,55,.6); background: rgba(212,175,55,.09); transform: translateY(-3px) scale(1.05); }
+
         /* ─── Process Steps ─── */
         .step-line {
             position: absolute; top: 28px; left: calc(50% + 28px);
@@ -497,6 +511,16 @@
                 linear-gradient(#d4af37,#d4af37) 100% 100%/1px 16px no-repeat;
         }
         .feat-card:hover::after { opacity: .55; inset: 10px; }
+
+        /* ─── Локальное свечение за курсором внутри карточек ─── */
+        .glow-card { position: relative; }
+        .glow-card .glow {
+            position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit;
+            opacity: 0; transition: opacity .5s ease;
+            background: radial-gradient(circle 190px at var(--gx,50%) var(--gy,50%),
+                        rgba(212,175,55,.16), rgba(212,175,55,.05) 40%, transparent 66%);
+        }
+        .glow-card:hover .glow { opacity: 1; }
 
         /* ─── Gold Text Glow ─── */
         .gold-grad { filter: drop-shadow(0 6px 34px rgba(212,175,55,.28)); }
@@ -603,6 +627,9 @@
     <i class="ph-fill ph-phone text-base"></i>
     Заказать
 </a>
+
+<!-- Scroll to top -->
+<button id="to-top" aria-label="Наверх"><i class="ph-bold ph-arrow-up"></i></button>
 
 <!-- Preloader -->
 <div id="preloader">
@@ -919,7 +946,8 @@
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
-            <div class="feat-card rounded-[2rem] p-10 md:p-14 text-center rev">
+            <div class="feat-card glow-card rounded-[2rem] p-10 md:p-14 text-center rev">
+                <div class="glow"></div>
                 <div class="w-16 h-16 mx-auto mb-8 rounded-2xl border border-[#93c572]/18 bg-[#93c572]/[.05] flex items-center justify-center">
                     <i class="ph-thin ph-leaf text-3xl text-[#93c572]/65"></i>
                 </div>
@@ -927,7 +955,8 @@
                 <div class="w-7 h-px bg-[#d4af37]/28 mx-auto mb-5"></div>
                 <p class="text-white/38 text-sm leading-relaxed font-light">Зелёная фисташка раннего урожая из Газиантепа — с самым насыщенным вкусом и ярким цветом на планете.</p>
             </div>
-            <div class="feat-card rounded-[2rem] p-10 md:p-14 text-center rev" style="transition-delay:.15s">
+            <div class="feat-card glow-card rounded-[2rem] p-10 md:p-14 text-center rev" style="transition-delay:.15s">
+                <div class="glow"></div>
                 <div class="w-16 h-16 mx-auto mb-8 rounded-2xl border border-[#d4af37]/18 bg-[#d4af37]/[.05] flex items-center justify-center">
                     <i class="ph-thin ph-fire text-3xl text-[#d4af37]/65"></i>
                 </div>
@@ -935,7 +964,8 @@
                 <div class="w-7 h-px bg-[#d4af37]/28 mx-auto mb-5"></div>
                 <p class="text-white/38 text-sm leading-relaxed font-light">5 традиционных каменных печей — для равномерного хруста, аромата топлёного масла и золотистого цвета.</p>
             </div>
-            <div class="feat-card rounded-[2rem] p-10 md:p-14 text-center rev" style="transition-delay:.3s">
+            <div class="feat-card glow-card rounded-[2rem] p-10 md:p-14 text-center rev" style="transition-delay:.3s">
+                <div class="glow"></div>
                 <div class="w-16 h-16 mx-auto mb-8 rounded-2xl border border-[#d4af37]/18 bg-[#d4af37]/[.05] flex items-center justify-center">
                     <i class="ph-thin ph-crown text-3xl text-[#d4af37]/65"></i>
                 </div>
@@ -1098,6 +1128,79 @@
     </div>
 </section>
 
+<!-- ═══ REVIEWS ═══ -->
+<section class="py-24 md:py-36 sdiv geo border-t border-white/[.04] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16 md:mb-22 rev">
+            <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Отзывы гостей ✦</div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-wide">
+                Что говорят<br><span class="text-white/35 italic font-light">наши гости</span>
+            </h2>
+            <div class="ornament mt-8">
+                <div class="ol l"></div>
+                <div class="od"></div>
+                <div class="oc"></div>
+                <div class="od"></div>
+                <div class="ol r"></div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
+
+            <!-- Отзыв 1 -->
+            <div class="feat-card glow-card rounded-[2rem] p-9 md:p-11 rev">
+                <div class="glow"></div>
+                <i class="ph-fill ph-quotes text-4xl text-[#d4af37]/25 mb-5 block"></i>
+                <div class="flex gap-1 text-[#d4af37] text-sm mb-5">
+                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                </div>
+                <p class="text-white/55 text-[15px] leading-relaxed font-light mb-8">«Заказывала на день рождения мамы — гости не поверили, что это не из Стамбула. Фисташка настоящая, тесто тает. Упаковка — отдельное произведение искусства.»</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4af37]/25 to-[#93c572]/15 border border-[#d4af37]/20 flex items-center justify-center font-serif text-[#d4af37] text-lg">А</div>
+                    <div>
+                        <div class="text-white/80 text-sm font-medium">Алина Керимова</div>
+                        <div class="text-white/30 text-xs">Москва</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Отзыв 2 -->
+            <div class="feat-card glow-card rounded-[2rem] p-9 md:p-11 rev" style="transition-delay:.15s">
+                <div class="glow"></div>
+                <i class="ph-fill ph-quotes text-4xl text-[#d4af37]/25 mb-5 block"></i>
+                <div class="flex gap-1 text-[#d4af37] text-sm mb-5">
+                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                </div>
+                <p class="text-white/55 text-[15px] leading-relaxed font-light mb-8">«Беру уже третий раз. Холодная баклава с фисташкой — это что-то невероятное. Доставили точно в срок, всё свежее, будто только из печи. Рекомендую всем.»</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4af37]/25 to-[#93c572]/15 border border-[#d4af37]/20 flex items-center justify-center font-serif text-[#d4af37] text-lg">Д</div>
+                    <div>
+                        <div class="text-white/80 text-sm font-medium">Дмитрий Соколов</div>
+                        <div class="text-white/30 text-xs">Москва</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Отзыв 3 -->
+            <div class="feat-card glow-card rounded-[2rem] p-9 md:p-11 rev" style="transition-delay:.3s">
+                <div class="glow"></div>
+                <i class="ph-fill ph-quotes text-4xl text-[#d4af37]/25 mb-5 block"></i>
+                <div class="flex gap-1 text-[#d4af37] text-sm mb-5">
+                    <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                </div>
+                <p class="text-white/55 text-[15px] leading-relaxed font-light mb-8">«Заказывали корпоративный подарок клиентам — восторг у всех. Премиум Бюль-Бюль просто произведение. Теперь только здесь. Спасибо за качество и вкус!»</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4af37]/25 to-[#93c572]/15 border border-[#d4af37]/20 flex items-center justify-center font-serif text-[#d4af37] text-lg">М</div>
+                    <div>
+                        <div class="text-white/80 text-sm font-medium">Марина Ветрова</div>
+                        <div class="text-white/30 text-xs">Москва</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
 <!-- ═══ FOOTER ═══ -->
 <footer class="border-t border-white/[.06] pt-16 pb-10 md:pt-24 md:pb-12 sdiv geo">
     <div class="max-w-7xl mx-auto px-6">
@@ -1251,7 +1354,8 @@ function renderProducts(filter='all') {
             </div>` : '';
 
         grid.insertAdjacentHTML('beforeend', `
-            <div class="prod-card group rounded-[2rem] overflow-hidden cursor-pointer" style="transition-delay:${i*.04}s" onclick="openModal(${p.id})">
+            <div class="prod-card glow-card group rounded-[2rem] overflow-hidden cursor-pointer" style="transition-delay:${i*.04}s" onclick="openModal(${p.id})">
+                <div class="glow"></div>
                 <div class="prod-inner">
                     <div class="relative h-60 md:h-68 overflow-hidden">
                         <div class="absolute inset-0 flex items-center justify-center text-white/[.04] ph-placeholder">
@@ -1282,7 +1386,23 @@ function renderProducts(filter='all') {
     });
 
     setupTilt();
+    initCardGlow();
     observe();
+}
+
+// ─── Свечение за курсором внутри карточек ───
+function initCardGlow() {
+    if (!FINE_POINTER) return;
+    document.querySelectorAll('.glow-card:not([data-glow])').forEach(card => {
+        card.dataset.glow = '1';
+        const g = card.querySelector('.glow');
+        if (!g) return;
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            g.style.setProperty('--gx', (e.clientX - r.left) + 'px');
+            g.style.setProperty('--gy', (e.clientY - r.top) + 'px');
+        }, { passive:true });
+    });
 }
 
 // ─── 3D Tilt ───
@@ -1357,6 +1477,7 @@ const navbar   = document.getElementById('navbar');
 const syrup    = document.getElementById('syrup');
 const heroLogo = document.getElementById('hero-logo-wrap');
 const floatBtn = document.getElementById('float-order');
+const toTop    = document.getElementById('to-top');
 const spySections = [...document.querySelectorAll('section[id]')];
 const spyLinks = new Map([...document.querySelectorAll('.nav-link')].map(l => [l.getAttribute('href').slice(1), l]));
 
@@ -1380,6 +1501,9 @@ function onScrollFrame() {
         else if (y < innerHeight * .3 && floatShown) { floatBtn.classList.remove('show'); floatShown = false; }
     }
 
+    // Кнопка «наверх»
+    if (toTop) toTop.classList.toggle('show', y > innerHeight * .9);
+
     // Scrollspy — подсветка активного раздела в навигации
     const mid = y + innerHeight * .35;
     let current = null;
@@ -1393,6 +1517,7 @@ function onScrollFrame() {
 window.addEventListener('scroll', () => {
     if (!ticking) { requestAnimationFrame(onScrollFrame); ticking = true; }
 }, { passive:true });
+if (toTop) toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
 // ─── Mobile Menu ───
 const mbMenu = document.getElementById('mb-menu');
@@ -1529,6 +1654,7 @@ window.addEventListener('load', () => {
     initCounters();
     observe();
     initMagnetic();
+    initCardGlow();
     onScrollFrame();                       // первичный расчёт (навбар/сироп/scrollspy)
 
     // Тяжёлые декоративные эффекты — только на мыши и без reduced-motion
