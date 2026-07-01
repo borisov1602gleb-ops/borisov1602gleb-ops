@@ -42,16 +42,24 @@
     <style>
         /* ─── Base ─── */
         *, *::before, *::after { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; scroll-padding-top: 96px; }
         html, body { max-width: 100%; overflow-x: hidden; }
         body {
             font-family: 'Manrope', sans-serif;
             background: #080e1f;
             color: #e8e6e3;
             cursor: none;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+            font-feature-settings: "liga" 1, "calt" 1, "kern" 1;
+            font-optical-sizing: auto;
+        }
+        /* Кастомный курсор — только для точных указателей (мышь). На тач-устройствах вернём системный. */
+        @media (hover: none), (pointer: coarse) {
+            body { cursor: auto; }
+            #cur-dot, #cur-ring { display: none !important; }
         }
         ::selection { background: rgba(212,175,55,.25); color: #f3e5ab; }
 
@@ -67,8 +75,19 @@
             font-family: 'Cormorant Garamond', serif;
             letter-spacing: .03em;
             font-weight: 400;
+            font-feature-settings: "liga" 1, "dlig" 1, "swsh" 1, "kern" 1;
+            text-wrap: balance;
         }
         h1 { font-weight: 500; }
+        p { text-wrap: pretty; }
+        /* Крупные числа (счётчики, цены) — ровные табличные цифры */
+        .cnt, .font-serif { font-variant-numeric: lining-nums proportional-nums; }
+
+        /* Флюид-заголовок героя — плавно масштабируется без скачков на брейкпойнтах */
+        .hero-h1 {
+            font-size: clamp(2.9rem, 11vw, 7rem);
+            line-height: .96;
+        }
 
         /* ─── Custom Cursor ─── */
         #cur-dot {
@@ -299,10 +318,12 @@
         /* ─── Gallery ─── */
         .gal-item { position: relative; overflow: hidden; border-radius: inherit; }
         .gal-item img {
-            transition: transform 3.5s cubic-bezier(.16,1,.3,1), filter 1.2s, brightness 1.2s;
+            transition: filter 1.2s;
             filter: brightness(.72) saturate(.9);
+            animation: kenburns 22s ease-in-out infinite alternate;
+            will-change: transform;
         }
-        .gal-item:hover img { transform: scale(1.07); filter: brightness(1) saturate(1.1); }
+        .gal-item:hover img { filter: brightness(1.03) saturate(1.12); animation-play-state: paused; }
         .gal-ov {
             position: absolute; inset: 0;
             background: linear-gradient(to top, rgba(8,14,31,.92) 0%, rgba(8,14,31,.15) 55%, transparent 100%);
@@ -493,6 +514,56 @@
             font-size: .8rem; letter-spacing: .3em;
             color: rgba(212,175,55,.55);
         }
+
+        /* ─── Курсор-прожектор (мягкое золотое свечение за мышью) ─── */
+        #spotlight {
+            position: fixed; inset: 0; z-index: 2; pointer-events: none;
+            background: radial-gradient(circle 360px at var(--sx, 50%) var(--sy, -30%),
+                        rgba(212,175,55,.07), rgba(212,175,55,.02) 45%, transparent 72%);
+            opacity: 0; transition: opacity .7s ease;
+            mix-blend-mode: screen;
+        }
+        #spotlight.on { opacity: 1; }
+
+        /* ─── Вращающийся золотой ореол за логотипом ─── */
+        .halo {
+            position: absolute; inset: -34px; border-radius: 50%; z-index: -1;
+            background: conic-gradient(from 0deg,
+                        transparent 0%, rgba(212,175,55,.4) 12%, transparent 30%,
+                        transparent 55%, rgba(212,175,55,.28) 70%, transparent 88%, transparent 100%);
+            filter: blur(16px); opacity: .7;
+            animation: spin 16s linear infinite;
+        }
+
+        /* ─── Ken Burns в галерее (кинематографичный дрейф) ─── */
+        @keyframes kenburns {
+            0%   { transform: scale(1.06) translate(0, 0); }
+            100% { transform: scale(1.14) translate(-2%, -1.4%); }
+        }
+
+        /* ─── Активная ссылка навигации (scrollspy) ─── */
+        .nav-link.active { color: rgba(255,255,255,.92); }
+        .nav-link.active::after { width: 100%; }
+
+        /* ─── Доступный фокус (курсор скрыт — важна видимость при навигации с клавиатуры) ─── */
+        a:focus-visible, button:focus-visible, [onclick]:focus-visible {
+            outline: 2px solid rgba(212,175,55,.7);
+            outline-offset: 3px;
+            border-radius: 6px;
+        }
+
+        /* ─── Уважение к prefers-reduced-motion ─── */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .001ms !important;
+                scroll-behavior: auto !important;
+            }
+            .rev, .rev-l, .rev-r { opacity: 1 !important; transform: none !important; }
+            .blob, .noise, #gold-dust, .mqtrack { animation: none !important; }
+        }
     </style>
 </head>
 
@@ -504,6 +575,9 @@
 
 <!-- Noise -->
 <div class="noise"></div>
+
+<!-- Cursor Spotlight -->
+<div id="spotlight"></div>
 
 <!-- Syrup Progress -->
 <div class="fixed top-0 left-0 h-full w-[3px] z-50 pointer-events-none">
@@ -592,6 +666,7 @@
         <!-- Logo glow -->
         <div class="flex justify-center mb-10 rev" id="hero-logo-wrap">
             <div class="relative">
+                <div class="halo"></div>
                 <div class="absolute -inset-5 rounded-3xl bg-[#d4af37]/10 blur-2xl animate-pulse"></div>
                 <!-- Декоративные уголки -->
                 <span class="absolute -top-3 -left-3 w-6 h-6 border-t border-l border-[#d4af37]/45"></span>
@@ -611,10 +686,10 @@
         </div>
 
         <!-- Title -->
-        <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif leading-[.95] tracking-wide mb-3 rev" style="transition-delay:.2s">
+        <h1 class="hero-h1 font-serif tracking-wide mb-3 rev" style="transition-delay:.2s">
             Искусство
         </h1>
-        <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-serif leading-[.95] italic mb-10 rev" style="transition-delay:.35s">
+        <h1 class="hero-h1 font-serif italic mb-10 rev" style="transition-delay:.35s">
             <span class="gold-grad">Восточных Сладостей</span>
         </h1>
 
@@ -1126,24 +1201,41 @@ const products = [
     { id:13, name:"Шоколадная Баклава с фисташкой",                desc:"Состав: Описание будет добавлено позже.", price:2600, cat:"special",   img:"Шоколадная Баклава с фисташкой.jpg" },
 ];
 
-// ─── Custom Cursor ───
-const dot = document.getElementById('cur-dot');
-const ring = document.getElementById('cur-ring');
-let mx=0, my=0, rx=0, ry=0;
+// ─── Возможности окружения ───
+const FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx+'px'; dot.style.top = my+'px';
-});
-(function tickRing() {
-    rx += (mx-rx)*.12; ry += (my-ry)*.12;
-    ring.style.left = rx+'px'; ring.style.top = ry+'px';
-    requestAnimationFrame(tickRing);
-})();
-document.addEventListener('mouseover', e => {
-    if (e.target.closest('a,button,[onclick],.prod-card')) document.body.classList.add('ch');
-    else document.body.classList.remove('ch');
-});
+// ─── Custom Cursor (только для мыши) ───
+if (FINE_POINTER) {
+    const dot = document.getElementById('cur-dot');
+    const ring = document.getElementById('cur-ring');
+    let mx=0, my=0, rx=0, ry=0;
+
+    document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx+'px'; dot.style.top = my+'px';
+    }, { passive:true });
+    (function tickRing() {
+        rx += (mx-rx)*.12; ry += (my-ry)*.12;
+        ring.style.left = rx+'px'; ring.style.top = ry+'px';
+        requestAnimationFrame(tickRing);
+    })();
+    document.addEventListener('mouseover', e => {
+        if (e.target.closest('a,button,[onclick],.prod-card')) document.body.classList.add('ch');
+        else document.body.classList.remove('ch');
+    }, { passive:true });
+
+    // Курсор-прожектор — мягкое свечение следует за мышью
+    if (!REDUCED_MOTION) {
+        const spot = document.getElementById('spotlight');
+        document.addEventListener('mousemove', e => {
+            spot.style.setProperty('--sx', e.clientX + 'px');
+            spot.style.setProperty('--sy', e.clientY + 'px');
+            if (!spot.classList.contains('on')) spot.classList.add('on');
+        }, { passive:true });
+        document.addEventListener('mouseleave', () => spot.classList.remove('on'), { passive:true });
+    }
+}
 
 // ─── Render Products ───
 function renderProducts(filter='all') {
@@ -1171,9 +1263,9 @@ function renderProducts(filter='all') {
                              onerror="this.src='https://placehold.co/400x300/0f1729/d4af37?text=Baklava';"
                              class="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-[1.06] opacity-0">
                         ${badge}
-                        <div class="absolute top-4 right-4 z-20 px-4 py-2 rounded-full text-[11px] tracking-[.18em] text-[#d4af37]/85 font-light border border-white/8"
+                        <div class="absolute top-4 right-4 z-20 px-4 py-2 rounded-full text-[11px] tracking-[.18em] font-medium border border-[#d4af37]/25 shadow-[0_4px_18px_rgba(212,175,55,.14)]"
                              style="background:rgba(8,14,31,.72);backdrop-filter:blur(16px);">
-                            ${p.price.toLocaleString('ru')} ₽
+                            <span class="gold-grad">${p.price.toLocaleString('ru')} ₽</span>
                         </div>
                     </div>
                     <div class="p-6 md:p-8">
@@ -1260,12 +1352,46 @@ function initCounters() {
     document.querySelectorAll('.cnt').forEach(el => io.observe(el));
 }
 
-// ─── Navbar + Syrup ───
-window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', scrollY>50);
+// ─── Единый rAF-обработчик скролла (navbar, сироп, параллакс, плавающая кнопка, scrollspy) ───
+const navbar   = document.getElementById('navbar');
+const syrup    = document.getElementById('syrup');
+const heroLogo = document.getElementById('hero-logo-wrap');
+const floatBtn = document.getElementById('float-order');
+const spySections = [...document.querySelectorAll('section[id]')];
+const spyLinks = new Map([...document.querySelectorAll('.nav-link')].map(l => [l.getAttribute('href').slice(1), l]));
+
+let ticking = false, floatShown = false;
+function onScrollFrame() {
+    const y = scrollY;
+
+    // Навбар
+    navbar.classList.toggle('scrolled', y > 50);
+
+    // Прогресс-сироп
     const maxH = document.documentElement.scrollHeight - innerHeight;
-    const pct = maxH>0 ? (scrollY/maxH)*100 : 0;
-    document.getElementById('syrup').style.height = pct+'%';
+    syrup.style.height = (maxH > 0 ? (y / maxH) * 100 : 0) + '%';
+
+    // Параллакс логотипа (только при активной анимации)
+    if (heroLogo && !REDUCED_MOTION) heroLogo.style.transform = `translateY(${y * .18}px)`;
+
+    // Плавающая кнопка «Заказать»
+    if (floatBtn) {
+        if (y > innerHeight * .6 && !floatShown) { floatBtn.classList.add('show'); floatShown = true; }
+        else if (y < innerHeight * .3 && floatShown) { floatBtn.classList.remove('show'); floatShown = false; }
+    }
+
+    // Scrollspy — подсветка активного раздела в навигации
+    const mid = y + innerHeight * .35;
+    let current = null;
+    for (const s of spySections) {
+        if (s.offsetTop <= mid) current = s.id;
+    }
+    spyLinks.forEach((link, id) => link.classList.toggle('active', id === current));
+
+    ticking = false;
+}
+window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(onScrollFrame); ticking = true; }
 }, { passive:true });
 
 // ─── Mobile Menu ───
@@ -1371,31 +1497,9 @@ function initCursorTrail() {
     })();
 }
 
-// ─── Floating CTA ───
-function initFloatCTA() {
-    const btn = document.getElementById('float-order');
-    let shown = false;
-    window.addEventListener('scroll', () => {
-        if (scrollY > innerHeight * .6 && !shown) {
-            btn.classList.add('show'); shown = true;
-        } else if (scrollY < innerHeight * .3 && shown) {
-            btn.classList.remove('show'); shown = false;
-        }
-    }, { passive: true });
-}
-
-// ─── Hero Parallax ───
-function initParallax() {
-    const wrap = document.getElementById('hero-logo-wrap');
-    if (!wrap) return;
-    window.addEventListener('scroll', () => {
-        const y = scrollY * .18;
-        wrap.style.transform = `translateY(${y}px)`;
-    }, { passive: true });
-}
-
 // ─── Magnetic Buttons ───
 function initMagnetic() {
+    if (!FINE_POINTER) return;
     document.querySelectorAll('.mag').forEach(el => {
         el.addEventListener('mousemove', e => {
             const r = el.getBoundingClientRect();
@@ -1424,11 +1528,12 @@ window.addEventListener('load', () => {
     renderProducts();
     initCounters();
     observe();
-    initDust();
-    initFloatCTA();
-    initParallax();
     initMagnetic();
-    initCursorTrail();
+    onScrollFrame();                       // первичный расчёт (навбар/сироп/scrollspy)
+
+    // Тяжёлые декоративные эффекты — только на мыши и без reduced-motion
+    if (!REDUCED_MOTION) initDust();
+    if (FINE_POINTER && !REDUCED_MOTION) initCursorTrail();
 });
 </script>
 </body>
