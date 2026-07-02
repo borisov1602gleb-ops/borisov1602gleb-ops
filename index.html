@@ -525,6 +525,49 @@
         }
         .glow-card:hover .glow { opacity: 1; }
 
+        /* ─── 3D-карусель ─── */
+        .carousel-stage {
+            position: relative; height: 380px; margin: 3rem auto 0;
+            perspective: 1500px;
+            touch-action: pan-y; cursor: grab; user-select: none;
+        }
+        .carousel-stage.dragging { cursor: grabbing; }
+        .carousel-ring {
+            position: absolute; inset: 0; margin: auto;
+            width: 210px; height: 300px;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(.16,1,.3,1);
+        }
+        .car-card {
+            position: absolute; top: 0; left: 0;
+            width: 210px; height: 300px;
+            border-radius: 1.4rem; overflow: hidden;
+            border: 1px solid rgba(255,255,255,.08);
+            box-shadow: 0 24px 50px rgba(0,0,0,.5);
+            background: #0f1729;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            cursor: pointer;
+            transition: box-shadow .5s, border-color .5s, filter .6s;
+            filter: brightness(.55) saturate(.9);
+        }
+        .car-card.is-front { filter: brightness(1) saturate(1.05); border-color: rgba(212,175,55,.45); box-shadow: 0 30px 70px rgba(212,175,55,.18); }
+        .car-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        .car-card .car-meta {
+            position: absolute; inset-inline: 0; bottom: 0; padding: 1.1rem 1rem .9rem;
+            background: linear-gradient(to top, rgba(8,14,31,.96), transparent);
+            text-align: center;
+        }
+        .car-card .car-name { font-family:'Cormorant Garamond',serif; color:#fff; font-size:1rem; line-height:1.15; letter-spacing:.02em; }
+        .car-card .car-price { color:#d4af37; font-size:.72rem; letter-spacing:.14em; margin-top:.25rem; }
+        .car-nav {
+            width: 52px; height: 52px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(212,175,55,.28); background: rgba(8,14,31,.6);
+            color: #d4af37; font-size: 1.4rem; backdrop-filter: blur(12px);
+            transition: all .4s ease;
+        }
+        .car-nav:hover { border-color: rgba(212,175,55,.65); background: rgba(212,175,55,.1); transform: scale(1.08); }
+
         /* ─── Gold Text Glow ─── */
         .gold-grad { filter: drop-shadow(0 6px 34px rgba(212,175,55,.28)); }
 
@@ -1061,6 +1104,32 @@
     </div>
 </section>
 
+<!-- ═══ 3D CAROUSEL ═══ -->
+<section class="py-24 md:py-36 sdiv geo border-t border-white/[.04] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-8 md:mb-12 rev">
+            <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full border border-white/8 text-[10px] tracking-[.28em] uppercase text-white/35 mb-8 backdrop-blur-md">✦ Витрина 360° ✦</div>
+            <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-white tracking-wide">
+                Полистай коллекцию<br><span class="text-white/35 italic font-light">в 3D-пространстве</span>
+            </h2>
+            <p class="text-white/28 font-light text-xs md:text-sm mt-6 tracking-wide">Крути перетаскиванием или стрелками · клик по карточке — подробнее</p>
+        </div>
+
+        <div id="carousel-stage" class="carousel-stage rev-z">
+            <div id="carousel-ring" class="carousel-ring"></div>
+        </div>
+
+        <div class="flex items-center justify-center gap-6 mt-6 rev">
+            <button id="car-prev" class="car-nav" aria-label="Предыдущая"><i class="ph-bold ph-caret-left"></i></button>
+            <div class="text-center min-w-[180px]">
+                <div id="car-label" class="font-serif text-lg text-white leading-tight"></div>
+                <div id="car-price" class="text-[#d4af37]/80 text-xs tracking-[.16em] mt-1"></div>
+            </div>
+            <button id="car-next" class="car-nav" aria-label="Следующая"><i class="ph-bold ph-caret-right"></i></button>
+        </div>
+    </div>
+</section>
+
 <!-- ═══ VIDEO BANNER ═══ -->
 <section class="py-36 md:py-52 relative overflow-hidden flex items-center justify-center sdiv border-t border-white/[.04]">
     <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-35">
@@ -1424,6 +1493,83 @@ function setupTilt() {
     });
 }
 
+// ─── 3D-карусель ───
+function initCarousel() {
+    const stage = document.getElementById('carousel-stage');
+    const ring  = document.getElementById('carousel-ring');
+    if (!stage || !ring) return;
+
+    const items = products, N = items.length, theta = 360 / N;
+    let radius = 460, index = 0, autoTimer = null;
+
+    // Построение карточек
+    items.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.dataset.id = p.id;
+        card.innerHTML =
+            `<img src="${encodeURI(p.img)}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/300x430/0f1729/d4af37?text=Baklava';">
+             <div class="car-meta"><div class="car-name">${p.name}</div><div class="car-price">${p.price.toLocaleString('ru')} ₽</div></div>`;
+        ring.appendChild(card);
+    });
+    const cards = [...ring.querySelectorAll('.car-card')];
+
+    function computeRadius() {
+        const cardW = window.innerWidth < 640 ? 152 : 210;
+        const cardH = Math.round(cardW * 1.43);
+        radius = Math.round((cardW / 2) / Math.tan(Math.PI / N)) + 28;
+        ring.style.width = cardW + 'px'; ring.style.height = cardH + 'px';
+        cards.forEach(c => { c.style.width = cardW + 'px'; c.style.height = cardH + 'px'; });
+        stage.style.height = (cardH + 80) + 'px';
+    }
+    function layout() { cards.forEach((c, i) => c.style.transform = `rotateY(${i*theta}deg) translateZ(${radius}px)`); }
+    function render(animate = true) {
+        ring.style.transition = animate ? '' : 'none';
+        ring.style.transform = `translateZ(-${radius}px) rotateY(${-index*theta}deg)`;
+        const norm = ((index % N) + N) % N, p = items[norm];
+        cards.forEach((c, i) => c.classList.toggle('is-front', i === norm));
+        document.getElementById('car-label').textContent = p.name;
+        document.getElementById('car-price').textContent = p.price.toLocaleString('ru') + ' ₽';
+    }
+    function go(d) { index += d; render(); }
+
+    computeRadius(); layout(); render(false);
+    window.addEventListener('resize', () => { computeRadius(); layout(); render(false); }, { passive:true });
+
+    document.getElementById('car-next').addEventListener('click', () => { go(1);  resetAuto(); });
+    document.getElementById('car-prev').addEventListener('click', () => { go(-1); resetAuto(); });
+
+    // Перетаскивание
+    let down = false, startX = 0, startAngle = 0, moved = 0;
+    const K = 0.32;
+    stage.addEventListener('pointerdown', e => {
+        down = true; moved = 0; startX = e.clientX; startAngle = -index * theta;
+        stage.classList.add('dragging'); ring.style.transition = 'none'; stopAuto();
+    });
+    window.addEventListener('pointermove', e => {
+        if (!down) return;
+        const dx = e.clientX - startX; moved = Math.max(moved, Math.abs(dx));
+        ring.style.transform = `translateZ(-${radius}px) rotateY(${startAngle + dx*K}deg)`;
+    }, { passive:true });
+    window.addEventListener('pointerup', e => {
+        if (!down) return; down = false; stage.classList.remove('dragging');
+        const dx = e.clientX - startX;
+        index = Math.round(-(startAngle + dx*K) / theta);
+        render(); resetAuto();
+    });
+
+    // Клик по карточке — открыть товар (если не тащили)
+    cards.forEach(c => c.addEventListener('click', () => { if (moved > 6) return; openModal(+c.dataset.id); }));
+
+    // Автоповорот с паузой при наведении
+    function startAuto() { if (REDUCED_MOTION) return; stopAuto(); autoTimer = setInterval(() => go(1), 3600); }
+    function stopAuto()  { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+    function resetAuto() { stopAuto(); startAuto(); }
+    stage.addEventListener('pointerenter', stopAuto);
+    stage.addEventListener('pointerleave', startAuto);
+    startAuto();
+}
+
 // ─── Modal ───
 function openModal(id) {
     const p = products.find(x=>x.id===id); if (!p) return;
@@ -1658,6 +1804,7 @@ window.addEventListener('load', () => {
     observe();
     initMagnetic();
     initCardGlow();
+    initCarousel();
     onScrollFrame();                       // первичный расчёт (навбар/сироп/scrollspy)
 
     // Тяжёлые декоративные эффекты — только на мыши и без reduced-motion
